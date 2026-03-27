@@ -39,9 +39,9 @@ Atualmente, informações importantes estão:
 
 Isso gera:
 
-❌ desorganização
-❌ perda de tempo
-❌ falhas na comunicação
+- ❌ desorganização
+- ❌ perda de tempo
+- ❌ falhas na comunicação
 
 ---
 
@@ -49,10 +49,10 @@ Isso gera:
 
 O sistema propõe:
 
-✔️ Visualização em **cards interativos**
-✔️ Interface simples e otimizada para TV
-✔️ Destaque de informações importantes
-✔️ Organização por categorias
+- ✔️ Visualização em **cards interativos**
+- ✔️ Interface simples e otimizada para TV
+- ✔️ Destaque de informações importantes
+- ✔️ Organização por categorias
 
 ---
 
@@ -180,10 +180,10 @@ src/main/java/br/com/escola/dashboard/
 
 ## 🧪 MVP (v0.1)
 
-✔️ Dashboard funcional
-✔️ Cards interativos
-✔️ Modo destaque
-✔️ Dados mockados
+- ✔️ Dashboard funcional
+- ✔️ Cards interativos
+- ✔️ Modo destaque
+- ✔️ Dados mockados
 
 ---
 
