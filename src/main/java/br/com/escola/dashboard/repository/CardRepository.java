@@ -18,6 +18,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CardRepository extends JpaRepository<Card, Long> {
 
+    
+
     // 🚀 IMPORTANTE:
     // Você NÃO precisa implementar nada aqui para o básico funcionar!
     // O Spring já fornece métodos prontos automaticamente.
