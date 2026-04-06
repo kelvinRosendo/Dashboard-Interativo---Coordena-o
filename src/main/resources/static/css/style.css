@@ -1,89 +1,201 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f6f8;
+/* ===================================== */
+/* 🔹 RESET GLOBAL                       */
+/* Remove espaçamentos padrão do navegador */
+/* ===================================== */
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
+/* ===================================== */
+/* 🔹 CORPO DA PÁGINA                   */
+/* Define o tema escuro do sistema       */
+/* ===================================== */
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #0f0f1a; /* fundo escuro */
+    color: #e5e7eb; /* texto claro */
+}
+
+/* ===================================== */
+/* 🔹 CONTAINER PRINCIPAL               */
+/* Centraliza o conteúdo na tela         */
+/* ===================================== */
 .container {
-    width: 90%;
-    max-width: 1100px;
-    margin: 40px auto;
+    width: 95%;
+    max-width: 1400px;
+    margin: 30px auto;
 }
 
+/* ===================================== */
+/* 🔹 TÍTULO PRINCIPAL                  */
+/* ===================================== */
 h1 {
+    font-size: 32px;
     margin-bottom: 5px;
-    color: #222;
+    color: #a78bfa; /* roxo principal */
 }
 
+/* ===================================== */
+/* 🔹 SUBTÍTULO                         */
+/* ===================================== */
 .subtitulo {
-    color: #666;
+    color: #9ca3af;
     margin-bottom: 25px;
 }
 
+/* ===================================== */
+/* 🔹 ÁREA DO TOPO (BOTÃO + AÇÕES)      */
+/* ===================================== */
 .topo {
     margin-bottom: 20px;
 }
 
+/* ===================================== */
+/* 🔹 BOTÃO PRINCIPAL                   */
+/* Botão de "Novo Card"                 */
+/* ===================================== */
 .botao {
     display: inline-block;
-    background-color: #2563eb;
+    background: linear-gradient(135deg, #7c3aed, #4c1d95);
     color: white;
     text-decoration: none;
-    padding: 10px 16px;
-    border-radius: 8px;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-weight: bold;
+    transition: 0.2s;
 }
 
+/* 🔹 Efeito ao passar o mouse */
+.botao:hover {
+    transform: scale(1.05);
+}
+
+/* ===================================== */
+/* 🔹 GRID DE CARDS                     */
+/* Layout responsivo                    */
+/* ===================================== */
 .lista-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
 }
 
+/* ===================================== */
+/* 🔹 CARD INDIVIDUAL                   */
+/* ===================================== */
 .card {
-    background-color: white;
-    border-radius: 12px;
-    padding: 18px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    background-color: #1a1a2e;
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid #2e2e4d;
+    transition: 0.2s;
 }
 
+/* 🔹 Efeito hover (levanta o card) */
+.card:hover {
+    transform: translateY(-5px);
+    border-color: #7c3aed;
+}
+
+/* ===================================== */
+/* 🔹 TÍTULO DO CARD                   */
+/* ===================================== */
 .card h2 {
-    margin-top: 0;
-    color: #111;
+    color: #c4b5fd;
+    margin-bottom: 10px;
 }
 
+/* ===================================== */
+/* 🔹 DESCRIÇÃO                         */
+/* ===================================== */
 .card p {
-    color: #444;
+    color: #d1d5db;
 }
 
+/* ===================================== */
+/* 🔹 INFORMAÇÕES (categoria, prioridade) */
+/* ===================================== */
 .info {
     display: flex;
     flex-direction: column;
     gap: 6px;
     margin: 12px 0;
     font-size: 14px;
-    color: #333;
+    color: #9ca3af;
 }
 
+/* ===================================== */
+/* 🔹 ÁREA DE AÇÕES (botões)            */
+/* ===================================== */
 .acoes {
-    margin-top: 16px;
+    margin-top: 15px;
     display: flex;
     gap: 10px;
 }
 
-.btn-editar,
-.btn-deletar {
-    text-decoration: none;
+/* ===================================== */
+/* 🔹 BOTÃO EDITAR                      */
+/* ===================================== */
+.btn-editar {
+    background-color: #16a34a;
     padding: 8px 12px;
     border-radius: 8px;
+    color: white;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+/* 🔹 Hover editar */
+.btn-editar:hover {
+    background-color: #15803d;
+}
+
+/* ===================================== */
+/* 🔹 BOTÃO DELETAR                     */
+/* ===================================== */
+.btn-deletar {
+    background-color: #dc2626;
+    padding: 8px 12px;
+    border-radius: 8px;
+    color: white;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+/* 🔹 Hover deletar */
+.btn-deletar:hover {
+    background-color: #b91c1c;
+}
+
+/* ===================================== */
+/* 🔹 FORMULÁRIO (novo/editar)          */
+/* ===================================== */
+.formulario {
+    background-color: #1a1a2e;
+    padding: 20px;
+    border-radius: 16px;
+    border: 1px solid #2e2e4d;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* 🔹 Campos do formulário */
+.formulario input,
+.formulario textarea,
+.formulario select {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #3f3f5a;
+    background-color: #0f0f1a;
     color: white;
     font-size: 14px;
 }
 
-.btn-editar {
-    background-color: #16a34a;
-}
-
-.btn-deletar {
-    background-color: #dc2626;
+/* 🔹 Placeholder */
+.formulario input::placeholder,
+.formulario textarea::placeholder {
+    color: #9ca3af;
 }

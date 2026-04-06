@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${modoEdicao} ? 'Editar Card' : 'Novo Card'">Novo Card</title>
+
+    <!-- 🔹 Importa o CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="container">
+
+    <!-- 🔹 Título dinâmico -->
+    <h1 th:text="${modoEdicao} ? 'Editar Card' : 'Novo Card'">Novo Card</h1>
+
+    <!--
+        🔹 Formulário dinâmico
+        Se estiver em modo de edição, envia para /atualizar-card/{id}
+        Se estiver em modo de criação, envia para /salvar-card
+    -->
+    <form th:action="${modoEdicao} ? @{'/atualizar-card/' + ${cardId}} : @{/salvar-card}"
+          method="post"
+          class="formulario"
+          th:object="${card}">
+
+        <!-- 🔹 Campo: Título -->
+        <label for="titulo">Título</label>
+        <input type="text" id="titulo" th:field="*{titulo}" required>
+
+        <!-- 🔹 Campo: Descrição -->
+        <label for="descricao">Descrição</label>
+        <textarea id="descricao" th:field="*{descricao}" rows="4"></textarea>
+
+        <!-- 🔹 Campo: Categoria -->
+        <label for="categoria">Categoria</label>
+        <select id="categoria" th:field="*{categoria}" required>
+            <option value="">Selecione</option>
+            <option value="EVENTO">EVENTO</option>
+            <option value="AVISO">AVISO</option>
+            <option value="TAREFA">TAREFA</option>
+        </select>
+
+        <!-- 🔹 Campo: Prioridade -->
+        <label for="prioridade">Prioridade</label>
+        <select id="prioridade" th:field="*{prioridade}" required>
+            <option value="">Selecione</option>
+            <option value="BAIXA">BAIXA</option>
+            <option value="MEDIA">MEDIA</option>
+            <option value="ALTA">ALTA</option>
+        </select>
+
+        <!-- 🔹 Botões -->
+        <div class="acoes">
+            <button type="submit" class="btn-editar"
+                    th:text="${modoEdicao} ? 'Atualizar' : 'Salvar'">Salvar</button>
+            <a href="/" class="btn-deletar">Cancelar</a>
+        </div>
+
+    </form>
+
+</div>
+
+</body>
+</html>

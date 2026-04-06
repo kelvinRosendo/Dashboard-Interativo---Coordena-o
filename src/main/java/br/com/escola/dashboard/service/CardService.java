@@ -76,6 +76,10 @@ public class CardService {
      * Se não encontrar, lança ResourceNotFoundException.
      */
     public CardResponseDTO buscarPorId(Long id) {
+        if (id == null) {
+            throw new ResourceNotFoundException("ID não pode ser nulo");
+        }
+
         Card card = cardRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Card não encontrado com id: " + id));
 
@@ -90,6 +94,10 @@ public class CardService {
      * Depois salva novamente e retorna o card atualizado.
      */
     public CardResponseDTO atualizarCard(Long id, CardRequestDTO requestDTO) {
+        if (id == null) {
+            throw new ResourceNotFoundException("ID não pode ser nulo");
+        }
+
         Card card = cardRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Card não encontrado com id: " + id));
 
@@ -106,15 +114,22 @@ public class CardService {
     /**
      * 🔹 Deletar um card
      *
-     * Primeiro verifica se o card existe.
-     * Se não existir, lança exceção.
-     * Se existir, remove do banco.
+     * Primeiro verifica se o ID foi informado.
+     * Depois tenta buscar o card no banco.
+     * Se não encontrar, lança exceção.
+     * Se encontrar, remove do banco.
      */
     public void deletarCard(Long id) {
+        if (id == null) {
+            throw new ResourceNotFoundException("ID não pode ser nulo");
+        }
+
         Card card = cardRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Card não encontrado com id: " + id));
 
-        cardRepository.delete(card);
+        if (card != null) {
+            cardRepository.delete(card);
+        }
     }
 
     /**
