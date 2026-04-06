@@ -5,6 +5,7 @@ import br.com.escola.dashboard.service.CardService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  * 🔹 ViewController
@@ -69,5 +70,20 @@ public class ViewController {
     public String salvarCard(@ModelAttribute("card") CardRequestDTO cardRequestDTO) {
         cardService.criarCard(cardRequestDTO);
         return "redirect:/"; // volta pra lista de cards
+    }
+
+    /**
+     * 🔹 Deleta um card pelo ID
+     *
+     * Quando acessar: /deletar-card/{id}
+     *
+     * O método:
+     * - chama o service para deletar
+     * - redireciona para a página inicial
+     */
+    @GetMapping("/deletar-card/{id}")
+    public String deletarCard(@PathVariable Long id) {
+        cardService.deletarCard(id);
+        return "redirect:/";
     }
 }
