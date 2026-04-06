@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Novo Card</title>
+
+    <!-- 🔹 Importa o CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="container">
+
+    <!-- 🔹 Título da página -->
+    <h1>Novo Card</h1>
+
+    <!-- 🔹 Formulário -->
+    <!-- action = rota que será chamada ao enviar -->
+    <!-- method = POST (envio de dados) -->
+    <form action="/salvar-card" method="post" class="formulario">
+
+        <!-- 🔹 Campo: Título -->
+        <label for="titulo">Título</label>
+        <input type="text" id="titulo" name="titulo" required>
+
+        <!-- 🔹 Campo: Descrição -->
+        <label for="descricao">Descrição</label>
+        <textarea id="descricao" name="descricao" rows="4"></textarea>
+
+        <!-- 🔹 Campo: Categoria -->
+        <label for="categoria">Categoria</label>
+        <select id="categoria" name="categoria" required>
+            <option value="">Selecione</option>
+            <option value="EVENTO">EVENTO</option>
+            <option value="AVISO">AVISO</option>
+            <option value="TAREFA">TAREFA</option>
+        </select>
+
+        <!-- 🔹 Campo: Prioridade -->
+        <label for="prioridade">Prioridade</label>
+        <select id="prioridade" name="prioridade" required>
+            <option value="">Selecione</option>
+            <option value="BAIXA">BAIXA</option>
+            <option value="MEDIA">MEDIA</option>
+            <option value="ALTA">ALTA</option>
+        </select>
+
+        <!-- 🔹 Botões -->
+        <div class="acoes">
+            <button type="submit" class="btn-editar">Salvar</button>
+            <a href="/" class="btn-deletar">Cancelar</a>
+        </div>
+
+    </form>
+
+</div>
+
+</body>
+</html>
