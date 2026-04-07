@@ -22,6 +22,7 @@
         <h2 class="titulo-secao">Pendentes</h2>
         <div class="lista-cards">
             <div class="card" th:each="card : ${pendentes}">
+                <p th:if="${#lists.isEmpty(pendentes)}" class="mensagem-vazia">Nenhum tarefa pendente.</p>
                 <h3 th:text="${card.titulo}">Título</h3>
                 <p th:text="${card.descricao}">Descrição</p>
 
@@ -63,6 +64,7 @@
         <h2 class="titulo-secao">Em andamento</h2>
         <div class="lista-cards">
             <div class="card" th:each="card : ${emAndamento}">
+                <p th:if="${#lists.isEmpty(emAndamento)}" class="mensagem-vazia">Nenhum tarefa em andamento.</p>
                 <h3 th:text="${card.titulo}">Título</h3>
                 <p th:text="${card.descricao}">Descrição</p>
 
@@ -104,6 +106,7 @@
         <h2 class="titulo-secao">Concluídos</h2>
         <div class="lista-cards">
             <div class="card" th:each="card : ${concluidos}">
+                <p th:if="${#lists.isEmpty(concluidos)}" class="mensagem-vazia">Nenhum tarefa concluída.</p>
                 <h3 th:text="${card.titulo}">Título</h3>
                 <p th:text="${card.descricao}">Descrição</p>
 

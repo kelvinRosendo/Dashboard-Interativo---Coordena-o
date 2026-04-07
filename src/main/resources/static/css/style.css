@@ -274,3 +274,10 @@ h1 {
     margin-bottom: 10px;
     font-size: 22px;
 }
+
+.mensagem-vazia {
+    color: #9ca3af;
+    font-style: italic;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
