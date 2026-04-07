@@ -2,147 +2,199 @@
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+
+    <!-- 🔹 Título da página -->
     <title>Dashboard Escolar</title>
+
+    <!-- 🔹 Importa o CSS -->
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
-<div class="container">
+<div class="dashboard-layout">
 
-    <!-- 🔹 Cabeçalho -->
-    <h1>Dashboard Escolar</h1>
-    <p class="subtitulo">Painel de organização da coordenação escolar</p>
+    <!-- ===================================== -->
+    <!-- 🔹 SIDEBAR: AVISOS E NOTIFICAÇÕES     -->
+    <!-- ===================================== -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>Avisos / Notas</h2>
+            <p>Notificações importantes</p>
+        </div>
 
-    <div class="topo">
-        <a href="/novo-card" class="botao">+ Novo Card</a>
-    </div>
+        <!-- 🔹 Lista lateral de avisos -->
+        <div class="sidebar-content">
 
-    <!-- 🔹 BLOCO: PENDENTES -->
-    <section class="secao-dashboard">
-        <h2 class="titulo-secao">Pendentes</h2>
-        <div class="lista-cards">
-            <div class="card" th:each="card : ${pendentes}">
-                <p th:if="${#lists.isEmpty(pendentes)}" class="mensagem-vazia">Nenhum tarefa pendente.</p>
-                <h3 th:text="${card.titulo}">Título</h3>
-                <p th:text="${card.descricao}">Descrição</p>
+            <div class="sidebar-item prioridade-alta-bg">
+                <div class="sidebar-item-topo">
+                    <span class="mini-badge prioridade-alta">Alta</span>
+                </div>
+                <h3>Reunião urgente</h3>
+                <p>Coordenação com professores às 14h na sala principal.</p>
+            </div>
 
-                <div class="info">
-                    <span><strong>Categoria:</strong> <span th:text="${card.categoria}"></span></span>
-                    <span>
-                        <strong>Prioridade:</strong>
-                        <span class="badge"
-                              th:classappend="${card.prioridade.name() == 'ALTA'} ? ' prioridade-alta' :
-                                              (${card.prioridade.name() == 'MEDIA'} ? ' prioridade-media' : ' prioridade-baixa')"
-                              th:text="${card.prioridade}">
-                        </span>
-                    </span>
-                    <span>
-                        <strong>Status:</strong>
-                        <span class="badge status-pendente" th:text="${card.status}"></span>
-                    </span>
+            <div class="sidebar-item prioridade-media-bg">
+                <div class="sidebar-item-topo">
+                    <span class="mini-badge prioridade-media">Média</span>
+                </div>
+                <h3>Entrega de documentos</h3>
+                <p>Prazo final para envio das fichas até sexta-feira.</p>
+            </div>
+
+            <div class="sidebar-item prioridade-baixa-bg">
+                <div class="sidebar-item-topo">
+                    <span class="mini-badge prioridade-baixa">Baixa</span>
+                </div>
+                <h3>Aviso interno</h3>
+                <p>Atualização do mural administrativo realizada hoje.</p>
+            </div>
+
+        </div>
+
+        <!-- 🔹 Botão inferior de adicionar -->
+        <div class="sidebar-footer">
+            <a href="/novo-card" class="btn-add">+</a>
+        </div>
+    </aside>
+
+    <!-- ===================================== -->
+    <!-- 🔹 ÁREA PRINCIPAL DO DASHBOARD        -->
+    <!-- ===================================== -->
+    <main class="main-content">
+
+        <!-- 🔹 Cabeçalho principal -->
+        <header class="dashboard-header">
+            <div>
+                <h1>Dashboard Escolar</h1>
+                <p>Painel operacional da coordenação</p>
+            </div>
+        </header>
+
+        <!-- ===================================== -->
+        <!-- 🔹 GRID PRINCIPAL                    -->
+        <!-- ===================================== -->
+        <section class="dashboard-grid">
+
+            <!-- 🔹 Card superior esquerdo -->
+            <div class="painel-card card-horarios">
+                <div class="card-topo">
+                    <h2>Horários Professores - Rotativo</h2>
+                    <a href="/novo-card" class="card-add">+</a>
                 </div>
 
-                <div class="info">
-                    <span><strong>Data do evento:</strong> <span th:text="${card.dataEvento}"></span></span>
-                    <span><strong>Responsável:</strong> <span th:text="${card.responsavel}"></span></span>
-                </div>
+                <div class="card-conteudo">
+                    <div class="item-lista" th:each="card : ${pendentes}">
+                        <strong th:text="${card.titulo}">Horário</strong>
+                        <p th:text="${card.responsavel} ?: 'Professor não definido'">Professor</p>
+                        <span th:text="${card.dataEvento} ?: 'Sem data definida'">Data</span>
+                    </div>
 
-                <div class="info">
-                    <span><strong>Observações:</strong> <span th:text="${card.observacoes}"></span></span>
-                </div>
-
-                <div class="acoes">
-                    <a th:href="@{'/editar-card/' + ${card.id}}" class="btn-editar">Editar</a>
-                    <a th:href="@{'/deletar-card/' + ${card.id}}" class="btn-deletar">Excluir</a>
+                    <p th:if="${#lists.isEmpty(pendentes)}" class="mensagem-vazia">
+                        Nenhum horário disponível no momento.
+                    </p>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- 🔹 BLOCO: EM ANDAMENTO -->
-    <section class="secao-dashboard">
-        <h2 class="titulo-secao">Em andamento</h2>
-        <div class="lista-cards">
-            <div class="card" th:each="card : ${emAndamento}">
-                <p th:if="${#lists.isEmpty(emAndamento)}" class="mensagem-vazia">Nenhum tarefa em andamento.</p>
-                <h3 th:text="${card.titulo}">Título</h3>
-                <p th:text="${card.descricao}">Descrição</p>
-
-                <div class="info">
-                    <span><strong>Categoria:</strong> <span th:text="${card.categoria}"></span></span>
-                    <span>
-                        <strong>Prioridade:</strong>
-                        <span class="badge"
-                              th:classappend="${card.prioridade.name() == 'ALTA'} ? ' prioridade-alta' :
-                                              (${card.prioridade.name() == 'MEDIA'} ? ' prioridade-media' : ' prioridade-baixa')"
-                              th:text="${card.prioridade}">
-                        </span>
-                    </span>
-                    <span>
-                        <strong>Status:</strong>
-                        <span class="badge status-andamento" th:text="${card.status}"></span>
-                    </span>
+            <!-- 🔹 Card superior direito -->
+            <div class="painel-card card-faltas">
+                <div class="card-topo">
+                    <h2>Agenda de Falta dos Professores</h2>
+                    <a href="/novo-card" class="card-add">+</a>
                 </div>
 
-                <div class="info">
-                    <span><strong>Data do evento:</strong> <span th:text="${card.dataEvento}"></span></span>
-                    <span><strong>Responsável:</strong> <span th:text="${card.responsavel}"></span></span>
-                </div>
+                <div class="card-conteudo">
+                    <div class="item-lista" th:each="card : ${emAndamento}">
+                        <strong th:text="${card.titulo}">Falta</strong>
+                        <p th:text="${card.descricao} ?: 'Sem descrição'">Descrição</p>
+                        <span th:text="${card.dataEvento} ?: 'Sem data definida'">Data</span>
+                    </div>
 
-                <div class="info">
-                    <span><strong>Observações:</strong> <span th:text="${card.observacoes}"></span></span>
-                </div>
-
-                <div class="acoes">
-                    <a th:href="@{'/editar-card/' + ${card.id}}" class="btn-editar">Editar</a>
-                    <a th:href="@{'/deletar-card/' + ${card.id}}" class="btn-deletar">Excluir</a>
+                    <p th:if="${#lists.isEmpty(emAndamento)}" class="mensagem-vazia">
+                        Nenhuma falta registrada no momento.
+                    </p>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- 🔹 BLOCO: CONCLUÍDOS -->
-    <section class="secao-dashboard">
-        <h2 class="titulo-secao">Concluídos</h2>
-        <div class="lista-cards">
-            <div class="card" th:each="card : ${concluidos}">
-                <p th:if="${#lists.isEmpty(concluidos)}" class="mensagem-vazia">Nenhum tarefa concluída.</p>
-                <h3 th:text="${card.titulo}">Título</h3>
-                <p th:text="${card.descricao}">Descrição</p>
-
-                <div class="info">
-                    <span><strong>Categoria:</strong> <span th:text="${card.categoria}"></span></span>
-                    <span>
-                        <strong>Prioridade:</strong>
-                        <span class="badge"
-                              th:classappend="${card.prioridade.name() == 'ALTA'} ? ' prioridade-alta' :
-                                              (${card.prioridade.name() == 'MEDIA'} ? ' prioridade-media' : ' prioridade-baixa')"
-                              th:text="${card.prioridade}">
-                        </span>
-                    </span>
-                    <span>
-                        <strong>Status:</strong>
-                        <span class="badge status-concluido" th:text="${card.status}"></span>
-                    </span>
+            <!-- 🔹 Card principal central -->
+            <div class="painel-card card-calendario">
+                <div class="card-topo">
+                    <h2>Card Principal - Calendário de Eventos</h2>
+                    <a href="/novo-card" class="card-add">+</a>
                 </div>
 
-                <div class="info">
-                    <span><strong>Data do evento:</strong> <span th:text="${card.dataEvento}"></span></span>
-                    <span><strong>Responsável:</strong> <span th:text="${card.responsavel}"></span></span>
-                </div>
+                <div class="card-conteudo">
+                    <div class="evento-destaque" th:each="card : ${concluidos}">
+                        <div class="evento-linha">
+                            <div class="evento-info">
+                                <h3 th:text="${card.titulo}">Evento</h3>
+                                <p th:text="${card.descricao} ?: 'Sem descrição'">Descrição</p>
+                            </div>
 
-                <div class="info">
-                    <span><strong>Observações:</strong> <span th:text="${card.observacoes}"></span></span>
-                </div>
+                            <div class="evento-meta">
+                                <span class="badge"
+                                      th:classappend="${card.prioridade.name() == 'ALTA'} ? ' prioridade-alta' :
+                                                      (${card.prioridade.name() == 'MEDIA'} ? ' prioridade-media' : ' prioridade-baixa')"
+                                      th:text="${card.prioridade}">
+                                    Prioridade
+                                </span>
 
-                <div class="acoes">
-                    <a th:href="@{'/editar-card/' + ${card.id}}" class="btn-editar">Editar</a>
-                    <a th:href="@{'/deletar-card/' + ${card.id}}" class="btn-deletar">Excluir</a>
+                                <span class="badge"
+                                      th:classappend="${card.status.name() == 'PENDENTE'} ? ' status-pendente' :
+                                                      (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento' : ' status-concluido')"
+                                      th:text="${card.status}">
+                                    Status
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="evento-extra">
+                            <span><strong>Data:</strong> <span th:text="${card.dataEvento} ?: 'Sem data'">Data</span></span>
+                            <span><strong>Responsável:</strong> <span th:text="${card.responsavel} ?: 'Não definido'">Responsável</span></span>
+                        </div>
+                    </div>
+
+                    <p th:if="${#lists.isEmpty(concluidos)}" class="mensagem-vazia">
+                        Nenhum evento principal cadastrado no momento.
+                    </p>
                 </div>
             </div>
-        </div>
-    </section>
 
+            <!-- 🔹 Card inferior esquerdo -->
+            <div class="painel-card card-rotina-admin">
+                <div class="card-topo">
+                    <h2>Rotina Administrativa</h2>
+                    <a href="/novo-card" class="card-add">+</a>
+                </div>
+
+                <div class="card-conteudo">
+                    <ul class="lista-simples">
+                        <li>Conferência de documentos</li>
+                        <li>Atualização de registros</li>
+                        <li>Atendimento interno</li>
+                        <li>Organização da agenda semanal</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 🔹 Card inferior direito -->
+            <div class="painel-card card-rotina-aux">
+                <div class="card-topo">
+                    <h2>Rotina Auxiliares</h2>
+                    <a href="/novo-card" class="card-add">+</a>
+                </div>
+
+                <div class="card-conteudo">
+                    <ul class="lista-simples">
+                        <li>Suporte às salas</li>
+                        <li>Organização dos espaços</li>
+                        <li>Controle de materiais</li>
+                        <li>Apoio operacional diário</li>
+                    </ul>
+                </div>
+            </div>
+
+        </section>
+    </main>
 </div>
 
 </body>
