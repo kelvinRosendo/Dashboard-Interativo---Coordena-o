@@ -49,6 +49,10 @@ public class CardService {
         card.setDescricao(requestDTO.getDescricao());
         card.setCategoria(requestDTO.getCategoria());
         card.setPrioridade(requestDTO.getPrioridade());
+        card.setDataEvento(requestDTO.getDataEvento());
+        card.setResponsavel(requestDTO.getResponsavel());
+        card.setStatus(requestDTO.getStatus());
+        card.setObservacoes(requestDTO.getObservacoes());
         card.setDataCriacao(LocalDateTime.now());
 
         Card cardSalvo = cardRepository.save(card);
@@ -105,6 +109,10 @@ public class CardService {
         card.setDescricao(requestDTO.getDescricao());
         card.setCategoria(requestDTO.getCategoria());
         card.setPrioridade(requestDTO.getPrioridade());
+        card.setDataEvento(requestDTO.getDataEvento());
+        card.setResponsavel(requestDTO.getResponsavel());
+        card.setStatus(requestDTO.getStatus());
+        card.setObservacoes(requestDTO.getObservacoes());
 
         Card cardAtualizado = cardRepository.save(card);
 
@@ -127,9 +135,7 @@ public class CardService {
         Card card = cardRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Card não encontrado com id: " + id));
 
-        if (card != null) {
-            cardRepository.delete(card);
-        }
+        cardRepository.delete(card);
     }
 
     /**
@@ -146,6 +152,10 @@ public class CardService {
         responseDTO.setCategoria(card.getCategoria());
         responseDTO.setPrioridade(card.getPrioridade());
         responseDTO.setDataCriacao(card.getDataCriacao());
+        responseDTO.setDataEvento(card.getDataEvento());
+        responseDTO.setResponsavel(card.getResponsavel());
+        responseDTO.setStatus(card.getStatus());
+        responseDTO.setObservacoes(card.getObservacoes());
 
         return responseDTO;
     }

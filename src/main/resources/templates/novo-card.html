@@ -2,6 +2,8 @@
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+
+    <!-- 🔹 Título dinâmico (Novo ou Editar) -->
     <title th:text="${modoEdicao} ? 'Editar Card' : 'Novo Card'">Novo Card</title>
 
     <!-- 🔹 Importa o CSS -->
@@ -11,49 +13,76 @@
 
 <div class="container">
 
-    <!-- 🔹 Título dinâmico -->
+    <!-- 🔹 Título da página -->
     <h1 th:text="${modoEdicao} ? 'Editar Card' : 'Novo Card'">Novo Card</h1>
 
-    <!--
-        🔹 Formulário dinâmico
-        Se estiver em modo de edição, envia para /atualizar-card/{id}
-        Se estiver em modo de criação, envia para /salvar-card
-    -->
+    <!-- 🔹 Formulário -->
+    <!-- Se for edição → atualiza -->
+    <!-- Se for criação → salva -->
     <form th:action="${modoEdicao} ? @{'/atualizar-card/' + ${cardId}} : @{/salvar-card}"
           method="post"
           class="formulario"
           th:object="${card}">
 
-        <!-- 🔹 Campo: Título -->
+        <!-- 🔹 TÍTULO -->
         <label for="titulo">Título</label>
         <input type="text" id="titulo" th:field="*{titulo}" required>
 
-        <!-- 🔹 Campo: Descrição -->
+        <!-- 🔹 DESCRIÇÃO -->
         <label for="descricao">Descrição</label>
-        <textarea id="descricao" th:field="*{descricao}" rows="4"></textarea>
+        <textarea id="descricao" th:field="*{descricao}" rows="3"></textarea>
 
-        <!-- 🔹 Campo: Categoria -->
+        <!-- 🔹 CATEGORIA -->
         <label for="categoria">Categoria</label>
         <select id="categoria" th:field="*{categoria}" required>
             <option value="">Selecione</option>
-            <option value="EVENTO">EVENTO</option>
-            <option value="AVISO">AVISO</option>
-            <option value="TAREFA">TAREFA</option>
+            <option value="EVENTO">Evento</option>
+            <option value="AVISO">Aviso</option>
+            <option value="TAREFA">Tarefa</option>
         </select>
 
-        <!-- 🔹 Campo: Prioridade -->
+        <!-- 🔹 PRIORIDADE -->
         <label for="prioridade">Prioridade</label>
         <select id="prioridade" th:field="*{prioridade}" required>
             <option value="">Selecione</option>
-            <option value="BAIXA">BAIXA</option>
-            <option value="MEDIA">MEDIA</option>
-            <option value="ALTA">ALTA</option>
+            <option value="BAIXA">Baixa</option>
+            <option value="MEDIA">Média</option>
+            <option value="ALTA">Alta</option>
         </select>
 
-        <!-- 🔹 Botões -->
+        <!-- 🔥 NOVOS CAMPOS COMEÇAM AQUI 🔥 -->
+
+        <!-- 🔹 DATA DO EVENTO -->
+        <label for="dataEvento">Data do Evento</label>
+        <input type="date" id="dataEvento" th:field="*{dataEvento}">
+
+        <!-- 🔹 RESPONSÁVEL -->
+        <label for="responsavel">Responsável</label>
+        <input type="text" id="responsavel" th:field="*{responsavel}" placeholder="Ex: Coordenação">
+
+        <!-- 🔹 STATUS -->
+        <label for="status">Status</label>
+        <select id="status" th:field="*{status}" required>
+            <option value="">Selecione</option>
+            <option value="PENDENTE">Pendente</option>
+            <option value="EM_ANDAMENTO">Em andamento</option>
+            <option value="CONCLUIDO">Concluído</option>
+        </select>
+
+        <!-- 🔹 OBSERVAÇÕES -->
+        <label for="observacoes">Observações</label>
+        <textarea id="observacoes" th:field="*{observacoes}" rows="3"
+                  placeholder="Informações adicionais..."></textarea>
+
+        <!-- 🔥 FIM DOS NOVOS CAMPOS 🔥 -->
+
+        <!-- 🔹 BOTÕES -->
         <div class="acoes">
             <button type="submit" class="btn-editar"
-                    th:text="${modoEdicao} ? 'Atualizar' : 'Salvar'">Salvar</button>
+                    th:text="${modoEdicao} ? 'Atualizar' : 'Salvar'">
+                Salvar
+            </button>
+
             <a href="/" class="btn-deletar">Cancelar</a>
         </div>
 
