@@ -9,42 +9,44 @@
 
 /* ===================================== */
 /* 🔹 CORPO DA PÁGINA                    */
+/* Fundo mais coerente com dashboard TV  */
 /* ===================================== */
 body {
     font-family: 'Segoe UI', Arial, sans-serif;
-    background: #f4f7fb;
-    color: #1f2937;
+    background: linear-gradient(135deg, #0b1020, #111827, #0f172a);
+    color: #e5e7eb;
 }
 
 /* ===================================== */
-/* 🔹 LAYOUT PRINCIPAL                   */
+/* 🔹 LAYOUT PRINCIPAL - 3 COLUNAS       */
 /* ===================================== */
 .dashboard-layout {
     display: grid;
-    grid-template-columns: 320px 1fr;
+    grid-template-columns: 320px 1fr 320px;
     min-height: 100vh;
 }
 
 /* ===================================== */
-/* 🔹 SIDEBAR                            */
+/* 🔹 SIDEBAR ESQUERDA                   */
 /* ===================================== */
-.sidebar {
-    background: #111827;
-    color: #f9fafb;
+.sidebar-esquerda {
+    background: rgba(3, 7, 18, 0.75);
+    backdrop-filter: blur(10px);
+    border-right: 1px solid rgba(148, 163, 184, 0.15);
+    padding: 24px 20px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 24px 20px;
-    border-right: 1px solid #1f2937;
 }
 
 .sidebar-header h2 {
     font-size: 24px;
+    color: #f8fafc;
     margin-bottom: 6px;
 }
 
 .sidebar-header p {
-    color: #9ca3af;
+    color: #94a3b8;
     font-size: 14px;
 }
 
@@ -57,20 +59,21 @@ body {
 }
 
 .sidebar-item {
-    border-radius: 16px;
+    border-radius: 18px;
     padding: 16px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
 }
 
 .sidebar-item h3 {
     font-size: 18px;
     margin-bottom: 8px;
+    color: #ffffff;
 }
 
 .sidebar-item p {
     font-size: 14px;
     line-height: 1.5;
-    color: #e5e7eb;
+    color: #f8fafc;
 }
 
 .sidebar-item-topo {
@@ -85,27 +88,8 @@ body {
     margin-top: 20px;
 }
 
-.btn-add {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: #2563eb;
-    color: white;
-    text-decoration: none;
-    font-size: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
-    transition: 0.2s ease;
-}
-
-.btn-add:hover {
-    transform: scale(1.06);
-}
-
 /* ===================================== */
-/* 🔹 CONTEÚDO PRINCIPAL                 */
+/* 🔹 COLUNA CENTRAL                     */
 /* ===================================== */
 .main-content {
     padding: 28px;
@@ -116,14 +100,93 @@ body {
 }
 
 .dashboard-header h1 {
-    font-size: 38px;
-    color: #111827;
+    font-size: 42px;
+    color: #f8fafc;
     margin-bottom: 6px;
 }
 
 .dashboard-header p {
-    color: #6b7280;
+    color: #94a3b8;
     font-size: 16px;
+}
+
+/* ===================================== */
+/* 🔹 COLUNA DIREITA                     */
+/* ===================================== */
+.sidebar-direita {
+    background: rgba(3, 7, 18, 0.45);
+    backdrop-filter: blur(10px);
+    border-left: 1px solid rgba(148, 163, 184, 0.15);
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.painel-lateral {
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid rgba(148, 163, 184, 0.15);
+    border-radius: 20px;
+    padding: 18px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+}
+
+.painel-lateral h2 {
+    font-size: 20px;
+    color: #f8fafc;
+    margin-bottom: 14px;
+}
+
+.texto-lateral {
+    color: #cbd5e1;
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+.resumo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.resumo-card {
+    background: rgba(30, 41, 59, 0.9);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    border-radius: 16px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.resumo-label {
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+.resumo-card strong {
+    font-size: 28px;
+    color: #ffffff;
+}
+
+.painel-info-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.info-box {
+    background: rgba(30, 41, 59, 0.85);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    border-radius: 16px;
+    padding: 12px;
+}
+
+.info-box p {
+    margin-top: 8px;
+    color: #cbd5e1;
+    font-size: 13px;
+    line-height: 1.5;
 }
 
 /* ===================================== */
@@ -149,7 +212,7 @@ body {
 
 .card-calendario {
     grid-area: calendario;
-    min-height: 320px;
+    min-height: 340px;
 }
 
 .card-rotina-admin {
@@ -161,14 +224,15 @@ body {
 }
 
 /* ===================================== */
-/* 🔹 CARD PADRÃO                        */
+/* 🔹 CARDS DO PAINEL CENTRAL            */
 /* ===================================== */
 .painel-card {
-    background: #ffffff;
-    border-radius: 22px;
+    background: rgba(15, 23, 42, 0.78);
+    backdrop-filter: blur(8px);
+    border-radius: 24px;
     padding: 22px;
-    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-    border: 1px solid #e5e7eb;
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.16);
 }
 
 .card-topo {
@@ -179,23 +243,28 @@ body {
 }
 
 .card-topo h2 {
-    font-size: 22px;
-    color: #111827;
+    font-size: 24px;
+    color: #f8fafc;
     max-width: 85%;
 }
 
 .card-add {
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
-    background: #eff6ff;
-    color: #2563eb;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: rgba(37, 99, 235, 0.16);
+    color: #60a5fa;
     text-decoration: none;
     font-size: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid #bfdbfe;
+    border: 1px solid rgba(96, 165, 250, 0.28);
+    transition: 0.2s ease;
+}
+
+.card-add:hover {
+    transform: scale(1.05);
 }
 
 .card-conteudo {
@@ -208,27 +277,27 @@ body {
 /* 🔹 ITENS INTERNOS                     */
 /* ===================================== */
 .item-lista {
-    background: #f9fafb;
-    border-radius: 14px;
+    background: rgba(30, 41, 59, 0.78);
+    border-radius: 16px;
     padding: 14px;
-    border: 1px solid #e5e7eb;
+    border: 1px solid rgba(148, 163, 184, 0.12);
 }
 
 .item-lista strong {
     display: block;
     font-size: 16px;
     margin-bottom: 6px;
-    color: #111827;
+    color: #f8fafc;
 }
 
 .item-lista p {
-    color: #4b5563;
+    color: #cbd5e1;
     margin-bottom: 6px;
     font-size: 14px;
 }
 
 .item-lista span {
-    color: #6b7280;
+    color: #94a3b8;
     font-size: 13px;
 }
 
@@ -236,9 +305,9 @@ body {
 /* 🔹 EVENTO PRINCIPAL                   */
 /* ===================================== */
 .evento-destaque {
-    background: #f8fafc;
-    border: 1px solid #e5e7eb;
-    border-radius: 16px;
+    background: rgba(30, 41, 59, 0.82);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    border-radius: 18px;
     padding: 16px;
 }
 
@@ -250,13 +319,13 @@ body {
 }
 
 .evento-info h3 {
-    font-size: 20px;
-    color: #111827;
+    font-size: 22px;
+    color: #f8fafc;
     margin-bottom: 6px;
 }
 
 .evento-info p {
-    color: #4b5563;
+    color: #cbd5e1;
     font-size: 14px;
 }
 
@@ -272,7 +341,7 @@ body {
     display: flex;
     gap: 20px;
     flex-wrap: wrap;
-    color: #4b5563;
+    color: #cbd5e1;
     font-size: 14px;
 }
 
@@ -284,7 +353,29 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    color: #374151;
+    color: #e2e8f0;
+}
+
+/* ===================================== */
+/* 🔹 BOTÃO ADICIONAR                    */
+/* ===================================== */
+.btn-add {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: white;
+    text-decoration: none;
+    font-size: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 12px 24px rgba(37, 99, 235, 0.3);
+    transition: 0.2s ease;
+}
+
+.btn-add:hover {
+    transform: scale(1.06);
 }
 
 /* ===================================== */
@@ -342,7 +433,7 @@ body {
 }
 
 /* ===================================== */
-/* 🔹 FUNDOS LATERAIS DE PRIORIDADE      */
+/* 🔹 FUNDOS DE PRIORIDADE DA SIDEBAR    */
 /* ===================================== */
 .prioridade-alta-bg {
     background: linear-gradient(135deg, #7f1d1d, #991b1b);
@@ -357,10 +448,10 @@ body {
 }
 
 /* ===================================== */
-/* 🔹 TEXTO AUXILIAR                     */
+/* 🔹 MENSAGEM VAZIA                     */
 /* ===================================== */
 .mensagem-vazia {
-    color: #6b7280;
+    color: #94a3b8;
     font-style: italic;
     font-size: 14px;
 }
@@ -368,14 +459,20 @@ body {
 /* ===================================== */
 /* 🔹 RESPONSIVIDADE                     */
 /* ===================================== */
-@media (max-width: 1100px) {
+@media (max-width: 1400px) {
+    .dashboard-layout {
+        grid-template-columns: 280px 1fr 280px;
+    }
+}
+
+@media (max-width: 1200px) {
     .dashboard-layout {
         grid-template-columns: 1fr;
     }
 
-    .sidebar {
-        border-right: none;
-        border-bottom: 1px solid #1f2937;
+    .sidebar-esquerda,
+    .sidebar-direita {
+        border: none;
     }
 
     .dashboard-grid {
