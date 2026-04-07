@@ -199,3 +199,57 @@ h1 {
 .formulario textarea::placeholder {
     color: #9ca3af;
 }
+
+/* ===================================== */
+/* 🔹 BADGES (STATUS E PRIORIDADE)       */
+/* ===================================== */
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-left: 6px;
+}
+
+/* ===================================== */
+/* 🔹 CORES DE PRIORIDADE                */
+/* ===================================== */
+.prioridade-alta {
+    background-color: #7f1d1d;
+    color: #fecaca;
+    border: 1px solid #dc2626;
+}
+
+.prioridade-media {
+    background-color: #78350f;
+    color: #fde68a;
+    border: 1px solid #f59e0b;
+}
+
+.prioridade-baixa {
+    background-color: #1e3a8a;
+    color: #bfdbfe;
+    border: 1px solid #3b82f6;
+}
+
+/* ===================================== */
+/* 🔹 CORES DE STATUS                    */
+/* ===================================== */
+.status-pendente {
+    background-color: #7f1d1d;
+    color: #fecaca;
+    border: 1px solid #ef4444;
+}
+
+.status-andamento {
+    background-color: #3b0764;
+    color: #ddd6fe;
+    border: 1px solid #8b5cf6;
+}
+
+.status-concluido {
+    background-color: #14532d;
+    color: #bbf7d0;
+    border: 1px solid #22c55e;
+}

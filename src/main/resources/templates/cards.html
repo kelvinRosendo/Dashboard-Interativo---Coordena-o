@@ -2,11 +2,7 @@
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-
-    <!-- 🔹 Título da página -->
     <title>Dashboard Escolar</title>
-
-    <!-- 🔹 Importa o arquivo CSS -->
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -16,10 +12,10 @@
         <!-- 🔹 Título principal -->
         <h1>Dashboard Escolar</h1>
 
-        <!-- 🔹 Subtítulo explicando a função da tela -->
+        <!-- 🔹 Subtítulo -->
         <p class="subtitulo">Painel de organização da coordenação escolar</p>
 
-        <!-- 🔹 Área superior com botão para criar novo card -->
+        <!-- 🔹 Botão para criar novo card -->
         <div class="topo">
             <a href="/novo-card" class="botao">+ Novo Card</a>
         </div>
@@ -27,13 +23,13 @@
         <!-- 🔹 Lista de cards -->
         <div class="lista-cards">
 
-            <!-- 🔹 Repete um card para cada item vindo do backend -->
+            <!-- 🔹 Um card para cada item vindo do backend -->
             <div class="card" th:each="card : ${cards}">
 
-                <!-- 🔹 Título do card -->
+                <!-- 🔹 Título -->
                 <h2 th:text="${card.titulo}">Título do Card</h2>
 
-                <!-- 🔹 Descrição do card -->
+                <!-- 🔹 Descrição -->
                 <p th:text="${card.descricao}">Descrição do card</p>
 
                 <!-- 🔹 Informações principais -->
@@ -45,12 +41,22 @@
 
                     <span>
                         <strong>Prioridade:</strong>
-                        <span th:text="${card.prioridade}">Prioridade</span>
+                        <span class="badge"
+                              th:classappend="${card.prioridade.name() == 'ALTA'} ? ' prioridade-alta' :
+                                              (${card.prioridade.name() == 'MEDIA'} ? ' prioridade-media' : ' prioridade-baixa')"
+                              th:text="${card.prioridade}">
+                            Prioridade
+                        </span>
                     </span>
 
                     <span>
                         <strong>Status:</strong>
-                        <span th:text="${card.status}">Status</span>
+                        <span class="badge"
+                              th:classappend="${card.status.name() == 'PENDENTE'} ? ' status-pendente' :
+                                              (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento' : ' status-concluido')"
+                              th:text="${card.status}">
+                            Status
+                        </span>
                     </span>
                 </div>
 
@@ -67,7 +73,7 @@
                     </span>
                 </div>
 
-                <!-- 🔹 Observações extras -->
+                <!-- 🔹 Observações -->
                 <div class="info">
                     <span>
                         <strong>Observações:</strong>
@@ -75,7 +81,7 @@
                     </span>
                 </div>
 
-                <!-- 🔹 Data de criação do card -->
+                <!-- 🔹 Data de criação -->
                 <div class="info">
                     <span>
                         <strong>Criado em:</strong>
@@ -83,7 +89,7 @@
                     </span>
                 </div>
 
-                <!-- 🔹 Botões de ação -->
+                <!-- 🔹 Botões -->
                 <div class="acoes">
                     <a th:href="@{'/editar-card/' + ${card.id}}" class="btn-editar">Editar</a>
                     <a th:href="@{'/deletar-card/' + ${card.id}}" class="btn-deletar">Excluir</a>
