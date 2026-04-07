@@ -132,10 +132,7 @@ public class CardService {
             throw new ResourceNotFoundException("ID não pode ser nulo");
         }
 
-        Card card = cardRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Card não encontrado com id: " + id));
-
-        cardRepository.delete(card);
+        cardRepository.deleteById(id);
     }
 
     /**
