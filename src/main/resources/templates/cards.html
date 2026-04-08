@@ -73,7 +73,7 @@
                 </div>
 
                 <div class="card-conteudo">
-                    <p th:if="${#lists.isEmpty(pendentes)}" class="mensagem-vazia">
+                    <p th:if="${pendentes == null or #lists.isEmpty(pendentes)}" class="mensagem-vazia">
                         Nenhum horário disponível no momento.
                     </p>
 
@@ -93,7 +93,7 @@
                 </div>
 
                 <div class="card-conteudo">
-                    <p th:if="${#lists.isEmpty(emAndamento)}" class="mensagem-vazia">
+                    <p th:if="${emAndamento == null or #lists.isEmpty(emAndamento)}" class="mensagem-vazia">
                         Nenhuma falta registrada no momento.
                     </p>
 
@@ -113,7 +113,7 @@
                 </div>
 
                 <div class="card-conteudo">
-                    <p th:if="${#lists.isEmpty(concluidos)}" class="mensagem-vazia">
+                    <p th:if="${concluidos == null or #lists.isEmpty(concluidos)}" class="mensagem-vazia">
                         Nenhum evento principal cadastrado no momento.
                     </p>
 
@@ -197,22 +197,22 @@
             <div class="resumo-grid">
                 <div class="resumo-card">
                     <span class="resumo-label">Pendentes</span>
-                    <strong th:text="${#lists.size(pendentes)}">0</strong>
+                    <strong th:text="${pendentes == null ? 0 : #lists.size(pendentes)}">0</strong>
                 </div>
 
                 <div class="resumo-card">
                     <span class="resumo-label">Em andamento</span>
-                    <strong th:text="${#lists.size(emAndamento)}">0</strong>
+                    <strong th:text="${emAndamento == null ? 0 : #lists.size(emAndamento)}">0</strong>
                 </div>
 
                 <div class="resumo-card">
                     <span class="resumo-label">Concluídos</span>
-                    <strong th:text="${#lists.size(concluidos)}">0</strong>
+                    <strong th:text="${concluidos == null ? 0 : #lists.size(concluidos)}">0</strong>
                 </div>
 
                 <div class="resumo-card">
                     <span class="resumo-label">Total</span>
-                    <strong th:text="${#lists.size(pendentes) + #lists.size(emAndamento) + #lists.size(concluidos)}">0</strong>
+                    <strong th:text="${(pendentes == null ? 0 : #lists.size(pendentes)) + (emAndamento == null ? 0 : #lists.size(emAndamento)) + (concluidos == null ? 0 : #lists.size(concluidos))}">0</strong>
                 </div>
             </div>
         </div>
