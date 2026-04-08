@@ -247,7 +247,7 @@ body {
 .dashboard-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: minmax(0, 1fr) minmax(0, 1.2fr) minmax(0, 1fr);
+    grid-template-rows: minmax(190px, 1fr) minmax(220px, 1.25fr) minmax(210px, 1.05fr);
     grid-template-areas:
         "horarios faltas"
         "calendario calendario"
@@ -275,6 +275,11 @@ body {
 
 .card-rotina-aux {
     grid-area: auxiliares;
+}
+
+.card-rotina-admin,
+.card-rotina-aux {
+    min-height: 210px;
 }
 
 /* ===================================== */
@@ -338,9 +343,11 @@ body {
     flex-direction: column;
     gap: 10px;
     min-height: 0;
+    flex: 1;
     overflow-y: auto;
     overflow-x: hidden;
-    padding-right: 4px;
+    padding-right: 6px;
+    padding-bottom: 8px;
 }
 
 /* ===================================== */
@@ -449,15 +456,18 @@ body {
     padding-left: 18px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
     color: #e2e8f0;
     overflow-y: auto;
     overflow-x: hidden;
     min-height: 0;
-    padding-right: 4px;
+    padding-right: 6px;
+    padding-bottom: 10px;
 }
 
 .lista-simples li {
+    line-height: 1.45;
+    padding-right: 2px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
