@@ -2,18 +2,18 @@
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${modoEdicao} ? 'Editar ' + tituloFormulario : tituloFormulario">Novo Card</title>
+    <title th:text="${modoEdicao ? 'Editar ' + tituloFormulario : tituloFormulario}">Novo Card</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body>
+<body class="form-page">
 
 <div class="container">
-    <h1 th:text="${modoEdicao} ? 'Editar ' + tituloFormulario : tituloFormulario">Novo Card</h1>
+    <h1 th:text="${modoEdicao ? 'Editar ' + tituloFormulario : tituloFormulario}">Novo Card</h1>
     <p class="texto-lateral">
         Preencha as informacoes principais para publicar este card no dashboard.
     </p>
 
-    <form th:action="${modoEdicao} ? @{'/atualizar-card/' + ${cardId}} : @{/salvar-card}"
+    <form th:action="${modoEdicao ? '/atualizar-card/' + cardId : '/salvar-card'}"
           method="post"
           class="formulario"
           th:object="${card}">

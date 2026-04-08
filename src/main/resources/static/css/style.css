@@ -24,6 +24,13 @@ body {
     color: #e5e7eb;
 }
 
+body.form-page {
+    min-height: 100vh;
+    height: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
 /* ===================================== */
 /* LAYOUT PRINCIPAL - TV MODE            */
 /* ===================================== */
@@ -506,6 +513,10 @@ body {
     border: 1px solid rgba(148, 163, 184, 0.14);
     border-radius: 24px;
     box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+}
+
+body.form-page .container {
+    margin: 32px auto 48px;
 }
 
 .container h1 {
