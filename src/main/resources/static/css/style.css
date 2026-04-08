@@ -506,7 +506,7 @@ body.form-page {
 /* FORMULARIO                            */
 /* ===================================== */
 .container {
-    width: min(760px, calc(100% - 32px));
+    width: min(920px, calc(100% - 32px));
     margin: 32px auto;
     padding: 28px;
     background: rgba(15, 23, 42, 0.82);
@@ -517,6 +517,10 @@ body.form-page {
 
 body.form-page .container {
     margin: 32px auto 48px;
+}
+
+.form-header {
+    margin-bottom: 24px;
 }
 
 .container h1 {
@@ -531,10 +535,21 @@ body.form-page .container {
 
 .formulario {
     display: grid;
-    gap: 12px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 16px;
+}
+
+.campo {
+    min-width: 0;
+}
+
+.campo-completo {
+    grid-column: 1 / -1;
 }
 
 .formulario label {
+    display: block;
+    margin-bottom: 8px;
     font-size: 14px;
     font-weight: 600;
     color: #e2e8f0;
@@ -568,8 +583,10 @@ body.form-page .container {
 
 .acoes {
     display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
     gap: 12px;
-    margin-top: 8px;
+    margin-top: 4px;
 }
 
 .btn-editar,
@@ -596,6 +613,31 @@ body.form-page .container {
     background: rgba(30, 41, 59, 0.92);
     color: #e2e8f0;
     border: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+@media (max-width: 760px) {
+    .container {
+        width: min(100%, calc(100% - 24px));
+        padding: 22px;
+    }
+
+    .formulario {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .campo-completo {
+        grid-column: auto;
+    }
+
+    .acoes {
+        justify-content: stretch;
+    }
+
+    .btn-editar,
+    .btn-deletar {
+        width: 100%;
+    }
 }
 
 /* ===================================== */
