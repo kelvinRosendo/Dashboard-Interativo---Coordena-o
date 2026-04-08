@@ -1,5 +1,5 @@
 /* ===================================== */
-/* 🔹 RESET GLOBAL                       */
+/* RESET GLOBAL                          */
 /* ===================================== */
 * {
     margin: 0;
@@ -7,73 +7,98 @@
     box-sizing: border-box;
 }
 
+html,
+body {
+    width: 100%;
+    height: 100vh;
+}
+
 /* ===================================== */
-/* 🔹 CORPO DA PÁGINA                    */
-/* Fundo mais coerente com dashboard TV  */
+/* CORPO DA PAGINA                       */
 /* ===================================== */
 body {
+    margin: 0;
+    overflow: hidden;
     font-family: 'Segoe UI', Arial, sans-serif;
     background: linear-gradient(135deg, #0b1020, #111827, #0f172a);
     color: #e5e7eb;
 }
 
 /* ===================================== */
-/* 🔹 LAYOUT PRINCIPAL - 3 COLUNAS       */
+/* LAYOUT PRINCIPAL - TV MODE            */
 /* ===================================== */
+.dashboard,
 .dashboard-layout {
     display: grid;
-    grid-template-columns: 320px 1fr 320px;
-    min-height: 100vh;
+    grid-template-columns: 250px 1fr 300px;
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
 }
 
 /* ===================================== */
-/* 🔹 SIDEBAR ESQUERDA                   */
+/* SIDEBAR ESQUERDA                      */
 /* ===================================== */
 .sidebar-esquerda {
     background: rgba(3, 7, 18, 0.75);
     backdrop-filter: blur(10px);
     border-right: 1px solid rgba(148, 163, 184, 0.15);
-    padding: 24px 20px;
+    padding: 20px 18px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    gap: 14px;
+    height: 100vh;
+    min-height: 0;
+    overflow: hidden;
 }
 
 .sidebar-header h2 {
-    font-size: 24px;
+    font-size: 22px;
     color: #f8fafc;
     margin-bottom: 6px;
 }
 
 .sidebar-header p {
     color: #94a3b8;
-    font-size: 14px;
+    font-size: 13px;
 }
 
 .sidebar-content {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    margin-top: 24px;
+    gap: 12px;
+    margin-top: 4px;
     flex: 1;
+    min-height: 0;
+    overflow: hidden;
 }
 
 .sidebar-item {
     border-radius: 18px;
-    padding: 16px;
+    padding: 14px;
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+    overflow: hidden;
 }
 
 .sidebar-item h3 {
-    font-size: 18px;
+    font-size: 17px;
     margin-bottom: 8px;
     color: #ffffff;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .sidebar-item p {
-    font-size: 14px;
-    line-height: 1.5;
+    font-size: 13px;
+    line-height: 1.35;
     color: #f8fafc;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
 }
 
 .sidebar-item-topo {
@@ -85,121 +110,143 @@ body {
 .sidebar-footer {
     display: flex;
     justify-content: center;
-    margin-top: 20px;
+    margin-top: 6px;
+    flex-shrink: 0;
 }
 
 /* ===================================== */
-/* 🔹 COLUNA CENTRAL                     */
+/* COLUNA CENTRAL                        */
 /* ===================================== */
 .main-content {
-    padding: 28px;
+    padding: 20px;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 16px;
+    height: 100vh;
+    min-height: 0;
+    overflow: hidden;
 }
 
 .dashboard-header {
-    margin-bottom: 24px;
+    margin-bottom: 0;
 }
 
 .dashboard-header h1 {
-    font-size: 42px;
+    font-size: 36px;
     color: #f8fafc;
     margin-bottom: 6px;
 }
 
 .dashboard-header p {
     color: #94a3b8;
-    font-size: 16px;
+    font-size: 15px;
 }
 
 /* ===================================== */
-/* 🔹 COLUNA DIREITA                     */
+/* COLUNA DIREITA                        */
 /* ===================================== */
 .sidebar-direita {
     background: rgba(3, 7, 18, 0.45);
     backdrop-filter: blur(10px);
     border-left: 1px solid rgba(148, 163, 184, 0.15);
-    padding: 24px 20px;
+    padding: 20px 18px;
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 14px;
+    height: 100vh;
+    min-height: 0;
+    overflow: hidden;
 }
 
 .painel-lateral {
     background: rgba(15, 23, 42, 0.75);
     border: 1px solid rgba(148, 163, 184, 0.15);
     border-radius: 20px;
-    padding: 18px;
+    padding: 16px;
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
 }
 
 .painel-lateral h2 {
-    font-size: 20px;
+    font-size: 18px;
     color: #f8fafc;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
 }
 
 .texto-lateral {
     color: #cbd5e1;
-    line-height: 1.6;
+    line-height: 1.5;
     font-size: 14px;
 }
 
 .resumo-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 10px;
 }
 
 .resumo-card {
     background: rgba(30, 41, 59, 0.9);
     border: 1px solid rgba(148, 163, 184, 0.12);
     border-radius: 16px;
-    padding: 14px;
+    padding: 12px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
+    overflow: hidden;
 }
 
 .resumo-label {
     color: #94a3b8;
-    font-size: 13px;
+    font-size: 12px;
 }
 
 .resumo-card strong {
-    font-size: 28px;
+    font-size: 24px;
     color: #ffffff;
 }
 
 .painel-info-lista {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
+    overflow: hidden;
 }
 
 .info-box {
     background: rgba(30, 41, 59, 0.85);
     border: 1px solid rgba(148, 163, 184, 0.12);
     border-radius: 16px;
-    padding: 12px;
+    padding: 10px 12px;
+    overflow: hidden;
 }
 
 .info-box p {
     margin-top: 8px;
     color: #cbd5e1;
     font-size: 13px;
-    line-height: 1.5;
+    line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
 }
 
 /* ===================================== */
-/* 🔹 GRID DOS PAINÉIS                   */
+/* GRID DOS PAINEIS                      */
 /* ===================================== */
 .dashboard-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1.2fr) minmax(0, 1fr);
     grid-template-areas:
         "horarios faltas"
         "calendario calendario"
         "admin auxiliares";
-    gap: 20px;
+    gap: 16px;
+    min-height: 0;
+    overflow: hidden;
 }
 
 .card-horarios {
@@ -212,7 +259,6 @@ body {
 
 .card-calendario {
     grid-area: calendario;
-    min-height: 340px;
 }
 
 .card-rotina-admin {
@@ -224,33 +270,44 @@ body {
 }
 
 /* ===================================== */
-/* 🔹 CARDS DO PAINEL CENTRAL            */
+/* CARDS DO PAINEL CENTRAL               */
 /* ===================================== */
+.card,
 .painel-card {
     background: rgba(15, 23, 42, 0.78);
     backdrop-filter: blur(8px);
     border-radius: 24px;
-    padding: 22px;
+    padding: 18px;
     border: 1px solid rgba(148, 163, 184, 0.14);
     box-shadow: 0 14px 32px rgba(0, 0, 0, 0.16);
+    height: 100%;
+    min-height: 180px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .card-topo {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 18px;
+    margin-bottom: 14px;
+    flex-shrink: 0;
+    gap: 12px;
 }
 
 .card-topo h2 {
-    font-size: 24px;
+    font-size: 20px;
     color: #f8fafc;
     max-width: 85%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .card-add {
-    width: 40px;
-    height: 40px;
+    width: 38px;
+    height: 38px;
     border-radius: 12px;
     background: rgba(37, 99, 235, 0.16);
     color: #60a5fa;
@@ -261,6 +318,7 @@ body {
     justify-content: center;
     border: 1px solid rgba(96, 165, 250, 0.28);
     transition: 0.2s ease;
+    flex-shrink: 0;
 }
 
 .card-add:hover {
@@ -270,45 +328,60 @@ body {
 .card-conteudo {
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 10px;
+    min-height: 0;
+    overflow: hidden;
 }
 
 /* ===================================== */
-/* 🔹 ITENS INTERNOS                     */
+/* ITENS INTERNOS                        */
 /* ===================================== */
 .item-lista {
     background: rgba(30, 41, 59, 0.78);
     border-radius: 16px;
-    padding: 14px;
+    padding: 12px;
     border: 1px solid rgba(148, 163, 184, 0.12);
+    overflow: hidden;
 }
 
 .item-lista strong {
     display: block;
-    font-size: 16px;
+    font-size: 15px;
     margin-bottom: 6px;
     color: #f8fafc;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.item-lista p {
+.item-lista p,
+.card p {
     color: #cbd5e1;
     margin-bottom: 6px;
     font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .item-lista span {
     color: #94a3b8;
     font-size: 13px;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 /* ===================================== */
-/* 🔹 EVENTO PRINCIPAL                   */
+/* EVENTO PRINCIPAL                      */
 /* ===================================== */
 .evento-destaque {
     background: rgba(30, 41, 59, 0.82);
     border: 1px solid rgba(148, 163, 184, 0.12);
     border-radius: 18px;
-    padding: 16px;
+    padding: 14px;
+    overflow: hidden;
 }
 
 .evento-linha {
@@ -318,15 +391,27 @@ body {
     align-items: flex-start;
 }
 
+.evento-info {
+    min-width: 0;
+}
+
 .evento-info h3 {
-    font-size: 22px;
+    font-size: 20px;
     color: #f8fafc;
     margin-bottom: 6px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .evento-info p {
     color: #cbd5e1;
     font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
 
 .evento-meta {
@@ -334,34 +419,43 @@ body {
     gap: 8px;
     flex-wrap: wrap;
     justify-content: flex-end;
+    flex-shrink: 0;
 }
 
 .evento-extra {
     margin-top: 12px;
     display: flex;
-    gap: 20px;
+    gap: 14px;
     flex-wrap: wrap;
     color: #cbd5e1;
-    font-size: 14px;
+    font-size: 13px;
+    overflow: hidden;
 }
 
 /* ===================================== */
-/* 🔹 LISTAS SIMPLES                     */
+/* LISTAS SIMPLES                        */
 /* ===================================== */
 .lista-simples {
     padding-left: 18px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
     color: #e2e8f0;
+    overflow: hidden;
+}
+
+.lista-simples li {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 /* ===================================== */
-/* 🔹 BOTÃO ADICIONAR                    */
+/* BOTAO ADICIONAR                       */
 /* ===================================== */
 .btn-add {
-    width: 58px;
-    height: 58px;
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
     background: linear-gradient(135deg, #2563eb, #1d4ed8);
     color: white;
@@ -379,7 +473,7 @@ body {
 }
 
 /* ===================================== */
-/* 🔹 BADGES                             */
+/* BADGES                                */
 /* ===================================== */
 .badge,
 .mini-badge {
@@ -391,7 +485,7 @@ body {
 }
 
 /* ===================================== */
-/* 🔹 PRIORIDADES                        */
+/* PRIORIDADES                           */
 /* ===================================== */
 .prioridade-alta {
     background: #fee2e2;
@@ -412,7 +506,7 @@ body {
 }
 
 /* ===================================== */
-/* 🔹 STATUS                             */
+/* STATUS                                */
 /* ===================================== */
 .status-pendente {
     background: #fee2e2;
@@ -433,7 +527,7 @@ body {
 }
 
 /* ===================================== */
-/* 🔹 FUNDOS DE PRIORIDADE DA SIDEBAR    */
+/* FUNDOS DE PRIORIDADE DA SIDEBAR       */
 /* ===================================== */
 .prioridade-alta-bg {
     background: linear-gradient(135deg, #7f1d1d, #991b1b);
@@ -448,7 +542,7 @@ body {
 }
 
 /* ===================================== */
-/* 🔹 MENSAGEM VAZIA                     */
+/* MENSAGEM VAZIA                        */
 /* ===================================== */
 .mensagem-vazia {
     color: #94a3b8;
@@ -457,26 +551,43 @@ body {
 }
 
 /* ===================================== */
-/* 🔹 RESPONSIVIDADE                     */
+/* RESPONSIVIDADE                        */
 /* ===================================== */
 @media (max-width: 1400px) {
+    .dashboard,
     .dashboard-layout {
-        grid-template-columns: 280px 1fr 280px;
+        grid-template-columns: 230px 1fr 270px;
     }
 }
 
 @media (max-width: 1200px) {
-    .dashboard-layout {
-        grid-template-columns: 1fr;
+    html,
+    body {
+        height: auto;
     }
 
+    body {
+        overflow: auto;
+    }
+
+    .dashboard,
+    .dashboard-layout {
+        grid-template-columns: 1fr;
+        height: auto;
+        max-height: none;
+    }
+
+    .main-content,
     .sidebar-esquerda,
     .sidebar-direita {
+        height: auto;
+        overflow: visible;
         border: none;
     }
 
     .dashboard-grid {
         grid-template-columns: 1fr;
+        grid-template-rows: auto;
         grid-template-areas:
             "horarios"
             "faltas"
