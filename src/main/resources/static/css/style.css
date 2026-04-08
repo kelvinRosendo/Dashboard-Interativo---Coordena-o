@@ -71,7 +71,9 @@ body {
     margin-top: 4px;
     flex: 1;
     min-height: 0;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 4px;
 }
 
 .sidebar-item {
@@ -165,6 +167,9 @@ body {
     padding: 16px;
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
     overflow: hidden;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 .painel-lateral h2 {
@@ -210,7 +215,10 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0;
+    padding-right: 4px;
 }
 
 .info-box {
@@ -330,7 +338,9 @@ body {
     flex-direction: column;
     gap: 10px;
     min-height: 0;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 4px;
 }
 
 /* ===================================== */
@@ -441,7 +451,10 @@ body {
     flex-direction: column;
     gap: 8px;
     color: #e2e8f0;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0;
+    padding-right: 4px;
 }
 
 .lista-simples li {
@@ -548,6 +561,36 @@ body {
     color: #94a3b8;
     font-style: italic;
     font-size: 14px;
+}
+
+.sidebar-content::-webkit-scrollbar,
+.painel-info-lista::-webkit-scrollbar,
+.card-conteudo::-webkit-scrollbar,
+.lista-simples::-webkit-scrollbar {
+    width: 8px;
+}
+
+.sidebar-content::-webkit-scrollbar-track,
+.painel-info-lista::-webkit-scrollbar-track,
+.card-conteudo::-webkit-scrollbar-track,
+.lista-simples::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.35);
+    border-radius: 999px;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb,
+.painel-info-lista::-webkit-scrollbar-thumb,
+.card-conteudo::-webkit-scrollbar-thumb,
+.lista-simples::-webkit-scrollbar-thumb {
+    background: rgba(96, 165, 250, 0.45);
+    border-radius: 999px;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb:hover,
+.painel-info-lista::-webkit-scrollbar-thumb:hover,
+.card-conteudo::-webkit-scrollbar-thumb:hover,
+.lista-simples::-webkit-scrollbar-thumb:hover {
+    background: rgba(96, 165, 250, 0.7);
 }
 
 /* ===================================== */
