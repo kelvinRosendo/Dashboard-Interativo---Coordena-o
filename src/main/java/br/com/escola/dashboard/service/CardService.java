@@ -3,68 +3,35 @@ package br.com.escola.dashboard.service;
 import br.com.escola.dashboard.dto.CardRequestDTO;
 import br.com.escola.dashboard.dto.CardResponseDTO;
 import br.com.escola.dashboard.entity.Card;
+import br.com.escola.dashboard.enums.CategoriaCard;
 import br.com.escola.dashboard.exception.ResourceNotFoundException;
 import br.com.escola.dashboard.repository.CardRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * 🔹 CardService
- *
- * Essa classe é a camada de regra de negócio dos cards.
- * Ela fica entre o Controller e o Repository.
- *
- * Funções principais:
- * - receber os dados enviados pelo controller
- * - aplicar a lógica da aplicação
- * - conversar com o repository
- * - retornar os dados já organizados em DTO
- */
 @Service
 public class CardService {
 
     private final CardRepository cardRepository;
 
-    /**
-     * 🔹 Injeção de dependência via construtor
-     *
-     * O Spring injeta automaticamente o CardRepository aqui.
-     */
     public CardService(CardRepository cardRepository) {
         this.cardRepository = cardRepository;
     }
 
-    /**
-     * 🔹 Criar um novo card
-     *
-     * Recebe um CardRequestDTO com os dados vindos da requisição,
-     * transforma em entidade Card, salva no banco e devolve um CardResponseDTO.
-     */
     public CardResponseDTO criarCard(CardRequestDTO requestDTO) {
-        Card card = new Card();
+        validarRegrasDeNegocio(requestDTO);
 
-        card.setTitulo(requestDTO.getTitulo());
-        card.setDescricao(requestDTO.getDescricao());
-        card.setCategoria(requestDTO.getCategoria());
-        card.setPrioridade(requestDTO.getPrioridade());
-        card.setDataEvento(requestDTO.getDataEvento());
-        card.setResponsavel(requestDTO.getResponsavel());
-        card.setStatus(requestDTO.getStatus());
-        card.setObservacoes(requestDTO.getObservacoes());
+        Card card = new Card();
+        preencherCard(card, requestDTO);
         card.setDataCriacao(LocalDateTime.now());
 
         Card cardSalvo = cardRepository.save(card);
-
         return converterParaResponseDTO(cardSalvo);
     }
 
-    /**
-     * 🔹 Listar todos os cards
-     *
-     * Busca todos os cards no banco e converte cada um para CardResponseDTO.
-     */
     public List<CardResponseDTO> listarTodos() {
         List<Card> cards = cardRepository.findAll();
 
@@ -73,73 +40,88 @@ public class CardService {
                 .toList();
     }
 
-    /**
-     * 🔹 Buscar card por ID
-     *
-     * Procura um card pelo id.
-     * Se não encontrar, lança ResourceNotFoundException.
-     */
     public CardResponseDTO buscarPorId(Long id) {
         if (id == null) {
-            throw new ResourceNotFoundException("ID não pode ser nulo");
+            throw new ResourceNotFoundException("ID nao pode ser nulo");
         }
 
         Card card = cardRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Card não encontrado com id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Card nao encontrado com id: " + id));
 
         return converterParaResponseDTO(card);
     }
 
-    /**
-     * 🔹 Atualizar um card existente
-     *
-     * Primeiro busca o card no banco.
-     * Se existir, atualiza os campos com os dados do DTO.
-     * Depois salva novamente e retorna o card atualizado.
-     */
     public CardResponseDTO atualizarCard(Long id, CardRequestDTO requestDTO) {
         if (id == null) {
-            throw new ResourceNotFoundException("ID não pode ser nulo");
+            throw new ResourceNotFoundException("ID nao pode ser nulo");
         }
 
-        Card card = cardRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Card não encontrado com id: " + id));
+        validarRegrasDeNegocio(requestDTO);
 
-        card.setTitulo(requestDTO.getTitulo());
-        card.setDescricao(requestDTO.getDescricao());
-        card.setCategoria(requestDTO.getCategoria());
-        card.setPrioridade(requestDTO.getPrioridade());
-        card.setDataEvento(requestDTO.getDataEvento());
-        card.setResponsavel(requestDTO.getResponsavel());
-        card.setStatus(requestDTO.getStatus());
-        card.setObservacoes(requestDTO.getObservacoes());
+        Card card = cardRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Card nao encontrado com id: " + id));
+
+        preencherCard(card, requestDTO);
 
         Card cardAtualizado = cardRepository.save(card);
-
         return converterParaResponseDTO(cardAtualizado);
     }
 
-    /**
-     * 🔹 Deletar um card
-     *
-     * Primeiro verifica se o ID foi informado.
-     * Depois tenta buscar o card no banco.
-     * Se não encontrar, lança exceção.
-     * Se encontrar, remove do banco.
-     */
     public void deletarCard(Long id) {
         if (id == null) {
-            throw new ResourceNotFoundException("ID não pode ser nulo");
+            throw new ResourceNotFoundException("ID nao pode ser nulo");
         }
 
         cardRepository.deleteById(id);
     }
 
-    /**
-     * 🔹 Método auxiliar para converter Card em CardResponseDTO
-     *
-     * Isso evita repetir código em vários métodos.
-     */
+    private void preencherCard(Card card, CardRequestDTO requestDTO) {
+        card.setTitulo(requestDTO.getTitulo().trim());
+        card.setDescricao(limparTexto(requestDTO.getDescricao()));
+        card.setCategoria(requestDTO.getCategoria());
+        card.setPrioridade(requestDTO.getPrioridade());
+        card.setDataEvento(requestDTO.getDataEvento());
+        card.setResponsavel(limparTexto(requestDTO.getResponsavel()));
+        card.setStatus(requestDTO.getStatus());
+        card.setObservacoes(limparTexto(requestDTO.getObservacoes()));
+    }
+
+    private void validarRegrasDeNegocio(CardRequestDTO requestDTO) {
+        CategoriaCard categoria = requestDTO.getCategoria();
+
+        if (categoria == null) {
+            return;
+        }
+
+        if (exigeDataEvento(categoria) && requestDTO.getDataEvento() == null) {
+            throw new IllegalArgumentException("Informe a data para este tipo de card.");
+        }
+
+        if (exigeResponsavel(categoria) && !StringUtils.hasText(requestDTO.getResponsavel())) {
+            throw new IllegalArgumentException("Informe o responsavel para este tipo de card.");
+        }
+
+        if (categoria == CategoriaCard.AVISO_NOTA && !StringUtils.hasText(requestDTO.getDescricao())) {
+            throw new IllegalArgumentException("Avisos e notas precisam de uma descricao.");
+        }
+    }
+
+    private boolean exigeDataEvento(CategoriaCard categoria) {
+        return categoria == CategoriaCard.EVENTO
+                || categoria == CategoriaCard.FALTA_PROFESSOR
+                || categoria == CategoriaCard.HORARIO_PROFESSOR;
+    }
+
+    private boolean exigeResponsavel(CategoriaCard categoria) {
+        return categoria == CategoriaCard.EVENTO
+                || categoria == CategoriaCard.FALTA_PROFESSOR
+                || categoria == CategoriaCard.HORARIO_PROFESSOR;
+    }
+
+    private String limparTexto(String valor) {
+        return StringUtils.hasText(valor) ? valor.trim() : null;
+    }
+
     private CardResponseDTO converterParaResponseDTO(Card card) {
         CardResponseDTO responseDTO = new CardResponseDTO();
 

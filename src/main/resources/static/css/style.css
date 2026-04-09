@@ -663,6 +663,27 @@ body.form-page .container {
     grid-column: 1 / -1;
 }
 
+.form-alerta {
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 1px solid rgba(248, 113, 113, 0.35);
+    background: rgba(127, 29, 29, 0.2);
+    color: #fecaca;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.form-alerta p {
+    margin: 0;
+}
+
+.lista-erros {
+    margin: 8px 0 0 18px;
+    padding: 0;
+    font-size: 13px;
+    font-weight: 500;
+}
+
 .formulario label {
     display: block;
     margin-bottom: 8px;
@@ -695,6 +716,19 @@ body.form-page .container {
 .formulario textarea {
     resize: vertical;
     min-height: 96px;
+}
+
+.campo-invalido {
+    border-color: rgba(248, 113, 113, 0.65) !important;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.14) !important;
+}
+
+.campo-erro {
+    display: block;
+    margin-top: 6px;
+    color: #fca5a5;
+    font-size: 12px;
+    line-height: 1.4;
 }
 
 .acoes {

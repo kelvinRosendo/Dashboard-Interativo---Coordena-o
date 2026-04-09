@@ -5,8 +5,10 @@ import br.com.escola.dashboard.dto.CardResponseDTO;
 import br.com.escola.dashboard.enums.CategoriaCard;
 import br.com.escola.dashboard.enums.StatusCard;
 import br.com.escola.dashboard.service.CardService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,17 +53,27 @@ public class ViewController {
         card.setCategoria(categoriaSelecionada);
         card.setStatus(StatusCard.PENDENTE);
 
-        model.addAttribute("card", card);
-        model.addAttribute("categoriaSelecionada", categoriaSelecionada);
-        model.addAttribute("tituloFormulario", categoriaSelecionada.getTituloFormulario());
-        model.addAttribute("modoEdicao", false);
-
+        preencherModeloFormulario(model, card, false, null);
         return "novo-card";
     }
 
     @PostMapping("/salvar-card")
-    public String salvarCard(@ModelAttribute("card") CardRequestDTO cardRequestDTO) {
-        cardService.criarCard(cardRequestDTO);
+    public String salvarCard(@Valid @ModelAttribute("card") CardRequestDTO cardRequestDTO,
+                             BindingResult bindingResult,
+                             Model model) {
+        if (bindingResult.hasErrors()) {
+            preencherModeloFormulario(model, cardRequestDTO, false, null);
+            return "novo-card";
+        }
+
+        try {
+            cardService.criarCard(cardRequestDTO);
+        } catch (IllegalArgumentException ex) {
+            bindingResult.reject("card.invalido", ex.getMessage());
+            preencherModeloFormulario(model, cardRequestDTO, false, null);
+            return "novo-card";
+        }
+
         return "redirect:/";
     }
 
@@ -85,20 +97,42 @@ public class ViewController {
         requestDTO.setStatus(card.getStatus());
         requestDTO.setObservacoes(card.getObservacoes());
 
-        model.addAttribute("card", requestDTO);
-        model.addAttribute("cardId", id);
-        model.addAttribute("categoriaSelecionada", card.getCategoria());
-        model.addAttribute("tituloFormulario", card.getCategoria().getTituloFormulario());
-        model.addAttribute("modoEdicao", true);
-
+        preencherModeloFormulario(model, requestDTO, true, id);
         return "novo-card";
     }
 
     @PostMapping("/atualizar-card/{id}")
     public String atualizarCard(@PathVariable Long id,
-                                @ModelAttribute("card") CardRequestDTO cardRequestDTO) {
-        cardService.atualizarCard(id, cardRequestDTO);
+                                @Valid @ModelAttribute("card") CardRequestDTO cardRequestDTO,
+                                BindingResult bindingResult,
+                                Model model) {
+        if (bindingResult.hasErrors()) {
+            preencherModeloFormulario(model, cardRequestDTO, true, id);
+            return "novo-card";
+        }
+
+        try {
+            cardService.atualizarCard(id, cardRequestDTO);
+        } catch (IllegalArgumentException ex) {
+            bindingResult.reject("card.invalido", ex.getMessage());
+            preencherModeloFormulario(model, cardRequestDTO, true, id);
+            return "novo-card";
+        }
+
         return "redirect:/";
+    }
+
+    private void preencherModeloFormulario(Model model, CardRequestDTO card, boolean modoEdicao, Long cardId) {
+        CategoriaCard categoriaSelecionada = card.getCategoria() != null ? card.getCategoria() : CategoriaCard.EVENTO;
+
+        model.addAttribute("card", card);
+        model.addAttribute("modoEdicao", modoEdicao);
+        model.addAttribute("tituloFormulario", categoriaSelecionada.getTituloFormulario());
+        model.addAttribute("categoriaSelecionada", categoriaSelecionada);
+
+        if (cardId != null) {
+            model.addAttribute("cardId", cardId);
+        }
     }
 
     private List<CardResponseDTO> filtrarPorCategoria(List<CardResponseDTO> cards, CategoriaCard categoria) {
