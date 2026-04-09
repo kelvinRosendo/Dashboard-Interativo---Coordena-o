@@ -250,17 +250,19 @@ body.form-page {
 .resumo-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 8px;
 }
 
 .resumo-card {
     background: rgba(30, 41, 59, 0.9);
     border: 1px solid rgba(148, 163, 184, 0.12);
     border-radius: 16px;
-    padding: 12px;
+    padding: 10px 12px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    justify-content: center;
+    gap: 4px;
+    min-height: 82px;
     overflow: hidden;
     transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
@@ -273,11 +275,13 @@ body.form-page {
 
 .resumo-label {
     color: #94a3b8;
-    font-size: 12px;
+    font-size: 11px;
+    line-height: 1.25;
 }
 
 .resumo-card strong {
-    font-size: 24px;
+    font-size: 18px;
+    line-height: 1;
     color: #ffffff;
 }
 
