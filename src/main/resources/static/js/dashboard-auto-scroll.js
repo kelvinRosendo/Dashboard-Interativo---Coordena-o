@@ -2,9 +2,14 @@
     const activeScrollers = new WeakMap();
 
     function setupAutoScroll(container) {
+        if (window.innerWidth <= 1200) {
+            teardownAutoScroll(container);
+            return;
+        }
+
         const maxScroll = Math.max(0, container.scrollHeight - container.clientHeight);
 
-        if (maxScroll <= 2) {
+        if (maxScroll <= 24) {
             teardownAutoScroll(container);
             return;
         }
@@ -16,11 +21,11 @@
 
         const state = {
             maxScroll,
-            speed: Number(container.dataset.scrollSpeed || 0.8),
+            speed: Number(container.dataset.scrollSpeed || 0.35),
             direction: 1,
             paused: false,
             rafId: null,
-            waitUntil: performance.now() + 600,
+            waitUntil: performance.now() + 1800,
             lastTime: performance.now(),
             position: container.scrollTop || 0,
             resumeTimeout: null
@@ -34,11 +39,11 @@
                 if (state.position >= state.maxScroll) {
                     state.position = state.maxScroll;
                     state.direction = -1;
-                    state.waitUntil = now + 900;
+                    state.waitUntil = now + 2200;
                 } else if (state.position <= 0) {
                     state.position = 0;
                     state.direction = 1;
-                    state.waitUntil = now + 900;
+                    state.waitUntil = now + 2200;
                 }
 
                 container.scrollTop = state.position;
@@ -54,7 +59,7 @@
 
         const handleMouseLeave = () => {
             state.paused = false;
-            state.waitUntil = performance.now() + 500;
+            state.waitUntil = performance.now() + 1200;
         };
 
         const handleWheel = () => {
@@ -62,8 +67,8 @@
             clearTimeout(state.resumeTimeout);
             state.resumeTimeout = setTimeout(() => {
                 state.paused = false;
-                state.waitUntil = performance.now() + 700;
-            }, 1400);
+                state.waitUntil = performance.now() + 1200;
+            }, 1800);
         };
 
         container.addEventListener("mouseenter", handleMouseEnter);

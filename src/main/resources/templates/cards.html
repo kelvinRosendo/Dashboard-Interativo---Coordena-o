@@ -23,7 +23,7 @@
 
             <div class="sidebar-item"
                  th:each="card : ${avisos}"
-                 th:classappend="${card.prioridade.name() == 'ALTA'} ? ' prioridade-alta-bg' :
+                 th:classappend="${card.prioridade.name() == 'ALTA'} ? ' prioridade-alta-bg card-critico' :
                                  (${card.prioridade.name() == 'MEDIA'} ? ' prioridade-media-bg' : ' prioridade-baixa-bg')">
                 <div class="sidebar-item-topo">
                     <span class="mini-badge"
@@ -35,6 +35,10 @@
                 </div>
                 <h3 th:text="${card.titulo}">Aviso</h3>
                 <p th:text="${card.descricao} ?: 'Sem descricao.'">Descricao</p>
+                <div class="card-acoes card-acoes-sidebar">
+                    <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar card">Editar</a>
+                    <a th:href="@{/deletar-card/{id}(id=${card.id})}" class="card-acao-link card-acao-link-danger" title="Excluir card">Excluir</a>
+                </div>
             </div>
         </div>
 
@@ -47,14 +51,14 @@
         <header class="dashboard-header">
             <div>
                 <h1>Dashboard Escolar</h1>
-                <p>Painel operacional da coordenacao</p>
+                <p>Painel operacional da coordenacao com leitura rapida por prioridade, status e responsavel.</p>
             </div>
         </header>
 
         <section class="dashboard-grid">
             <div class="painel-card card-horarios">
                 <div class="card-topo">
-                    <h2>Horarios Professores - Rotativo</h2>
+                    <h2>Horarios de Professores</h2>
                     <a th:href="@{/novo-card(categoria='HORARIO_PROFESSOR')}" class="card-add">+</a>
                 </div>
 
@@ -63,17 +67,34 @@
                         Nenhum horario disponivel no momento.
                     </p>
 
-                    <div class="item-lista" th:each="card : ${horarios}">
+                    <div class="item-lista"
+                         th:each="card : ${horarios}"
+                         th:classappend="${card.prioridade.name() == 'ALTA'} ? ' card-critico' : ''">
                         <strong th:text="${card.titulo}">Horario</strong>
-                        <p th:text="${card.responsavel} ?: 'Professor nao definido'">Professor</p>
-                        <span th:text="${card.dataEvento} ?: 'Sem data definida'">Data</span>
+                        <p>
+                            <strong>Professor:</strong>
+                            <span th:text="${card.responsavel} ?: 'Professor nao definido'">Professor</span>
+                        </p>
+                        <div class="item-meta">
+                            <span><strong>Data:</strong> <span th:text="${card.dataEvento} ?: 'Sem data definida'">Data</span></span>
+                            <span class="mini-badge"
+                                  th:classappend="${card.status.name() == 'PENDENTE'} ? ' status-pendente' :
+                                                  (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento' : ' status-concluido')"
+                                  th:text="${card.status}">
+                                Status
+                            </span>
+                        </div>
+                        <div class="card-acoes">
+                            <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar horario">Editar</a>
+                            <a th:href="@{/deletar-card/{id}(id=${card.id})}" class="card-acao-link card-acao-link-danger" title="Excluir horario">Excluir</a>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="painel-card card-faltas">
                 <div class="card-topo">
-                    <h2>Agenda de Falta dos Professores</h2>
+                    <h2>Faltas de Professores</h2>
                     <a th:href="@{/novo-card(categoria='FALTA_PROFESSOR')}" class="card-add">+</a>
                 </div>
 
@@ -82,17 +103,31 @@
                         Nenhuma falta registrada no momento.
                     </p>
 
-                    <div class="item-lista" th:each="card : ${faltas}">
+                    <div class="item-lista"
+                         th:each="card : ${faltas}"
+                         th:classappend="${card.prioridade.name() == 'ALTA'} ? ' card-critico' : ''">
                         <strong th:text="${card.titulo}">Falta</strong>
                         <p th:text="${card.descricao} ?: 'Sem descricao'">Descricao</p>
-                        <span th:text="${card.dataEvento} ?: 'Sem data definida'">Data</span>
+                        <div class="item-meta">
+                            <span><strong>Data:</strong> <span th:text="${card.dataEvento} ?: 'Sem data definida'">Data</span></span>
+                            <span class="mini-badge"
+                                  th:classappend="${card.status.name() == 'PENDENTE'} ? ' status-pendente' :
+                                                  (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento' : ' status-concluido')"
+                                  th:text="${card.status}">
+                                Status
+                            </span>
+                        </div>
+                        <div class="card-acoes">
+                            <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar falta">Editar</a>
+                            <a th:href="@{/deletar-card/{id}(id=${card.id})}" class="card-acao-link card-acao-link-danger" title="Excluir falta">Excluir</a>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="painel-card card-calendario">
                 <div class="card-topo">
-                    <h2>Card Principal - Calendario de Eventos</h2>
+                    <h2>Eventos Principais</h2>
                     <a th:href="@{/novo-card(categoria='EVENTO')}" class="card-add">+</a>
                 </div>
 
@@ -101,7 +136,9 @@
                         Nenhum evento principal cadastrado no momento.
                     </p>
 
-                    <div class="evento-destaque" th:each="card : ${eventos}">
+                    <div class="evento-destaque"
+                         th:each="card : ${eventos}"
+                         th:classappend="${card.prioridade.name() == 'ALTA'} ? ' card-critico' : ''">
                         <div class="evento-linha">
                             <div class="evento-info">
                                 <h3 th:text="${card.titulo}">Evento</h3>
@@ -129,6 +166,10 @@
                             <span><strong>Data:</strong> <span th:text="${card.dataEvento} ?: 'Sem data'">Data</span></span>
                             <span><strong>Responsavel:</strong> <span th:text="${card.responsavel} ?: 'Nao definido'">Responsavel</span></span>
                         </div>
+                        <div class="card-acoes">
+                            <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar evento">Editar</a>
+                            <a th:href="@{/deletar-card/{id}(id=${card.id})}" class="card-acao-link card-acao-link-danger" title="Excluir evento">Excluir</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -144,18 +185,39 @@
                         Nenhuma rotina administrativa cadastrada.
                     </p>
 
-                    <ul class="lista-simples" th:if="${rotinaAdministrativa != null and !#lists.isEmpty(rotinaAdministrativa)}">
-                        <li th:each="card : ${rotinaAdministrativa}"
-                            th:text="${card.titulo} + (${card.descricao} != null and !#strings.isEmpty(card.descricao) ? ' - ' + card.descricao : '')">
-                            Item de rotina
-                        </li>
-                    </ul>
+                    <div class="lista-rotina" th:if="${rotinaAdministrativa != null and !#lists.isEmpty(rotinaAdministrativa)}">
+                        <div class="item-lista item-lista-rotina"
+                             th:each="card : ${rotinaAdministrativa}"
+                             th:classappend="${card.prioridade.name() == 'ALTA'} ? ' card-critico' : ''">
+                            <strong th:text="${card.titulo}">Item de rotina</strong>
+                            <p th:text="${card.descricao} ?: 'Sem descricao complementar.'">Descricao</p>
+                            <div class="item-meta">
+                                <span><strong>Responsavel:</strong> <span th:text="${card.responsavel} ?: 'Responsavel nao informado'">Responsavel</span></span>
+                                <span class="mini-badge"
+                                      th:classappend="${card.prioridade.name() == 'ALTA'} ? ' prioridade-alta' :
+                                                      (${card.prioridade.name() == 'MEDIA'} ? ' prioridade-media' : ' prioridade-baixa')"
+                                      th:text="${card.prioridade}">
+                                    Prioridade
+                                </span>
+                                <span class="mini-badge"
+                                      th:classappend="${card.status.name() == 'PENDENTE'} ? ' status-pendente' :
+                                                      (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento' : ' status-concluido')"
+                                      th:text="${card.status}">
+                                    Status
+                                </span>
+                            </div>
+                            <div class="card-acoes">
+                                <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar rotina administrativa">Editar</a>
+                                <a th:href="@{/deletar-card/{id}(id=${card.id})}" class="card-acao-link card-acao-link-danger" title="Excluir rotina administrativa">Excluir</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="painel-card card-rotina-aux">
                 <div class="card-topo">
-                    <h2>Rotina Auxiliares</h2>
+                    <h2>Rotina de Auxiliares</h2>
                     <a th:href="@{/novo-card(categoria='ROTINA_AUXILIAR')}" class="card-add">+</a>
                 </div>
 
@@ -164,12 +226,33 @@
                         Nenhuma rotina auxiliar cadastrada.
                     </p>
 
-                    <ul class="lista-simples" th:if="${rotinaAuxiliar != null and !#lists.isEmpty(rotinaAuxiliar)}">
-                        <li th:each="card : ${rotinaAuxiliar}"
-                            th:text="${card.titulo} + (${card.descricao} != null and !#strings.isEmpty(card.descricao) ? ' - ' + card.descricao : '')">
-                            Item de rotina
-                        </li>
-                    </ul>
+                    <div class="lista-rotina" th:if="${rotinaAuxiliar != null and !#lists.isEmpty(rotinaAuxiliar)}">
+                        <div class="item-lista item-lista-rotina"
+                             th:each="card : ${rotinaAuxiliar}"
+                             th:classappend="${card.prioridade.name() == 'ALTA'} ? ' card-critico' : ''">
+                            <strong th:text="${card.titulo}">Item de rotina</strong>
+                            <p th:text="${card.descricao} ?: 'Sem descricao complementar.'">Descricao</p>
+                            <div class="item-meta">
+                                <span><strong>Responsavel:</strong> <span th:text="${card.responsavel} ?: 'Responsavel nao informado'">Responsavel</span></span>
+                                <span class="mini-badge"
+                                      th:classappend="${card.prioridade.name() == 'ALTA'} ? ' prioridade-alta' :
+                                                      (${card.prioridade.name() == 'MEDIA'} ? ' prioridade-media' : ' prioridade-baixa')"
+                                      th:text="${card.prioridade}">
+                                    Prioridade
+                                </span>
+                                <span class="mini-badge"
+                                      th:classappend="${card.status.name() == 'PENDENTE'} ? ' status-pendente' :
+                                                      (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento' : ' status-concluido')"
+                                      th:text="${card.status}">
+                                    Status
+                                </span>
+                            </div>
+                            <div class="card-acoes">
+                                <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar rotina auxiliar">Editar</a>
+                                <a th:href="@{/deletar-card/{id}(id=${card.id})}" class="card-acao-link card-acao-link-danger" title="Excluir rotina auxiliar">Excluir</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
