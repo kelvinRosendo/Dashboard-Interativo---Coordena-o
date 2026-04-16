@@ -61,10 +61,14 @@ public class CardService {
         Card card = cardRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Card nao encontrado com id: " + id));
 
-        preencherCard(card, requestDTO);
+        if (card != null) {
+            preencherCard(card, requestDTO);
 
-        Card cardAtualizado = cardRepository.save(card);
-        return converterParaResponseDTO(cardAtualizado);
+            Card cardAtualizado = cardRepository.save(card);
+            return converterParaResponseDTO(cardAtualizado);
+        }
+        
+        throw new ResourceNotFoundException("Card nao encontrado com id: " + id);
     }
 
     public void deletarCard(Long id) {

@@ -69,7 +69,8 @@ public class ViewController {
         try {
             cardService.criarCard(cardRequestDTO);
         } catch (IllegalArgumentException ex) {
-            bindingResult.reject("card.invalido", ex.getMessage());
+            String errorMessage = ex.getMessage();
+            bindingResult.reject("card.invalido", errorMessage != null ? errorMessage : "Erro ao criar card");
             preencherModeloFormulario(model, cardRequestDTO, false, null);
             return "novo-card";
         }
@@ -114,7 +115,8 @@ public class ViewController {
         try {
             cardService.atualizarCard(id, cardRequestDTO);
         } catch (IllegalArgumentException ex) {
-            bindingResult.reject("card.invalido", ex.getMessage());
+            String errorMessage = ex.getMessage();
+            bindingResult.reject("card.invalido", errorMessage != null ? errorMessage : "Erro ao atualizar card");
             preencherModeloFormulario(model, cardRequestDTO, true, id);
             return "novo-card";
         }

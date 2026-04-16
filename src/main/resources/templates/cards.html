@@ -69,7 +69,10 @@
 
                     <div class="item-lista"
                          th:each="card : ${horarios}"
-                         th:classappend="${card.prioridade.name() == 'ALTA'} ? ' card-critico' : ''">
+                         th:classappend="${card.prioridade.name() == 'ALTA'} ? ' card-critico prioridade-alta-card' :
+                                         (${card.prioridade.name() == 'MEDIA'} ? ' prioridade-media-card' : ' prioridade-baixa-card') + 
+                                         (${card.status.name() == 'PENDENTE'} ? ' status-pendente-card' :
+                                         (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento-card' : ' status-concluido-card'))">
                         <strong th:text="${card.titulo}">Horario</strong>
                         <p>
                             <strong>Professor:</strong>
@@ -105,7 +108,10 @@
 
                     <div class="item-lista"
                          th:each="card : ${faltas}"
-                         th:classappend="${card.prioridade.name() == 'ALTA'} ? ' card-critico' : ''">
+                         th:classappend="${card.prioridade.name() == 'ALTA'} ? ' card-critico prioridade-alta-card' :
+                                         (${card.prioridade.name() == 'MEDIA'} ? ' prioridade-media-card' : ' prioridade-baixa-card') + 
+                                         (${card.status.name() == 'PENDENTE'} ? ' status-pendente-card' :
+                                         (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento-card' : ' status-concluido-card'))">
                         <strong th:text="${card.titulo}">Falta</strong>
                         <p th:text="${card.descricao} ?: 'Sem descricao'">Descricao</p>
                         <div class="item-meta">
@@ -138,7 +144,10 @@
 
                     <div class="evento-destaque"
                          th:each="card : ${eventos}"
-                         th:classappend="${card.prioridade.name() == 'ALTA'} ? ' card-critico' : ''">
+                         th:classappend="${card.prioridade.name() == 'ALTA'} ? ' card-critico prioridade-alta-card' :
+                                         (${card.prioridade.name() == 'MEDIA'} ? ' prioridade-media-card' : ' prioridade-baixa-card') + 
+                                         (${card.status.name() == 'PENDENTE'} ? ' status-pendente-card' :
+                                         (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento-card' : ' status-concluido-card'))">
                         <div class="evento-linha">
                             <div class="evento-info">
                                 <h3 th:text="${card.titulo}">Evento</h3>
@@ -188,7 +197,10 @@
                     <div class="lista-rotina" th:if="${rotinaAdministrativa != null and !#lists.isEmpty(rotinaAdministrativa)}">
                         <div class="item-lista item-lista-rotina"
                              th:each="card : ${rotinaAdministrativa}"
-                             th:classappend="${card.prioridade.name() == 'ALTA'} ? ' card-critico' : ''">
+                             th:classappend="${card.prioridade.name() == 'ALTA'} ? ' card-critico prioridade-alta-card' :
+                                             (${card.prioridade.name() == 'MEDIA'} ? ' prioridade-media-card' : ' prioridade-baixa-card') + 
+                                             (${card.status.name() == 'PENDENTE'} ? ' status-pendente-card' :
+                                             (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento-card' : ' status-concluido-card'))">
                             <strong th:text="${card.titulo}">Item de rotina</strong>
                             <p th:text="${card.descricao} ?: 'Sem descricao complementar.'">Descricao</p>
                             <div class="item-meta">
@@ -229,7 +241,10 @@
                     <div class="lista-rotina" th:if="${rotinaAuxiliar != null and !#lists.isEmpty(rotinaAuxiliar)}">
                         <div class="item-lista item-lista-rotina"
                              th:each="card : ${rotinaAuxiliar}"
-                             th:classappend="${card.prioridade.name() == 'ALTA'} ? ' card-critico' : ''">
+                             th:classappend="${card.prioridade.name() == 'ALTA'} ? ' card-critico prioridade-alta-card' :
+                                             (${card.prioridade.name() == 'MEDIA'} ? ' prioridade-media-card' : ' prioridade-baixa-card') + 
+                                             (${card.status.name() == 'PENDENTE'} ? ' status-pendente-card' :
+                                             (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento-card' : ' status-concluido-card'))">
                             <strong th:text="${card.titulo}">Item de rotina</strong>
                             <p th:text="${card.descricao} ?: 'Sem descricao complementar.'">Descricao</p>
                             <div class="item-meta">
