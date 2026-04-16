@@ -36,8 +36,12 @@
                 <h3 th:text="${card.titulo}">Aviso</h3>
                 <p th:text="${card.descricao} ?: 'Sem descricao.'">Descricao</p>
                 <div class="card-acoes card-acoes-sidebar">
-                    <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar card">Editar</a>
-                    <a th:href="@{/deletar-card/{id}(id=${card.id})}" class="card-acao-link card-acao-link-danger" title="Excluir card">Excluir</a>
+                    <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar card" aria-label="Editar card">
+                        <span aria-hidden="true">📝</span>
+                    </a>
+                    <a th:href="@{/deletar-card/{id}(id=${card.id})}" class="card-acao-link card-acao-link-danger" title="Excluir card" aria-label="Excluir card">
+                        <span aria-hidden="true">🗑</span>
+                    </a>
                 </div>
             </div>
         </div>
@@ -81,15 +85,19 @@
                         <div class="item-meta">
                             <span><strong>Data:</strong> <span th:text="${card.dataEvento} ?: 'Sem data definida'">Data</span></span>
                             <span class="mini-badge"
-                                  th:classappend="${card.status.name() == 'PENDENTE'} ? ' status-pendente' :
-                                                  (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento' : ' status-concluido')"
+                                  th:classappend="${card.status.name() == 'PENDENTE'} ? ' status-pendente status-badge-canto' :
+                                                  (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento status-badge-canto' : ' status-concluido status-badge-canto')"
                                   th:text="${card.status}">
                                 Status
                             </span>
                         </div>
                         <div class="card-acoes">
-                            <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar horario">Editar</a>
-                            <a th:href="@{/deletar-card/{id}(id=${card.id})}" class="card-acao-link card-acao-link-danger" title="Excluir horario">Excluir</a>
+                            <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar horario" aria-label="Editar horario">
+                                <span aria-hidden="true">📝</span>
+                            </a>
+                            <a th:href="@{/deletar-card/{id}(id=${card.id})}" class="card-acao-link card-acao-link-danger" title="Excluir horario" aria-label="Excluir horario">
+                                <span aria-hidden="true">🗑</span>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -117,15 +125,19 @@
                         <div class="item-meta">
                             <span><strong>Data:</strong> <span th:text="${card.dataEvento} ?: 'Sem data definida'">Data</span></span>
                             <span class="mini-badge"
-                                  th:classappend="${card.status.name() == 'PENDENTE'} ? ' status-pendente' :
-                                                  (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento' : ' status-concluido')"
+                                  th:classappend="${card.status.name() == 'PENDENTE'} ? ' status-pendente status-badge-canto' :
+                                                  (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento status-badge-canto' : ' status-concluido status-badge-canto')"
                                   th:text="${card.status}">
                                 Status
                             </span>
                         </div>
                         <div class="card-acoes">
-                            <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar falta">Editar</a>
-                            <a th:href="@{/deletar-card/{id}(id=${card.id})}" class="card-acao-link card-acao-link-danger" title="Excluir falta">Excluir</a>
+                            <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar falta" aria-label="Editar falta">
+                                <span aria-hidden="true">📝</span>
+                            </a>
+                            <a th:href="@{/deletar-card/{id}(id=${card.id})}" class="card-acao-link card-acao-link-danger" title="Excluir falta" aria-label="Excluir falta">
+                                <span aria-hidden="true">🗑</span>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -163,8 +175,8 @@
                                 </span>
 
                                 <span class="badge"
-                                      th:classappend="${card.status.name() == 'PENDENTE'} ? ' status-pendente' :
-                                                      (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento' : ' status-concluido')"
+                                      th:classappend="${card.status.name() == 'PENDENTE'} ? ' status-pendente status-badge-canto' :
+                                                      (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento status-badge-canto' : ' status-concluido status-badge-canto')"
                                       th:text="${card.status}">
                                     Status
                                 </span>
@@ -176,8 +188,12 @@
                             <span><strong>Responsavel:</strong> <span th:text="${card.responsavel} ?: 'Nao definido'">Responsavel</span></span>
                         </div>
                         <div class="card-acoes">
-                            <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar evento">Editar</a>
-                            <a th:href="@{/deletar-card/{id}(id=${card.id})}" class="card-acao-link card-acao-link-danger" title="Excluir evento">Excluir</a>
+                            <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar evento" aria-label="Editar evento">
+                                <span aria-hidden="true">📝</span>
+                            </a>
+                            <a th:href="@{/deletar-card/{id}(id=${card.id})}" class="card-acao-link card-acao-link-danger" title="Excluir evento" aria-label="Excluir evento">
+                                <span aria-hidden="true">🗑</span>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -212,15 +228,19 @@
                                     Prioridade
                                 </span>
                                 <span class="mini-badge"
-                                      th:classappend="${card.status.name() == 'PENDENTE'} ? ' status-pendente' :
-                                                      (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento' : ' status-concluido')"
+                                      th:classappend="${card.status.name() == 'PENDENTE'} ? ' status-pendente status-badge-canto' :
+                                                      (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento status-badge-canto' : ' status-concluido status-badge-canto')"
                                       th:text="${card.status}">
                                     Status
                                 </span>
                             </div>
                             <div class="card-acoes">
-                                <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar rotina administrativa">Editar</a>
-                                <a th:href="@{/deletar-card/{id}(id=${card.id})}" class="card-acao-link card-acao-link-danger" title="Excluir rotina administrativa">Excluir</a>
+                                <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar rotina administrativa" aria-label="Editar rotina administrativa">
+                                    <span aria-hidden="true">📝</span>
+                                </a>
+                                <a th:href="@{/deletar-card/{id}(id=${card.id})}" class="card-acao-link card-acao-link-danger" title="Excluir rotina administrativa" aria-label="Excluir rotina administrativa">
+                                    <span aria-hidden="true">🗑</span>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -256,15 +276,19 @@
                                     Prioridade
                                 </span>
                                 <span class="mini-badge"
-                                      th:classappend="${card.status.name() == 'PENDENTE'} ? ' status-pendente' :
-                                                      (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento' : ' status-concluido')"
+                                      th:classappend="${card.status.name() == 'PENDENTE'} ? ' status-pendente status-badge-canto' :
+                                                      (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento status-badge-canto' : ' status-concluido status-badge-canto')"
                                       th:text="${card.status}">
                                     Status
                                 </span>
                             </div>
                             <div class="card-acoes">
-                                <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar rotina auxiliar">Editar</a>
-                                <a th:href="@{/deletar-card/{id}(id=${card.id})}" class="card-acao-link card-acao-link-danger" title="Excluir rotina auxiliar">Excluir</a>
+                                <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar rotina auxiliar" aria-label="Editar rotina auxiliar">
+                                    <span aria-hidden="true">📝</span>
+                                </a>
+                                <a th:href="@{/deletar-card/{id}(id=${card.id})}" class="card-acao-link card-acao-link-danger" title="Excluir rotina auxiliar" aria-label="Excluir rotina auxiliar">
+                                    <span aria-hidden="true">🗑</span>
+                                </a>
                             </div>
                         </div>
                     </div>
