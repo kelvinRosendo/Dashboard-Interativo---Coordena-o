@@ -4,124 +4,166 @@
     <meta charset="UTF-8">
     <title>Dashboard Escolar</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script th:src="@{/js/dashboard-auto-scroll.js}" defer></script>
 </head>
 <body>
 
 <div class="dashboard-layout">
 
-    <!-- ===================================== -->
-    <!-- 🔹 COLUNA ESQUERDA: AVISOS            -->
-    <!-- ===================================== -->
     <aside class="sidebar-esquerda">
         <div class="sidebar-header">
             <h2>Avisos / Notas</h2>
-            <p>Notificações importantes</p>
+            <p>Notificacoes importantes</p>
         </div>
 
-        <div class="sidebar-content">
+        <div class="sidebar-content auto-scroll" data-auto-scroll data-scroll-speed="0.35">
+            <p th:if="${avisos == null or #lists.isEmpty(avisos)}" class="mensagem-vazia">
+                Nenhum aviso cadastrado no momento.
+            </p>
 
-            <div class="sidebar-item prioridade-alta-bg">
+            <div class="sidebar-item"
+                 th:each="card : ${avisos}"
+                 th:classappend="${card.prioridade.name() == 'ALTA'} ? ' prioridade-alta-bg card-critico' :
+                                 (${card.prioridade.name() == 'MEDIA'} ? ' prioridade-media-bg' : ' prioridade-baixa-bg')">
                 <div class="sidebar-item-topo">
-                    <span class="mini-badge prioridade-alta">Alta</span>
+                    <span class="mini-badge"
+                          th:classappend="${card.prioridade.name() == 'ALTA'} ? ' prioridade-alta' :
+                                          (${card.prioridade.name() == 'MEDIA'} ? ' prioridade-media' : ' prioridade-baixa')"
+                          th:text="${card.prioridade}">
+                        Prioridade
+                    </span>
                 </div>
-                <h3>Reunião urgente</h3>
-                <p>Coordenação com professores às 14h na sala principal.</p>
-            </div>
-
-            <div class="sidebar-item prioridade-media-bg">
-                <div class="sidebar-item-topo">
-                    <span class="mini-badge prioridade-media">Média</span>
+                <h3 th:text="${card.titulo}">Aviso</h3>
+                <p th:text="${card.descricao} ?: 'Sem descricao.'">Descricao</p>
+                <div class="card-acoes card-acoes-sidebar">
+                    <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar card" aria-label="Editar card">
+                        <span aria-hidden="true">📝</span>
+                    </a>
+                    <a th:href="@{/deletar-card/{id}(id=${card.id})}" class="card-acao-link card-acao-link-danger" title="Excluir card" aria-label="Excluir card">
+                        <span aria-hidden="true">🗑</span>
+                    </a>
                 </div>
-                <h3>Entrega de documentos</h3>
-                <p>Prazo final para envio das fichas até sexta-feira.</p>
             </div>
-
-            <div class="sidebar-item prioridade-baixa-bg">
-                <div class="sidebar-item-topo">
-                    <span class="mini-badge prioridade-baixa">Baixa</span>
-                </div>
-                <h3>Aviso interno</h3>
-                <p>Atualização do mural administrativo realizada hoje.</p>
-            </div>
-
         </div>
 
         <div class="sidebar-footer">
-            <a href="/novo-card" class="btn-add">+</a>
+            <a th:href="@{/novo-card(categoria='AVISO_NOTA')}" class="btn-add">+</a>
         </div>
     </aside>
 
-    <!-- ===================================== -->
-    <!-- 🔹 COLUNA CENTRAL: DASHBOARD PRINCIPAL -->
-    <!-- ===================================== -->
     <main class="main-content">
-
         <header class="dashboard-header">
             <div>
                 <h1>Dashboard Escolar</h1>
-                <p>Painel operacional da coordenação</p>
+                <p>Painel operacional da coordenacao com leitura rapida por prioridade, status e responsavel.</p>
             </div>
         </header>
 
         <section class="dashboard-grid">
-
-            <!-- 🔹 Horários professores -->
             <div class="painel-card card-horarios">
                 <div class="card-topo">
-                    <h2>Horários Professores - Rotativo</h2>
-                    <a href="/novo-card" class="card-add">+</a>
+                    <h2>Horarios de Professores</h2>
+                    <a th:href="@{/novo-card(categoria='HORARIO_PROFESSOR')}" class="card-add">+</a>
                 </div>
 
-                <div class="card-conteudo">
-                    <p th:if="${#lists.isEmpty(pendentes)}" class="mensagem-vazia">
-                        Nenhum horário disponível no momento.
+                <div class="card-conteudo auto-scroll" data-auto-scroll data-scroll-speed="0.4">
+                    <p th:if="${horarios == null or #lists.isEmpty(horarios)}" class="mensagem-vazia">
+                        Nenhum horario disponivel no momento.
                     </p>
 
-                    <div class="item-lista" th:each="card : ${pendentes}">
-                        <strong th:text="${card.titulo}">Horário</strong>
-                        <p th:text="${card.responsavel} ?: 'Professor não definido'">Professor</p>
-                        <span th:text="${card.dataEvento} ?: 'Sem data definida'">Data</span>
+                    <div class="item-lista"
+                         th:each="card : ${horarios}"
+                         th:classappend="${card.prioridade.name() == 'ALTA'} ? ' card-critico prioridade-alta-card' :
+                                         (${card.prioridade.name() == 'MEDIA'} ? ' prioridade-media-card' : ' prioridade-baixa-card') + 
+                                         (${card.status.name() == 'PENDENTE'} ? ' status-pendente-card' :
+                                         (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento-card' : ' status-concluido-card'))">
+                        <strong th:text="${card.titulo}">Horario</strong>
+                        <p>
+                            <strong>Professor:</strong>
+                            <span th:text="${card.responsavel} ?: 'Professor nao definido'">Professor</span>
+                        </p>
+                        <div class="item-meta">
+                            <span class="meta-data"><strong>Data:</strong> <span th:text="${card.dataEvento} ?: 'Sem data definida'">Data</span></span>
+                            <span class="mini-badge"
+                                  th:classappend="${card.status.name() == 'PENDENTE'} ? ' status-pendente status-badge-canto' :
+                                                  (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento status-badge-canto' : ' status-concluido status-badge-canto')"
+                                  th:text="${card.status}">
+                                Status
+                            </span>
+                        </div>
+                        <div class="card-acoes">
+                            <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar horario" aria-label="Editar horario">
+                                <span aria-hidden="true">📝</span>
+                            </a>
+                            <a th:href="@{/deletar-card/{id}(id=${card.id})}" class="card-acao-link card-acao-link-danger" title="Excluir horario" aria-label="Excluir horario">
+                                <span aria-hidden="true">🗑</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 🔹 Faltas -->
             <div class="painel-card card-faltas">
                 <div class="card-topo">
-                    <h2>Agenda de Falta dos Professores</h2>
-                    <a href="/novo-card" class="card-add">+</a>
+                    <h2>Faltas de Professores</h2>
+                    <a th:href="@{/novo-card(categoria='FALTA_PROFESSOR')}" class="card-add">+</a>
                 </div>
 
-                <div class="card-conteudo">
-                    <p th:if="${#lists.isEmpty(emAndamento)}" class="mensagem-vazia">
+                <div class="card-conteudo auto-scroll" data-auto-scroll data-scroll-speed="0.4">
+                    <p th:if="${faltas == null or #lists.isEmpty(faltas)}" class="mensagem-vazia">
                         Nenhuma falta registrada no momento.
                     </p>
 
-                    <div class="item-lista" th:each="card : ${emAndamento}">
+                    <div class="item-lista"
+                         th:each="card : ${faltas}"
+                         th:classappend="${card.prioridade.name() == 'ALTA'} ? ' card-critico prioridade-alta-card' :
+                                         (${card.prioridade.name() == 'MEDIA'} ? ' prioridade-media-card' : ' prioridade-baixa-card') + 
+                                         (${card.status.name() == 'PENDENTE'} ? ' status-pendente-card' :
+                                         (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento-card' : ' status-concluido-card'))">
                         <strong th:text="${card.titulo}">Falta</strong>
-                        <p th:text="${card.descricao} ?: 'Sem descrição'">Descrição</p>
-                        <span th:text="${card.dataEvento} ?: 'Sem data definida'">Data</span>
+                        <p th:text="${card.descricao} ?: 'Sem descricao'">Descricao</p>
+                        <div class="item-meta">
+                            <span class="meta-data"><strong>Data:</strong> <span th:text="${card.dataEvento} ?: 'Sem data definida'">Data</span></span>
+                            <span class="mini-badge"
+                                  th:classappend="${card.status.name() == 'PENDENTE'} ? ' status-pendente status-badge-canto' :
+                                                  (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento status-badge-canto' : ' status-concluido status-badge-canto')"
+                                  th:text="${card.status}">
+                                Status
+                            </span>
+                        </div>
+                        <div class="card-acoes">
+                            <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar falta" aria-label="Editar falta">
+                                <span aria-hidden="true">📝</span>
+                            </a>
+                            <a th:href="@{/deletar-card/{id}(id=${card.id})}" class="card-acao-link card-acao-link-danger" title="Excluir falta" aria-label="Excluir falta">
+                                <span aria-hidden="true">🗑</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 🔹 Calendário principal -->
             <div class="painel-card card-calendario">
                 <div class="card-topo">
-                    <h2>Card Principal - Calendário de Eventos</h2>
-                    <a href="/novo-card" class="card-add">+</a>
+                    <h2>Eventos Principais</h2>
+                    <a th:href="@{/novo-card(categoria='EVENTO')}" class="card-add">+</a>
                 </div>
 
-                <div class="card-conteudo">
-                    <p th:if="${#lists.isEmpty(concluidos)}" class="mensagem-vazia">
+                <div class="card-conteudo auto-scroll" data-auto-scroll data-scroll-speed="0.3">
+                    <p th:if="${eventos == null or #lists.isEmpty(eventos)}" class="mensagem-vazia">
                         Nenhum evento principal cadastrado no momento.
                     </p>
 
-                    <div class="evento-destaque" th:each="card : ${concluidos}">
+                    <div class="evento-destaque"
+                         th:each="card : ${eventos}"
+                         th:classappend="${card.prioridade.name() == 'ALTA'} ? ' card-critico prioridade-alta-card' :
+                                         (${card.prioridade.name() == 'MEDIA'} ? ' prioridade-media-card' : ' prioridade-baixa-card') + 
+                                         (${card.status.name() == 'PENDENTE'} ? ' status-pendente-card' :
+                                         (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento-card' : ' status-concluido-card'))">
                         <div class="evento-linha">
                             <div class="evento-info">
                                 <h3 th:text="${card.titulo}">Evento</h3>
-                                <p th:text="${card.descricao} ?: 'Sem descrição'">Descrição</p>
+                                <p th:text="${card.descricao} ?: 'Sem descricao'">Descricao</p>
                             </div>
 
                             <div class="evento-meta">
@@ -133,8 +175,8 @@
                                 </span>
 
                                 <span class="badge"
-                                      th:classappend="${card.status.name() == 'PENDENTE'} ? ' status-pendente' :
-                                                      (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento' : ' status-concluido')"
+                                      th:classappend="${card.status.name() == 'PENDENTE'} ? ' status-pendente status-badge-canto' :
+                                                      (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento status-badge-canto' : ' status-concluido status-badge-canto')"
                                       th:text="${card.status}">
                                     Status
                                 </span>
@@ -143,76 +185,141 @@
 
                         <div class="evento-extra">
                             <span><strong>Data:</strong> <span th:text="${card.dataEvento} ?: 'Sem data'">Data</span></span>
-                            <span><strong>Responsável:</strong> <span th:text="${card.responsavel} ?: 'Não definido'">Responsável</span></span>
+                            <span><strong>Responsavel:</strong> <span th:text="${card.responsavel} ?: 'Nao definido'">Responsavel</span></span>
+                        </div>
+                        <div class="card-acoes">
+                            <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar evento" aria-label="Editar evento">
+                                <span aria-hidden="true">📝</span>
+                            </a>
+                            <a th:href="@{/deletar-card/{id}(id=${card.id})}" class="card-acao-link card-acao-link-danger" title="Excluir evento" aria-label="Excluir evento">
+                                <span aria-hidden="true">🗑</span>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 🔹 Rotina administrativa -->
             <div class="painel-card card-rotina-admin">
                 <div class="card-topo">
                     <h2>Rotina Administrativa</h2>
-                    <a href="/novo-card" class="card-add">+</a>
+                    <a th:href="@{/novo-card(categoria='ROTINA_ADMINISTRATIVA')}" class="card-add">+</a>
                 </div>
 
-                <div class="card-conteudo">
-                    <ul class="lista-simples">
-                        <li>Conferência de documentos</li>
-                        <li>Atualização de registros</li>
-                        <li>Atendimento interno</li>
-                        <li>Organização da agenda semanal</li>
-                    </ul>
+                <div class="card-conteudo auto-scroll" data-auto-scroll data-scroll-speed="0.35">
+                    <p th:if="${rotinaAdministrativa == null or #lists.isEmpty(rotinaAdministrativa)}" class="mensagem-vazia">
+                        Nenhuma rotina administrativa cadastrada.
+                    </p>
+
+                    <div class="lista-rotina" th:if="${rotinaAdministrativa != null and !#lists.isEmpty(rotinaAdministrativa)}">
+                        <div class="item-lista item-lista-rotina"
+                             th:each="card : ${rotinaAdministrativa}"
+                             th:classappend="${card.prioridade.name() == 'ALTA'} ? ' card-critico prioridade-alta-card' :
+                                             (${card.prioridade.name() == 'MEDIA'} ? ' prioridade-media-card' : ' prioridade-baixa-card') + 
+                                             (${card.status.name() == 'PENDENTE'} ? ' status-pendente-card' :
+                                             (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento-card' : ' status-concluido-card'))">
+                            <strong th:text="${card.titulo}">Item de rotina</strong>
+                            <p th:text="${card.descricao} ?: 'Sem descricao complementar.'">Descricao</p>
+                            <div class="item-meta">
+                                <span><strong>Responsavel:</strong> <span th:text="${card.responsavel} ?: 'Responsavel nao informado'">Responsavel</span></span>
+                                <span class="mini-badge"
+                                      th:classappend="${card.prioridade.name() == 'ALTA'} ? ' prioridade-alta' :
+                                                      (${card.prioridade.name() == 'MEDIA'} ? ' prioridade-media' : ' prioridade-baixa')"
+                                      th:text="${card.prioridade}">
+                                    Prioridade
+                                </span>
+                                <span class="mini-badge"
+                                      th:classappend="${card.status.name() == 'PENDENTE'} ? ' status-pendente status-badge-canto' :
+                                                      (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento status-badge-canto' : ' status-concluido status-badge-canto')"
+                                      th:text="${card.status}">
+                                    Status
+                                </span>
+                            </div>
+                            <div class="card-acoes">
+                                <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar rotina administrativa" aria-label="Editar rotina administrativa">
+                                    <span aria-hidden="true">📝</span>
+                                </a>
+                                <a th:href="@{/deletar-card/{id}(id=${card.id})}" class="card-acao-link card-acao-link-danger" title="Excluir rotina administrativa" aria-label="Excluir rotina administrativa">
+                                    <span aria-hidden="true">🗑</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- 🔹 Rotina auxiliares -->
             <div class="painel-card card-rotina-aux">
                 <div class="card-topo">
-                    <h2>Rotina Auxiliares</h2>
-                    <a href="/novo-card" class="card-add">+</a>
+                    <h2>Rotina de Auxiliares</h2>
+                    <a th:href="@{/novo-card(categoria='ROTINA_AUXILIAR')}" class="card-add">+</a>
                 </div>
 
-                <div class="card-conteudo">
-                    <ul class="lista-simples">
-                        <li>Suporte às salas</li>
-                        <li>Organização dos espaços</li>
-                        <li>Controle de materiais</li>
-                        <li>Apoio operacional diário</li>
-                    </ul>
+                <div class="card-conteudo auto-scroll" data-auto-scroll data-scroll-speed="0.35">
+                    <p th:if="${rotinaAuxiliar == null or #lists.isEmpty(rotinaAuxiliar)}" class="mensagem-vazia">
+                        Nenhuma rotina auxiliar cadastrada.
+                    </p>
+
+                    <div class="lista-rotina" th:if="${rotinaAuxiliar != null and !#lists.isEmpty(rotinaAuxiliar)}">
+                        <div class="item-lista item-lista-rotina"
+                             th:each="card : ${rotinaAuxiliar}"
+                             th:classappend="${card.prioridade.name() == 'ALTA'} ? ' card-critico prioridade-alta-card' :
+                                             (${card.prioridade.name() == 'MEDIA'} ? ' prioridade-media-card' : ' prioridade-baixa-card') + 
+                                             (${card.status.name() == 'PENDENTE'} ? ' status-pendente-card' :
+                                             (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento-card' : ' status-concluido-card'))">
+                            <strong th:text="${card.titulo}">Item de rotina</strong>
+                            <p th:text="${card.descricao} ?: 'Sem descricao complementar.'">Descricao</p>
+                            <div class="item-meta">
+                                <span><strong>Responsavel:</strong> <span th:text="${card.responsavel} ?: 'Responsavel nao informado'">Responsavel</span></span>
+                                <span class="mini-badge"
+                                      th:classappend="${card.prioridade.name() == 'ALTA'} ? ' prioridade-alta' :
+                                                      (${card.prioridade.name() == 'MEDIA'} ? ' prioridade-media' : ' prioridade-baixa')"
+                                      th:text="${card.prioridade}">
+                                    Prioridade
+                                </span>
+                                <span class="mini-badge"
+                                      th:classappend="${card.status.name() == 'PENDENTE'} ? ' status-pendente status-badge-canto' :
+                                                      (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento status-badge-canto' : ' status-concluido status-badge-canto')"
+                                      th:text="${card.status}">
+                                    Status
+                                </span>
+                            </div>
+                            <div class="card-acoes">
+                                <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar rotina auxiliar" aria-label="Editar rotina auxiliar">
+                                    <span aria-hidden="true">📝</span>
+                                </a>
+                                <a th:href="@{/deletar-card/{id}(id=${card.id})}" class="card-acao-link card-acao-link-danger" title="Excluir rotina auxiliar" aria-label="Excluir rotina auxiliar">
+                                    <span aria-hidden="true">🗑</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-
         </section>
     </main>
 
-    <!-- ===================================== -->
-    <!-- 🔹 COLUNA DIREITA: RESUMO / INDICADORES -->
-    <!-- ===================================== -->
     <aside class="sidebar-direita">
-
         <div class="painel-lateral">
             <h2>Resumo do Dia</h2>
 
             <div class="resumo-grid">
                 <div class="resumo-card">
                     <span class="resumo-label">Pendentes</span>
-                    <strong th:text="${#lists.size(pendentes)}">0</strong>
+                    <strong th:text="${pendentes == null ? 0 : #lists.size(pendentes)}">0</strong>
                 </div>
 
                 <div class="resumo-card">
                     <span class="resumo-label">Em andamento</span>
-                    <strong th:text="${#lists.size(emAndamento)}">0</strong>
+                    <strong th:text="${emAndamento == null ? 0 : #lists.size(emAndamento)}">0</strong>
                 </div>
 
                 <div class="resumo-card">
-                    <span class="resumo-label">Concluídos</span>
-                    <strong th:text="${#lists.size(concluidos)}">0</strong>
+                    <span class="resumo-label">Concluidos</span>
+                    <strong th:text="${concluidos == null ? 0 : #lists.size(concluidos)}">0</strong>
                 </div>
 
                 <div class="resumo-card">
                     <span class="resumo-label">Total</span>
-                    <strong th:text="${#lists.size(pendentes) + #lists.size(emAndamento) + #lists.size(concluidos)}">0</strong>
+                    <strong th:text="${(pendentes == null ? 0 : #lists.size(pendentes)) + (emAndamento == null ? 0 : #lists.size(emAndamento)) + (concluidos == null ? 0 : #lists.size(concluidos))}">0</strong>
                 </div>
             </div>
         </div>
@@ -223,17 +330,17 @@
             <div class="painel-info-lista">
                 <div class="info-box">
                     <span class="badge prioridade-alta">Alta</span>
-                    <p>Itens que exigem atenção imediata da coordenação.</p>
+                    <p>Itens que exigem atencao imediata da coordenacao.</p>
                 </div>
 
                 <div class="info-box">
-                    <span class="badge prioridade-media">Média</span>
-                    <p>Itens em acompanhamento ou próximos da execução.</p>
+                    <span class="badge prioridade-media">Media</span>
+                    <p>Itens em acompanhamento ou proximos da execucao.</p>
                 </div>
 
                 <div class="info-box">
                     <span class="badge prioridade-baixa">Baixa</span>
-                    <p>Itens de rotina ou apoio sem urgência imediata.</p>
+                    <p>Itens de rotina ou apoio sem urgencia imediata.</p>
                 </div>
             </div>
         </div>
@@ -244,30 +351,21 @@
             <div class="painel-info-lista">
                 <div class="info-box">
                     <span class="badge status-pendente">Pendente</span>
-                    <p>Aguardando início ou decisão.</p>
+                    <p>Aguardando inicio ou decisao.</p>
                 </div>
 
                 <div class="info-box">
                     <span class="badge status-andamento">Em andamento</span>
-                    <p>Em execução, organização ou acompanhamento.</p>
+                    <p>Em execucao, organizacao ou acompanhamento.</p>
                 </div>
 
                 <div class="info-box">
-                    <span class="badge status-concluido">Concluído</span>
+                    <span class="badge status-concluido">Concluido</span>
                     <p>Finalizado e registrado no sistema.</p>
                 </div>
             </div>
         </div>
-
-        <div class="painel-lateral">
-            <h2>Atualização</h2>
-            <p class="texto-lateral">
-                Painel preparado para exibição contínua em tela cheia na coordenação.
-            </p>
-        </div>
-
     </aside>
-
 </div>
 
 </body>
