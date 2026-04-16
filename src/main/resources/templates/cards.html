@@ -83,7 +83,7 @@
                             <span th:text="${card.responsavel} ?: 'Professor nao definido'">Professor</span>
                         </p>
                         <div class="item-meta">
-                            <span><strong>Data:</strong> <span th:text="${card.dataEvento} ?: 'Sem data definida'">Data</span></span>
+                            <span class="meta-data"><strong>Data:</strong> <span th:text="${card.dataEvento} ?: 'Sem data definida'">Data</span></span>
                             <span class="mini-badge"
                                   th:classappend="${card.status.name() == 'PENDENTE'} ? ' status-pendente status-badge-canto' :
                                                   (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento status-badge-canto' : ' status-concluido status-badge-canto')"
@@ -123,7 +123,7 @@
                         <strong th:text="${card.titulo}">Falta</strong>
                         <p th:text="${card.descricao} ?: 'Sem descricao'">Descricao</p>
                         <div class="item-meta">
-                            <span><strong>Data:</strong> <span th:text="${card.dataEvento} ?: 'Sem data definida'">Data</span></span>
+                            <span class="meta-data"><strong>Data:</strong> <span th:text="${card.dataEvento} ?: 'Sem data definida'">Data</span></span>
                             <span class="mini-badge"
                                   th:classappend="${card.status.name() == 'PENDENTE'} ? ' status-pendente status-badge-canto' :
                                                   (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento status-badge-canto' : ' status-concluido status-badge-canto')"

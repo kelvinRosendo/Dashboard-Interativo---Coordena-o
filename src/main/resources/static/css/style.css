@@ -550,6 +550,26 @@ body.form-page {
     align-items: center;
 }
 
+.meta-data {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    color: #e2e8f0;
+    font-weight: 600;
+}
+
+.meta-data strong {
+    color: #ffffff;
+    font-size: 15px;
+}
+
+.meta-data span {
+    color: #f8fafc;
+    font-size: 15px;
+    font-weight: 700;
+}
+
 .item-lista-rotina {
     min-height: 138px;
 }
