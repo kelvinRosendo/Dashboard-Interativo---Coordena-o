@@ -26,6 +26,7 @@
                  th:classappend="${card.prioridade.name() == 'ALTA'} ? ' prioridade-alta-bg card-critico' :
                                  (${card.prioridade.name() == 'MEDIA'} ? ' prioridade-media-bg' : ' prioridade-baixa-bg')">
                 <div class="sidebar-item-topo">
+                    <h3 th:text="${card.titulo}">Aviso</h3>
                     <span class="mini-badge"
                           th:classappend="${card.prioridade.name() == 'ALTA'} ? ' prioridade-alta' :
                                           (${card.prioridade.name() == 'MEDIA'} ? ' prioridade-media' : ' prioridade-baixa')"
@@ -33,7 +34,6 @@
                         Prioridade
                     </span>
                 </div>
-                <h3 th:text="${card.titulo}">Aviso</h3>
                 <p th:text="${card.descricao} ?: 'Sem descricao.'">Descricao</p>
                 <div class="card-acoes card-acoes-sidebar">
                     <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar card" aria-label="Editar card">

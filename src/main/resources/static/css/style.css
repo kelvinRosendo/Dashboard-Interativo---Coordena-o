@@ -90,6 +90,10 @@ body.form-page {
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
     overflow: hidden;
     transition: transform 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease;
+    min-height: 132px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .sidebar-item::after {
@@ -119,34 +123,40 @@ body.form-page {
 }
 
 .sidebar-item h3 {
-    font-size: 19px;
-    margin-bottom: 8px;
+    font-size: 16px;
+    margin-bottom: 0;
     color: #ffffff;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: normal;
     display: -webkit-box;
-    line-clamp: 2;
-    -webkit-line-clamp: 2;
+    line-clamp: 3;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
+    line-height: 1.3;
+    flex: 1;
+    min-width: 0;
 }
 
 .sidebar-item p {
     font-size: 14px;
-    line-height: 1.5;
+    line-height: 1.45;
     color: #f8fafc;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    line-clamp: 3;
-    -webkit-line-clamp: 3;
+    line-clamp: 4;
+    -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
+    opacity: 0.96;
 }
 
 .sidebar-item-topo {
     display: flex;
-    justify-content: flex-end;
-    margin-bottom: 10px;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    min-width: 0;
 }
 
 .sidebar-footer {
@@ -733,6 +743,19 @@ body.form-page {
 
 .card-acoes-sidebar {
     margin-top: 12px;
+}
+
+.sidebar-item .mini-badge {
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    flex-shrink: 0;
+}
+
+.sidebar-item:hover .mini-badge,
+.sidebar-item:focus-within .mini-badge {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .card-acao-link {
