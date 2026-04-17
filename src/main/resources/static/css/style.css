@@ -149,6 +149,8 @@ body.form-page {
     -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     opacity: 0.96;
+    transition: opacity 0.18s ease, max-height 0.18s ease, margin 0.18s ease;
+    max-height: 120px;
 }
 
 .sidebar-item-topo {
@@ -756,6 +758,13 @@ body.form-page {
 .sidebar-item:focus-within .mini-badge {
     opacity: 1;
     transform: translateY(0);
+}
+
+.sidebar-item:hover p,
+.sidebar-item:focus-within p {
+    opacity: 0;
+    max-height: 0;
+    margin: 0;
 }
 
 .card-acao-link {
