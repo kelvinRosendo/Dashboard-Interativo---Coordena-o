@@ -131,12 +131,12 @@
                                 Status
                             </span>
                         </div>
-                        <p class="item-descricao" th:text="${card.descricao} ?: 'Sem descricao'">Descricao</p>
+                        <p class="item-descricao item-descricao-falta">
+                            <span class="professor-destaque" th:text="${card.responsavel} ?: 'Professor nao informado'">Professor</span>
+                            <span class="descricao-complementar" th:text="${card.descricao} ?: 'Sem descricao'">Descricao</span>
+                        </p>
                         <div class="item-meta">
                             <span class="meta-data"><strong>Data:</strong> <span th:text="${card.dataEvento} ?: 'Sem data definida'">Data</span></span>
-                            <span class="meta-data" th:if="${card.responsavel != null and !#strings.isEmpty(card.responsavel)}">
-                                <strong>Prof.:</strong> <span th:text="${card.responsavel}">Responsavel</span>
-                            </span>
                         </div>
                         <div class="card-acoes">
                             <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar falta" aria-label="Editar falta">

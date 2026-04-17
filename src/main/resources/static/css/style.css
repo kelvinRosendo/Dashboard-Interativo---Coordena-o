@@ -388,7 +388,7 @@ body.form-page {
 
 .card-rotina-admin,
 .card-rotina-aux {
-    min-height: 240px;
+    min-height: 220px;
 }
 
 /* ===================================== */
@@ -614,19 +614,71 @@ body.form-page {
 }
 
 .item-lista-rotina {
-    min-height: 168px;
+    min-height: 126px;
+    padding: 14px 16px 12px;
+    gap: 10px;
+}
+
+.item-lista-rotina .item-cabecalho {
+    flex-wrap: wrap;
+    gap: 8px 10px;
+    align-items: flex-start;
+}
+
+.item-lista-rotina strong {
+    font-size: 16px;
+    line-clamp: 3;
+    -webkit-line-clamp: 3;
+}
+
+.item-lista-rotina .status-badge-inline {
+    align-self: flex-start;
+}
+
+.item-lista-rotina .item-descricao {
+    min-height: auto;
+    line-clamp: 2;
+    -webkit-line-clamp: 2;
+}
+
+.item-lista-rotina .item-meta {
+    gap: 6px 12px;
 }
 
 .lista-rotina {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
     overflow-y: auto;
     overflow-x: hidden;
     min-height: 0;
+    flex: 1;
+    max-height: 100%;
     padding-right: 8px;
     padding-bottom: 10px;
     scrollbar-gutter: stable;
+}
+
+.item-descricao-falta {
+    display: flex !important;
+    flex-direction: column;
+    gap: 4px;
+    line-height: 1.35;
+}
+
+.professor-destaque {
+    display: block;
+    font-size: 17px;
+    font-weight: 800;
+    color: #f8fafc;
+    line-height: 1.2;
+}
+
+.descricao-complementar {
+    display: block;
+    font-size: 13px;
+    color: #cbd5e1;
+    line-height: 1.4;
 }
 
 /* ===================================== */
