@@ -1,12 +1,10 @@
 # 📺 Dashboard Interativo para Coordenacao Escolar
 
-<p align="center">
-  <img src="https://img.shields.io/badge/status-em%20desenvolvimento-f4b400?style=for-the-badge" alt="Status do projeto" />
-  <img src="https://img.shields.io/badge/java-17+-1d6fdc?style=for-the-badge" alt="Java 17+" />
-  <img src="https://img.shields.io/badge/spring%20boot-3.2.5-2ea043?style=for-the-badge" alt="Spring Boot 3.2.5" />
-  <img src="https://img.shields.io/badge/postgresql-configurado-336791?style=for-the-badge" alt="PostgreSQL" />
-  <img src="https://img.shields.io/badge/frontend-thymeleaf%20%2B%20css%20%2B%20js-f28c28?style=for-the-badge" alt="Frontend" />
-</p>
+![Status do projeto](https://img.shields.io/badge/status-em%20desenvolvimento-f4b400?style=for-the-badge)
+![Java 17+](https://img.shields.io/badge/java-17+-1d6fdc?style=for-the-badge)
+![Spring Boot 3.2.5](https://img.shields.io/badge/spring%20boot-3.2.5-2ea043?style=for-the-badge)
+![PostgreSQL](https://img.shields.io/badge/postgresql-configurado-336791?style=for-the-badge)
+![Frontend](https://img.shields.io/badge/frontend-thymeleaf%20%2B%20css%20%2B%20js-f28c28?style=for-the-badge)
 
 <p align="center">
   Painel visual para coordenacao escolar com cards organizados por categoria, prioridade e status.
