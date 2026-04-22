@@ -192,6 +192,26 @@ src/main/java/br/com/escola/dashboard/
 
 ## 🚀 Como Executar
 
+### Com Docker
+
+1. Copie `.env.example` para `.env` e ajuste as credenciais.
+2. Suba os containers:
+
+```bash
+docker compose up --build -d
+```
+
+3. Acesse:
+
+- Dashboard web: [http://localhost:8081](http://localhost:8081)
+- API REST: [http://localhost:8081/cards](http://localhost:8081/cards)
+
+4. Para derrubar os containers:
+
+```bash
+docker compose down
+```
+
 ### 1. Requisitos
 
 - Java 17+

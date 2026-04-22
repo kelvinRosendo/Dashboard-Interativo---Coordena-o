@@ -1,0 +1,9 @@
+# Arquivos e pastas que nao precisam entrar no contexto do build.
+target/
+.git/
+.github/
+.vscode/
+*.log
+# Evita enviar credenciais reais para o build da imagem.
+.env
+README.md
