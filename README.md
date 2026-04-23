@@ -192,25 +192,18 @@ src/main/java/br/com/escola/dashboard/
 
 ## 🚀 Como Executar
 
-### Com Docker
+### Com Nginx
 
-1. Copie `.env.example` para `.env` e ajuste as credenciais.
-2. Suba os containers:
-
-```bash
-docker compose up --build -d
-```
-
-3. Acesse:
-
-- Dashboard web: [http://localhost:8081](http://localhost:8081)
-- API REST: [http://localhost:8081/cards](http://localhost:8081/cards)
-
-4. Para derrubar os containers:
+1. Rode a aplicacao localmente na maquina do servidor:
 
 ```bash
-docker compose down
+.\mvnw.cmd spring-boot:run
 ```
+
+2. A aplicacao ficara ouvindo apenas em `127.0.0.1:8081`.
+3. Configure o Nginx do servidor com o arquivo `deploy/nginx/dashboard-escolar.conf`.
+4. Reinicie ou recarregue o Nginx.
+5. Acesse pelo IP do servidor usando a porta 80.
 
 ### 1. Requisitos
 
@@ -233,6 +226,7 @@ spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.format_sql=true
 
+server.address=127.0.0.1
 server.port=8081
 ```
 
