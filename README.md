@@ -203,7 +203,8 @@ src/main/java/br/com/escola/dashboard/
 2. Configure as variaveis de ambiente do servidor conforme seu banco e a porta desejada:
 
 ```powershell
-$env:DB_URL="jdbc:postgresql://localhost:5432/dashboard_escolar"
+$env:SPRING_PROFILES_ACTIVE="prod"
+$env:DB_URL="jdbc:postgresql://localhost:5433/dashboard_escolar"
 $env:DB_USERNAME="postgres"
 $env:DB_PASSWORD="1234"
 $env:SERVER_ADDRESS="0.0.0.0"
@@ -223,6 +224,15 @@ Exemplo:
 
 ```text
 http://192.168.1.20:8081
+```
+
+No Windows Server, voce tambem pode usar o script:
+
+```powershell
+.\deploy\windows\start-dashboard-server.ps1 `
+  -DbPassword "SUA_SENHA_DO_POSTGRES" `
+  -Build `
+  -OpenFirewall
 ```
 
 ### Com Nginx
