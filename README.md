@@ -192,18 +192,42 @@ src/main/java/br/com/escola/dashboard/
 
 ## 🚀 Como Executar
 
-### Com Nginx
+### Acesso direto por IP e porta
 
-1. Rode a aplicacao localmente na maquina do servidor:
+1. Publique o `.jar` no servidor ou gere o artefato com:
 
 ```bash
-.\mvnw.cmd spring-boot:run
+.\mvnw.cmd clean package
 ```
 
-2. A aplicacao ficara ouvindo apenas em `127.0.0.1:8081`.
-3. Configure o Nginx do servidor com o arquivo `deploy/nginx/dashboard-escolar.conf`.
-4. Reinicie ou recarregue o Nginx.
-5. Acesse pelo IP do servidor usando a porta 80.
+2. Configure as variaveis de ambiente do servidor conforme seu banco e a porta desejada:
+
+```powershell
+$env:DB_URL="jdbc:postgresql://localhost:5432/dashboard_escolar"
+$env:DB_USERNAME="postgres"
+$env:DB_PASSWORD="1234"
+$env:SERVER_ADDRESS="0.0.0.0"
+$env:SERVER_PORT="8081"
+```
+
+3. Inicie a aplicacao no servidor:
+
+```bash
+java -jar target/dashboard-escolar-0.0.1-SNAPSHOT.jar
+```
+
+4. Libere a porta escolhida no firewall do servidor.
+5. Acesse de outra maquina usando `http://IP_DO_SERVIDOR:PORTA`.
+
+Exemplo:
+
+```text
+http://192.168.1.20:8081
+```
+
+### Com Nginx
+
+Se voce quiser publicar sem mostrar a porta no navegador, o projeto tambem possui exemplo de proxy reverso em `deploy/nginx/dashboard-escolar.conf`.
 
 ### 1. Requisitos
 
@@ -213,21 +237,21 @@ src/main/java/br/com/escola/dashboard/
 
 ### 2. Configure o banco
 
-Edite `src/main/resources/application.properties` conforme seu ambiente:
+Edite `src/main/resources/application.properties` ou defina variaveis de ambiente:
 
 ```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/dashboard_escolar
-spring.datasource.username=postgres
-spring.datasource.password=1234
+spring.datasource.url=${DB_URL:jdbc:postgresql://localhost:5432/dashboard_escolar}
+spring.datasource.username=${DB_USERNAME:postgres}
+spring.datasource.password=${DB_PASSWORD:1234}
 spring.datasource.driver-class-name=org.postgresql.Driver
 
 spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
 spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
+spring.jpa.show-sql=${SPRING_JPA_SHOW_SQL:true}
 spring.jpa.properties.hibernate.format_sql=true
 
-server.address=127.0.0.1
-server.port=8081
+server.address=${SERVER_ADDRESS:0.0.0.0}
+server.port=${SERVER_PORT:8081}
 ```
 
 ### 3. Rode o projeto
@@ -246,6 +270,7 @@ No Windows:
 
 - Dashboard web: [http://localhost:8081](http://localhost:8081)
 - API REST: [http://localhost:8081/cards](http://localhost:8081/cards)
+- Na rede interna: `http://IP_DO_SERVIDOR:8081`
 
 ---
 
