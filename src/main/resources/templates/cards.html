@@ -63,7 +63,6 @@
             <div class="painel-card card-horarios">
                 <div class="card-topo">
                     <h2>Horarios de Professores</h2>
-                    <a th:href="@{/novo-card(categoria='HORARIO_PROFESSOR')}" class="card-add">+</a>
                 </div>
 
                 <div class="card-conteudo auto-scroll" data-auto-scroll data-scroll-speed="0.4">
@@ -112,7 +111,6 @@
             <div class="painel-card card-faltas">
                 <div class="card-topo">
                     <h2>Faltas de Professores</h2>
-                    <a th:href="@{/novo-card(categoria='FALTA_PROFESSOR')}" class="card-add">+</a>
                 </div>
 
                 <div class="card-conteudo auto-scroll" data-auto-scroll data-scroll-speed="0.4">
@@ -161,7 +159,6 @@
             <div class="painel-card card-calendario">
                 <div class="card-topo">
                     <h2>Eventos Principais</h2>
-                    <a th:href="@{/novo-card(categoria='EVENTO')}" class="card-add">+</a>
                 </div>
 
                 <div class="card-conteudo auto-scroll" data-auto-scroll data-scroll-speed="0.3">
@@ -214,7 +211,6 @@
             <div class="painel-card card-rotina-admin">
                 <div class="card-topo">
                     <h2>Rotina Administrativa</h2>
-                    <a th:href="@{/novo-card(categoria='ROTINA_ADMINISTRATIVA')}" class="card-add">+</a>
                 </div>
 
                 <div class="card-conteudo auto-scroll" data-auto-scroll data-scroll-speed="0.35">
@@ -262,7 +258,6 @@
             <div class="painel-card card-rotina-aux">
                 <div class="card-topo">
                     <h2>Rotina de Auxiliares</h2>
-                    <a th:href="@{/novo-card(categoria='ROTINA_AUXILIAR')}" class="card-add">+</a>
                 </div>
 
                 <div class="card-conteudo auto-scroll" data-auto-scroll data-scroll-speed="0.35">
@@ -333,6 +328,71 @@
                     <span class="resumo-label">Total</span>
                     <strong th:text="${(pendentes == null ? 0 : #lists.size(pendentes)) + (emAndamento == null ? 0 : #lists.size(emAndamento)) + (concluidos == null ? 0 : #lists.size(concluidos))}">0</strong>
                 </div>
+            </div>
+        </div>
+
+        <div class="painel-lateral">
+            <h2>Em foco agora</h2>
+
+            <div class="painel-lateral-lista">
+                <p th:if="${cardsEmFoco == null or #lists.isEmpty(cardsEmFoco)}" class="mensagem-vazia mensagem-vazia-lateral">
+                    Nenhum item em foco no momento.
+                </p>
+
+                <article class="lateral-card"
+                         th:if="${cardsEmFoco != null and !#lists.isEmpty(cardsEmFoco)}"
+                         th:each="card : ${cardsEmFoco}"
+                         th:classappend="${card.prioridade.name() == 'ALTA'} ? ' lateral-card-critico' :
+                                         (${card.prioridade.name() == 'MEDIA'} ? ' lateral-card-atencao' : ' lateral-card-neutro')">
+                    <div class="lateral-card-topo">
+                        <strong th:text="${card.titulo}">Titulo</strong>
+                        <span class="mini-badge"
+                              th:classappend="${card.status.name() == 'PENDENTE'} ? ' status-pendente' :
+                                              (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento' : ' status-concluido')"
+                              th:text="${card.status}">
+                            Status
+                        </span>
+                    </div>
+
+                    <p class="lateral-card-texto"
+                       th:text="${card.observacoes != null and !#strings.isEmpty(card.observacoes) ? card.observacoes : (card.descricao ?: 'Sem detalhe adicional.')}">
+                        Observacao
+                    </p>
+
+                    <div class="lateral-card-meta">
+                        <span th:text="${card.responsavel} ?: 'Sem responsavel definido'">Responsavel</span>
+                        <span th:text="${card.dataEvento} ?: 'Sem data definida'">Data</span>
+                    </div>
+                </article>
+            </div>
+        </div>
+
+        <div class="painel-lateral">
+            <h2>Proximas acoes</h2>
+
+            <div class="painel-lateral-lista">
+                <p th:if="${proximasAcoes == null or #lists.isEmpty(proximasAcoes)}" class="mensagem-vazia mensagem-vazia-lateral">
+                    Nenhuma proxima acao registrada.
+                </p>
+
+                <article class="lateral-card lateral-card-acao"
+                         th:if="${proximasAcoes != null and !#lists.isEmpty(proximasAcoes)}"
+                         th:each="card : ${proximasAcoes}"
+                         th:classappend="${card.prioridade.name() == 'ALTA'} ? ' lateral-card-critico' :
+                                         (${card.prioridade.name() == 'MEDIA'} ? ' lateral-card-atencao' : ' lateral-card-neutro')">
+                    <strong th:text="${card.titulo}">Titulo</strong>
+                    <p class="lateral-card-texto" th:text="${card.observacoes}">Observacao</p>
+
+                    <div class="lateral-card-meta">
+                        <span th:text="${card.responsavel} ?: 'Sem responsavel definido'">Responsavel</span>
+                        <span class="lateral-chip"
+                              th:classappend="${card.status.name() == 'PENDENTE'} ? ' lateral-chip-pendente' :
+                                              (${card.status.name() == 'EM_ANDAMENTO'} ? ' lateral-chip-andamento' : ' lateral-chip-concluido')"
+                              th:text="${card.status}">
+                            Status
+                        </span>
+                    </div>
+                </article>
             </div>
         </div>
     </aside>

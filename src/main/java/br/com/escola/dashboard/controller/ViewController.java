@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class ViewController {
@@ -40,6 +42,8 @@ public class ViewController {
         model.addAttribute("pendentes", filtrarPorStatus(cards, StatusCard.PENDENTE));
         model.addAttribute("emAndamento", filtrarPorStatus(cards, StatusCard.EM_ANDAMENTO));
         model.addAttribute("concluidos", filtrarPorStatus(cards, StatusCard.CONCLUIDO));
+        model.addAttribute("cardsEmFoco", selecionarCardsEmFoco(cards));
+        model.addAttribute("proximasAcoes", selecionarProximasAcoes(cards));
 
         return "cards";
     }
@@ -147,5 +151,60 @@ public class ViewController {
         return cards.stream()
                 .filter(card -> card.getStatus() == status)
                 .toList();
+    }
+
+    private List<CardResponseDTO> selecionarCardsEmFoco(List<CardResponseDTO> cards) {
+        return cards.stream()
+                .filter(card -> card.getStatus() != StatusCard.CONCLUIDO)
+                .sorted(comparadorPainelLateral())
+                .limit(4)
+                .toList();
+    }
+
+    private List<CardResponseDTO> selecionarProximasAcoes(List<CardResponseDTO> cards) {
+        Set<Long> idsEmFoco = selecionarCardsEmFoco(cards).stream()
+                .map(CardResponseDTO::getId)
+                .filter(id -> id != null)
+                .collect(java.util.stream.Collectors.toSet());
+
+        return cards.stream()
+                .filter(card -> card.getStatus() != StatusCard.CONCLUIDO)
+                .filter(card -> card.getObservacoes() != null && !card.getObservacoes().isBlank())
+                .filter(card -> card.getId() == null || !idsEmFoco.contains(card.getId()))
+                .sorted(comparadorPainelLateral())
+                .limit(4)
+                .toList();
+    }
+
+    private Comparator<CardResponseDTO> comparadorPainelLateral() {
+        return Comparator
+                .comparingInt((CardResponseDTO card) -> pesoPrioridade(card.getPrioridade())).reversed()
+                .thenComparingInt(card -> pesoStatus(card.getStatus()))
+                .thenComparing(CardResponseDTO::getDataEvento, Comparator.nullsLast(Comparator.naturalOrder()))
+                .thenComparing(CardResponseDTO::getDataCriacao, Comparator.nullsLast(Comparator.reverseOrder()));
+    }
+
+    private int pesoPrioridade(br.com.escola.dashboard.enums.PrioridadeCard prioridade) {
+        if (prioridade == null) {
+            return 0;
+        }
+
+        return switch (prioridade) {
+            case ALTA -> 3;
+            case MEDIA -> 2;
+            case BAIXA -> 1;
+        };
+    }
+
+    private int pesoStatus(StatusCard status) {
+        if (status == null) {
+            return 99;
+        }
+
+        return switch (status) {
+            case PENDENTE -> 0;
+            case EM_ANDAMENTO -> 1;
+            case CONCLUIDO -> 2;
+        };
     }
 }
