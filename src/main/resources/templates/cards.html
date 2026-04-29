@@ -55,7 +55,7 @@
         <header class="dashboard-header">
             <div>
                 <h1>Dashboard Escolar</h1>
-                <p>Painel operacional da coordenacao com leitura rapida por prioridade, status e responsavel.</p>
+                <p>Painel diario da coordenacao com leitura rapida por status, responsavel e proxima acao.</p>
             </div>
         </header>
 
@@ -89,6 +89,10 @@
                         <p class="item-descricao">
                             <strong>Professor:</strong>
                             <span th:text="${card.responsavel} ?: 'Professor nao definido'">Professor</span>
+                        </p>
+                        <p class="item-apoio" th:if="${card.observacoes != null and !#strings.isEmpty(card.observacoes)}">
+                            <strong>Proxima acao:</strong>
+                            <span th:text="${card.observacoes}">Observacao</span>
                         </p>
                         <div class="item-meta">
                             <span class="meta-data"><strong>Data:</strong> <span th:text="${card.dataEvento} ?: 'Sem data definida'">Data</span></span>
@@ -134,6 +138,10 @@
                         <p class="item-descricao item-descricao-falta">
                             <span class="professor-destaque" th:text="${card.responsavel} ?: 'Professor nao informado'">Professor</span>
                             <span class="descricao-complementar" th:text="${card.descricao} ?: 'Sem descricao'">Descricao</span>
+                        </p>
+                        <p class="item-apoio" th:if="${card.observacoes != null and !#strings.isEmpty(card.observacoes)}">
+                            <strong>Proxima acao:</strong>
+                            <span th:text="${card.observacoes}">Observacao</span>
                         </p>
                         <div class="item-meta">
                             <span class="meta-data"><strong>Data:</strong> <span th:text="${card.dataEvento} ?: 'Sem data definida'">Data</span></span>
@@ -186,8 +194,11 @@
                         <div class="evento-extra">
                             <span><strong>Data:</strong> <span th:text="${card.dataEvento} ?: 'Sem data'">Data</span></span>
                             <span><strong>Responsavel:</strong> <span th:text="${card.responsavel} ?: 'Nao definido'">Responsavel</span></span>
-                            <span><strong>Prioridade:</strong> <span th:text="${card.prioridade}">Prioridade</span></span>
                         </div>
+                        <p class="evento-observacao" th:if="${card.observacoes != null and !#strings.isEmpty(card.observacoes)}">
+                            <strong>Proxima acao:</strong>
+                            <span th:text="${card.observacoes}">Observacao</span>
+                        </p>
                         <div class="card-acoes">
                             <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar evento" aria-label="Editar evento">
                                 <span aria-hidden="true">📝</span>
@@ -228,9 +239,12 @@
                                 </span>
                             </div>
                             <p class="item-descricao" th:text="${card.descricao} ?: 'Sem descricao complementar.'">Descricao</p>
+                            <p class="item-apoio" th:if="${card.observacoes != null and !#strings.isEmpty(card.observacoes)}">
+                                <strong>Proxima acao:</strong>
+                                <span th:text="${card.observacoes}">Observacao</span>
+                            </p>
                             <div class="item-meta">
                                 <span class="meta-data"><strong>Responsavel:</strong> <span th:text="${card.responsavel} ?: 'Responsavel nao informado'">Responsavel</span></span>
-                                <span class="meta-data"><strong>Prioridade:</strong> <span th:text="${card.prioridade}">Prioridade</span></span>
                             </div>
                             <div class="card-acoes">
                                 <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar rotina administrativa" aria-label="Editar rotina administrativa">
@@ -273,9 +287,12 @@
                                 </span>
                             </div>
                             <p class="item-descricao" th:text="${card.descricao} ?: 'Sem descricao complementar.'">Descricao</p>
+                            <p class="item-apoio" th:if="${card.observacoes != null and !#strings.isEmpty(card.observacoes)}">
+                                <strong>Proxima acao:</strong>
+                                <span th:text="${card.observacoes}">Observacao</span>
+                            </p>
                             <div class="item-meta">
                                 <span class="meta-data"><strong>Responsavel:</strong> <span th:text="${card.responsavel} ?: 'Responsavel nao informado'">Responsavel</span></span>
-                                <span class="meta-data"><strong>Prioridade:</strong> <span th:text="${card.prioridade}">Prioridade</span></span>
                             </div>
                             <div class="card-acoes">
                                 <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar rotina auxiliar" aria-label="Editar rotina auxiliar">
@@ -315,48 +332,6 @@
                 <div class="resumo-card">
                     <span class="resumo-label">Total</span>
                     <strong th:text="${(pendentes == null ? 0 : #lists.size(pendentes)) + (emAndamento == null ? 0 : #lists.size(emAndamento)) + (concluidos == null ? 0 : #lists.size(concluidos))}">0</strong>
-                </div>
-            </div>
-        </div>
-
-        <div class="painel-lateral">
-            <h2>Prioridades</h2>
-
-            <div class="painel-info-lista">
-                <div class="info-box">
-                    <span class="badge prioridade-alta">Alta</span>
-                    <p>Itens que exigem atencao imediata da coordenacao.</p>
-                </div>
-
-                <div class="info-box">
-                    <span class="badge prioridade-media">Media</span>
-                    <p>Itens em acompanhamento ou proximos da execucao.</p>
-                </div>
-
-                <div class="info-box">
-                    <span class="badge prioridade-baixa">Baixa</span>
-                    <p>Itens de rotina ou apoio sem urgencia imediata.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="painel-lateral">
-            <h2>Status Operacional</h2>
-
-            <div class="painel-info-lista">
-                <div class="info-box">
-                    <span class="badge status-pendente">Pendente</span>
-                    <p>Aguardando inicio ou decisao.</p>
-                </div>
-
-                <div class="info-box">
-                    <span class="badge status-andamento">Em andamento</span>
-                    <p>Em execucao, organizacao ou acompanhamento.</p>
-                </div>
-
-                <div class="info-box">
-                    <span class="badge status-concluido">Concluido</span>
-                    <p>Finalizado e registrado no sistema.</p>
                 </div>
             </div>
         </div>

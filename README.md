@@ -37,6 +37,7 @@ O foco do projeto e entregar leitura rapida para a coordenacao em telas grandes,
 - resumo lateral por status
 - destaque visual por prioridade e status
 - acoes de editar e excluir diretamente no painel
+- documentacao operacional separada da interface
 
 ### Gerenciamento web
 
@@ -69,14 +70,20 @@ O foco do projeto e entregar leitura rapida para a coordenacao em telas grandes,
 | Miolo superior | Horarios e Faltas de Professores |
 | Miolo central | Eventos Principais |
 | Miolo inferior | Rotina Administrativa e Rotina de Auxiliares |
-| Coluna direita | Resumo do Dia, Prioridades e Status Operacional |
+| Coluna direita | Resumo do Dia |
 
 ### Destaques da interface atual
 
 - cards com leitura visual por cor de prioridade
 - badges de status operacional
+- observacoes em destaque como proxima acao
 - rolagem em blocos extensos
 - preenchimento inicial automatico para demonstracao
+
+### Documentacao operacional
+
+- regras de prioridade e status foram movidas para [`docs/guia-operacional.md`](docs/guia-operacional.md)
+- a interface ficou mais limpa e manteve cor e badge como apoio de leitura
 
 ---
 
@@ -106,6 +113,8 @@ PENDENTE
 EM_ANDAMENTO
 CONCLUIDO
 ```
+
+Para os significados operacionais e exemplos de uso, consulte [`docs/guia-operacional.md`](docs/guia-operacional.md).
 
 ---
 
@@ -276,6 +285,7 @@ Exemplo de criacao:
 - regras de validacao por categoria
 - preenchimento inicial automatico
 - organizacao visual por prioridade e status
+- documentacao operacional separada da tela principal
 
 ### Ainda pode evoluir
 
