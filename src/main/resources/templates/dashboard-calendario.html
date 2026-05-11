@@ -47,7 +47,7 @@
                         <span th:if="${dia.hoje}">Hoje</span>
                     </header>
 
-                    <div class="calendario-itens auto-scroll" data-auto-scroll data-scroll-speed="0.22">
+                    <div class="calendario-itens">
                         <p th:if="${dia.itens == null or #lists.isEmpty(dia.itens)}" class="calendario-vazio">Sem registros</p>
                         <div class="calendario-item"
                              th:each="item : ${dia.itens}"
@@ -62,21 +62,16 @@
         </section>
 
         <aside class="calendario-resumo">
-            <section class="tv-panel-block">
+            <section class="tv-panel-block calendario-hoje">
                 <h2>Hoje</h2>
                 <p th:if="${eventosHoje == null or #lists.isEmpty(eventosHoje)}" class="mensagem-vazia">Nenhum compromisso para hoje.</p>
-                <article class="tv-mini-card" th:each="card : ${eventosHoje}">
+                <article class="tv-mini-card"
+                         th:each="card : ${eventosHoje}"
+                         th:classappend="${card.prioridade.name() == 'ALTA'} ? ' tv-card-alta' :
+                                         (${card.prioridade.name() == 'MEDIA'} ? ' tv-card-media' : ' tv-card-baixa')">
                     <strong th:text="${card.titulo}">Evento</strong>
                     <span th:text="${card.responsavel != null and !#strings.isEmpty(card.responsavel) ? card.responsavel : card.categoria.tituloDashboard}">Responsavel</span>
                 </article>
-            </section>
-
-            <section class="tv-panel-block">
-                <h2>Visualizacao</h2>
-                <div class="modo-legenda">
-                    <span th:classappend="${modoSemanal ? ' modo-legenda-ativo' : ''}">Semanal</span>
-                    <span th:classappend="${!modoSemanal ? ' modo-legenda-ativo' : ''}">Mensal</span>
-                </div>
             </section>
         </aside>
     </main>

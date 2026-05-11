@@ -20,7 +20,7 @@ body.tv-page {
     max-height: 100vh;
     overflow: hidden;
     display: grid;
-    grid-template-rows: auto 1fr auto;
+    grid-template-rows: auto minmax(250px, 1fr) minmax(220px, 0.72fr);
     gap: 16px;
     padding: 22px;
 }
@@ -55,7 +55,6 @@ body.tv-page {
     color: #cbd5c8;
     font-size: 17px;
     margin-top: 8px;
-    text-transform: capitalize;
 }
 
 .tv-switch {
@@ -114,10 +113,11 @@ body.tv-page {
 }
 
 .semana-hero h2 {
-    font-size: clamp(46px, 6vw, 92px);
+    font-size: clamp(48px, 5.3vw, 82px);
     line-height: 0.98;
     color: #ffffff;
-    max-width: 12ch;
+    max-width: 18ch;
+    overflow-wrap: anywhere;
 }
 
 .semana-hero h3 {
@@ -166,7 +166,8 @@ body.tv-page {
     border: 1px solid rgba(247, 247, 244, 0.14);
     background: #1f2328;
     padding: 16px;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -182,11 +183,24 @@ body.tv-page {
 .tv-mini-card,
 .tv-aviso {
     border-radius: 8px;
-    border-left: 5px solid #ef4444;
+    border-left: 5px solid #7dd3c7;
     background: rgba(255, 255, 255, 0.07);
     padding: 12px;
     display: grid;
     gap: 4px;
+    min-width: 0;
+}
+
+.tv-card-alta {
+    border-left-color: #ef4444;
+}
+
+.tv-card-media {
+    border-left-color: #f59e0b;
+}
+
+.tv-card-baixa {
+    border-left-color: #22c55e;
 }
 
 .tv-mini-card strong,
@@ -194,8 +208,9 @@ body.tv-page {
 .manutencao-card strong,
 .calendario-item strong {
     color: #ffffff;
-    font-size: 16px;
+    font-size: 17px;
     line-height: 1.25;
+    min-width: 0;
 }
 
 .tv-mini-card span,
@@ -203,12 +218,13 @@ body.tv-page {
 .manutencao-card p,
 .calendario-item span {
     color: #d7ddd4;
-    font-size: 14px;
+    font-size: 15px;
     line-height: 1.35;
+    min-width: 0;
 }
 
 .tv-bottom-grid {
-    min-height: 180px;
+    min-height: 0;
     display: grid;
     grid-template-columns: minmax(0, 1fr) 420px;
     gap: 16px;
@@ -220,6 +236,7 @@ body.tv-page {
     background: #1a1d21;
     padding: 16px;
     min-width: 0;
+    min-height: 0;
     overflow: hidden;
 }
 
@@ -235,10 +252,13 @@ body.tv-page {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 10px;
+    max-height: calc(100% - 46px);
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .manutencao-card {
-    min-height: 118px;
+    min-height: 104px;
     border-radius: 8px;
     padding: 12px;
     background: rgba(255, 255, 255, 0.07);
@@ -284,6 +304,9 @@ body.tv-page {
 .avisos-tv-lista {
     display: grid;
     gap: 10px;
+    max-height: calc(100% - 46px);
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .calendario-shell {
@@ -327,7 +350,7 @@ body.tv-page {
 }
 
 .calendario-grid-mensal {
-    grid-auto-rows: minmax(96px, 1fr);
+    grid-auto-rows: minmax(0, 1fr);
 }
 
 .calendario-grid-semanal {
@@ -380,6 +403,7 @@ body.tv-page {
 .calendario-itens {
     min-height: 0;
     overflow-y: auto;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
     gap: 6px;
@@ -392,6 +416,46 @@ body.tv-page {
     padding: 8px;
     display: grid;
     gap: 3px;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.calendario-item strong {
+    display: -webkit-box;
+    line-clamp: 2;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+}
+
+.calendario-item span {
+    display: -webkit-box;
+    line-clamp: 1;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.calendario-grid-mensal .calendario-itens {
+    overflow: hidden;
+    gap: 4px;
+}
+
+.calendario-grid-mensal .calendario-item {
+    padding: 5px 6px;
+    gap: 0;
+}
+
+.calendario-grid-mensal .calendario-item strong {
+    font-size: 13px;
+    line-height: 1.15;
+    line-clamp: 1;
+    -webkit-line-clamp: 1;
+}
+
+.calendario-grid-mensal .calendario-item span {
+    display: none;
 }
 
 .calendario-item-alta {
@@ -442,6 +506,22 @@ body.tv-page {
         overflow-y: auto;
         height: auto;
         max-height: none;
+    }
+
+    .calendario-layout,
+    .calendario-resumo,
+    .tv-side-panel {
+        min-height: auto;
+    }
+
+    .calendario-resumo .tv-panel-block,
+    .tv-side-panel .tv-panel-block {
+        flex: none;
+        min-height: 180px;
+    }
+
+    .calendario-grid-semanal {
+        grid-auto-rows: 144px;
     }
 }
 

@@ -23,7 +23,7 @@
     <main class="tv-semana-layout">
         <section class="semana-hero">
             <div class="semana-hero-label">Segmento em destaque</div>
-            <h2 th:text="${semanaAtual != null ? semanaAtual.responsavel : 'Semana nao definida'}">Fundamental 1</h2>
+            <h2 th:text="${segmentoSemana}">Fundamental 1</h2>
             <h3 th:text="${semanaAtual != null ? semanaAtual.titulo : 'Cadastre a Semana em Foco'}">Fundamental 1 em foco</h3>
             <p th:text="${semanaAtual != null ? semanaAtual.descricao : 'Use o cadastro de cards para registrar o segmento, demandas e prioridades da semana.'}">
                 Demandas da semana.
@@ -38,7 +38,10 @@
             <section class="tv-panel-block">
                 <h2>Faltas</h2>
                 <p th:if="${faltas == null or #lists.isEmpty(faltas)}" class="mensagem-vazia">Nenhuma falta registrada.</p>
-                <article class="tv-mini-card" th:each="card : ${faltas}">
+                <article class="tv-mini-card"
+                         th:each="card : ${faltas}"
+                         th:classappend="${card.prioridade.name() == 'ALTA'} ? ' tv-card-alta' :
+                                         (${card.prioridade.name() == 'MEDIA'} ? ' tv-card-media' : ' tv-card-baixa')">
                     <strong th:text="${card.responsavel != null and !#strings.isEmpty(card.responsavel) ? card.responsavel : card.titulo}">Professor</strong>
                     <span th:text="${card.observacoes != null and !#strings.isEmpty(card.observacoes) ? card.observacoes : card.descricao}">Detalhe</span>
                 </article>
@@ -47,7 +50,10 @@
             <section class="tv-panel-block">
                 <h2>Substituicoes</h2>
                 <p th:if="${substituicoes == null or #lists.isEmpty(substituicoes)}" class="mensagem-vazia">Nenhuma substituicao registrada.</p>
-                <article class="tv-mini-card" th:each="card : ${substituicoes}">
+                <article class="tv-mini-card"
+                         th:each="card : ${substituicoes}"
+                         th:classappend="${card.prioridade.name() == 'ALTA'} ? ' tv-card-alta' :
+                                         (${card.prioridade.name() == 'MEDIA'} ? ' tv-card-media' : ' tv-card-baixa')">
                     <strong th:text="${card.titulo}">Substituicao</strong>
                     <span th:text="${card.responsavel != null and !#strings.isEmpty(card.responsavel) ? card.responsavel : 'Responsavel nao definido'}">Responsavel</span>
                 </article>
@@ -59,7 +65,6 @@
         <div class="tv-section">
             <div class="tv-section-header">
                 <h2>Cards de manutencao</h2>
-                <a th:href="@{/novo-card(categoria='ROTINA_COORDENADORES')}" class="tv-action-link">Adicionar</a>
             </div>
             <div class="manutencao-grid">
                 <p th:if="${manutencao == null or #lists.isEmpty(manutencao)}" class="mensagem-vazia">Nenhuma demanda de manutencao cadastrada.</p>
@@ -79,11 +84,13 @@
         <div class="tv-section tv-section-alertas">
             <div class="tv-section-header">
                 <h2>Avisos do dia</h2>
-                <a th:href="@{/novo-card(categoria='AVISO_NOTA')}" class="tv-action-link">Adicionar</a>
             </div>
             <div class="avisos-tv-lista">
                 <p th:if="${avisos == null or #lists.isEmpty(avisos)}" class="mensagem-vazia">Nenhum aviso ativo.</p>
-                <article class="tv-aviso" th:each="card : ${avisos}">
+                <article class="tv-aviso"
+                         th:each="card : ${avisos}"
+                         th:classappend="${card.prioridade.name() == 'ALTA'} ? ' tv-card-alta' :
+                                         (${card.prioridade.name() == 'MEDIA'} ? ' tv-card-media' : ' tv-card-baixa')">
                     <strong th:text="${card.titulo}">Aviso</strong>
                     <span th:text="${card.descricao}">Mensagem</span>
                 </article>

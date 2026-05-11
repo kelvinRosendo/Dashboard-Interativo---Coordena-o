@@ -55,6 +55,7 @@ public class DashboardTvController {
                 .toList();
 
         model.addAttribute("semanaAtual", semanaAtual);
+        model.addAttribute("segmentoSemana", resolverSegmentoSemana(semanaAtual));
         model.addAttribute("semanas", semanas);
         model.addAttribute("manutencao", manutencao);
         model.addAttribute("avisos", limitar(filtrarPorCategoria(cards, CategoriaCard.AVISO_NOTA), 4));
@@ -86,7 +87,7 @@ public class DashboardTvController {
             LocalDate ultimoDiaMes = dataReferencia.withDayOfMonth(dataReferencia.lengthOfMonth());
             inicio = primeiroDiaMes.minusDays(primeiroDiaMes.getDayOfWeek().getValue() - 1L);
             fim = ultimoDiaMes.plusDays(7L - ultimoDiaMes.getDayOfWeek().getValue());
-            tituloPeriodo = dataReferencia.format(TITULO_MES);
+            tituloPeriodo = capitalizarPrimeiraLetra(dataReferencia.format(TITULO_MES));
         }
 
         List<CardResponseDTO> cardsComData = cardService.listarTodos().stream()
@@ -127,6 +128,41 @@ public class DashboardTvController {
                 .sorted(comparadorPainel())
                 .limit(limite)
                 .toList();
+    }
+
+    private String resolverSegmentoSemana(CardResponseDTO semanaAtual) {
+        if (semanaAtual == null) {
+            return "Semana nao definida";
+        }
+
+        if (temTexto(semanaAtual.getResponsavel()) && semanaAtual.getResponsavel().trim().length() > 2) {
+            return semanaAtual.getResponsavel().trim();
+        }
+
+        if (temTexto(semanaAtual.getTitulo())) {
+            String titulo = semanaAtual.getTitulo().trim();
+            String tituloNormalizado = titulo.toLowerCase(Locale.ROOT);
+
+            if (tituloNormalizado.endsWith(" em foco")) {
+                return titulo.substring(0, titulo.length() - " em foco".length()).trim();
+            }
+
+            return titulo;
+        }
+
+        return "Semana em foco";
+    }
+
+    private String capitalizarPrimeiraLetra(String texto) {
+        if (!temTexto(texto)) {
+            return texto;
+        }
+
+        return texto.substring(0, 1).toUpperCase(new Locale("pt", "BR")) + texto.substring(1);
+    }
+
+    private boolean temTexto(String texto) {
+        return texto != null && !texto.isBlank();
     }
 
     private Comparator<CardResponseDTO> comparadorPainel() {

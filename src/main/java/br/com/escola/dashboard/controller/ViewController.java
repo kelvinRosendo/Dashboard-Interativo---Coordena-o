@@ -29,6 +29,11 @@ public class ViewController {
     }
 
     @GetMapping("/")
+    public String redirecionarParaDashboardTv() {
+        return "redirect:/tv/semana";
+    }
+
+    @GetMapping("/admin/cards")
     public String paginaInicial(Model model) {
         List<CardResponseDTO> cards = cardService.listarTodos();
 
@@ -80,13 +85,13 @@ public class ViewController {
             return "novo-card";
         }
 
-        return "redirect:/";
+        return "redirect:/admin/cards";
     }
 
     @GetMapping("/deletar-card/{id}")
     public String deletarCard(@PathVariable Long id) {
         cardService.deletarCard(id);
-        return "redirect:/";
+        return "redirect:/admin/cards";
     }
 
     @GetMapping("/editar-card/{id}")
@@ -126,7 +131,7 @@ public class ViewController {
             return "novo-card";
         }
 
-        return "redirect:/";
+        return "redirect:/admin/cards";
     }
 
     private void preencherModeloFormulario(Model model, CardRequestDTO card, boolean modoEdicao, Long cardId) {
