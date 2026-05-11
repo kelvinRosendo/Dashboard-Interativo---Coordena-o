@@ -38,9 +38,10 @@
             <select id="categoria" th:field="*{categoria}" required th:classappend="${#fields.hasErrors('categoria')} ? ' campo-invalido'">
                 <option value="EVENTO">Novo Evento</option>
                 <option value="FALTA_PROFESSOR">Falta de Professores</option>
-                <option value="HORARIO_PROFESSOR">Horarios Professores - Rotativo</option>
+                <option value="SUBSTITUICAO">Substituicao</option>
                 <option value="ROTINA_ADMINISTRATIVA">Rotina Administrativa</option>
-                <option value="ROTINA_AUXILIAR">Rotina Auxiliares</option>
+                <option value="ROTINA_COORDENADORES">Rotina dos Coordenadores</option>
+                <option value="SEMANA_EM_FOCO">Semana em Foco</option>
                 <option value="AVISO_NOTA">Avisos / Notas</option>
             </select>
             <small class="campo-erro" th:if="${#fields.hasErrors('categoria')}" th:errors="*{categoria}">Erro</small>

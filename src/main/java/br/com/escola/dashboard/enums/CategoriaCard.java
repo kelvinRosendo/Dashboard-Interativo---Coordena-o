@@ -3,9 +3,10 @@ package br.com.escola.dashboard.enums;
 public enum CategoriaCard {
     EVENTO("Novo Evento", "Card Principal - Calendario de Eventos"),
     FALTA_PROFESSOR("Falta de Professores", "Agenda de Falta dos Professores"),
-    HORARIO_PROFESSOR("Horario de Professores", "Horarios Professores - Rotativo"),
+    SUBSTITUICAO("Substituicao", "Substituicoes"),
     ROTINA_ADMINISTRATIVA("Rotina Administrativa", "Rotina Administrativa"),
-    ROTINA_AUXILIAR("Rotina Auxiliares", "Rotina Auxiliares"),
+    ROTINA_COORDENADORES("Rotina dos Coordenadores", "Rotina dos Coordenadores"),
+    SEMANA_EM_FOCO("Semana em Foco", "Semana em Foco"),
     AVISO_NOTA("Avisos / Notas", "Avisos / Notas");
 
     private final String tituloFormulario;

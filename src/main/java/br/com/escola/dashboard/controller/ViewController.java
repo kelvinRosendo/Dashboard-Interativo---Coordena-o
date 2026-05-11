@@ -33,11 +33,12 @@ public class ViewController {
         List<CardResponseDTO> cards = cardService.listarTodos();
 
         model.addAttribute("cards", cards);
-        model.addAttribute("horarios", filtrarPorCategoria(cards, CategoriaCard.HORARIO_PROFESSOR));
+        model.addAttribute("substituicoes", filtrarPorCategoria(cards, CategoriaCard.SUBSTITUICAO));
         model.addAttribute("faltas", filtrarPorCategoria(cards, CategoriaCard.FALTA_PROFESSOR));
         model.addAttribute("eventos", filtrarPorCategoria(cards, CategoriaCard.EVENTO));
         model.addAttribute("rotinaAdministrativa", filtrarPorCategoria(cards, CategoriaCard.ROTINA_ADMINISTRATIVA));
-        model.addAttribute("rotinaAuxiliar", filtrarPorCategoria(cards, CategoriaCard.ROTINA_AUXILIAR));
+        model.addAttribute("rotinaCoordenadores", filtrarPorCategoria(cards, CategoriaCard.ROTINA_COORDENADORES));
+        model.addAttribute("semanaEmFoco", filtrarPorCategoria(cards, CategoriaCard.SEMANA_EM_FOCO));
         model.addAttribute("avisos", filtrarPorCategoria(cards, CategoriaCard.AVISO_NOTA));
         model.addAttribute("pendentes", filtrarPorStatus(cards, StatusCard.PENDENTE));
         model.addAttribute("emAndamento", filtrarPorStatus(cards, StatusCard.EM_ANDAMENTO));

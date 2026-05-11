@@ -62,22 +62,22 @@
         <section class="dashboard-grid">
             <div class="painel-card card-horarios">
                 <div class="card-topo">
-                    <h2>Horarios de Professores</h2>
+                    <h2>Substituicoes</h2>
                 </div>
 
                 <div class="card-conteudo auto-scroll" data-auto-scroll data-scroll-speed="0.4">
-                    <p th:if="${horarios == null or #lists.isEmpty(horarios)}" class="mensagem-vazia">
-                        Nenhum horario disponivel no momento.
+                    <p th:if="${substituicoes == null or #lists.isEmpty(substituicoes)}" class="mensagem-vazia">
+                        Nenhuma substituicao registrada no momento.
                     </p>
 
                     <div class="item-lista"
-                         th:each="card : ${horarios}"
+                         th:each="card : ${substituicoes}"
                          th:classappend="${card.prioridade.name() == 'ALTA'} ? ' card-critico prioridade-alta-card' :
                                          (${card.prioridade.name() == 'MEDIA'} ? ' prioridade-media-card' : ' prioridade-baixa-card') + 
                                          (${card.status.name() == 'PENDENTE'} ? ' status-pendente-card' :
                                          (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento-card' : ' status-concluido-card'))">
                         <div class="item-cabecalho">
-                            <strong th:text="${card.titulo}">Horario</strong>
+                            <strong th:text="${card.titulo}">Substituicao</strong>
                             <span class="mini-badge status-badge-inline"
                                   th:classappend="${card.status.name() == 'PENDENTE'} ? ' status-pendente' :
                                                   (${card.status.name() == 'EM_ANDAMENTO'} ? ' status-andamento' : ' status-concluido')"
@@ -97,10 +97,10 @@
                             <span class="meta-data"><strong>Data:</strong> <span th:text="${card.dataEvento} ?: 'Sem data definida'">Data</span></span>
                         </div>
                         <div class="card-acoes">
-                            <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar horario" aria-label="Editar horario">
+                            <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar substituicao" aria-label="Editar substituicao">
                                 <span aria-hidden="true">📝</span>
                             </a>
-                            <a th:href="@{/deletar-card/{id}(id=${card.id})}" class="card-acao-link card-acao-link-danger" title="Excluir horario" aria-label="Excluir horario">
+                            <a th:href="@{/deletar-card/{id}(id=${card.id})}" class="card-acao-link card-acao-link-danger" title="Excluir substituicao" aria-label="Excluir substituicao">
                                 <span aria-hidden="true">🗑</span>
                             </a>
                         </div>
@@ -257,17 +257,17 @@
 
             <div class="painel-card card-rotina-aux">
                 <div class="card-topo">
-                    <h2>Rotina de Auxiliares</h2>
+                    <h2>Rotina dos Coordenadores</h2>
                 </div>
 
                 <div class="card-conteudo auto-scroll" data-auto-scroll data-scroll-speed="0.35">
-                    <p th:if="${rotinaAuxiliar == null or #lists.isEmpty(rotinaAuxiliar)}" class="mensagem-vazia">
-                        Nenhuma rotina auxiliar cadastrada.
+                    <p th:if="${rotinaCoordenadores == null or #lists.isEmpty(rotinaCoordenadores)}" class="mensagem-vazia">
+                        Nenhuma rotina dos coordenadores cadastrada.
                     </p>
 
-                    <div class="lista-rotina" th:if="${rotinaAuxiliar != null and !#lists.isEmpty(rotinaAuxiliar)}">
+                    <div class="lista-rotina" th:if="${rotinaCoordenadores != null and !#lists.isEmpty(rotinaCoordenadores)}">
                         <div class="item-lista item-lista-rotina"
-                             th:each="card : ${rotinaAuxiliar}"
+                             th:each="card : ${rotinaCoordenadores}"
                              th:classappend="${card.prioridade.name() == 'ALTA'} ? ' card-critico prioridade-alta-card' :
                                              (${card.prioridade.name() == 'MEDIA'} ? ' prioridade-media-card' : ' prioridade-baixa-card') + 
                                              (${card.status.name() == 'PENDENTE'} ? ' status-pendente-card' :
@@ -290,10 +290,10 @@
                                 <span class="meta-data"><strong>Responsavel:</strong> <span th:text="${card.responsavel} ?: 'Responsavel nao informado'">Responsavel</span></span>
                             </div>
                             <div class="card-acoes">
-                                <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar rotina auxiliar" aria-label="Editar rotina auxiliar">
+                                <a th:href="@{/editar-card/{id}(id=${card.id})}" class="card-acao-link" title="Editar rotina dos coordenadores" aria-label="Editar rotina dos coordenadores">
                                     <span aria-hidden="true">📝</span>
                                 </a>
-                                <a th:href="@{/deletar-card/{id}(id=${card.id})}" class="card-acao-link card-acao-link-danger" title="Excluir rotina auxiliar" aria-label="Excluir rotina auxiliar">
+                                <a th:href="@{/deletar-card/{id}(id=${card.id})}" class="card-acao-link card-acao-link-danger" title="Excluir rotina dos coordenadores" aria-label="Excluir rotina dos coordenadores">
                                     <span aria-hidden="true">🗑</span>
                                 </a>
                             </div>

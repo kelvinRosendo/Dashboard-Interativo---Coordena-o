@@ -40,6 +40,12 @@ public class CardService {
                 .toList();
     }
 
+    public List<CardResponseDTO> listarPorCategoria(CategoriaCard categoria) {
+        return cardRepository.findByCategoria(categoria).stream()
+                .map(this::converterParaResponseDTO)
+                .toList();
+    }
+
     public CardResponseDTO buscarPorId(Long id) {
         if (id == null) {
             throw new ResourceNotFoundException("ID nao pode ser nulo");
@@ -113,13 +119,15 @@ public class CardService {
     private boolean exigeDataEvento(CategoriaCard categoria) {
         return categoria == CategoriaCard.EVENTO
                 || categoria == CategoriaCard.FALTA_PROFESSOR
-                || categoria == CategoriaCard.HORARIO_PROFESSOR;
+                || categoria == CategoriaCard.SUBSTITUICAO
+                || categoria == CategoriaCard.SEMANA_EM_FOCO;
     }
 
     private boolean exigeResponsavel(CategoriaCard categoria) {
         return categoria == CategoriaCard.EVENTO
                 || categoria == CategoriaCard.FALTA_PROFESSOR
-                || categoria == CategoriaCard.HORARIO_PROFESSOR;
+                || categoria == CategoriaCard.SUBSTITUICAO
+                || categoria == CategoriaCard.SEMANA_EM_FOCO;
     }
 
     private String limparTexto(String valor) {

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Semana em Foco</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script th:src="@{/js/dashboard-auto-scroll.js}" defer></script>
+</head>
+<body class="tv-page">
+
+<div class="tv-shell">
+    <header class="tv-topbar">
+        <div>
+            <span class="tv-kicker">Dashboard da Coordenacao</span>
+            <h1>Semana em Foco</h1>
+        </div>
+        <nav class="tv-switch" aria-label="Telas do dashboard">
+            <a th:href="@{/tv/semana}" class="tv-switch-link tv-switch-link-active">Semana</a>
+            <a th:href="@{/tv/calendario(modo='semanal')}" class="tv-switch-link">Calendario</a>
+        </nav>
+    </header>
+
+    <main class="tv-semana-layout">
+        <section class="semana-hero">
+            <div class="semana-hero-label">Segmento em destaque</div>
+            <h2 th:text="${semanaAtual != null ? semanaAtual.responsavel : 'Semana nao definida'}">Fundamental 1</h2>
+            <h3 th:text="${semanaAtual != null ? semanaAtual.titulo : 'Cadastre a Semana em Foco'}">Fundamental 1 em foco</h3>
+            <p th:text="${semanaAtual != null ? semanaAtual.descricao : 'Use o cadastro de cards para registrar o segmento, demandas e prioridades da semana.'}">
+                Demandas da semana.
+            </p>
+            <div class="semana-hero-footer">
+                <span th:text="${semanaAtual != null and semanaAtual.dataEvento != null ? semanaAtual.dataEvento : hoje}">Data</span>
+                <span th:if="${semanaAtual != null}" th:text="${semanaAtual.prioridade}">Prioridade</span>
+            </div>
+        </section>
+
+        <aside class="tv-side-panel">
+            <section class="tv-panel-block">
+                <h2>Faltas</h2>
+                <p th:if="${faltas == null or #lists.isEmpty(faltas)}" class="mensagem-vazia">Nenhuma falta registrada.</p>
+                <article class="tv-mini-card" th:each="card : ${faltas}">
+                    <strong th:text="${card.responsavel != null and !#strings.isEmpty(card.responsavel) ? card.responsavel : card.titulo}">Professor</strong>
+                    <span th:text="${card.observacoes != null and !#strings.isEmpty(card.observacoes) ? card.observacoes : card.descricao}">Detalhe</span>
+                </article>
+            </section>
+
+            <section class="tv-panel-block">
+                <h2>Substituicoes</h2>
+                <p th:if="${substituicoes == null or #lists.isEmpty(substituicoes)}" class="mensagem-vazia">Nenhuma substituicao registrada.</p>
+                <article class="tv-mini-card" th:each="card : ${substituicoes}">
+                    <strong th:text="${card.titulo}">Substituicao</strong>
+                    <span th:text="${card.responsavel != null and !#strings.isEmpty(card.responsavel) ? card.responsavel : 'Responsavel nao definido'}">Responsavel</span>
+                </article>
+            </section>
+        </aside>
+    </main>
+
+    <section class="tv-bottom-grid">
+        <div class="tv-section">
+            <div class="tv-section-header">
+                <h2>Cards de manutencao</h2>
+                <a th:href="@{/novo-card(categoria='ROTINA_COORDENADORES')}" class="tv-action-link">Adicionar</a>
+            </div>
+            <div class="manutencao-grid">
+                <p th:if="${manutencao == null or #lists.isEmpty(manutencao)}" class="mensagem-vazia">Nenhuma demanda de manutencao cadastrada.</p>
+                <article class="manutencao-card"
+                         th:each="card : ${manutencao}"
+                         th:classappend="${card.prioridade.name() == 'ALTA'} ? ' manutencao-alta' :
+                                         (${card.prioridade.name() == 'MEDIA'} ? ' manutencao-media' : ' manutencao-baixa')">
+                    <div>
+                        <strong th:text="${card.titulo}">Tarefa</strong>
+                        <p th:text="${card.descricao != null and !#strings.isEmpty(card.descricao) ? card.descricao : 'Sem descricao.'}">Descricao</p>
+                    </div>
+                    <span th:text="${card.status}">Status</span>
+                </article>
+            </div>
+        </div>
+
+        <div class="tv-section tv-section-alertas">
+            <div class="tv-section-header">
+                <h2>Avisos do dia</h2>
+                <a th:href="@{/novo-card(categoria='AVISO_NOTA')}" class="tv-action-link">Adicionar</a>
+            </div>
+            <div class="avisos-tv-lista">
+                <p th:if="${avisos == null or #lists.isEmpty(avisos)}" class="mensagem-vazia">Nenhum aviso ativo.</p>
+                <article class="tv-aviso" th:each="card : ${avisos}">
+                    <strong th:text="${card.titulo}">Aviso</strong>
+                    <span th:text="${card.descricao}">Mensagem</span>
+                </article>
+            </div>
+        </div>
+    </section>
+</div>
+
+</body>
+</html>
