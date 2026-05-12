@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Dashboard da Coordenacao</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="login-page">
+
+<main class="login-shell">
+    <section class="login-panel">
+        <div class="login-copy">
+            <span class="login-kicker">Dashboard da Coordenacao</span>
+            <h1>Acesso interno</h1>
+            <p>Entre com sua conta Google para acessar a area administrativa do sistema.</p>
+        </div>
+
+        <div class="login-card">
+            <h2>Login com Google</h2>
+
+            <div class="login-message login-message-success" th:if="${param.logout}">
+                Voce saiu do sistema.
+            </div>
+
+            <div class="login-message login-message-error" th:if="${param.error}">
+                Nao foi possivel concluir o login. Verifique as credenciais do Google.
+            </div>
+
+            <a th:if="${googleConfigurado}"
+               class="google-login-button"
+               th:href="@{/oauth2/authorization/google}">
+                <span class="google-mark">G</span>
+                <span>Entrar com Google</span>
+            </a>
+
+            <div class="oauth-setup-alert" th:if="${!googleConfigurado}">
+                <strong>Configuracao pendente</strong>
+                <p>Cadastre as credenciais OAuth 2.0 no Google Cloud e defina as variaveis de ambiente:</p>
+                <code>GOOGLE_CLIENT_ID</code>
+                <code>GOOGLE_CLIENT_SECRET</code>
+            </div>
+
+            <div class="login-links">
+                <a th:href="@{/tv/semana}">Ver dashboard da TV</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+</body>
+</html>
