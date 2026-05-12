@@ -1,319 +1,180 @@
-# 📺 Dashboard Interativo para Coordenacao Escolar
+# 📚 Sistema de Gestão Escolar – Dashboard com Calendário Integrado
 
 <p align="center">
   <img src="https://img.shields.io/badge/status-em%20desenvolvimento-f4b400?style=for-the-badge" alt="Status do projeto" />
   <img src="https://img.shields.io/badge/java-17+-1d6fdc?style=for-the-badge" alt="Java 17+" />
   <img src="https://img.shields.io/badge/spring%20boot-3.2.5-2ea043?style=for-the-badge" alt="Spring Boot 3.2.5" />
   <img src="https://img.shields.io/badge/postgresql-configurado-336791?style=for-the-badge" alt="PostgreSQL" />
+  <img src="https://img.shields.io/badge/oauth2-google-4285F4?style=for-the-badge" alt="Google OAuth2" />
+  <img src="https://img.shields.io/badge/google%20agenda-integracao%20planejada-34A853?style=for-the-badge" alt="Google Agenda" />
   <img src="https://img.shields.io/badge/frontend-thymeleaf%20%2B%20css%20%2B%20js-f28c28?style=for-the-badge" alt="Frontend" />
 </p>
 
 <p align="center">
-  Painel visual para coordenacao escolar com cards organizados por categoria, prioridade e status.
+  Plataforma web para gestao escolar, organizacao da rotina da coordenacao e visualizacao centralizada de compromissos, avisos e tarefas.
 </p>
 
 ---
 
 ## ✨ Visao Geral
 
-O **Dashboard Interativo para Coordenacao Escolar** e uma aplicacao web feita com **Spring Boot**, **Thymeleaf** e **PostgreSQL** para concentrar informacoes operacionais da escola em um unico painel.
+O **Sistema de Gestao Escolar – Dashboard com Calendario Integrado** e uma aplicacao web em desenvolvimento para apoiar a rotina da coordenacao escolar.
 
-O foco do projeto e entregar leitura rapida para a coordenacao em telas grandes, como:
+O projeto evoluiu de um dashboard simples com cards para uma ferramenta mais robusta de gestao, com foco em:
 
-- 📌 avisos e notas
-- 👩‍🏫 horarios de professores
-- 🚨 faltas de professores
-- 📅 eventos principais
-- 🗂️ rotina administrativa
-- 👥 rotina de auxiliares
+- organizacao visual da rotina escolar;
+- apoio a tomada de decisao;
+- acompanhamento de tarefas dos coordenadores;
+- exibicao clara de avisos importantes;
+- integracao com Google Agenda;
+- login com conta Google via OAuth 2.0;
+- visualizacao em telas grandes, como TV ou monitor.
 
----
+O elemento central do sistema sera um **calendario integrado ao Google Agenda**, ocupando a maior parte da tela e funcionando como nucleo principal da plataforma.
 
-## 🧭 O Que Ja Funciona
+Cada coordenador devera acessar o sistema com sua propria conta Google, permitindo visualizar:
 
-### Dashboard principal
-
-- exibicao de cards por categoria
-- resumo lateral por status
-- destaque visual por prioridade e status
-- acoes de editar e excluir diretamente no painel
-- documentacao operacional separada da interface
-
-### Gerenciamento web
-
-- criacao de cards por formulario
-- edicao de cards existentes
-- exclusao de cards
-- validacao de campos obrigatorios
-
-### API REST
-
-- `GET /cards`
-- `GET /cards/{id}`
-- `POST /cards`
-- `PUT /cards/{id}`
-- `DELETE /cards/{id}`
-
-### Dados iniciais
-
-- o projeto possui seed automatica
-- categorias vazias sao preenchidas com cards de exemplo
-- categorias que ja possuem dados nao sao sobrescritas
+- seus compromissos individuais;
+- eventos compartilhados da escola;
+- tarefas vinculadas a sua rotina;
+- avisos e comunicados importantes do dia.
 
 ---
 
-## 🖥️ Estrutura Visual do Dashboard
+## 🎯 Objetivo do Projeto
 
-| Area | Conteudo |
-| --- | --- |
-| Coluna esquerda | Avisos / Notas |
-| Miolo superior | Horarios e Faltas de Professores |
-| Miolo central | Eventos Principais |
-| Miolo inferior | Rotina Administrativa e Rotina de Auxiliares |
-| Coluna direita | Resumo do Dia |
+O objetivo principal do sistema e melhorar a organizacao da coordenacao escolar, reduzindo a dependencia de lembretes manuais, memoria individual ou comunicacoes soltas.
 
-### Destaques da interface atual
+A plataforma busca reunir, em um unico ambiente:
 
-- cards com leitura visual por cor de prioridade
-- badges de status operacional
-- observacoes em destaque como proxima acao
-- rolagem em blocos extensos
-- preenchimento inicial automatico para demonstracao
-
-### Documentacao operacional
-
-- regras de prioridade e status foram movidas para [`docs/guia-operacional.md`](docs/guia-operacional.md)
-- a interface ficou mais limpa e manteve cor e badge como apoio de leitura
+- calendario escolar;
+- compromissos dos coordenadores;
+- tarefas diarias, semanais e mensais;
+- avisos rapidos;
+- rotina administrativa;
+- alertas de conflito ou excesso de atividades;
+- visualizacao clara para uso em computador, TV ou monitor.
 
 ---
 
-## 🧩 Categorias Disponiveis
+## 🧭 Funcionalidades Principais
+
+### Calendario integrado ao Google Agenda
+
+O calendario sera o centro da interface.
+
+Ele devera permitir:
+
+- visualizar compromissos do coordenador logado;
+- visualizar eventos compartilhados da escola;
+- clicar em um dia especifico para consultar detalhes;
+- adicionar novos eventos;
+- adicionar tarefas relacionadas ao dia;
+- identificar dias com atividades ja cadastradas;
+- exibir alertas antes de salvar novos compromissos em datas ocupadas.
+
+A integracao com o Google Agenda sera feita por meio da **Google Calendar API**.
+
+---
+
+### Login com Google / OAuth 2.0
+
+O sistema utilizara autenticacao com conta Google.
+
+Isso permite que cada usuario acesse o sistema com sua propria identidade, possibilitando separacao de dados e telas por perfil.
+
+Perfis previstos:
+
+- Administrador;
+- Diretora;
+- Coordenadora;
+- outros perfis escolares, se necessario futuramente.
+
+O login com Google tambem sera importante para acessar os compromissos e calendarios vinculados ao usuario.
+
+---
+
+### Dashboard em tela grande
+
+O dashboard sera pensado para exibicao em:
+
+- computador;
+- TV;
+- monitor da coordenacao;
+- painel de acompanhamento interno.
+
+O calendario devera ocupar a maior parte da tela, enquanto os avisos e resumos ficarao em areas laterais ou secundarias.
+
+---
+
+### Area lateral de avisos
+
+A interface tera uma area secundaria com informacoes de leitura rapida.
+
+Essa area podera exibir cards com:
+
+- avisos importantes;
+- faltas de professores;
+- substituicoes;
+- comunicados do dia;
+- demandas urgentes;
+- lembretes administrativos.
+
+A ideia e manter a leitura simples, objetiva e sem poluir o dashboard principal.
+
+---
+
+### Tarefas individuais dos coordenadores
+
+Cada coordenador tera uma lista propria de tarefas, funcionando como um checklist.
+
+As tarefas poderao ser organizadas por frequencia:
+
+- tarefas diarias;
+- tarefas semanais;
+- tarefas mensais.
+
+A proposta e criar um fluxo de trabalho claro, evitando esquecimentos e facilitando o acompanhamento da rotina.
+
+Essa area podera receber nomes como:
+
+- Rotina dos Coordenadores;
+- Plano de Acao;
+- Fluxo de Trabalho.
+
+O termo **Rotina de Auxiliares** foi removido do escopo principal do sistema.
+
+---
+
+### Rotina Administrativa
+
+A **Rotina Administrativa** representa uma visao geral das atividades da escola.
+
+Ela podera ser organizada por:
+
+- dia;
+- semana;
+- mes.
+
+Essa rotina deve reunir processos mais amplos da instituicao, apoiando a gestao escolar e a organizacao interna.
+
+---
+
+### Alerta antes de criar eventos ou tarefas
+
+Um ponto critico do sistema e a validacao antes da criacao de novos eventos ou tarefas.
+
+Sempre que o usuario tentar criar uma nova atividade em um dia que ja possui compromissos, o sistema devera exibir um alerta.
+
+Esse alerta deve informar claramente quais atividades ja existem naquela data.
+
+Exemplo de comportamento:
 
 ```text
-AVISO_NOTA
-HORARIO_PROFESSOR
-FALTA_PROFESSOR
-EVENTO
-ROTINA_ADMINISTRATIVA
-ROTINA_AUXILIAR
-```
+Ja existem atividades cadastradas para este dia:
 
-### Prioridades
+- Reuniao pedagogica - 09:00
+- Atendimento aos responsaveis - 14:00
+- Fechamento de relatorio mensal
 
-```text
-BAIXA
-MEDIA
-ALTA
-```
-
-### Status
-
-```text
-PENDENTE
-EM_ANDAMENTO
-CONCLUIDO
-```
-
-Para os significados operacionais e exemplos de uso, consulte [`docs/guia-operacional.md`](docs/guia-operacional.md).
-
----
-
-## 🧠 Regras de Negocio
-
-- todo card precisa ter `titulo`
-- todo card precisa ter `categoria`
-- todo card precisa ter `prioridade`
-- todo card precisa ter `status`
-- `EVENTO`, `FALTA_PROFESSOR` e `HORARIO_PROFESSOR` exigem `dataEvento`
-- `EVENTO`, `FALTA_PROFESSOR` e `HORARIO_PROFESSOR` exigem `responsavel`
-- `AVISO_NOTA` exige `descricao`
-
----
-
-## 🏗️ Stack do Projeto
-
-### Backend
-
-- Java 17
-- Spring Boot 3.2.5
-- Spring Web
-- Spring Data JPA
-- Spring Validation
-- Thymeleaf
-
-### Banco de dados
-
-- PostgreSQL
-
-### Frontend
-
-- HTML
-- CSS
-- JavaScript
-
----
-
-## 🗃️ Modelo de Dados
-
-Entidade principal: `Card`
-
-```json
-{
-  "id": 1,
-  "titulo": "Conselho de classe",
-  "descricao": "Reuniao de fechamento do trimestre com professores.",
-  "categoria": "EVENTO",
-  "prioridade": "ALTA",
-  "dataCriacao": "2026-04-17T09:00:00",
-  "dataEvento": "2026-04-20",
-  "responsavel": "Coordenacao Pedagogica",
-  "status": "PENDENTE",
-  "observacoes": "Levar relatorios de desempenho."
-}
-```
-
----
-
-## 🧱 Arquitetura
-
-```text
-src/main/java/br/com/escola/dashboard/
-├── config
-├── controller
-├── dto
-├── entity
-├── enums
-├── exception
-├── repository
-├── service
-└── utils
-```
-
-### Camadas
-
-- `controller`: endpoints web e API
-- `service`: regras de negocio
-- `repository`: persistencia com JPA
-- `entity`: entidades do sistema
-- `dto`: entrada e saida de dados
-- `config`: configuracoes e carga inicial
-- `exception`: tratamento de erros
-
----
-
-## 🚀 Como Executar
-
-### 1. Requisitos
-
-- Java 17+
-- Maven
-- PostgreSQL em execucao
-
-### 2. Configure o banco
-
-Edite `src/main/resources/application.properties` conforme seu ambiente:
-
-```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/dashboard_escolar
-spring.datasource.username=postgres
-spring.datasource.password=1234
-spring.datasource.driver-class-name=org.postgresql.Driver
-
-spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.format_sql=true
-
-server.port=8081
-```
-
-### 3. Rode o projeto
-
-```bash
-mvn spring-boot:run
-```
-
-No Windows:
-
-```bash
-.\mvnw.cmd spring-boot:run
-```
-
-### 4. Acesse
-
-- Dashboard web: [http://localhost:8081](http://localhost:8081)
-- API REST: [http://localhost:8081/cards](http://localhost:8081/cards)
-
----
-
-## 🔄 Fluxo de Uso
-
-### Pela interface
-
-1. abra o dashboard
-2. clique no botao `+` da categoria desejada
-3. preencha o formulario
-4. salve
-5. acompanhe o card no painel principal
-
-### Pela API
-
-Exemplo de criacao:
-
-```json
-{
-  "titulo": "Reuniao pedagogica",
-  "descricao": "Encontro com os professores do fundamental.",
-  "categoria": "EVENTO",
-  "prioridade": "ALTA",
-  "dataEvento": "2026-04-25",
-  "responsavel": "Coordenacao Pedagogica",
-  "status": "PENDENTE",
-  "observacoes": "Levar pauta impressa."
-}
-```
-
----
-
-## 📌 Estado Atual do Projeto
-
-### Ja implementado
-
-- dashboard funcional
-- CRUD web de cards
-- CRUD REST de cards
-- regras de validacao por categoria
-- preenchimento inicial automatico
-- organizacao visual por prioridade e status
-- documentacao operacional separada da tela principal
-
-### Ainda pode evoluir
-
-- filtros e busca
-- autenticacao
-- historico de alteracoes
-- testes automatizados
-- atualizacao em tempo real
-- lapidacao visual fina do dashboard
-
----
-
-## 🛣️ Proximos Passos
-
-- melhorar a legibilidade dos cards em todos os blocos
-- reduzir cortes e truncamentos em telas menores
-- criar testes para service e controller
-- separar configuracoes sensiveis por ambiente
-- evoluir a experiencia de cadastro e edicao
-
----
-
-## 👨‍💻 Autor
-
-Desenvolvido por **Kelvin**.
-
----
-
-<p align="center">
-  <b>feito com cafe, tentativa, ajuste visual e vontade de fazer funcionar</b>
-</p>
+Deseja continuar mesmo assim?
