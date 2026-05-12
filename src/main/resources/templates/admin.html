@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Dashboard da Coordenacao</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="admin-page">
+
+<main class="admin-shell">
+    <header class="admin-header">
+        <div>
+            <span class="admin-kicker">Area interna</span>
+            <h1>Painel administrativo</h1>
+            <p th:if="${email != null}">
+                Logado como <strong th:text="${nome}">Usuario</strong> · <span th:text="${email}">email</span>
+            </p>
+        </div>
+
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="admin-logout-button">Sair</button>
+        </form>
+    </header>
+
+    <section class="admin-grid">
+        <a th:href="@{/tv/semana}" class="admin-card">
+            <span>TV</span>
+            <strong>Semana em Foco</strong>
+            <p>Abrir a tela principal de exibicao da coordenacao.</p>
+        </a>
+
+        <a th:href="@{/tv/calendario(modo='semanal')}" class="admin-card">
+            <span>Agenda</span>
+            <strong>Calendario semanal</strong>
+            <p>Ver os compromissos e demandas da semana.</p>
+        </a>
+
+        <a th:href="@{/tv/calendario(modo='mensal')}" class="admin-card">
+            <span>Agenda</span>
+            <strong>Calendario mensal</strong>
+            <p>Consultar a distribuicao geral do mes.</p>
+        </a>
+    </section>
+</main>
+
+</body>
+</html>

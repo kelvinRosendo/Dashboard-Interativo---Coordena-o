@@ -14,6 +14,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/login", "/error", "/css/**", "/js/**", "/tv/**").permitAll()
                         .requestMatchers(
+                                "/admin",
                                 "/admin/**",
                                 "/novo-card",
                                 "/salvar-card",
@@ -26,7 +27,7 @@ public class SecurityConfig {
                 )
                 .oauth2Login(oauth -> oauth
                         .loginPage("/login")
-                        .defaultSuccessUrl("/admin/cards", true)
+                        .defaultSuccessUrl("/admin", true)
                 )
                 .logout(logout -> logout
                         .logoutSuccessUrl("/login?logout")

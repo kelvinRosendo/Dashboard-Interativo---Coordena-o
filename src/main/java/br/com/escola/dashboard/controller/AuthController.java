@@ -16,7 +16,7 @@ public class AuthController {
     @GetMapping("/login")
     public String login(@AuthenticationPrincipal OAuth2User usuario, Model model) {
         if (usuario != null) {
-            return "redirect:/admin/cards";
+            return "redirect:/admin";
         }
 
         model.addAttribute("googleConfigurado", googleConfigurado());
