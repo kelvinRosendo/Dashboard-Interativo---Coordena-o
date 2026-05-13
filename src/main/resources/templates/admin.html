@@ -13,7 +13,7 @@
             <span class="admin-kicker">Area interna</span>
             <h1>Painel administrativo</h1>
             <p th:if="${email != null}">
-                Logado como <strong th:text="${nome}">Usuario</strong> · <span th:text="${email}">email</span>
+                Logado como <strong th:text="${nome}">Usuario</strong> - <span th:text="${email}">email</span>
             </p>
         </div>
 
@@ -22,24 +22,81 @@
         </form>
     </header>
 
-    <section class="admin-grid">
-        <a th:href="@{/tv/semana}" class="admin-card">
-            <span>TV</span>
-            <strong>Semana em Foco</strong>
-            <p>Abrir a tela principal de exibicao da coordenacao.</p>
-        </a>
+    <section class="admin-dashboard">
+        <div class="admin-main-column">
+            <section class="admin-section">
+                <div class="admin-section-header">
+                    <span>Google Agenda</span>
+                    <strong>Proximos 7 dias</strong>
+                </div>
 
-        <a th:href="@{/tv/calendario(modo='semanal')}" class="admin-card">
-            <span>Agenda</span>
-            <strong>Calendario semanal</strong>
-            <p>Ver os compromissos e demandas da semana.</p>
-        </a>
+                <p class="admin-empty admin-alert" th:if="${calendarErro != null}" th:text="${calendarErro}">
+                    Erro ao carregar calendario.
+                </p>
 
-        <a th:href="@{/tv/calendario(modo='mensal')}" class="admin-card">
-            <span>Agenda</span>
-            <strong>Calendario mensal</strong>
-            <p>Consultar a distribuicao geral do mes.</p>
-        </a>
+                <p class="admin-empty" th:if="${calendarErro == null and (eventosGoogle == null or #lists.isEmpty(eventosGoogle))}">
+                    Nenhum evento encontrado na agenda principal.
+                </p>
+
+                <div class="admin-calendar-list" th:if="${eventosGoogle != null and !#lists.isEmpty(eventosGoogle)}">
+                    <article class="admin-calendar-item" th:each="evento : ${eventosGoogle}">
+                        <div class="admin-calendar-date">
+                            <strong th:text="${#temporals.format(evento.data, 'dd')}">13</strong>
+                            <span th:text="${#temporals.format(evento.data, 'MMM')}">mai</span>
+                        </div>
+                        <div>
+                            <strong th:text="${evento.titulo}">Evento</strong>
+                            <p th:text="${evento.diaInteiro ? 'Dia inteiro' : #temporals.format(evento.inicio, 'HH:mm')}">Horario</p>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <section class="admin-section">
+                <div class="admin-section-header">
+                    <span>Coordenadoras</span>
+                    <strong>Telas de teste</strong>
+                </div>
+
+                <div class="admin-coordinator-grid">
+                    <a th:each="coordenadora : ${coordenadoras}"
+                       th:href="@{/coordenadoras/{slug}(slug=${coordenadora.slug})}"
+                       class="admin-mini-card">
+                        <strong th:text="${coordenadora.nome}">Segmento</strong>
+                        <span th:text="${coordenadora.descricao}">Descricao</span>
+                    </a>
+                </div>
+            </section>
+        </div>
+
+        <aside class="admin-side-column">
+            <section class="admin-section">
+                <div class="admin-section-header">
+                    <span>TV</span>
+                    <strong>Dashboards</strong>
+                </div>
+
+                <div class="admin-action-list">
+                    <a th:href="@{/tv/semana}" class="admin-action-card">Semana em Foco</a>
+                    <a th:href="@{/tv/calendario(modo='semanal')}" class="admin-action-card">Calendario semanal</a>
+                    <a th:href="@{/tv/calendario(modo='mensal')}" class="admin-action-card">Calendario mensal</a>
+                </div>
+            </section>
+
+            <section class="admin-section">
+                <div class="admin-section-header">
+                    <span>Cadastro</span>
+                    <strong>Acoes rapidas</strong>
+                </div>
+
+                <div class="admin-action-list">
+                    <a th:href="@{/novo-card(categoria='SEMANA_EM_FOCO')}" class="admin-action-card">Nova semana em foco</a>
+                    <a th:href="@{/novo-card(categoria='ROTINA_COORDENADORES')}" class="admin-action-card">Nova rotina</a>
+                    <a th:href="@{/novo-card(categoria='AVISO_NOTA')}" class="admin-action-card">Novo aviso</a>
+                    <a th:href="@{/novo-card(categoria='FALTA_PROFESSOR')}" class="admin-action-card">Registrar falta</a>
+                </div>
+            </section>
+        </aside>
     </section>
 </main>
 

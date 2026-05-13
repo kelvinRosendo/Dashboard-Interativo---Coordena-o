@@ -47,13 +47,19 @@
                     </header>
 
                     <div class="calendario-itens">
-                        <p th:if="${dia.itens == null or #lists.isEmpty(dia.itens)}" class="calendario-vazio">Sem registros</p>
+                        <p th:if="${(dia.itens == null or #lists.isEmpty(dia.itens)) and (dia.eventosGoogle == null or #lists.isEmpty(dia.eventosGoogle))}"
+                           class="calendario-vazio">Sem registros</p>
                         <div class="calendario-item"
                              th:each="item : ${dia.itens}"
                              th:classappend="${item.prioridade.name() == 'ALTA'} ? ' calendario-item-alta' :
                                              (${item.prioridade.name() == 'MEDIA'} ? ' calendario-item-media' : ' calendario-item-baixa')">
                             <strong th:text="${item.titulo}">Evento</strong>
                             <span th:text="${item.categoria.tituloDashboard}">Tipo</span>
+                        </div>
+                        <div class="calendario-item calendario-item-google"
+                             th:each="item : ${dia.eventosGoogle}">
+                            <strong th:text="${item.titulo}">Evento Google</strong>
+                            <span th:text="${item.diaInteiro ? 'Google Agenda' : #temporals.format(item.inicio, 'HH:mm')}">Google Agenda</span>
                         </div>
                     </div>
                 </article>
@@ -63,13 +69,20 @@
         <aside class="calendario-resumo">
             <section class="tv-panel-block calendario-hoje">
                 <h2>Hoje</h2>
-                <p th:if="${eventosHoje == null or #lists.isEmpty(eventosHoje)}" class="mensagem-vazia">Nenhum compromisso para hoje.</p>
+                <p th:if="${calendarErro != null}" class="mensagem-vazia" th:text="${calendarErro}">Erro no Google Agenda.</p>
+                <p th:if="${(eventosHoje == null or #lists.isEmpty(eventosHoje)) and (eventosGoogleHoje == null or #lists.isEmpty(eventosGoogleHoje))}"
+                   class="mensagem-vazia">Nenhum compromisso para hoje.</p>
                 <article class="tv-mini-card"
                          th:each="card : ${eventosHoje}"
                          th:classappend="${card.prioridade.name() == 'ALTA'} ? ' tv-card-alta' :
                                          (${card.prioridade.name() == 'MEDIA'} ? ' tv-card-media' : ' tv-card-baixa')">
                     <strong th:text="${card.titulo}">Evento</strong>
                     <span th:text="${card.responsavel != null and !#strings.isEmpty(card.responsavel) ? card.responsavel : card.categoria.tituloDashboard}">Responsavel</span>
+                </article>
+                <article class="tv-mini-card tv-card-google"
+                         th:each="evento : ${eventosGoogleHoje}">
+                    <strong th:text="${evento.titulo}">Evento Google</strong>
+                    <span th:text="${evento.diaInteiro ? 'Google Agenda' : #temporals.format(evento.inicio, 'HH:mm')}">Google Agenda</span>
                 </article>
             </section>
         </aside>

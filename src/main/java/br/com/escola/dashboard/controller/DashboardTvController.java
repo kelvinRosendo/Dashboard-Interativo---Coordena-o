@@ -2,10 +2,14 @@ package br.com.escola.dashboard.controller;
 
 import br.com.escola.dashboard.dto.CalendarioDiaDTO;
 import br.com.escola.dashboard.dto.CardResponseDTO;
+import br.com.escola.dashboard.dto.GoogleCalendarEventDTO;
 import br.com.escola.dashboard.enums.CategoriaCard;
 import br.com.escola.dashboard.enums.StatusCard;
 import br.com.escola.dashboard.service.CardService;
+import br.com.escola.dashboard.service.GoogleCalendarService;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,9 +34,11 @@ public class DashboardTvController {
     private static final DateTimeFormatter TITULO_SEMANA = DateTimeFormatter.ofPattern("dd/MM", new Locale("pt", "BR"));
 
     private final CardService cardService;
+    private final GoogleCalendarService googleCalendarService;
 
-    public DashboardTvController(CardService cardService) {
+    public DashboardTvController(CardService cardService, GoogleCalendarService googleCalendarService) {
         this.cardService = cardService;
+        this.googleCalendarService = googleCalendarService;
     }
 
     @GetMapping({"", "/semana"})
@@ -70,6 +76,7 @@ public class DashboardTvController {
     public String calendario(@RequestParam(name = "modo", defaultValue = "mensal") String modo,
                              @RequestParam(name = "referencia", required = false)
                              @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate referencia,
+                             @RegisteredOAuth2AuthorizedClient("google") OAuth2AuthorizedClient googleClient,
                              Model model) {
         LocalDate dataReferencia = referencia != null ? referencia : LocalDate.now();
         boolean modoSemanal = "semanal".equalsIgnoreCase(modo);
@@ -99,12 +106,24 @@ public class DashboardTvController {
         Map<LocalDate, List<CardResponseDTO>> itensPorData = cardsComData.stream()
                 .collect(Collectors.groupingBy(CardResponseDTO::getDataEvento));
 
+        List<GoogleCalendarEventDTO> eventosGoogle = List.of();
+        String calendarErro = null;
+        try {
+            eventosGoogle = googleCalendarService.listarEventos(googleClient, inicio, fim);
+        } catch (IllegalStateException ex) {
+            calendarErro = ex.getMessage();
+        }
+
+        Map<LocalDate, List<GoogleCalendarEventDTO>> googlePorData = eventosGoogle.stream()
+                .collect(Collectors.groupingBy(GoogleCalendarEventDTO::getData));
+
         List<CalendarioDiaDTO> dias = inicio.datesUntil(fim.plusDays(1))
                 .map(data -> new CalendarioDiaDTO(
                         data,
                         data.equals(LocalDate.now()),
                         !modoSemanal && data.getMonth() != dataReferencia.getMonth(),
-                        itensPorData.getOrDefault(data, List.of())))
+                        itensPorData.getOrDefault(data, List.of()),
+                        googlePorData.getOrDefault(data, List.of())))
                 .toList();
 
         model.addAttribute("modo", modoSemanal ? "semanal" : "mensal");
@@ -112,6 +131,8 @@ public class DashboardTvController {
         model.addAttribute("tituloPeriodo", tituloPeriodo);
         model.addAttribute("dias", dias);
         model.addAttribute("eventosHoje", itensPorData.getOrDefault(LocalDate.now(), List.of()));
+        model.addAttribute("eventosGoogleHoje", googlePorData.getOrDefault(LocalDate.now(), List.of()));
+        model.addAttribute("calendarErro", calendarErro);
 
         return "dashboard-calendario";
     }

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Coordenadoras - Dashboard da Coordenacao</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="admin-page">
+
+<main class="admin-shell">
+    <header class="admin-header">
+        <div>
+            <span class="admin-kicker">Area de teste</span>
+            <h1>Telas das coordenadoras</h1>
+            <p>Selecione um segmento para validar a experiencia individual.</p>
+        </div>
+
+        <a th:href="@{/admin}" class="admin-logout-button admin-link-button">Admin</a>
+    </header>
+
+    <section class="admin-grid">
+        <a th:each="segmento : ${segmentos}"
+           th:href="@{/coordenadoras/{slug}(slug=${segmento.slug})}"
+           class="admin-card">
+            <span>Coordenadora</span>
+            <strong th:text="${segmento.nome}">Segmento</strong>
+            <p th:text="${segmento.descricao}">Descricao</p>
+        </a>
+    </section>
+</main>
+
+</body>
+</html>

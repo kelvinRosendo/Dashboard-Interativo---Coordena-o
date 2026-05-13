@@ -16,7 +16,10 @@ Foram adicionadas as primeiras estruturas do MVP visual para TV:
 - tela de TV para Calendario Integrado;
 - modo semanal e mensal no calendario;
 - login com OAuth 2.0 / Google;
+- leitura dos proximos eventos do Google Agenda no admin;
+- exibicao dos eventos do Google Agenda no calendario da TV quando houver usuario logado;
 - painel administrativo limpo em `/admin`;
+- telas de teste por segmento de coordenacao;
 - migracao das categorias antigas `ROTINA_AUXILIAR` e `HORARIO_PROFESSOR`;
 - dados iniciais para Semana em Foco e Rotina dos Coordenadores.
 
@@ -25,6 +28,11 @@ Foram adicionadas as primeiras estruturas do MVP visual para TV:
 - `/` - redireciona para `/tv/semana`;
 - `/login` - tela de acesso com Google;
 - `/admin` - painel administrativo interno;
+- `/coordenadoras` - selecao das telas de teste das coordenadoras;
+- `/coordenadoras/infantil` - tela de teste da Educacao Infantil;
+- `/coordenadoras/fundamental-1` - tela de teste do Fundamental 1;
+- `/coordenadoras/fundamental-2` - tela de teste do Fundamental 2;
+- `/coordenadoras/ensino-medio` - tela de teste do Ensino Medio;
 - `/tv/semana` - tela da Semana em Foco para TV;
 - `/tv/calendario?modo=semanal` - calendario em modo semanal;
 - `/tv/calendario?modo=mensal` - calendario em modo mensal;
@@ -35,6 +43,19 @@ Foram adicionadas as primeiras estruturas do MVP visual para TV:
 
 A tela antiga de cards foi removida do fluxo para evitar duplicidade visual e manter o projeto apontando para o MVP novo.
 Os servicos e a entidade `Card` continuam existindo porque ainda alimentam a Semana em Foco e o Calendario Integrado.
+
+## Google Agenda
+
+O login Google agora solicita tambem permissao de leitura do calendario.
+O admin usa o token OAuth do usuario logado para buscar eventos da agenda principal nos proximos 7 dias.
+A tela `/tv/calendario` tambem exibe os eventos do Google Agenda dentro do modo semanal ou mensal quando o usuario tiver uma sessao autenticada.
+Se a TV estiver sem login, o calendario continua abrindo normalmente apenas com os cards internos do sistema.
+
+Escopo usado:
+
+```text
+https://www.googleapis.com/auth/calendar.readonly
+```
 
 ## Ajuste de conceito
 

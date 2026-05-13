@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${segmento.nome + ' - Coordenadora'}">Coordenadora</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="admin-page">
+
+<main class="coordenadora-shell">
+    <header class="admin-header">
+        <div>
+            <span class="admin-kicker">Painel da coordenadora</span>
+            <h1 th:text="${segmento.nome}">Segmento</h1>
+            <p th:text="${segmento.descricao}">Descricao</p>
+        </div>
+
+        <div class="admin-actions">
+            <a th:href="@{/coordenadoras}" class="admin-logout-button admin-link-button">Coordenadoras</a>
+            <a th:href="@{/admin}" class="admin-logout-button admin-link-button">Admin</a>
+        </div>
+    </header>
+
+    <section class="coordenadora-grid">
+        <article class="coordenadora-panel coordenadora-panel-wide">
+            <div class="admin-section-header">
+                <span>Semana em foco</span>
+                <strong th:text="${segmento.nome}">Segmento</strong>
+            </div>
+
+            <p th:if="${semanas == null or #lists.isEmpty(semanas)}" class="admin-empty">
+                Nenhuma semana em foco especifica para este segmento ainda.
+            </p>
+
+            <div class="coordenadora-list">
+                <article class="coordenadora-item" th:each="card : ${semanas}">
+                    <strong th:text="${card.titulo}">Titulo</strong>
+                    <p th:text="${card.descricao}">Descricao</p>
+                    <span th:text="${card.status}">Status</span>
+                </article>
+            </div>
+        </article>
+
+        <article class="coordenadora-panel">
+            <div class="admin-section-header">
+                <span>Checklist</span>
+                <strong>Rotina</strong>
+            </div>
+
+            <div class="coordenadora-list">
+                <label class="coordenadora-check" th:each="card : ${tarefas}">
+                    <input type="checkbox" th:checked="${card.status.name() == 'CONCLUIDO'}" disabled>
+                    <span>
+                        <strong th:text="${card.titulo}">Tarefa</strong>
+                        <small th:text="${card.observacoes != null ? card.observacoes : card.descricao}">Detalhe</small>
+                    </span>
+                </label>
+            </div>
+        </article>
+
+        <article class="coordenadora-panel">
+            <div class="admin-section-header">
+                <span>Avisos</span>
+                <strong>Comunicados</strong>
+            </div>
+
+            <div class="coordenadora-list">
+                <article class="coordenadora-item" th:each="card : ${avisos}">
+                    <strong th:text="${card.titulo}">Aviso</strong>
+                    <p th:text="${card.descricao}">Descricao</p>
+                </article>
+            </div>
+        </article>
+
+        <article class="coordenadora-panel coordenadora-panel-wide">
+            <div class="admin-section-header">
+                <span>Operacao</span>
+                <strong>Faltas de professores</strong>
+            </div>
+
+            <div class="coordenadora-list coordenadora-list-horizontal">
+                <article class="coordenadora-item" th:each="card : ${faltas}">
+                    <strong th:text="${card.responsavel != null ? card.responsavel : card.titulo}">Professor</strong>
+                    <p th:text="${card.observacoes != null ? card.observacoes : card.descricao}">Detalhe</p>
+                    <span th:text="${card.dataEvento}">Data</span>
+                </article>
+            </div>
+        </article>
+    </section>
+</main>
+
+</body>
+</html>

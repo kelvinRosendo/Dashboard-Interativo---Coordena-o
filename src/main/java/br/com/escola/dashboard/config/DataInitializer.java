@@ -54,7 +54,7 @@ public class DataInitializer implements CommandLineRunner {
         );
 
         salvarCategoriaSeNecessario(
-                CategoriaCard.EVENTO,
+                CategoriaCard.EVENTO, 
                 List.of(
                         criarCard("Conselho de classe", "Reuniao de fechamento do primeiro trimestre com professores.", CategoriaCard.EVENTO, PrioridadeCard.ALTA, StatusCard.PENDENTE, LocalDate.of(2026, 4, 20), "Coordenacao Pedagogica", "Levar relatorios de desempenho.", agora),
                         criarCard("Simulado geral", "Aplicacao de simulado para turmas do ensino fundamental.", CategoriaCard.EVENTO, PrioridadeCard.MEDIA, StatusCard.EM_ANDAMENTO, LocalDate.of(2026, 4, 22), "Equipe Pedagogica", "Organizar salas e provas.", agora.plusHours(1)),

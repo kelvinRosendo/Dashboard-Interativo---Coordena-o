@@ -9,12 +9,22 @@ public class CalendarioDiaDTO {
     private final boolean hoje;
     private final boolean foraDoMes;
     private final List<CardResponseDTO> itens;
+    private final List<GoogleCalendarEventDTO> eventosGoogle;
 
     public CalendarioDiaDTO(LocalDate data, boolean hoje, boolean foraDoMes, List<CardResponseDTO> itens) {
+        this(data, hoje, foraDoMes, itens, List.of());
+    }
+
+    public CalendarioDiaDTO(LocalDate data,
+                            boolean hoje,
+                            boolean foraDoMes,
+                            List<CardResponseDTO> itens,
+                            List<GoogleCalendarEventDTO> eventosGoogle) {
         this.data = data;
         this.hoje = hoje;
         this.foraDoMes = foraDoMes;
         this.itens = itens;
+        this.eventosGoogle = eventosGoogle;
     }
 
     public LocalDate getData() {
@@ -35,5 +45,9 @@ public class CalendarioDiaDTO {
 
     public List<CardResponseDTO> getItens() {
         return itens;
+    }
+
+    public List<GoogleCalendarEventDTO> getEventosGoogle() {
+        return eventosGoogle;
     }
 }
