@@ -1,11 +1,18 @@
+# Build
 /target/
 *.class
-*.log
 *.jar
 *.war
+
+# IDE
 *.iml
 .idea/
 .vscode/
+
+# Logs
+*.log
+
+# Variaveis locais e segredos
 .env
 .env.*
 .env.example
