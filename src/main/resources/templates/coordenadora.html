@@ -7,7 +7,10 @@
 </head>
 <body class="admin-page">
 
-<main class="coordenadora-shell">
+<div class="app-shell">
+    <aside th:replace="~{fragments/sidebar :: sidebar('coordenadoras', false)}"></aside>
+
+<main class="coordenadora-shell app-main">
     <header class="admin-header">
         <div>
             <span class="admin-kicker">Colegio Satelite - Painel da coordenadora</span>
@@ -73,43 +76,45 @@
             </div>
         </article>
     </section>
+
+    <section class="operation-dock operation-dock--collapsed" data-operation-dock>
+        <div class="operation-dock__header">
+            <div>
+                <span>Operacao</span>
+                <strong>Rotina operacional</strong>
+            </div>
+            <p>
+                <span th:text="${faltas != null ? #lists.size(faltas) : 0}">0</span>
+                faltas registradas
+            </p>
+            <button type="button" class="operation-dock__toggle" data-operation-toggle aria-expanded="false">
+                Expandir
+            </button>
+        </div>
+
+        <div class="operation-dock__content">
+            <div class="admin-section-header">
+                <span>Operacao</span>
+                <strong>Faltas de professores</strong>
+            </div>
+
+            <div class="coordenadora-list coordenadora-list-horizontal">
+                <p th:if="${faltas == null or #lists.isEmpty(faltas)}" class="admin-empty">
+                    Nenhuma falta registrada para esta rotina.
+                </p>
+                <article class="coordenadora-item" th:each="card : ${faltas}">
+                    <strong th:text="${card.responsavel != null ? card.responsavel : card.titulo}">Professor</strong>
+                    <p th:text="${card.observacoes != null ? card.observacoes : card.descricao}">Detalhe</p>
+                    <span th:text="${card.dataEvento}">Data</span>
+                </article>
+            </div>
+        </div>
+    </section>
 </main>
 
-<section class="operation-dock operation-dock--collapsed" data-operation-dock>
-    <div class="operation-dock__header">
-        <div>
-            <span>Operacao</span>
-            <strong>Rotina operacional</strong>
-        </div>
-        <p>
-            <span th:text="${faltas != null ? #lists.size(faltas) : 0}">0</span>
-            faltas registradas
-        </p>
-        <button type="button" class="operation-dock__toggle" data-operation-toggle aria-expanded="false">
-            Expandir
-        </button>
-    </div>
-
-    <div class="operation-dock__content">
-        <div class="admin-section-header">
-            <span>Operacao</span>
-            <strong>Faltas de professores</strong>
-        </div>
-
-        <div class="coordenadora-list coordenadora-list-horizontal">
-            <p th:if="${faltas == null or #lists.isEmpty(faltas)}" class="admin-empty">
-                Nenhuma falta registrada para esta rotina.
-            </p>
-            <article class="coordenadora-item" th:each="card : ${faltas}">
-                <strong th:text="${card.responsavel != null ? card.responsavel : card.titulo}">Professor</strong>
-                <p th:text="${card.observacoes != null ? card.observacoes : card.descricao}">Detalhe</p>
-                <span th:text="${card.dataEvento}">Data</span>
-            </article>
-        </div>
-    </div>
-</section>
-
 <script th:src="@{/js/coordenadora.js}"></script>
+
+</div>
 
 </body>
 </html>

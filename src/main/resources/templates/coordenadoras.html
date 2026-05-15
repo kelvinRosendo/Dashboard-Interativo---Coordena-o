@@ -7,7 +7,10 @@
 </head>
 <body class="admin-page">
 
-<main class="admin-shell">
+<div class="app-shell">
+    <aside th:replace="~{fragments/sidebar :: sidebar('coordenadoras', false)}"></aside>
+
+<main class="admin-shell app-main">
     <header class="admin-header">
         <div>
             <span class="admin-kicker">Colegio Satelite - Area de teste</span>
@@ -28,6 +31,8 @@
         </a>
     </section>
 </main>
+
+</div>
 
 </body>
 </html>

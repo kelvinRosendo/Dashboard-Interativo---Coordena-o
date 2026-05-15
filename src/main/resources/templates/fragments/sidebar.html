@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<aside class="app-sidebar"
+       th:fragment="sidebar(active, tvMode)"
+       th:classappend="${tvMode} ? ' app-sidebar--tv' : ''">
+    <div class="app-sidebar__brand">
+        <span class="brand-mark app-sidebar__logo"></span>
+        <div class="app-sidebar__title">
+            <strong>Colegio Satelite</strong>
+            <small>Dashboard da Coordenacao</small>
+        </div>
+    </div>
+
+    <nav class="app-sidebar__nav" aria-label="Navegacao principal">
+        <a th:href="@{/admin}"
+           class="app-sidebar__link"
+           th:classappend="${active == 'admin'} ? ' app-sidebar__link--active' : ''">
+            <span>PA</span>
+            <strong>Painel Admin</strong>
+        </a>
+
+        <a th:href="@{/tv/calendario(modo='mensal')}"
+           class="app-sidebar__link"
+           th:classappend="${active == 'calendario'} ? ' app-sidebar__link--active' : ''">
+            <span>CA</span>
+            <strong>Calendario</strong>
+        </a>
+
+        <a th:href="@{/tv/semana}"
+           class="app-sidebar__link"
+           th:classappend="${active == 'semana'} ? ' app-sidebar__link--active' : ''">
+            <span>SF</span>
+            <strong>Semana em Foco</strong>
+        </a>
+
+        <a th:href="@{/coordenadoras}"
+           class="app-sidebar__link"
+           th:classappend="${active == 'coordenadoras'} ? ' app-sidebar__link--active' : ''">
+            <span>CO</span>
+            <strong>Coordenadoras</strong>
+        </a>
+
+        <a th:href="@{/novo-card(categoria='AVISO_NOTA')}"
+           class="app-sidebar__link"
+           th:classappend="${active == 'novo-card'} ? ' app-sidebar__link--active' : ''">
+            <span>NA</span>
+            <strong>Novo Aviso</strong>
+        </a>
+
+        <span class="app-sidebar__link app-sidebar__link--disabled" aria-disabled="true">
+            <span>RE</span>
+            <strong>Relatorios</strong>
+        </span>
+
+        <span class="app-sidebar__link app-sidebar__link--disabled" aria-disabled="true">
+            <span>CF</span>
+            <strong>Configuracoes</strong>
+        </span>
+    </nav>
+
+    <form th:if="${!tvMode}" class="app-sidebar__logout" th:action="@{/logout}" method="post">
+        <button type="submit" class="app-sidebar__logout-button">
+            <span>SA</span>
+            <strong>Sair</strong>
+        </button>
+    </form>
+</aside>
+
+</body>
+</html>

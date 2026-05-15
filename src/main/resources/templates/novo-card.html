@@ -7,6 +7,10 @@
 </head>
 <body class="form-page">
 
+<div class="app-shell">
+    <aside th:replace="~{fragments/sidebar :: sidebar('novo-card', false)}"></aside>
+
+<main class="app-main form-main">
 <div class="container">
     <div class="form-header">
         <span class="form-kicker">Colegio Satelite - Gestao de Cards</span>
@@ -105,6 +109,9 @@
             <a href="/admin" class="btn-deletar">Cancelar</a>
         </div>
     </form>
+</div>
+</main>
+
 </div>
 
 </body>

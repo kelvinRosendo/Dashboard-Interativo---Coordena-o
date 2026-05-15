@@ -7,7 +7,10 @@
 </head>
 <body class="tv-page">
 
-<div class="tv-shell calendario-shell">
+<div class="app-shell app-shell--tv">
+    <aside th:replace="~{fragments/sidebar :: sidebar('calendario', true)}"></aside>
+
+<div class="tv-shell calendario-shell app-main app-main--tv">
     <header class="tv-topbar">
         <div>
             <span class="tv-kicker">Colegio Satelite - Dashboard da Coordenacao</span>
@@ -87,6 +90,8 @@
             </section>
         </aside>
     </main>
+</div>
+
 </div>
 
 </body>
