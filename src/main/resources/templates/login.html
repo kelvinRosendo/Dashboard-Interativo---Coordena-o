@@ -8,14 +8,64 @@
 <body class="login-page">
 
 <main class="login-shell">
+    <header class="login-navbar">
+        <div class="brand-lockup">
+            <span class="brand-mark"></span>
+            <span class="brand-text">
+                <small>Colegio</small>
+                <strong>Satelite</strong>
+            </span>
+        </div>
+        <nav class="login-nav" aria-label="Acesso rapido">
+            <a th:href="@{/admin}">Admin</a>
+            <a th:href="@{/login}" class="login-nav-active">Login</a>
+        </nav>
+    </header>
+
     <section class="login-panel">
         <div class="login-copy">
-            <span class="login-kicker">Dashboard da Coordenacao</span>
-            <h1>Acesso interno</h1>
-            <p>Entre com sua conta Google para acessar a area administrativa do sistema.</p>
+            <span class="login-kicker">Colegio Satelite - Dashboard da Coordenacao</span>
+            <h1>Sistema de <strong>Coordenacao</strong> Escolar</h1>
+            <p>Organize rotinas, acompanhe demandas e mantenha a equipe alinhada em uma experiencia visual simples e institucional.</p>
+
+            <div class="login-feature-list">
+                <article class="login-feature login-feature-blue">
+                    <span>01</span>
+                    <div>
+                        <strong>Organizacao</strong>
+                        <p>Centralize agenda, tarefas e avisos em um unico painel.</p>
+                    </div>
+                </article>
+                <article class="login-feature login-feature-yellow">
+                    <span>02</span>
+                    <div>
+                        <strong>Comunicacao</strong>
+                        <p>Deixe substituicoes, faltas e comunicados visiveis para todos.</p>
+                    </div>
+                </article>
+                <article class="login-feature login-feature-pink">
+                    <span>03</span>
+                    <div>
+                        <strong>Confiabilidade</strong>
+                        <p>Acompanhe a rotina escolar com clareza e seguranca.</p>
+                    </div>
+                </article>
+            </div>
         </div>
 
         <div class="login-card">
+            <div class="login-preview-card">
+                <span class="preview-sun"></span>
+                <div class="preview-window">
+                    <div class="preview-sidebar"></div>
+                    <div class="preview-calendar">
+                        <span></span><span></span><span></span><span></span>
+                        <strong></strong><strong></strong><strong></strong>
+                    </div>
+                </div>
+                <div class="preview-status">Sistema Online</div>
+            </div>
+
             <h2>Login com Google</h2>
 
             <div class="login-message login-message-success" th:if="${param.logout}">
