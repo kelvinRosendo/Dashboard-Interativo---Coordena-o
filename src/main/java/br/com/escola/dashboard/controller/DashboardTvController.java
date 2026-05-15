@@ -8,8 +8,10 @@ import br.com.escola.dashboard.enums.StatusCard;
 import br.com.escola.dashboard.service.CardService;
 import br.com.escola.dashboard.service.GoogleCalendarService;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
-import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,10 +37,14 @@ public class DashboardTvController {
 
     private final CardService cardService;
     private final GoogleCalendarService googleCalendarService;
+    private final OAuth2AuthorizedClientService authorizedClientService;
 
-    public DashboardTvController(CardService cardService, GoogleCalendarService googleCalendarService) {
+    public DashboardTvController(CardService cardService,
+                                 GoogleCalendarService googleCalendarService,
+                                 OAuth2AuthorizedClientService authorizedClientService) {
         this.cardService = cardService;
         this.googleCalendarService = googleCalendarService;
+        this.authorizedClientService = authorizedClientService;
     }
 
     @GetMapping({"", "/semana"})
@@ -76,7 +82,7 @@ public class DashboardTvController {
     public String calendario(@RequestParam(name = "modo", defaultValue = "mensal") String modo,
                              @RequestParam(name = "referencia", required = false)
                              @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate referencia,
-                             @RegisteredOAuth2AuthorizedClient("google") OAuth2AuthorizedClient googleClient,
+                             Authentication authentication,
                              Model model) {
         LocalDate dataReferencia = referencia != null ? referencia : LocalDate.now();
         boolean modoSemanal = "semanal".equalsIgnoreCase(modo);
@@ -109,6 +115,7 @@ public class DashboardTvController {
         List<GoogleCalendarEventDTO> eventosGoogle = List.of();
         String calendarErro = null;
         try {
+            OAuth2AuthorizedClient googleClient = resolverGoogleClient(authentication);
             eventosGoogle = googleCalendarService.listarEventos(googleClient, inicio, fim);
         } catch (IllegalStateException ex) {
             calendarErro = ex.getMessage();
@@ -184,6 +191,21 @@ public class DashboardTvController {
 
     private boolean temTexto(String texto) {
         return texto != null && !texto.isBlank();
+    }
+
+    private OAuth2AuthorizedClient resolverGoogleClient(Authentication authentication) {
+        if (!(authentication instanceof OAuth2AuthenticationToken oauthToken)) {
+            return null;
+        }
+
+        if (!"google".equals(oauthToken.getAuthorizedClientRegistrationId())) {
+            return null;
+        }
+
+        return authorizedClientService.loadAuthorizedClient(
+                oauthToken.getAuthorizedClientRegistrationId(),
+                oauthToken.getName()
+        );
     }
 
     private Comparator<CardResponseDTO> comparadorPainel() {
