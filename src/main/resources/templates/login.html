@@ -10,11 +10,9 @@
 <main class="login-shell">
     <header class="login-navbar">
         <div class="brand-lockup">
-            <span class="brand-mark"></span>
-            <span class="brand-text">
-                <small>Colegio</small>
-                <strong>Satelite</strong>
-            </span>
+            <img th:src="@{/img/logo-colegio-satelite-horizontal-branco.png}"
+                 alt="Colegio Satelite"
+                 class="logo-main login-brand__logo">
         </div>
         <nav class="login-nav" aria-label="Acesso rapido">
             <a th:href="@{/admin}">Admin</a>
@@ -78,6 +76,7 @@
 
             <a th:if="${googleConfigurado}"
                class="google-login-button"
+               title="Entrar com Google"
                th:href="@{/oauth2/authorization/google}">
                 <span class="google-mark">G</span>
                 <span>Entrar com Google</span>

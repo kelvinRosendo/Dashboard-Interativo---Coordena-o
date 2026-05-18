@@ -70,6 +70,55 @@
                     </a>
                 </div>
             </section>
+
+            <section class="admin-section admin-progress-panel">
+                <div class="admin-section-header">
+                    <span>Acompanhamento</span>
+                    <strong>Progresso das coordenadoras</strong>
+                </div>
+
+                <div class="admin-progress-list">
+                    <article class="admin-progress-item admin-progress-value-70">
+                        <div class="admin-progress-item__header">
+                            <strong>Educacao Infantil</strong>
+                            <span>70%</span>
+                        </div>
+                        <div class="admin-progress-bar">
+                            <span class="admin-progress-bar__fill"></span>
+                        </div>
+                    </article>
+
+                    <article class="admin-progress-item admin-progress-value-60">
+                        <div class="admin-progress-item__header">
+                            <strong>Fundamental I</strong>
+                            <span>60%</span>
+                        </div>
+                        <div class="admin-progress-bar">
+                            <span class="admin-progress-bar__fill"></span>
+                        </div>
+                    </article>
+
+                    <article class="admin-progress-item admin-progress-value-45">
+                        <div class="admin-progress-item__header">
+                            <strong>Fundamental II</strong>
+                            <span>45%</span>
+                        </div>
+                        <div class="admin-progress-bar">
+                            <span class="admin-progress-bar__fill"></span>
+                        </div>
+                    </article>
+
+                    <article class="admin-progress-item admin-progress-value-80">
+                        <div class="admin-progress-item__header">
+                            <strong>Ensino Medio</strong>
+                            <span>80%</span>
+                        </div>
+                        <div class="admin-progress-bar">
+                            <span class="admin-progress-bar__fill"></span>
+                        </div>
+                    </article>
+                </div>
+            </section>
         </div>
 
         <aside class="admin-side-column">
@@ -80,23 +129,24 @@
                 </div>
 
                 <div class="admin-action-list">
-                    <a th:href="@{/tv/semana}" class="admin-action-card">Semana em Foco</a>
-                    <a th:href="@{/tv/calendario(modo='semanal')}" class="admin-action-card">Calendario semanal</a>
-                    <a th:href="@{/tv/calendario(modo='mensal')}" class="admin-action-card">Calendario mensal</a>
-                </div>
-            </section>
-
-            <section class="admin-section">
-                <div class="admin-section-header">
-                    <span>Cadastro</span>
-                    <strong>Acoes rapidas</strong>
-                </div>
-
-                <div class="admin-action-list">
-                    <a th:href="@{/novo-card(categoria='SEMANA_EM_FOCO')}" class="admin-action-card">Nova semana em foco</a>
-                    <a th:href="@{/novo-card(categoria='ROTINA_COORDENADORES')}" class="admin-action-card">Nova rotina</a>
-                    <a th:href="@{/novo-card(categoria='AVISO_NOTA')}" class="admin-action-card">Novo aviso</a>
-                    <a th:href="@{/novo-card(categoria='FALTA_PROFESSOR')}" class="admin-action-card">Registrar falta</a>
+                    <a th:href="@{/tv/semana}" class="admin-action-card">
+                        <span class="admin-action-icon">
+                            <img th:src="@{/img/icons/icon-week.png}" alt="">
+                        </span>
+                        <strong>Semana em Foco</strong>
+                    </a>
+                    <a th:href="@{/tv/calendario(modo='semanal')}" class="admin-action-card">
+                        <span class="admin-action-icon">
+                            <img th:src="@{/img/icons/icon-calendar.png}" alt="">
+                        </span>
+                        <strong>Calendario semanal</strong>
+                    </a>
+                    <a th:href="@{/tv/calendario(modo='mensal')}" class="admin-action-card">
+                        <span class="admin-action-icon">
+                            <img th:src="@{/img/icons/icon-calendar.png}" alt="">
+                        </span>
+                        <strong>Calendario mensal</strong>
+                    </a>
                 </div>
             </section>
         </aside>

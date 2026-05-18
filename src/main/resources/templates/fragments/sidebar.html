@@ -6,66 +6,99 @@
        th:fragment="sidebar(active, tvMode)"
        th:classappend="${tvMode} ? ' app-sidebar--tv' : ''">
     <div class="app-sidebar__brand">
-        <span class="brand-mark app-sidebar__logo"></span>
-        <div class="app-sidebar__title">
-            <strong>Colegio Satelite</strong>
-            <small>Dashboard da Coordenacao</small>
-        </div>
+        <img th:src="@{/img/logo-colegio-satelite-horizontal-branco.png}"
+             alt="Colegio Satelite"
+             class="app-sidebar__brand-logo app-sidebar__brand-logo--full">
+        <img th:src="@{/img/logo-colegio-satelite.png}"
+             alt="Colegio Satelite"
+             class="app-sidebar__brand-logo app-sidebar__brand-logo--mark">
     </div>
+
+    <button type="button"
+            class="app-sidebar__toggle"
+            data-sidebar-toggle
+            aria-label="Recolher menu"
+            aria-expanded="true"
+            title="Recolher menu">
+        <span data-sidebar-toggle-icon>&laquo;</span>
+    </button>
 
     <nav class="app-sidebar__nav" aria-label="Navegacao principal">
         <a th:href="@{/admin}"
            class="app-sidebar__link"
+           title="Painel Admin"
            th:classappend="${active == 'admin'} ? ' app-sidebar__link--active' : ''">
-            <span>PA</span>
-            <strong>Painel Admin</strong>
+            <span class="app-sidebar__icon">
+                <img th:src="@{/img/icons/icon-admin.png}" alt="" class="app-sidebar__icon-img">
+            </span>
+            <strong class="app-sidebar__text">Painel Admin</strong>
         </a>
 
         <a th:href="@{/tv/calendario(modo='mensal')}"
            class="app-sidebar__link"
+           title="Calendario"
            th:classappend="${active == 'calendario'} ? ' app-sidebar__link--active' : ''">
-            <span>CA</span>
-            <strong>Calendario</strong>
+            <span class="app-sidebar__icon">
+                <img th:src="@{/img/icons/icon-calendar.png}" alt="" class="app-sidebar__icon-img">
+            </span>
+            <strong class="app-sidebar__text">Calendario</strong>
         </a>
 
         <a th:href="@{/tv/semana}"
            class="app-sidebar__link"
+           title="Semana em Foco"
            th:classappend="${active == 'semana'} ? ' app-sidebar__link--active' : ''">
-            <span>SF</span>
-            <strong>Semana em Foco</strong>
+            <span class="app-sidebar__icon">
+                <img th:src="@{/img/icons/icon-week.png}" alt="" class="app-sidebar__icon-img">
+            </span>
+            <strong class="app-sidebar__text">Semana em Foco</strong>
         </a>
 
         <a th:href="@{/coordenadoras}"
            class="app-sidebar__link"
+           title="Coordenadoras"
            th:classappend="${active == 'coordenadoras'} ? ' app-sidebar__link--active' : ''">
-            <span>CO</span>
-            <strong>Coordenadoras</strong>
+            <span class="app-sidebar__icon">
+                <img th:src="@{/img/icons/icon-coordinators.png}" alt="" class="app-sidebar__icon-img">
+            </span>
+            <strong class="app-sidebar__text">Coordenadoras</strong>
         </a>
 
         <a th:href="@{/novo-card(categoria='AVISO_NOTA')}"
            class="app-sidebar__link"
+           title="Novo Aviso"
            th:classappend="${active == 'novo-card'} ? ' app-sidebar__link--active' : ''">
-            <span>NA</span>
-            <strong>Novo Aviso</strong>
+            <span class="app-sidebar__icon">
+                <img th:src="@{/img/icons/icon-add.png}" alt="" class="app-sidebar__icon-img">
+            </span>
+            <strong class="app-sidebar__text">Novo Aviso</strong>
         </a>
 
-        <span class="app-sidebar__link app-sidebar__link--disabled" aria-disabled="true">
-            <span>RE</span>
-            <strong>Relatorios</strong>
+        <span class="app-sidebar__link app-sidebar__link--disabled" aria-disabled="true" title="Relatorios">
+            <span class="app-sidebar__icon">
+                <img th:src="@{/img/icons/icon-report.png}" alt="" class="app-sidebar__icon-img">
+            </span>
+            <strong class="app-sidebar__text">Relatorios</strong>
         </span>
 
-        <span class="app-sidebar__link app-sidebar__link--disabled" aria-disabled="true">
-            <span>CF</span>
-            <strong>Configuracoes</strong>
+        <span class="app-sidebar__link app-sidebar__link--disabled" aria-disabled="true" title="Configuracoes">
+            <span class="app-sidebar__icon">
+                <img th:src="@{/img/icons/icon-settings.png}" alt="" class="app-sidebar__icon-img">
+            </span>
+            <strong class="app-sidebar__text">Configuracoes</strong>
         </span>
     </nav>
 
     <form th:if="${!tvMode}" class="app-sidebar__logout" th:action="@{/logout}" method="post">
-        <button type="submit" class="app-sidebar__logout-button">
-            <span>SA</span>
-            <strong>Sair</strong>
+        <button type="submit" class="app-sidebar__logout-button" title="Sair">
+            <span class="app-sidebar__icon">
+                <img th:src="@{/img/icons/icon-logout.png}" alt="" class="app-sidebar__icon-img">
+            </span>
+            <strong class="app-sidebar__text">Sair</strong>
         </button>
     </form>
+
+    <script th:src="@{/js/sidebar.js}"></script>
 </aside>
 
 </body>

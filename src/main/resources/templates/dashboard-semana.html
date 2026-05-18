@@ -12,9 +12,14 @@
 
 <div class="tv-shell app-main app-main--tv">
     <header class="tv-topbar">
-        <div>
-            <span class="tv-kicker">Colegio Satelite - Dashboard da Coordenacao</span>
-            <h1>Semana em Foco</h1>
+        <div class="tv-title-block">
+            <img th:src="@{/img/logo-colegio-satelite.png}"
+                 alt="Colegio Satelite"
+                 class="tv-brand__logo">
+            <div>
+                <span class="tv-kicker">Colegio Satelite - Dashboard da Coordenacao</span>
+                <h1>Semana em Foco</h1>
+            </div>
         </div>
         <nav class="tv-switch" aria-label="Telas do dashboard">
             <a th:href="@{/tv/semana}" class="tv-switch-link tv-switch-link-active">Semana</a>

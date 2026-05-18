@@ -48,11 +48,23 @@
             <div class="admin-section-header">
                 <span>Checklist</span>
                 <strong>Rotina</strong>
-                <small class="checklist-progress js-check-progress">0/0 concluidas</small>
+                <small class="checklist-progress js-check-percent">0% concluido</small>
             </div>
 
-            <div class="coordenadora-list">
-                <label class="coordenadora-check js-check-item" th:each="card : ${tarefas}">
+            <div class="coord-progress">
+                <div class="coord-progress__label">
+                    <span class="js-check-progress">0 de 0 atividades concluidas</span>
+                    <strong class="js-check-percent-inline">0%</strong>
+                </div>
+                <div class="coord-progress__bar">
+                    <span class="coord-progress__fill js-check-progress-fill"></span>
+                </div>
+            </div>
+
+            <div class="coordenadora-list coord-checklist">
+                <label class="coordenadora-check coord-checklist__item js-check-item"
+                       th:each="card : ${tarefas}"
+                       th:attr="data-check-id=${card.id}">
                     <input type="checkbox" class="js-check-input" th:checked="${card.status.name() == 'CONCLUIDO'}">
                     <span>
                         <strong th:text="${card.titulo}">Tarefa</strong>
