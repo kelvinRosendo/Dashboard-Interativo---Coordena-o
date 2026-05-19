@@ -71,6 +71,87 @@
                 </div>
             </section>
 
+            <section class="admin-section demanda-admin-panel">
+                <div class="admin-section-header">
+                    <div>
+                        <span>Demandas das coordenacoes</span>
+                        <strong>Acompanhamento real</strong>
+                    </div>
+                    <a th:href="@{/admin/demandas/nova}" class="btn-editar demanda-new-button">Nova demanda</a>
+                </div>
+
+                <div class="demanda-summary-grid">
+                    <article class="demanda-summary-card">
+                        <span>Total</span>
+                        <strong th:text="${demandaResumo.total}">0</strong>
+                    </article>
+                    <article class="demanda-summary-card">
+                        <span>Pendentes</span>
+                        <strong th:text="${demandaResumo.pendentes}">0</strong>
+                    </article>
+                    <article class="demanda-summary-card">
+                        <span>Em andamento</span>
+                        <strong th:text="${demandaResumo.emAndamento}">0</strong>
+                    </article>
+                    <article class="demanda-summary-card">
+                        <span>Concluidas</span>
+                        <strong th:text="${demandaResumo.concluidas}">0</strong>
+                    </article>
+                    <article class="demanda-summary-card demanda-summary-card--warning">
+                        <span>Proximas do prazo</span>
+                        <strong th:text="${demandaResumo.proximasDoPrazo}">0</strong>
+                    </article>
+                </div>
+
+                <p class="admin-empty" th:if="${demandasAdmin == null or #lists.isEmpty(demandasAdmin)}">
+                    Nenhuma demanda cadastrada ainda.
+                </p>
+
+                <div class="demanda-admin-list" th:if="${demandasAdmin != null and !#lists.isEmpty(demandasAdmin)}">
+                    <article class="demanda-admin-card"
+                             th:each="demanda : ${demandasAdmin}"
+                             th:classappend="| demanda-prioridade-${demanda.prioridade.cssClass}|">
+                        <div class="demanda-card-header">
+                            <div>
+                                <strong th:text="${demanda.titulo}">Demanda</strong>
+                                <span th:text="${demanda.segmento.titulo}">Segmento</span>
+                            </div>
+                            <div class="demanda-badge-row">
+                                <span class="demanda-badge"
+                                      th:classappend="| demanda-badge--prioridade-${demanda.prioridade.cssClass}|"
+                                      th:text="${demanda.prioridade.titulo}">
+                                    Prioridade
+                                </span>
+                                <span class="demanda-badge"
+                                      th:classappend="| demanda-badge--status-${demanda.status.cssClass}|"
+                                      th:text="${demanda.status.titulo}">
+                                    Status
+                                </span>
+                            </div>
+                        </div>
+                        <p th:text="${demanda.descricao}">Descricao</p>
+                        <div class="demanda-meta">
+                            <span th:text="${demanda.dataPrazo != null ? 'Prazo: ' + #temporals.format(demanda.dataPrazo, 'dd/MM/yyyy') : 'Sem prazo definido'}">Prazo</span>
+                            <span th:text="${demanda.criadaPor != null ? 'Criada por: ' + demanda.criadaPor : 'Criada pela direcao'}">Criada por</span>
+                        </div>
+                        <form th:action="@{/admin/demandas/{id}/status(id=${demanda.id})}"
+                              method="post"
+                              class="demanda-status-form">
+                            <label th:for="${'status-admin-' + demanda.id}">Atualizar status</label>
+                            <select th:id="${'status-admin-' + demanda.id}" name="status">
+                                <option th:each="statusItem : ${statusDemandas}"
+                                        th:value="${statusItem}"
+                                        th:text="${statusItem.titulo}"
+                                        th:selected="${statusItem == demanda.status}">
+                                    Status
+                                </option>
+                            </select>
+                            <button type="submit" class="btn-editar demanda-action-button">Salvar</button>
+                        </form>
+                    </article>
+                </div>
+            </section>
+
             <section class="admin-section admin-progress-panel">
                 <div class="admin-section-header">
                     <span>Acompanhamento</span>
@@ -78,44 +159,19 @@
                 </div>
 
                 <div class="admin-progress-list">
-                    <article class="admin-progress-item admin-progress-value-70">
+                    <article class="admin-progress-item"
+                             th:each="progresso : ${demandaResumo.progressos}">
                         <div class="admin-progress-item__header">
-                            <strong>Educacao Infantil</strong>
-                            <span>70%</span>
+                            <strong th:text="${progresso.titulo}">Segmento</strong>
+                            <span th:text="${progresso.percentual + '%'}">0%</span>
                         </div>
                         <div class="admin-progress-bar">
-                            <span class="admin-progress-bar__fill"></span>
+                            <span class="admin-progress-bar__fill"
+                                  th:style="'width: ' + ${progresso.percentual} + '%'"></span>
                         </div>
-                    </article>
-
-                    <article class="admin-progress-item admin-progress-value-60">
-                        <div class="admin-progress-item__header">
-                            <strong>Fundamental I</strong>
-                            <span>60%</span>
-                        </div>
-                        <div class="admin-progress-bar">
-                            <span class="admin-progress-bar__fill"></span>
-                        </div>
-                    </article>
-
-                    <article class="admin-progress-item admin-progress-value-45">
-                        <div class="admin-progress-item__header">
-                            <strong>Fundamental II</strong>
-                            <span>45%</span>
-                        </div>
-                        <div class="admin-progress-bar">
-                            <span class="admin-progress-bar__fill"></span>
-                        </div>
-                    </article>
-
-                    <article class="admin-progress-item admin-progress-value-80">
-                        <div class="admin-progress-item__header">
-                            <strong>Ensino Medio</strong>
-                            <span>80%</span>
-                        </div>
-                        <div class="admin-progress-bar">
-                            <span class="admin-progress-bar__fill"></span>
-                        </div>
+                        <small th:text="${progresso.concluidas + ' de ' + progresso.total + ' demandas concluidas'}">
+                            0 de 0 demandas concluidas
+                        </small>
                     </article>
                 </div>
             </section>

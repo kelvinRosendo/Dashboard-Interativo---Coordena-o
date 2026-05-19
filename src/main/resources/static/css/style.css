@@ -1020,6 +1020,12 @@ body.form-page {
     white-space: nowrap;
 }
 
+.admin-section-header > div {
+    min-width: 0;
+    display: grid;
+    gap: 4px;
+}
+
 .admin-card,
 .admin-mini-card,
 .admin-action-card {
@@ -1364,6 +1370,224 @@ body.form-page {
 
 .coord-checklist__item--done small {
     color: var(--subtle);
+}
+
+.demanda-admin-panel,
+.demanda-coordenadora-panel {
+    border-color: rgba(96, 165, 250, 0.2);
+}
+
+.demanda-new-button {
+    min-height: 42px;
+    padding-inline: 16px;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.demanda-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.demanda-summary-card {
+    padding: 14px;
+    display: grid;
+    gap: 7px;
+    border-radius: var(--radius);
+    border: 1px solid rgba(96, 165, 250, 0.18);
+    background: rgba(37, 99, 235, 0.09);
+}
+
+.demanda-summary-card span {
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.demanda-summary-card strong {
+    color: #ffffff;
+    font-size: clamp(24px, 3vw, 34px);
+    line-height: 1;
+}
+
+.demanda-summary-card--warning {
+    border-color: rgba(250, 204, 21, 0.32);
+    background: rgba(250, 204, 21, 0.09);
+}
+
+.demanda-admin-list,
+.demanda-grid {
+    display: grid;
+    gap: 14px;
+}
+
+.demanda-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.demanda-admin-card,
+.demanda-card {
+    padding: 16px;
+    display: grid;
+    gap: 12px;
+    border-radius: var(--radius);
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    border-left: 4px solid var(--blue-2);
+    background: rgba(2, 6, 23, 0.26);
+}
+
+.demanda-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.demanda-card-header > div:first-child {
+    min-width: 0;
+    display: grid;
+    gap: 5px;
+}
+
+.demanda-card-header strong {
+    color: #ffffff;
+    font-size: 17px;
+    line-height: 1.2;
+}
+
+.demanda-card-header span,
+.demanda-meta,
+.demanda-card p,
+.demanda-admin-card p {
+    color: var(--muted);
+}
+
+.demanda-card p,
+.demanda-admin-card p {
+    font-size: 14px;
+}
+
+.demanda-badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 7px;
+}
+
+.demanda-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 26px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    color: #0f172a;
+    background: var(--yellow);
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.demanda-badge--prioridade-baixa {
+    background: #bfdbfe;
+}
+
+.demanda-badge--prioridade-media {
+    background: #fde68a;
+}
+
+.demanda-badge--prioridade-alta,
+.demanda-badge--prioridade-urgente {
+    background: #fecaca;
+    color: #7f1d1d;
+}
+
+.demanda-badge--status-pendente {
+    background: #fde68a;
+}
+
+.demanda-badge--status-andamento {
+    background: #bfdbfe;
+}
+
+.demanda-badge--status-concluida {
+    background: #bbf7d0;
+    color: #14532d;
+}
+
+.demanda-badge--status-cancelada {
+    background: #cbd5e1;
+    color: #334155;
+}
+
+.demanda-prioridade-alta {
+    border-left-color: var(--yellow);
+}
+
+.demanda-prioridade-urgente {
+    border-left-color: var(--danger);
+    box-shadow: inset 0 0 0 1px rgba(239, 68, 68, 0.2);
+}
+
+.demanda-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.demanda-actions,
+.demanda-status-form {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.demanda-status-form {
+    padding-top: 8px;
+    border-top: 1px solid var(--line);
+}
+
+.demanda-status-form label {
+    color: var(--subtle);
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.demanda-status-form select {
+    min-height: 38px;
+    min-width: 160px;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    color: var(--text);
+    background: rgba(2, 6, 23, 0.58);
+    padding: 0 10px;
+}
+
+.demanda-action-button {
+    min-height: 38px;
+    padding-inline: 13px;
+    font-size: 13px;
+}
+
+.demanda-action-button--success {
+    background: linear-gradient(135deg, var(--success), #86efac);
+}
+
+.demanda-alerta {
+    border-color: rgba(250, 204, 21, 0.24);
+    background: rgba(250, 204, 21, 0.08);
+    color: #fde68a;
+}
+
+.demanda-form-container {
+    max-width: 900px;
 }
 
 .operation-dock {
@@ -2191,6 +2415,14 @@ body.tv-page {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
+    .demanda-summary-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .demanda-grid {
+        grid-template-columns: 1fr;
+    }
+
     .coordenadora-list-horizontal {
         grid-template-columns: 1fr;
     }
@@ -2349,6 +2581,7 @@ body.tv-page {
     .admin-grid,
     .admin-coordinator-grid,
     .coordenadora-grid,
+    .demanda-summary-grid,
     .formulario {
         grid-template-columns: 1fr;
     }
@@ -2368,6 +2601,16 @@ body.tv-page {
     .admin-logout-button,
     .admin-link-button {
         width: 100%;
+    }
+
+    .demanda-card-header,
+    .demanda-status-form {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .demanda-badge-row {
+        justify-content: flex-start;
     }
 
     .calendario-weekdays,

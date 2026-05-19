@@ -1,6 +1,9 @@
 package br.com.escola.dashboard.controller;
 
 import br.com.escola.dashboard.dto.GoogleCalendarEventDTO;
+import br.com.escola.dashboard.enums.SegmentoCoordenacao;
+import br.com.escola.dashboard.enums.StatusDemanda;
+import br.com.escola.dashboard.service.DemandaService;
 import br.com.escola.dashboard.service.GoogleCalendarService;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
@@ -11,15 +14,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
 public class AdminController {
 
     private final GoogleCalendarService googleCalendarService;
+    private final DemandaService demandaService;
 
-    public AdminController(GoogleCalendarService googleCalendarService) {
+    public AdminController(GoogleCalendarService googleCalendarService, DemandaService demandaService) {
         this.googleCalendarService = googleCalendarService;
+        this.demandaService = demandaService;
     }
 
     @GetMapping("/admin")
@@ -31,12 +37,16 @@ public class AdminController {
 
         model.addAttribute("nome", nome);
         model.addAttribute("email", email);
-        model.addAttribute("coordenadoras", List.of(
-                new CoordenadoraResumo("infantil", "Educacao Infantil", "Rotina do Infantil"),
-                new CoordenadoraResumo("fundamental-1", "Fundamental 1", "Rotina do Fund. 1"),
-                new CoordenadoraResumo("fundamental-2", "Fundamental 2", "Rotina do Fund. 2"),
-                new CoordenadoraResumo("ensino-medio", "Ensino Medio", "Rotina do Medio")
-        ));
+        model.addAttribute("coordenadoras", Arrays.stream(SegmentoCoordenacao.values())
+                .map(segmento -> new CoordenadoraResumo(
+                        segmento.getSlug(),
+                        segmento.getTitulo(),
+                        segmento.getDescricao()
+                ))
+                .toList());
+        model.addAttribute("demandaResumo", demandaService.resumoGeral());
+        model.addAttribute("demandasAdmin", demandaService.listarTodasParaAdmin());
+        model.addAttribute("statusDemandas", StatusDemanda.values());
 
         try {
             List<GoogleCalendarEventDTO> eventosGoogle = googleCalendarService.listarEventos(

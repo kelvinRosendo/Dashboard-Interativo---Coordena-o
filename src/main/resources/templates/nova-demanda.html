@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nova demanda - Dashboard da Coordenacao</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="form-page">
+
+<div class="app-shell">
+    <aside th:replace="~{fragments/sidebar :: sidebar('admin', false)}"></aside>
+
+    <main class="app-main form-main">
+        <div class="container demanda-form-container">
+            <div class="form-header">
+                <span class="form-kicker">Colegio Satelite - Demandas das coordenacoes</span>
+                <h1>Nova demanda</h1>
+                <p class="texto-lateral">
+                    Cadastre uma tarefa da Alissandra para uma coordenacao acompanhar e concluir.
+                </p>
+            </div>
+
+            <form th:action="@{/admin/demandas}"
+                  method="post"
+                  class="formulario demanda-form"
+                  th:object="${demanda}">
+
+                <div class="form-alerta campo-completo" th:if="${#fields.hasAnyErrors()}">
+                    <p>Corrija os campos destacados antes de salvar.</p>
+                </div>
+
+                <div class="campo campo-completo">
+                    <label for="titulo">Titulo</label>
+                    <input type="text"
+                           id="titulo"
+                           th:field="*{titulo}"
+                           required
+                           placeholder="Ex: Revisar plano semanal do Fundamental 1"
+                           th:classappend="${#fields.hasErrors('titulo')} ? ' campo-invalido'">
+                    <small class="campo-erro" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}">Erro</small>
+                </div>
+
+                <div class="campo campo-completo">
+                    <label for="descricao">Descricao</label>
+                    <textarea id="descricao"
+                              th:field="*{descricao}"
+                              rows="4"
+                              required
+                              placeholder="Detalhe o que deve ser feito, contexto e expectativa de entrega."
+                              th:classappend="${#fields.hasErrors('descricao')} ? ' campo-invalido'"></textarea>
+                    <small class="campo-erro" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}">Erro</small>
+                </div>
+
+                <div class="campo">
+                    <label for="segmento">Coordenacao</label>
+                    <select id="segmento"
+                            th:field="*{segmento}"
+                            required
+                            th:classappend="${#fields.hasErrors('segmento')} ? ' campo-invalido'">
+                        <option value="">Selecione</option>
+                        <option th:each="segmentoItem : ${segmentosDemanda}"
+                                th:value="${segmentoItem}"
+                                th:text="${segmentoItem.titulo}">
+                            Segmento
+                        </option>
+                    </select>
+                    <small class="campo-erro" th:if="${#fields.hasErrors('segmento')}" th:errors="*{segmento}">Erro</small>
+                </div>
+
+                <div class="campo">
+                    <label for="prioridade">Prioridade</label>
+                    <select id="prioridade"
+                            th:field="*{prioridade}"
+                            required
+                            th:classappend="${#fields.hasErrors('prioridade')} ? ' campo-invalido'">
+                        <option value="">Selecione</option>
+                        <option th:each="prioridadeItem : ${prioridadesDemanda}"
+                                th:value="${prioridadeItem}"
+                                th:text="${prioridadeItem.titulo}">
+                            Prioridade
+                        </option>
+                    </select>
+                    <small class="campo-erro" th:if="${#fields.hasErrors('prioridade')}" th:errors="*{prioridade}">Erro</small>
+                </div>
+
+                <div class="campo">
+                    <label for="dataPrazo">Prazo</label>
+                    <input type="date"
+                           id="dataPrazo"
+                           th:field="*{dataPrazo}"
+                           th:classappend="${#fields.hasErrors('dataPrazo')} ? ' campo-invalido'">
+                    <small class="campo-erro" th:if="${#fields.hasErrors('dataPrazo')}" th:errors="*{dataPrazo}">Erro</small>
+                </div>
+
+                <div class="acoes campo-completo">
+                    <button type="submit" class="btn-editar">Salvar demanda</button>
+                    <a th:href="@{/admin}" class="btn-deletar">Voltar</a>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+
+</body>
+</html>
