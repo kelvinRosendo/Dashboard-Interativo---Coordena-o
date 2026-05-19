@@ -16,7 +16,13 @@
         </div>
         <nav class="login-nav" aria-label="Acesso rapido">
             <a th:href="@{/admin}">Admin</a>
-            <a th:href="@{/login}" class="login-nav-active">Login</a>
+            <a th:if="${googleConfigurado}"
+               th:href="@{/oauth2/authorization/google}"
+               class="login-nav-active"
+               title="Entrar com Google">Login</a>
+            <span th:if="${!googleConfigurado}"
+                  class="login-nav-active login-nav-disabled"
+                  title="Configure o Google OAuth para entrar">Login</span>
         </nav>
     </header>
 

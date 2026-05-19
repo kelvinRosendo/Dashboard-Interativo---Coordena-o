@@ -562,6 +562,11 @@ body.login-page {
     box-shadow: 0 14px 28px rgba(37, 99, 235, 0.35);
 }
 
+.login-nav .login-nav-disabled {
+    cursor: not-allowed;
+    opacity: 0.72;
+}
+
 .login-panel {
     width: min(1480px, 100%);
     margin: 0 auto;
@@ -955,6 +960,17 @@ body.form-page {
     display: grid;
     gap: 20px;
     align-content: start;
+}
+
+.admin-side-column .admin-coordinator-grid {
+    grid-template-columns: 1fr;
+}
+
+.admin-side-coordenadoras .admin-mini-card span {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .admin-grid,

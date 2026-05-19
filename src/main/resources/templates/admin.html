@@ -62,22 +62,6 @@
                 </div>
             </section>
 
-            <section class="admin-section">
-                <div class="admin-section-header">
-                    <span>Coordenadoras</span>
-                    <strong>Telas de teste</strong>
-                </div>
-
-                <div class="admin-coordinator-grid">
-                    <a th:each="coordenadora : ${coordenadoras}"
-                       th:href="@{/coordenadoras/{slug}(slug=${coordenadora.slug})}"
-                       class="admin-mini-card">
-                        <strong th:text="${coordenadora.nome}">Segmento</strong>
-                        <span th:text="${coordenadora.descricao}">Descricao</span>
-                    </a>
-                </div>
-            </section>
-
             <section class="admin-section demanda-admin-panel">
                 <div class="admin-section-header">
                     <div>
@@ -210,6 +194,22 @@
                             <img th:src="@{/img/icons/icon-calendar.png}" alt="">
                         </span>
                         <strong>Calendario mensal</strong>
+                    </a>
+                </div>
+            </section>
+
+            <section class="admin-section admin-side-coordenadoras">
+                <div class="admin-section-header">
+                    <span>Coordenadoras</span>
+                    <strong>Telas de teste</strong>
+                </div>
+
+                <div class="admin-coordinator-grid">
+                    <a th:each="coordenadora : ${coordenadoras}"
+                       th:href="@{/coordenadoras/{slug}(slug=${coordenadora.slug})}"
+                       class="admin-mini-card">
+                        <strong th:text="${coordenadora.nome}">Segmento</strong>
+                        <span th:text="${coordenadora.descricao}">Descricao</span>
                     </a>
                 </div>
             </section>
