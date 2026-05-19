@@ -21,9 +21,16 @@
         </div>
 
         <form th:action="@{/logout}" method="post">
+            <th:block th:replace="~{fragments/csrf :: token}"></th:block>
             <button type="submit" class="admin-logout-button">Sair</button>
         </form>
     </header>
+
+    <p class="admin-flash admin-flash--success"
+       th:if="${mensagemSucesso != null}"
+       th:text="${mensagemSucesso}">
+        Mensagem de sucesso
+    </p>
 
     <section class="admin-dashboard">
         <div class="admin-main-column">
@@ -137,6 +144,7 @@
                         <form th:action="@{/admin/demandas/{id}/status(id=${demanda.id})}"
                               method="post"
                               class="demanda-status-form">
+                            <th:block th:replace="~{fragments/csrf :: token}"></th:block>
                             <label th:for="${'status-admin-' + demanda.id}">Atualizar status</label>
                             <select th:id="${'status-admin-' + demanda.id}" name="status">
                                 <option th:each="statusItem : ${statusDemandas}"

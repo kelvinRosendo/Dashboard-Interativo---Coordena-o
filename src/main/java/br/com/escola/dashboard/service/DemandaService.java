@@ -46,11 +46,25 @@ public class DemandaService {
     }
 
     public Demanda atualizarStatus(Long id, StatusDemanda status) {
-        Demanda demanda = demandaRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Demanda nao encontrada com id: " + id));
+        Demanda demanda = buscarDemanda(id);
+        demanda.setStatus(status);
+        return demandaRepository.save(demanda);
+    }
+
+    public Demanda atualizarStatusParaSegmento(Long id, StatusDemanda status, SegmentoCoordenacao segmento) {
+        Demanda demanda = buscarDemanda(id);
+
+        if (demanda.getSegmento() != segmento) {
+            throw new IllegalArgumentException("Demanda nao pertence ao segmento informado.");
+        }
 
         demanda.setStatus(status);
         return demandaRepository.save(demanda);
+    }
+
+    private Demanda buscarDemanda(Long id) {
+        return demandaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Demanda nao encontrada com id: " + id));
     }
 
     public ResumoDemandas resumoGeral() {

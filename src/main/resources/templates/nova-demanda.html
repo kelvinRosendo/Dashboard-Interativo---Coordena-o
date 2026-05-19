@@ -25,6 +25,8 @@
                   class="formulario demanda-form"
                   th:object="${demanda}">
 
+                <th:block th:replace="~{fragments/csrf :: token}"></th:block>
+
                 <div class="form-alerta campo-completo" th:if="${#fields.hasAnyErrors()}">
                     <p>Corrija os campos destacados antes de salvar.</p>
                 </div>

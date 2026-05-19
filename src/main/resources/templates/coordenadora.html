@@ -24,6 +24,12 @@
         </div>
     </header>
 
+    <p class="admin-flash admin-flash--success"
+       th:if="${mensagemSucesso != null}"
+       th:text="${mensagemSucesso}">
+        Mensagem de sucesso
+    </p>
+
     <section class="coordenadora-grid">
         <article class="coordenadora-panel coordenadora-panel-wide">
             <div class="admin-section-header">
@@ -48,7 +54,7 @@
             <div class="admin-section-header">
                 <span>Demandas da Alissandra</span>
                 <strong>Plano de acao</strong>
-                <small class="checklist-progress" th:text="${demandaProgresso.percentual + '% concluido'}">0% concluido</small>
+                <small class="demanda-progress-label" th:text="${demandaProgresso.percentual + '% concluido'}">0% concluido</small>
             </div>
 
             <div class="coord-progress">
@@ -65,12 +71,13 @@
             </div>
 
             <p class="admin-empty demanda-alerta"
-               th:text="${'Voce tem ' + demandasPendentes + ' demandas pendentes'}">
-                Voce tem 0 demandas pendentes
+               th:if="${demandasPendentes > 0}"
+               th:text="${'Voce tem ' + demandasPendentes + ' demanda' + (demandasPendentes == 1 ? '' : 's') + ' pendente' + (demandasPendentes == 1 ? '' : 's')}">
+                Voce tem demandas pendentes
             </p>
 
             <p class="admin-empty" th:if="${demandas == null or #lists.isEmpty(demandas)}">
-                Nenhuma demanda cadastrada para esta coordenacao ainda.
+                Nenhuma demanda atribuida para este segmento.
             </p>
 
             <div class="demanda-grid" th:if="${demandas != null and !#lists.isEmpty(demandas)}">
@@ -111,12 +118,14 @@
                         <form th:if="${demanda.status.name() == 'PENDENTE'}"
                               th:action="@{/coordenadoras/{segmento}/demandas/{id}/status(segmento=${segmento.slug}, id=${demanda.id})}"
                               method="post">
+                            <th:block th:replace="~{fragments/csrf :: token}"></th:block>
                             <input type="hidden" name="status" value="EM_ANDAMENTO">
-                            <button type="submit" class="btn-editar demanda-action-button">Iniciar</button>
+                            <button type="submit" class="btn-editar demanda-action-button">Em andamento</button>
                         </form>
-                        <form th:if="${demanda.status.name() != 'CONCLUIDA' and demanda.status.name() != 'CANCELADA'}"
+                        <form th:if="${demanda.status.name() == 'PENDENTE' or demanda.status.name() == 'EM_ANDAMENTO'}"
                               th:action="@{/coordenadoras/{segmento}/demandas/{id}/status(segmento=${segmento.slug}, id=${demanda.id})}"
                               method="post">
+                            <th:block th:replace="~{fragments/csrf :: token}"></th:block>
                             <input type="hidden" name="status" value="CONCLUIDA">
                             <button type="submit" class="btn-editar demanda-action-button demanda-action-button--success">Concluir</button>
                         </form>

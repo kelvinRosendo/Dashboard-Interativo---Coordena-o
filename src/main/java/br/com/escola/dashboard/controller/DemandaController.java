@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class DemandaController {
@@ -36,29 +37,40 @@ public class DemandaController {
     public String criarDemanda(@Valid @ModelAttribute("demanda") DemandaRequestDTO demanda,
                                BindingResult bindingResult,
                                @AuthenticationPrincipal OAuth2User usuario,
-                               Model model) {
+                               Model model,
+                               RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             prepararFormulario(model, demanda);
             return "nova-demanda";
         }
 
         demandaService.criarDemanda(demanda, obterAutor(usuario));
+        redirectAttributes.addFlashAttribute("mensagemSucesso", "Demanda cadastrada com sucesso.");
         return "redirect:/admin";
     }
 
     @PostMapping("/admin/demandas/{id}/status")
     public String atualizarStatusAdmin(@PathVariable Long id,
-                                       @RequestParam StatusDemanda status) {
+                                       @RequestParam StatusDemanda status,
+                                       RedirectAttributes redirectAttributes) {
         demandaService.atualizarStatus(id, status);
+        redirectAttributes.addFlashAttribute("mensagemSucesso", "Status da demanda atualizado.");
         return "redirect:/admin";
     }
 
     @PostMapping("/coordenadoras/{segmento}/demandas/{id}/status")
     public String atualizarStatusCoordenadora(@PathVariable String segmento,
                                               @PathVariable Long id,
-                                              @RequestParam StatusDemanda status) {
-        demandaService.atualizarStatus(id, status);
-        return "redirect:/coordenadoras/" + segmento;
+                                              @RequestParam StatusDemanda status,
+                                              RedirectAttributes redirectAttributes) {
+        SegmentoCoordenacao segmentoEnum = SegmentoCoordenacao.fromSlug(segmento);
+        if (segmentoEnum == null) {
+            return "redirect:/coordenadoras";
+        }
+
+        demandaService.atualizarStatusParaSegmento(id, status, segmentoEnum);
+        redirectAttributes.addFlashAttribute("mensagemSucesso", "Status da demanda atualizado.");
+        return "redirect:/coordenadoras/" + segmentoEnum.getSlug();
     }
 
     private void prepararFormulario(Model model, DemandaRequestDTO demanda) {
