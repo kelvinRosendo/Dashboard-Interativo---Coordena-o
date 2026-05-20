@@ -5,10 +5,10 @@
     <title>Semana em Foco</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body class="tv-page tv-page--semana">
+<body class="tv-page tv-page--semana" th:classappend="${modoDashboard} ? ' tv-page--dashboard' : ''">
 
-<div class="app-shell app-shell--tv">
-    <aside th:replace="~{fragments/sidebar :: sidebar('semana', true)}"></aside>
+<div class="app-shell app-shell--tv" th:classappend="${modoDashboard} ? ' app-shell--dashboard-tv' : ''">
+    <aside th:if="${!modoDashboard}" th:replace="~{fragments/sidebar :: sidebar('semana', true)}"></aside>
 
 <div class="tv-shell tv-shell--semana app-main app-main--tv">
     <header class="tv-topbar">
@@ -21,10 +21,21 @@
                 <h1>Semana em Foco</h1>
             </div>
         </div>
-        <nav class="tv-switch" aria-label="Telas do dashboard">
-            <a th:href="@{/tv/semana}" class="tv-switch-link tv-switch-link-active">Semana</a>
-            <a th:href="@{/tv/calendario(modo='semanal')}" class="tv-switch-link">Calendario</a>
-        </nav>
+        <div class="tv-dashboard-toolbar">
+            <nav class="tv-switch" aria-label="Telas do dashboard" th:if="${!modoDashboard}">
+                <a th:href="@{/tv/semana}" class="tv-switch-link tv-switch-link-active">Semana</a>
+                <a th:href="@{/tv/calendario(modo='semanal')}" class="tv-switch-link">Calendario</a>
+            </nav>
+            <div class="tv-dashboard-timer"
+                 th:if="${modoDashboard}"
+                 data-dashboard-timer
+                 th:data-dashboard-duration="${timerSegundos}"
+                 th:data-dashboard-target="@{/tv/calendario(modo='mensal')}"
+                 aria-live="polite">
+                <span>Calendario em</span>
+                <strong data-dashboard-countdown th:text="${timerSegundos + 's'}">30s</strong>
+            </div>
+        </div>
     </header>
 
     <main class="tv-semana-layout tv-week-shell">
@@ -108,5 +119,6 @@
 
 </div>
 
+<script th:if="${modoDashboard}" th:src="@{/js/dashboard-ui.js}"></script>
 </body>
 </html>

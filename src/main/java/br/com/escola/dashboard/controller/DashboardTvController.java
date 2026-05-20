@@ -48,7 +48,12 @@ public class DashboardTvController {
     }
 
     @GetMapping({"", "/semana"})
-    public String semanaEmFoco(Model model) {
+    public String semanaEmFoco(@RequestParam(name = "modo", defaultValue = "padrao") String modo,
+                               @RequestParam(name = "timer", defaultValue = "30") Integer timer,
+                               Model model) {
+        boolean modoDashboard = "dashboard".equalsIgnoreCase(modo);
+        int timerSegundos = normalizarTimer(timer);
+
         List<CardResponseDTO> cards = cardService.listarTodos();
 
         List<CardResponseDTO> semanas = filtrarPorCategoria(cards, CategoriaCard.SEMANA_EM_FOCO);
@@ -63,17 +68,19 @@ public class DashboardTvController {
                         filtrarPorCategoria(cards, CategoriaCard.ROTINA_COORDENADORES).stream())
                 .filter(card -> card.getStatus() != StatusCard.CONCLUIDO)
                 .sorted(comparadorPainel())
-                .limit(6)
+                .limit(modoDashboard ? 4 : 6)
                 .toList();
 
         model.addAttribute("semanaAtual", semanaAtual);
         model.addAttribute("segmentoSemana", resolverSegmentoSemana(semanaAtual));
         model.addAttribute("semanas", semanas);
         model.addAttribute("manutencao", manutencao);
-        model.addAttribute("avisos", limitar(filtrarPorCategoria(cards, CategoriaCard.AVISO_NOTA), 4));
-        model.addAttribute("faltas", limitar(filtrarPorCategoria(cards, CategoriaCard.FALTA_PROFESSOR), 5));
-        model.addAttribute("substituicoes", limitar(filtrarPorCategoria(cards, CategoriaCard.SUBSTITUICAO), 5));
+        model.addAttribute("avisos", limitar(filtrarPorCategoria(cards, CategoriaCard.AVISO_NOTA), modoDashboard ? 3 : 4));
+        model.addAttribute("faltas", limitar(filtrarPorCategoria(cards, CategoriaCard.FALTA_PROFESSOR), modoDashboard ? 3 : 5));
+        model.addAttribute("substituicoes", limitar(filtrarPorCategoria(cards, CategoriaCard.SUBSTITUICAO), modoDashboard ? 3 : 5));
         model.addAttribute("hoje", LocalDate.now());
+        model.addAttribute("modoDashboard", modoDashboard);
+        model.addAttribute("timerSegundos", timerSegundos);
 
         return "dashboard-semana";
     }
@@ -206,6 +213,14 @@ public class DashboardTvController {
                 oauthToken.getAuthorizedClientRegistrationId(),
                 oauthToken.getName()
         );
+    }
+
+    private int normalizarTimer(Integer timer) {
+        if (timer == null) {
+            return 30;
+        }
+
+        return Math.max(5, Math.min(timer, 3600));
     }
 
     private Comparator<CardResponseDTO> comparadorPainel() {

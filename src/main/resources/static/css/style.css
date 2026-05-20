@@ -2056,20 +2056,39 @@ body.tv-page {
 /* TV SEMANA EM FOCO - FULLSCREEN        */
 /* ===================================== */
 body.tv-page.tv-page--semana {
+    min-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+body.tv-page.tv-page--semana.tv-page--dashboard {
+    width: 100vw;
     height: 100vh;
     max-height: 100vh;
     overflow: hidden;
 }
 
 body.tv-page.tv-page--semana .app-shell--tv {
+    min-height: 100vh;
+}
+
+body.tv-page.tv-page--semana .app-shell--dashboard-tv {
+    width: 100vw;
     height: 100vh;
     min-height: 0;
+    grid-template-columns: minmax(0, 1fr);
     overflow: hidden;
 }
 
 body.tv-page.tv-page--semana .app-main--tv.tv-shell--semana {
-    height: 100%;
+    min-height: 100vh;
+}
+
+body.tv-page.tv-page--semana.tv-page--dashboard .app-main--tv.tv-shell--semana {
+    width: 100vw;
+    height: 100vh;
     min-height: 0;
+    max-height: 100vh;
     overflow: hidden;
 }
 
@@ -2078,17 +2097,61 @@ body.tv-page.tv-page--semana .app-main--tv.tv-shell--semana {
     flex-direction: column;
     gap: clamp(8px, 1vh, 14px);
     padding: clamp(10px, 1.2vh, 18px);
-    min-height: 0;
-    height: 100%;
-    max-height: 100%;
-    overflow: hidden;
+    min-height: 100vh;
+    height: auto;
+    max-height: none;
+    overflow: visible;
     grid-template-rows: unset;
+}
+
+.tv-page--dashboard .tv-shell.tv-shell--semana {
+    min-height: 0;
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
 }
 
 .tv-shell--semana .tv-topbar {
     flex: 0 0 auto;
     min-height: clamp(64px, 9vh, 88px);
     padding: clamp(12px, 1.4vh, 18px) clamp(14px, 1.6vw, 20px);
+}
+
+.tv-dashboard-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.tv-dashboard-timer {
+    min-height: 54px;
+    min-width: 178px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 9px 15px;
+    border-radius: var(--radius);
+    border: 1px solid rgba(250, 204, 21, 0.46);
+    color: #0f172a;
+    background: linear-gradient(135deg, var(--yellow), var(--yellow-2));
+    box-shadow: 0 16px 34px rgba(250, 204, 21, 0.2);
+}
+
+.tv-dashboard-timer span {
+    font-size: 13px;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.tv-dashboard-timer strong {
+    min-width: 46px;
+    color: #0f172a;
+    font-size: clamp(24px, 2.4vw, 34px);
+    line-height: 1;
+    font-weight: 950;
+    text-align: right;
 }
 
 .tv-shell--semana .tv-topbar h1 {
@@ -2101,6 +2164,10 @@ body.tv-page.tv-page--semana .app-main--tv.tv-shell--semana {
     display: flex;
     flex-direction: column;
     gap: clamp(8px, 1vh, 14px);
+    overflow: visible;
+}
+
+.tv-page--dashboard .tv-week-shell.tv-semana-layout {
     overflow: hidden;
 }
 
@@ -2122,6 +2189,10 @@ body.tv-page.tv-page--semana .app-main--tv.tv-shell--semana {
 .tv-week-notices .avisos-tv-lista {
     max-height: none;
     min-height: 0;
+}
+
+.tv-page--dashboard .tv-week-notices .avisos-tv-lista {
+    overflow: hidden;
 }
 
 .tv-week-feature.semana-hero {
@@ -2174,6 +2245,10 @@ body.tv-page.tv-page--semana .app-main--tv.tv-shell--semana {
     max-height: none;
 }
 
+.tv-page--dashboard .tv-week-side .tv-panel-block {
+    overflow: hidden;
+}
+
 .tv-card--notice,
 .tv-card--maintenance {
     border-color: rgba(96, 165, 250, 0.22);
@@ -2186,23 +2261,60 @@ body.tv-page.tv-page--semana .app-main--tv.tv-shell--semana {
 .tv-week-maintenance-row {
     flex: 0 0 auto;
     min-height: 0;
-    max-height: clamp(132px, 23vh, 210px);
+    max-height: none;
     width: 100%;
     display: grid;
     grid-template-rows: auto minmax(0, 1fr);
-    overflow: hidden;
+    overflow: visible;
 }
 
 .tv-week-maintenance-grid {
     min-height: 0;
     max-height: 100%;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
-    overflow-y: auto;
+    overflow-y: visible;
     overflow-x: hidden;
 }
 
 .tv-week-maintenance-grid .manutencao-card {
-    min-height: clamp(88px, 12vh, 108px);
+    min-height: clamp(108px, 14vh, 132px);
+}
+
+.tv-page--dashboard .tv-week-main-grid {
+    grid-template-columns: minmax(220px, 0.72fr) minmax(0, 1.58fr) minmax(260px, 0.9fr);
+}
+
+.tv-page--dashboard .tv-week-maintenance-row {
+    flex-basis: clamp(164px, 24vh, 224px);
+    max-height: clamp(164px, 24vh, 224px);
+    overflow: hidden;
+}
+
+.tv-page--dashboard .tv-week-maintenance-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-auto-rows: minmax(0, 1fr);
+    overflow: hidden;
+}
+
+.tv-page--dashboard .tv-week-maintenance-grid .manutencao-card {
+    min-height: 0;
+}
+
+.tv-page--dashboard .tv-aviso,
+.tv-page--dashboard .tv-mini-card {
+    padding: clamp(10px, 1.15vh, 13px);
+}
+
+.tv-page--dashboard .tv-mini-card strong,
+.tv-page--dashboard .tv-aviso strong,
+.tv-page--dashboard .manutencao-card strong {
+    font-size: clamp(15px, 1.25vw, 18px);
+}
+
+.tv-page--dashboard .tv-mini-card span,
+.tv-page--dashboard .tv-aviso span,
+.tv-page--dashboard .manutencao-card p {
+    font-size: clamp(13px, 1vw, 15px);
 }
 
 .manutencao-empty {
@@ -2888,5 +3000,50 @@ body.tv-page.tv-page--semana .app-main--tv.tv-shell--semana {
 
     .operation-dock__header p {
         width: 100%;
+    }
+}
+
+body.tv-page.tv-page--semana.tv-page--dashboard {
+    height: 100vh;
+    overflow: hidden;
+}
+
+body.tv-page.tv-page--semana.tv-page--dashboard .app-shell--dashboard-tv,
+body.tv-page.tv-page--semana.tv-page--dashboard .app-main--tv.tv-shell--semana {
+    height: 100vh;
+    min-height: 0;
+    overflow: hidden;
+}
+
+body.tv-page.tv-page--semana.tv-page--dashboard .tv-shell.tv-shell--semana {
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+}
+
+body.tv-page.tv-page--semana.tv-page--dashboard .tv-week-main-grid {
+    display: grid;
+    grid-template-columns: minmax(210px, 0.72fr) minmax(0, 1.58fr) minmax(240px, 0.9fr);
+}
+
+body.tv-page.tv-page--semana.tv-page--dashboard .tv-week-feature,
+body.tv-page.tv-page--semana.tv-page--dashboard .tv-week-notices,
+body.tv-page.tv-page--semana.tv-page--dashboard .tv-week-side,
+body.tv-page.tv-page--semana.tv-page--dashboard .tv-week-maintenance-row {
+    order: initial;
+}
+
+@media (max-width: 980px) {
+    body.tv-page.tv-page--semana.tv-page--dashboard .tv-topbar {
+        align-items: center;
+        flex-direction: row;
+    }
+
+    body.tv-page.tv-page--semana.tv-page--dashboard .tv-week-main-grid {
+        grid-template-columns: minmax(170px, 0.72fr) minmax(0, 1.4fr) minmax(190px, 0.86fr);
+    }
+
+    body.tv-page.tv-page--semana.tv-page--dashboard .tv-week-feature.semana-hero h2 {
+        font-size: clamp(28px, 5vw, 42px);
     }
 }
