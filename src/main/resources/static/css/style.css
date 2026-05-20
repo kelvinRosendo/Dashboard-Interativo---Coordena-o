@@ -1263,22 +1263,6 @@ body.form-page {
     box-shadow: 0 0 18px rgba(59, 130, 246, 0.32);
 }
 
-.admin-progress-value-45 {
-    --progress: 45%;
-}
-
-.admin-progress-value-60 {
-    --progress: 60%;
-}
-
-.admin-progress-value-70 {
-    --progress: 70%;
-}
-
-.admin-progress-value-80 {
-    --progress: 80%;
-}
-
 .coordenadora-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1600,6 +1584,87 @@ body.form-page {
     border-color: rgba(250, 204, 21, 0.24);
     background: rgba(250, 204, 21, 0.08);
     color: #fde68a;
+}
+
+.demanda-notification {
+    margin: 0 0 18px;
+    padding: 1px;
+    border-radius: var(--radius);
+    background: linear-gradient(135deg, rgba(250, 204, 21, 0.72), rgba(37, 99, 235, 0.48));
+    box-shadow: 0 22px 54px rgba(0, 0, 0, 0.32);
+}
+
+.demanda-notification__card {
+    display: grid;
+    gap: 12px;
+    padding: clamp(18px, 2vw, 24px);
+    border-radius: calc(var(--radius) - 1px);
+    background:
+        linear-gradient(135deg, rgba(250, 204, 21, 0.08), transparent 42%),
+        linear-gradient(180deg, rgba(21, 31, 49, 0.98), rgba(7, 11, 21, 0.98));
+}
+
+.demanda-notification__eyebrow,
+.demanda-new-pill {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    color: #0f172a;
+    background: var(--yellow);
+    font-size: 11px;
+    font-weight: 950;
+    text-transform: uppercase;
+}
+
+.demanda-notification h2 {
+    max-width: 720px;
+    color: #ffffff;
+    font-size: clamp(22px, 2.4vw, 31px);
+    line-height: 1.12;
+}
+
+.demanda-notification p {
+    color: var(--muted);
+    font-weight: 700;
+}
+
+.demanda-notification__preview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 10px;
+}
+
+.demanda-notification__preview article {
+    padding: 12px;
+    display: grid;
+    gap: 5px;
+    border-radius: var(--radius);
+    border: 1px solid rgba(250, 204, 21, 0.18);
+    background: rgba(2, 6, 23, 0.34);
+}
+
+.demanda-notification__preview strong {
+    color: #ffffff;
+    font-size: 14px;
+}
+
+.demanda-notification__preview span {
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.demanda-notification__actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.demanda-new-pill {
+    margin-top: 2px;
+    background: rgba(250, 204, 21, 0.94);
 }
 
 .demanda-progress-label {

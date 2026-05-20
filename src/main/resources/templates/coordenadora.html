@@ -30,6 +30,35 @@
         Mensagem de sucesso
     </p>
 
+    <section class="demanda-notification"
+             th:if="${quantidadeDemandasNovas != null and quantidadeDemandasNovas > 0}"
+             role="dialog"
+             aria-labelledby="nova-demanda-titulo">
+        <div class="demanda-notification__card">
+            <span class="demanda-notification__eyebrow">Nova demanda recebida</span>
+            <h2 id="nova-demanda-titulo">A Alissandra atribuiu uma nova demanda para este segmento.</h2>
+            <p th:text="${quantidadeDemandasNovas == 1 ? 'Existe 1 demanda pendente ainda nao visualizada.' : 'Existem ' + quantidadeDemandasNovas + ' demandas pendentes ainda nao visualizadas.'}">
+                Existem demandas novas.
+            </p>
+
+            <div class="demanda-notification__preview">
+                <article th:each="demanda : ${demandasNovas}">
+                    <strong th:text="${demanda.titulo}">Demanda</strong>
+                    <span th:text="${demanda.dataPrazo != null ? 'Prazo: ' + #temporals.format(demanda.dataPrazo, 'dd/MM/yyyy') : 'Sem prazo definido'}">
+                        Prazo
+                    </span>
+                </article>
+            </div>
+
+            <form th:action="@{/coordenadoras/{segmento}/demandas/visualizar(segmento=${segmento.slug})}"
+                  method="post"
+                  class="demanda-notification__actions">
+                <th:block th:replace="~{fragments/csrf :: token}"></th:block>
+                <button type="submit" class="btn-editar">Ver demandas</button>
+            </form>
+        </div>
+    </section>
+
     <section class="coordenadora-grid">
         <article class="coordenadora-panel coordenadora-panel-wide">
             <div class="admin-section-header">
@@ -87,6 +116,9 @@
                     <div class="demanda-card-header">
                         <div>
                             <strong th:text="${demanda.titulo}">Demanda</strong>
+                            <small class="demanda-new-pill" th:if="${!demanda.visualizadaPelaCoordenadora}">
+                                Nova
+                            </small>
                             <span th:text="${demanda.dataPrazo != null ? 'Prazo: ' + #temporals.format(demanda.dataPrazo, 'dd/MM/yyyy') : 'Sem prazo definido'}">
                                 Prazo
                             </span>

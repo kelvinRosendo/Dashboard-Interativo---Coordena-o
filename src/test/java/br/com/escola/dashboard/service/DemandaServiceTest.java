@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -130,6 +131,40 @@ class DemandaServiceTest {
         );
 
         assertEquals(StatusDemanda.EM_ANDAMENTO, atualizada.getStatus());
+        assertEquals(true, atualizada.isVisualizadaPelaCoordenadora());
         verify(demandaRepository).save(demanda);
+    }
+
+    @Test
+    void listarNovasPendentesPorSegmento_deveBuscarPendentesNaoVisualizadas() {
+        SegmentoCoordenacao segmento = SegmentoCoordenacao.EDUCACAO_INFANTIL;
+        Demanda demanda = new Demanda();
+
+        when(demandaRepository.findBySegmentoAndStatusAndVisualizadaPelaCoordenadoraFalseOrderByDataPrazoAscDataCriacaoDesc(
+                segmento,
+                StatusDemanda.PENDENTE
+        )).thenReturn(List.of(demanda));
+
+        List<Demanda> resultado = demandaService.listarNovasPendentesPorSegmento(segmento);
+
+        assertEquals(1, resultado.size());
+    }
+
+    @Test
+    void marcarNovasPendentesComoVisualizadas_deveSalvarDemandasComoVistas() {
+        SegmentoCoordenacao segmento = SegmentoCoordenacao.EDUCACAO_INFANTIL;
+        Demanda primeira = new Demanda();
+        Demanda segunda = new Demanda();
+
+        when(demandaRepository.findBySegmentoAndStatusAndVisualizadaPelaCoordenadoraFalseOrderByDataPrazoAscDataCriacaoDesc(
+                segmento,
+                StatusDemanda.PENDENTE
+        )).thenReturn(List.of(primeira, segunda));
+
+        demandaService.marcarNovasPendentesComoVisualizadas(segmento);
+
+        assertEquals(true, primeira.isVisualizadaPelaCoordenadora());
+        assertEquals(true, segunda.isVisualizadaPelaCoordenadora());
+        verify(demandaRepository).saveAll(List.of(primeira, segunda));
     }
 }

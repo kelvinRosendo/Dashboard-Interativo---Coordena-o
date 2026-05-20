@@ -52,6 +52,9 @@ public class Demanda {
 
     private LocalDateTime concluidaEm;
 
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private boolean visualizadaPelaCoordenadora;
+
     @PrePersist
     public void prePersist() {
         if (dataCriacao == null) {
@@ -154,5 +157,13 @@ public class Demanda {
 
     public void setConcluidaEm(LocalDateTime concluidaEm) {
         this.concluidaEm = concluidaEm;
+    }
+
+    public boolean isVisualizadaPelaCoordenadora() {
+        return visualizadaPelaCoordenadora;
+    }
+
+    public void setVisualizadaPelaCoordenadora(boolean visualizadaPelaCoordenadora) {
+        this.visualizadaPelaCoordenadora = visualizadaPelaCoordenadora;
     }
 }

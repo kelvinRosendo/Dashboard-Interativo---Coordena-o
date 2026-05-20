@@ -20,9 +20,17 @@ public interface DemandaRepository extends JpaRepository<Demanda, Long> {
     List<Demanda> findBySegmentoAndStatusOrderByDataPrazoAscDataCriacaoDesc(SegmentoCoordenacao segmento,
                                                                              StatusDemanda status);
 
+    List<Demanda> findBySegmentoAndStatusAndVisualizadaPelaCoordenadoraFalseOrderByDataPrazoAscDataCriacaoDesc(
+            SegmentoCoordenacao segmento,
+            StatusDemanda status
+    );
+
     long countBySegmento(SegmentoCoordenacao segmento);
 
     long countByStatus(StatusDemanda status);
 
     long countBySegmentoAndStatus(SegmentoCoordenacao segmento, StatusDemanda status);
+
+    long countBySegmentoAndStatusAndVisualizadaPelaCoordenadoraFalse(SegmentoCoordenacao segmento,
+                                                                     StatusDemanda status);
 }

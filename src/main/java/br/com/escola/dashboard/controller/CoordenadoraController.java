@@ -66,6 +66,8 @@ public class CoordenadoraController {
         model.addAttribute("demandas", demandaService.listarPorSegmento(segmentoEnum));
         model.addAttribute("demandaProgresso", demandaService.calcularProgressoPorSegmento(segmentoEnum));
         model.addAttribute("demandasPendentes", demandaService.contarPendentesPorSegmento(segmentoEnum));
+        model.addAttribute("demandasNovas", demandaService.listarNovasPendentesPorSegmento(segmentoEnum));
+        model.addAttribute("quantidadeDemandasNovas", demandaService.contarNovasPendentesPorSegmento(segmentoEnum));
 
         return "coordenadora";
     }

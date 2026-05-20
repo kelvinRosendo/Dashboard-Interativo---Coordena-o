@@ -73,6 +73,19 @@ public class DemandaController {
         return "redirect:/coordenadoras/" + segmentoEnum.getSlug();
     }
 
+    @PostMapping("/coordenadoras/{segmento}/demandas/visualizar")
+    public String visualizarDemandasCoordenadora(@PathVariable String segmento,
+                                                 RedirectAttributes redirectAttributes) {
+        SegmentoCoordenacao segmentoEnum = SegmentoCoordenacao.fromSlug(segmento);
+        if (segmentoEnum == null) {
+            return "redirect:/coordenadoras";
+        }
+
+        demandaService.marcarNovasPendentesComoVisualizadas(segmentoEnum);
+        redirectAttributes.addFlashAttribute("mensagemSucesso", "Demandas novas marcadas como vistas.");
+        return "redirect:/coordenadoras/" + segmentoEnum.getSlug();
+    }
+
     private void prepararFormulario(Model model, DemandaRequestDTO demanda) {
         model.addAttribute("demanda", demanda);
         model.addAttribute("segmentosDemanda", SegmentoCoordenacao.values());

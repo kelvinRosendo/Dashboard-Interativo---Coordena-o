@@ -59,6 +59,7 @@ public class DemandaService {
         }
 
         demanda.setStatus(status);
+        demanda.setVisualizadaPelaCoordenadora(true);
         return demandaRepository.save(demanda);
     }
 
@@ -105,6 +106,27 @@ public class DemandaService {
 
     public long contarPendentesPorSegmento(SegmentoCoordenacao segmento) {
         return demandaRepository.countBySegmentoAndStatus(segmento, StatusDemanda.PENDENTE);
+    }
+
+    public List<Demanda> listarNovasPendentesPorSegmento(SegmentoCoordenacao segmento) {
+        return demandaRepository.findBySegmentoAndStatusAndVisualizadaPelaCoordenadoraFalseOrderByDataPrazoAscDataCriacaoDesc(
+                segmento,
+                StatusDemanda.PENDENTE
+        );
+    }
+
+    public long contarNovasPendentesPorSegmento(SegmentoCoordenacao segmento) {
+        return demandaRepository.countBySegmentoAndStatusAndVisualizadaPelaCoordenadoraFalse(
+                segmento,
+                StatusDemanda.PENDENTE
+        );
+    }
+
+    public void marcarNovasPendentesComoVisualizadas(SegmentoCoordenacao segmento) {
+        List<Demanda> demandasNovas = listarNovasPendentesPorSegmento(segmento);
+
+        demandasNovas.forEach(demanda -> demanda.setVisualizadaPelaCoordenadora(true));
+        demandaRepository.saveAll(demandasNovas);
     }
 
     private long contarProximasDoPrazo() {
