@@ -31,13 +31,24 @@
        th:text="${mensagemSucesso}">
         Mensagem de sucesso
     </p>
+    <p class="admin-flash admin-flash--error"
+       th:if="${mensagemErro != null}"
+       th:text="${mensagemErro}">
+        Mensagem de erro
+    </p>
 
     <section class="admin-dashboard">
         <div class="admin-main-column">
             <section class="admin-section">
                 <div class="admin-section-header">
-                    <span>Google Agenda</span>
-                    <strong>Proximos 7 dias</strong>
+                    <div>
+                        <span>Google Agenda</span>
+                        <strong>Proximos 7 dias</strong>
+                    </div>
+                    <a th:href="@{/agenda/eventos/novo(origem='admin')}"
+                       class="btn-editar demanda-new-button">
+                        Novo evento
+                    </a>
                 </div>
 
                 <p class="admin-empty admin-alert" th:if="${calendarErro != null}" th:text="${calendarErro}">

@@ -19,6 +19,10 @@
         </div>
 
         <div class="admin-actions">
+            <a th:href="@{/agenda/eventos/novo(origem='coordenadora', segmento=${segmento.slug})}"
+               class="admin-logout-button admin-link-button">
+                Novo evento
+            </a>
             <a th:href="@{/coordenadoras}" class="admin-logout-button admin-link-button">Coordenadoras</a>
             <a th:href="@{/admin}" class="admin-logout-button admin-link-button">Admin</a>
         </div>
@@ -28,6 +32,11 @@
        th:if="${mensagemSucesso != null}"
        th:text="${mensagemSucesso}">
         Mensagem de sucesso
+    </p>
+    <p class="admin-flash admin-flash--error"
+       th:if="${mensagemErro != null}"
+       th:text="${mensagemErro}">
+        Mensagem de erro
     </p>
 
     <section class="demanda-notification"

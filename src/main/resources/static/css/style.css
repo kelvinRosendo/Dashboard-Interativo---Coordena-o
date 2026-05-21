@@ -1689,6 +1689,12 @@ body.form-page {
     color: #bbf7d0;
 }
 
+.admin-flash--error {
+    border-color: rgba(239, 68, 68, 0.34);
+    background: rgba(239, 68, 68, 0.12);
+    color: #fecaca;
+}
+
 .demanda-form-container {
     max-width: 900px;
 }

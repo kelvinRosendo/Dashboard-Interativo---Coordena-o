@@ -1,5 +1,6 @@
 package br.com.escola.dashboard.service;
 
+import br.com.escola.dashboard.dto.GoogleCalendarEventRequestDTO;
 import br.com.escola.dashboard.dto.GoogleCalendarEventDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -7,9 +8,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -20,14 +23,19 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Service
 public class GoogleCalendarService {
 
     private static final String EVENTS_URL = "https://www.googleapis.com/calendar/v3/calendars/primary/events";
     private static final String CALENDAR_READONLY_SCOPE = "https://www.googleapis.com/auth/calendar.readonly";
+    private static final String CALENDAR_EVENTS_SCOPE = "https://www.googleapis.com/auth/calendar.events";
+    private static final String CALENDAR_FULL_SCOPE = "https://www.googleapis.com/auth/calendar";
     private static final ZoneId DEFAULT_ZONE = ZoneId.of("America/Sao_Paulo");
 
     private final RestTemplate restTemplate = new RestTemplate();
@@ -86,6 +94,64 @@ public class GoogleCalendarService {
         }
     }
 
+    public void criarEvento(OAuth2AuthorizedClient googleClient, GoogleCalendarEventRequestDTO requestDTO) {
+        if (googleClient == null || googleClient.getAccessToken() == null) {
+            throw new IllegalStateException("Sua sessao Google nao esta pronta para criar eventos. Saia e entre novamente.");
+        }
+
+        if (!temPermissaoEscrita(googleClient.getAccessToken().getScopes())) {
+            throw new IllegalStateException("Sua sessao Google ainda nao tem permissao para criar eventos. Saia, entre novamente e autorize o Google Agenda.");
+        }
+
+        if (!requestDTO.getFim().isAfter(requestDTO.getInicio())) {
+            throw new IllegalArgumentException("O horario final deve ser posterior ao horario inicial.");
+        }
+
+        String inicio = requestDTO.getData()
+                .atTime(requestDTO.getInicio())
+                .atZone(DEFAULT_ZONE)
+                .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+
+        String fim = requestDTO.getData()
+                .atTime(requestDTO.getFim())
+                .atZone(DEFAULT_ZONE)
+                .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+
+        Map<String, Object> payload = Map.of(
+                "summary", requestDTO.getTitulo().trim(),
+                "description", StringUtils.hasText(requestDTO.getDescricao()) ? requestDTO.getDescricao().trim() : "",
+                "start", Map.of(
+                        "dateTime", inicio,
+                        "timeZone", DEFAULT_ZONE.getId()
+                ),
+                "end", Map.of(
+                        "dateTime", fim,
+                        "timeZone", DEFAULT_ZONE.getId()
+                )
+        );
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(googleClient.getAccessToken().getTokenValue());
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        try {
+            restTemplate.exchange(
+                    EVENTS_URL,
+                    HttpMethod.POST,
+                    new HttpEntity<>(payload, headers),
+                    JsonNode.class
+            );
+        } catch (HttpStatusCodeException ex) {
+            String detalhe = extrairMensagemGoogle(ex.getResponseBodyAsString());
+            throw new IllegalStateException(
+                    "Google Agenda respondeu com erro " + ex.getStatusCode().value() + ": " + detalhe,
+                    ex
+            );
+        } catch (RestClientException ex) {
+            throw new IllegalStateException("Nao foi possivel criar o evento no Google Agenda.", ex);
+        }
+    }
+
     private GoogleCalendarEventDTO converterEvento(JsonNode item) {
         JsonNode start = item.path("start");
         JsonNode end = item.path("end");
@@ -122,5 +188,9 @@ public class GoogleCalendarService {
         } catch (JsonProcessingException ex) {
             return corpoResposta;
         }
+    }
+
+    private boolean temPermissaoEscrita(Set<String> scopes) {
+        return scopes.contains(CALENDAR_EVENTS_SCOPE) || scopes.contains(CALENDAR_FULL_SCOPE);
     }
 }

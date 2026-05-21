@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Novo evento - Google Agenda</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="form-page">
+
+<div class="app-shell">
+    <aside th:replace="~{fragments/sidebar :: sidebar(${sidebarActive}, false)}"></aside>
+
+    <main class="app-main form-main">
+        <div class="container demanda-form-container">
+            <div class="form-header">
+                <span class="form-kicker">Colegio Satelite - Google Agenda</span>
+                <h1>Novo evento</h1>
+                <p class="texto-lateral">
+                    Crie um compromisso diretamente na agenda Google da conta conectada.
+                </p>
+            </div>
+
+            <form th:action="@{/agenda/eventos}"
+                  method="post"
+                  class="formulario agenda-form"
+                  th:object="${evento}">
+
+                <th:block th:replace="~{fragments/csrf :: token}"></th:block>
+
+                <input type="hidden" th:field="*{origem}">
+                <input type="hidden" th:field="*{segmento}">
+
+                <div class="form-alerta campo-completo" th:if="${#fields.hasAnyErrors()}">
+                    <p>Corrija os campos destacados antes de salvar o evento.</p>
+                    <ul class="lista-erros" th:if="${#fields.hasGlobalErrors()}">
+                        <li th:each="erro : ${#fields.globalErrors()}" th:text="${erro}">Erro</li>
+                    </ul>
+                </div>
+
+                <div class="campo campo-completo">
+                    <label for="titulo">Titulo</label>
+                    <input type="text"
+                           id="titulo"
+                           th:field="*{titulo}"
+                           required
+                           placeholder="Ex: Reuniao pedagogica"
+                           th:classappend="${#fields.hasErrors('titulo')} ? ' campo-invalido'">
+                    <small class="campo-erro" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}">Erro</small>
+                </div>
+
+                <div class="campo campo-completo">
+                    <label for="descricao">Descricao</label>
+                    <textarea id="descricao"
+                              th:field="*{descricao}"
+                              rows="4"
+                              placeholder="Detalhes importantes para a agenda."></textarea>
+                    <small class="campo-erro" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}">Erro</small>
+                </div>
+
+                <div class="campo">
+                    <label for="data">Data</label>
+                    <input type="date"
+                           id="data"
+                           th:field="*{data}"
+                           required
+                           th:classappend="${#fields.hasErrors('data')} ? ' campo-invalido'">
+                    <small class="campo-erro" th:if="${#fields.hasErrors('data')}" th:errors="*{data}">Erro</small>
+                </div>
+
+                <div class="campo">
+                    <label for="inicio">Inicio</label>
+                    <input type="time"
+                           id="inicio"
+                           th:field="*{inicio}"
+                           required
+                           th:classappend="${#fields.hasErrors('inicio')} ? ' campo-invalido'">
+                    <small class="campo-erro" th:if="${#fields.hasErrors('inicio')}" th:errors="*{inicio}">Erro</small>
+                </div>
+
+                <div class="campo">
+                    <label for="fim">Fim</label>
+                    <input type="time"
+                           id="fim"
+                           th:field="*{fim}"
+                           required
+                           th:classappend="${#fields.hasErrors('fim')} ? ' campo-invalido'">
+                    <small class="campo-erro" th:if="${#fields.hasErrors('fim')}" th:errors="*{fim}">Erro</small>
+                </div>
+
+                <div class="acoes campo-completo">
+                    <button type="submit" class="btn-editar">Criar no Google Agenda</button>
+                    <a th:href="${voltarUrl}" class="btn-deletar">Voltar</a>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+
+</body>
+</html>
