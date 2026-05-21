@@ -183,12 +183,25 @@ a:hover {
 /* ===================================== */
 /* APP SHELL / SIDEBAR                   */
 /* ===================================== */
+html.sidebar-collapsed-pending {
+    --sidebar-width: 76px;
+}
+
+html.sidebar-collapsed-pending .app-sidebar__brand-logo--full,
+html.sidebar-collapsed-pending .app-sidebar__text {
+    opacity: 0;
+}
+
+html.sidebar-collapsed-pending .app-sidebar__brand-logo--mark {
+    display: block;
+}
+
 .app-shell {
     --sidebar-width: 260px;
     min-height: 100vh;
     display: grid;
     grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
-    transition: grid-template-columns 0.22s ease;
+    transition: grid-template-columns 0.24s cubic-bezier(0.4, 0, 0.2, 1);
     background:
         linear-gradient(135deg, rgba(37, 99, 235, 0.1), transparent 34%),
         linear-gradient(180deg, #0a1020 0%, #070b15 52%, #060912 100%);
@@ -200,6 +213,11 @@ a:hover {
 
 .app-main {
     min-width: 0;
+    transition: padding 0.24s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.app-shell--sidebar-ready .app-main {
+    transition: padding 0.24s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .app-main--tv {
@@ -223,7 +241,20 @@ a:hover {
         linear-gradient(180deg, rgba(13, 20, 35, 0.98), rgba(6, 9, 18, 0.98)),
         var(--surface);
     box-shadow: 18px 0 42px rgba(0, 0, 0, 0.22);
-    transition: width 0.22s ease, padding 0.22s ease;
+    transition: width 0.24s cubic-bezier(0.4, 0, 0.2, 1), padding 0.24s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.app-sidebar--ready .app-sidebar__text,
+.app-sidebar--ready .app-sidebar__brand-logo--full,
+.app-sidebar--ready .app-sidebar__brand-logo--mark {
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.app-sidebar__text {
+    white-space: nowrap;
+    overflow: hidden;
+    opacity: 1;
+    transform: translateX(0);
 }
 
 .app-sidebar__brand {
@@ -441,7 +472,12 @@ a:hover {
 
 .app-sidebar--collapsed .app-sidebar__title,
 .app-sidebar--collapsed .app-sidebar__text {
-    display: none;
+    opacity: 0;
+    transform: translateX(-6px);
+    pointer-events: none;
+    width: 0;
+    margin: 0;
+    padding: 0;
 }
 
 .app-sidebar--collapsed .app-sidebar__toggle {
@@ -2748,6 +2784,130 @@ body.tv-page.tv-page--semana.tv-page--dashboard .app-main--tv.tv-shell--semana {
 .dashboard,
 .dashboard-layout {
     min-height: 100vh;
+}
+
+/* ===================================== */
+/* MODAL DE CONFLITO DE AGENDA           */
+/* ===================================== */
+.conflito-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 120;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.conflito-modal--open {
+    display: flex;
+}
+
+.conflito-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(2, 6, 23, 0.72);
+}
+
+.conflito-modal__panel {
+    position: relative;
+    z-index: 1;
+    width: min(560px, 100%);
+    max-height: min(80vh, 640px);
+    display: grid;
+    gap: 14px;
+    padding: 22px;
+    border-radius: var(--radius);
+    border: 1px solid rgba(96, 165, 250, 0.28);
+    background: linear-gradient(180deg, rgba(21, 31, 49, 0.98), rgba(7, 11, 21, 0.98));
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.conflito-modal__header h2 {
+    color: #ffffff;
+    font-size: clamp(22px, 2vw, 28px);
+    line-height: 1.15;
+}
+
+.conflito-modal__header p {
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.45;
+}
+
+.conflito-modal__aviso {
+    padding: 10px 12px;
+    border-radius: var(--radius);
+    border: 1px solid rgba(250, 204, 21, 0.28);
+    background: rgba(250, 204, 21, 0.1);
+    color: #fde68a;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.conflito-modal__lista {
+    list-style: none;
+    display: grid;
+    gap: 10px;
+    max-height: min(42vh, 320px);
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.conflito-modal__item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    background: rgba(15, 23, 42, 0.72);
+}
+
+.conflito-modal__item strong {
+    color: #ffffff;
+    font-size: 15px;
+    line-height: 1.25;
+}
+
+.conflito-modal__item span {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.conflito-modal__origem {
+    flex: 0 0 auto;
+    min-height: 28px;
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 999px;
+    color: #0f172a;
+    background: var(--yellow);
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.conflito-modal__acoes {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .app-shell,
+    .app-main,
+    .app-sidebar,
+    .app-sidebar__text,
+    .app-sidebar__brand-logo--full,
+    .app-sidebar__brand-logo--mark {
+        transition: none;
+    }
 }
 
 /* ===================================== */

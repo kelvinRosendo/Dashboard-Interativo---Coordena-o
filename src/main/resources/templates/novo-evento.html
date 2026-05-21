@@ -20,7 +20,8 @@
                 </p>
             </div>
 
-            <form th:action="@{/agenda/eventos}"
+            <form id="formComConflito"
+                  th:action="@{/agenda/eventos}"
                   method="post"
                   class="formulario agenda-form"
                   th:object="${evento}">
@@ -95,6 +96,8 @@
         </div>
     </main>
 </div>
+
+<th:block th:replace="~{fragments/conflito-modal :: conflitoModal}"></th:block>
 
 </body>
 </html>

@@ -15,11 +15,19 @@ import java.util.Map;
 
 public class GoogleOAuthEnvironmentPostProcessor implements EnvironmentPostProcessor, Ordered {
 
-    private static final String PROPERTY_SOURCE_NAME = "googleOAuthResolvedProperties";
+    private static final String PROPERTY_SOURCE_NAME = "dashboardResolvedProperties";
+
     private static final String GOOGLE_CLIENT_ID = "GOOGLE_CLIENT_ID";
     private static final String GOOGLE_CLIENT_SECRET = "GOOGLE_CLIENT_SECRET";
     private static final String SPRING_CLIENT_ID = "spring.security.oauth2.client.registration.google.client-id";
     private static final String SPRING_CLIENT_SECRET = "spring.security.oauth2.client.registration.google.client-secret";
+
+    private static final String DATABASE_URL = "DATABASE_URL";
+    private static final String DATABASE_USERNAME = "DATABASE_USERNAME";
+    private static final String DATABASE_PASSWORD = "DATABASE_PASSWORD";
+    private static final String SPRING_DATASOURCE_URL = "spring.datasource.url";
+    private static final String SPRING_DATASOURCE_USERNAME = "spring.datasource.username";
+    private static final String SPRING_DATASOURCE_PASSWORD = "spring.datasource.password";
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
@@ -39,12 +47,42 @@ public class GoogleOAuthEnvironmentPostProcessor implements EnvironmentPostProce
                 environment.getProperty(SPRING_CLIENT_SECRET)
         );
 
+        String databaseUrl = primeiroValorValido(
+                System.getenv(DATABASE_URL),
+                envFile.get(DATABASE_URL),
+                envFile.get(SPRING_DATASOURCE_URL),
+                environment.getProperty(SPRING_DATASOURCE_URL)
+        );
+
+        String databaseUsername = primeiroValorValido(
+                System.getenv(DATABASE_USERNAME),
+                envFile.get(DATABASE_USERNAME),
+                envFile.get(SPRING_DATASOURCE_USERNAME),
+                environment.getProperty(SPRING_DATASOURCE_USERNAME)
+        );
+
+        String databasePassword = primeiroValorValido(
+                System.getenv(DATABASE_PASSWORD),
+                envFile.get(DATABASE_PASSWORD),
+                envFile.get(SPRING_DATASOURCE_PASSWORD),
+                environment.getProperty(SPRING_DATASOURCE_PASSWORD)
+        );
+
         Map<String, Object> propriedades = new HashMap<>();
         if (temTexto(clientId)) {
             propriedades.put(SPRING_CLIENT_ID, clientId);
         }
         if (temTexto(clientSecret)) {
             propriedades.put(SPRING_CLIENT_SECRET, clientSecret);
+        }
+        if (temTexto(databaseUrl)) {
+            propriedades.put(SPRING_DATASOURCE_URL, databaseUrl);
+        }
+        if (temTexto(databaseUsername)) {
+            propriedades.put(SPRING_DATASOURCE_USERNAME, databaseUsername);
+        }
+        if (temTexto(databasePassword)) {
+            propriedades.put(SPRING_DATASOURCE_PASSWORD, databasePassword);
         }
 
         if (!propriedades.isEmpty()) {

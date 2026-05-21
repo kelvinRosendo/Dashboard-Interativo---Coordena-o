@@ -4,8 +4,12 @@ import br.com.escola.dashboard.dto.CardRequestDTO;
 import br.com.escola.dashboard.dto.CardResponseDTO;
 import br.com.escola.dashboard.enums.CategoriaCard;
 import br.com.escola.dashboard.enums.StatusCard;
+import br.com.escola.dashboard.dto.AgendaConflictCheckDTO;
+import br.com.escola.dashboard.service.AgendaConflictService;
 import br.com.escola.dashboard.service.CardService;
 import jakarta.validation.Valid;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,9 +23,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ViewController {
 
     private final CardService cardService;
+    private final AgendaConflictService agendaConflictService;
 
-    public ViewController(CardService cardService) {
+    public ViewController(CardService cardService, AgendaConflictService agendaConflictService) {
         this.cardService = cardService;
+        this.agendaConflictService = agendaConflictService;
     }
 
     @GetMapping("/")
@@ -45,10 +51,25 @@ public class ViewController {
     @PostMapping("/salvar-card")
     public String salvarCard(@Valid @ModelAttribute("card") CardRequestDTO cardRequestDTO,
                              BindingResult bindingResult,
+                             @RequestParam(name = "confirmarConflito", defaultValue = "false") boolean confirmarConflito,
+                             @RegisteredOAuth2AuthorizedClient("google") OAuth2AuthorizedClient googleClient,
                              Model model) {
         if (bindingResult.hasErrors()) {
             preencherModeloFormulario(model, cardRequestDTO, false, null);
             return "novo-card";
+        }
+
+        if (cardRequestDTO.getDataEvento() != null && !confirmarConflito) {
+            AgendaConflictCheckDTO conflitos = agendaConflictService.buscarConflitos(
+                    googleClient,
+                    cardRequestDTO.getDataEvento(),
+                    null
+            );
+            if (conflitos.temConflitos()) {
+                preencherModeloFormulario(model, cardRequestDTO, false, null);
+                adicionarConflitosAoModelo(model, conflitos);
+                return "novo-card";
+            }
         }
 
         try {
@@ -91,10 +112,25 @@ public class ViewController {
     public String atualizarCard(@PathVariable Long id,
                                 @Valid @ModelAttribute("card") CardRequestDTO cardRequestDTO,
                                 BindingResult bindingResult,
+                                @RequestParam(name = "confirmarConflito", defaultValue = "false") boolean confirmarConflito,
+                                @RegisteredOAuth2AuthorizedClient("google") OAuth2AuthorizedClient googleClient,
                                 Model model) {
         if (bindingResult.hasErrors()) {
             preencherModeloFormulario(model, cardRequestDTO, true, id);
             return "novo-card";
+        }
+
+        if (cardRequestDTO.getDataEvento() != null && !confirmarConflito) {
+            AgendaConflictCheckDTO conflitos = agendaConflictService.buscarConflitos(
+                    googleClient,
+                    cardRequestDTO.getDataEvento(),
+                    id
+            );
+            if (conflitos.temConflitos()) {
+                preencherModeloFormulario(model, cardRequestDTO, true, id);
+                adicionarConflitosAoModelo(model, conflitos);
+                return "novo-card";
+            }
         }
 
         try {
@@ -120,6 +156,13 @@ public class ViewController {
         if (cardId != null) {
             model.addAttribute("cardId", cardId);
         }
+    }
+
+    private void adicionarConflitosAoModelo(Model model, AgendaConflictCheckDTO conflitos) {
+        model.addAttribute("exibirModalConflito", true);
+        model.addAttribute("conflitos", conflitos.conflitos());
+        model.addAttribute("googleAgendaIndisponivel", conflitos.googleIndisponivel());
+        model.addAttribute("avisoGoogle", conflitos.avisoGoogle());
     }
 
 }

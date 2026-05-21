@@ -20,10 +20,13 @@
         </p>
     </div>
 
-    <form th:action="${modoEdicao ? '/atualizar-card/' + cardId : '/salvar-card'}"
+    <form id="formComConflito"
+          th:action="${modoEdicao ? '/atualizar-card/' + cardId : '/salvar-card'}"
           method="post"
           class="formulario"
           th:object="${card}">
+
+        <th:block th:replace="~{fragments/csrf :: token}"></th:block>
 
         <div class="form-alerta campo-completo" th:if="${#fields.hasAnyErrors()}">
             <p>Corrija os campos destacados antes de salvar.</p>
@@ -113,6 +116,8 @@
 </main>
 
 </div>
+
+<th:block th:replace="~{fragments/conflito-modal :: conflitoModal}"></th:block>
 
 </body>
 </html>

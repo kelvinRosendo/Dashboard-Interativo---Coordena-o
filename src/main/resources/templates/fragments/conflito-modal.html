@@ -1,0 +1,43 @@
+<th:block xmlns:th="http://www.thymeleaf.org" th:fragment="conflitoModal">
+    <div class="conflito-modal"
+         th:if="${exibirModalConflito}"
+         data-conflito-modal
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="conflitoModalTitulo">
+        <div class="conflito-modal__backdrop" data-conflito-close></div>
+        <div class="conflito-modal__panel">
+            <div class="conflito-modal__header">
+                <h2 id="conflitoModalTitulo">Compromissos neste dia</h2>
+                <p>Ja existem atividades cadastradas para a data selecionada. Revise antes de continuar.</p>
+            </div>
+
+            <p class="conflito-modal__aviso"
+               th:if="${googleAgendaIndisponivel and avisoGoogle != null}"
+               th:text="${avisoGoogle}">
+                Aviso do Google Agenda
+            </p>
+
+            <ul class="conflito-modal__lista">
+                <li class="conflito-modal__item" th:each="conflito : ${conflitos}">
+                    <div>
+                        <strong th:text="${conflito.titulo()}">Titulo</strong>
+                        <span th:text="${conflito.horario()}">Horario</span>
+                    </div>
+                    <span class="conflito-modal__origem" th:text="${conflito.origem()}">Origem</span>
+                </li>
+            </ul>
+
+            <div class="conflito-modal__acoes">
+                <button type="button" class="btn-deletar" data-conflito-close>Cancelar</button>
+                <button type="submit"
+                        class="btn-editar"
+                        name="confirmarConflito"
+                        value="true"
+                        form="formComConflito">
+                    Continuar mesmo assim
+                </button>
+            </div>
+        </div>
+    </div>
+</th:block>

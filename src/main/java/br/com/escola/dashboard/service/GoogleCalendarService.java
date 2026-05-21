@@ -41,6 +41,17 @@ public class GoogleCalendarService {
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    public boolean podeConsultar(OAuth2AuthorizedClient googleClient) {
+        if (googleClient == null || googleClient.getAccessToken() == null) {
+            return false;
+        }
+
+        Set<String> scopes = googleClient.getAccessToken().getScopes();
+        return scopes.contains(CALENDAR_READONLY_SCOPE)
+                || scopes.contains(CALENDAR_EVENTS_SCOPE)
+                || scopes.contains(CALENDAR_FULL_SCOPE);
+    }
+
     public List<GoogleCalendarEventDTO> listarEventos(OAuth2AuthorizedClient googleClient,
                                                        LocalDate inicio,
                                                        LocalDate fim) {

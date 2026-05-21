@@ -25,6 +25,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/admin",
                                 "/admin/**",
+                                "/agenda/**",
                                 "/novo-card",
                                 "/salvar-card",
                                 "/editar-card/**",
