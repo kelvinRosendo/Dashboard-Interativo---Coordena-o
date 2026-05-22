@@ -59,7 +59,7 @@ public class GoogleCalendarService {
             return List.of();
         }
 
-        if (!googleClient.getAccessToken().getScopes().contains(CALENDAR_READONLY_SCOPE)) {
+        if (!podeConsultar(googleClient)) {
             throw new IllegalStateException("Sua sessao Google ainda nao tem permissao de leitura do calendario. Saia e entre novamente.");
         }
 

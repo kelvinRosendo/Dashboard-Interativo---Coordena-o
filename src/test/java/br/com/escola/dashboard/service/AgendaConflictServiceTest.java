@@ -3,7 +3,9 @@ package br.com.escola.dashboard.service;
 import br.com.escola.dashboard.dto.AgendaConflictCheckDTO;
 import br.com.escola.dashboard.dto.GoogleCalendarEventDTO;
 import br.com.escola.dashboard.entity.Card;
+import br.com.escola.dashboard.entity.Demanda;
 import br.com.escola.dashboard.repository.CardRepository;
+import br.com.escola.dashboard.repository.DemandaRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,6 +33,9 @@ class AgendaConflictServiceTest {
     private CardRepository cardRepository;
 
     @Mock
+    private DemandaRepository demandaRepository;
+
+    @Mock
     private GoogleCalendarService googleCalendarService;
 
     @InjectMocks
@@ -54,6 +59,7 @@ class AgendaConflictServiceTest {
         );
 
         when(cardRepository.findByDataEventoOrderByTituloAsc(data)).thenReturn(List.of(card));
+        when(demandaRepository.findByDataPrazoOrderByTituloAsc(data)).thenReturn(List.of());
         when(googleCalendarService.podeConsultar(googleClient)).thenReturn(true);
         when(googleCalendarService.listarEventos(googleClient, data, data)).thenReturn(List.of(eventoGoogle));
 
@@ -70,6 +76,7 @@ class AgendaConflictServiceTest {
         LocalDate data = LocalDate.of(2026, 5, 21);
 
         when(cardRepository.findByDataEventoOrderByTituloAsc(data)).thenReturn(List.of());
+        when(demandaRepository.findByDataPrazoOrderByTituloAsc(data)).thenReturn(List.of());
         when(googleCalendarService.podeConsultar(null)).thenReturn(false);
 
         AgendaConflictCheckDTO resultado = agendaConflictService.buscarConflitos(null, data, null);
@@ -86,10 +93,28 @@ class AgendaConflictServiceTest {
         when(card.getId()).thenReturn(8L);
 
         when(cardRepository.findByDataEventoOrderByTituloAsc(data)).thenReturn(List.of(card));
+        when(demandaRepository.findByDataPrazoOrderByTituloAsc(data)).thenReturn(List.of());
         when(googleCalendarService.podeConsultar(any())).thenReturn(false);
 
         AgendaConflictCheckDTO resultado = agendaConflictService.buscarConflitos(null, data, 8L);
 
         assertTrue(resultado.conflitos().isEmpty());
+    }
+
+    @Test
+    void buscarConflitos_deveIncluirDemandasComPrazoNoDia() {
+        LocalDate data = LocalDate.of(2026, 5, 23);
+        Demanda demanda = mock(Demanda.class);
+        when(demanda.getTitulo()).thenReturn("Enviar relatorio semanal");
+
+        when(cardRepository.findByDataEventoOrderByTituloAsc(data)).thenReturn(List.of());
+        when(demandaRepository.findByDataPrazoOrderByTituloAsc(data)).thenReturn(List.of(demanda));
+        when(googleCalendarService.podeConsultar(null)).thenReturn(false);
+
+        AgendaConflictCheckDTO resultado = agendaConflictService.buscarConflitos(null, data, null);
+
+        assertEquals(1, resultado.conflitos().size());
+        assertEquals("Enviar relatorio semanal", resultado.conflitos().get(0).titulo());
+        assertEquals("Sistema", resultado.conflitos().get(0).origem());
     }
 }

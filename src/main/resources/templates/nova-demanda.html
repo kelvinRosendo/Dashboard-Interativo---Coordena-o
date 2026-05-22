@@ -20,7 +20,8 @@
                 </p>
             </div>
 
-            <form th:action="@{/admin/demandas}"
+            <form id="formComConflito"
+                  th:action="@{/admin/demandas}"
                   method="post"
                   class="formulario demanda-form"
                   th:object="${demanda}">
@@ -102,6 +103,8 @@
         </div>
     </main>
 </div>
+
+<th:block th:replace="~{fragments/conflito-modal :: conflitoModal}"></th:block>
 
 </body>
 </html>

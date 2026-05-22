@@ -1,22 +1,50 @@
-(function initSidebarStateBootstrap() {
-    const STORAGE_KEY = "dashboardSidebarCollapsed";
+const SIDEBAR_STORAGE_KEY = "dashboardSidebarCollapsed";
 
+function resolveInitialSidebarCollapsed(shell) {
     try {
-        const savedState = window.localStorage.getItem(STORAGE_KEY);
-        const shell = document.querySelector(".app-shell");
+        const savedState = window.localStorage.getItem(SIDEBAR_STORAGE_KEY);
         const isTvShell = Boolean(shell && shell.classList.contains("app-shell--tv"));
         const isCompactViewport = window.matchMedia("(max-width: 1100px)").matches;
-        const shouldCollapse = savedState === null
+        return savedState === null
             ? isTvShell || isCompactViewport
             : savedState === "true";
-
-        if (shouldCollapse) {
-            document.documentElement.classList.add("sidebar-collapsed-pending");
-        }
     } catch {
-        // Ignora falhas de storage e segue com o estado padrao.
+        return false;
     }
-})();
+}
+
+function applySidebarBootstrap() {
+    const sidebar = document.querySelector(".app-sidebar");
+    const shell = document.querySelector(".app-shell");
+    const collapsed = resolveInitialSidebarCollapsed(shell);
+
+    document.documentElement.classList.toggle("sidebar-collapsed-pending", collapsed);
+
+    if (shell) {
+        shell.classList.toggle("app-shell--sidebar-collapsed", collapsed);
+    }
+
+    if (!sidebar) {
+        return;
+    }
+
+    sidebar.classList.toggle("app-sidebar--collapsed", collapsed);
+
+    const toggle = sidebar.querySelector("[data-sidebar-toggle]");
+    const toggleIcon = sidebar.querySelector("[data-sidebar-toggle-icon]");
+
+    if (toggle) {
+        toggle.setAttribute("aria-expanded", String(!collapsed));
+        toggle.setAttribute("aria-label", collapsed ? "Expandir menu" : "Recolher menu");
+        toggle.setAttribute("title", collapsed ? "Expandir menu" : "Recolher menu");
+    }
+
+    if (toggleIcon) {
+        toggleIcon.textContent = collapsed ? ">" : "<";
+    }
+}
+
+applySidebarBootstrap();
 
 document.addEventListener("DOMContentLoaded", () => {
     initSidebar();
@@ -25,7 +53,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function initSidebar() {
-    const STORAGE_KEY = "dashboardSidebarCollapsed";
     const sidebar = document.querySelector(".app-sidebar");
 
     if (!sidebar) {
@@ -55,26 +82,15 @@ function initSidebar() {
         }
 
         if (toggleIcon) {
-            toggleIcon.textContent = collapsed ? "»" : "«";
+            toggleIcon.textContent = collapsed ? ">" : "<";
         }
 
         if (persist) {
-            window.localStorage.setItem(STORAGE_KEY, String(collapsed));
+            window.localStorage.setItem(SIDEBAR_STORAGE_KEY, String(collapsed));
         }
     };
 
-    let savedState = null;
-    try {
-        savedState = window.localStorage.getItem(STORAGE_KEY);
-    } catch {
-        savedState = null;
-    }
-
-    const shouldStartCollapsed = savedState === null
-        ? Boolean(shell && shell.classList.contains("app-shell--tv")) || window.matchMedia("(max-width: 1100px)").matches
-        : savedState === "true";
-
-    setCollapsed(shouldStartCollapsed, false);
+    setCollapsed(resolveInitialSidebarCollapsed(shell), false);
     document.documentElement.classList.remove("sidebar-collapsed-pending");
 
     if (toggle) {
@@ -85,10 +101,12 @@ function initSidebar() {
     }
 
     if (!prefersReducedMotion) {
-        sidebar.classList.add("app-sidebar--ready");
-        if (shell) {
-            shell.classList.add("app-shell--sidebar-ready");
-        }
+        window.requestAnimationFrame(() => {
+            sidebar.classList.add("app-sidebar--ready");
+            if (shell) {
+                shell.classList.add("app-shell--sidebar-ready");
+            }
+        });
     }
 }
 

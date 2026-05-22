@@ -201,10 +201,14 @@ html.sidebar-collapsed-pending .app-sidebar__brand-logo--mark {
     min-height: 100vh;
     display: grid;
     grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
-    transition: grid-template-columns 0.24s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: none;
     background:
         linear-gradient(135deg, rgba(37, 99, 235, 0.1), transparent 34%),
         linear-gradient(180deg, #0a1020 0%, #070b15 52%, #060912 100%);
+}
+
+.app-shell--sidebar-ready {
+    transition: grid-template-columns 0.24s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .app-shell--sidebar-collapsed {
@@ -213,7 +217,7 @@ html.sidebar-collapsed-pending .app-sidebar__brand-logo--mark {
 
 .app-main {
     min-width: 0;
-    transition: padding 0.24s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: none;
 }
 
 .app-shell--sidebar-ready .app-main {
@@ -241,7 +245,13 @@ html.sidebar-collapsed-pending .app-sidebar__brand-logo--mark {
         linear-gradient(180deg, rgba(13, 20, 35, 0.98), rgba(6, 9, 18, 0.98)),
         var(--surface);
     box-shadow: 18px 0 42px rgba(0, 0, 0, 0.22);
-    transition: width 0.24s cubic-bezier(0.4, 0, 0.2, 1), padding 0.24s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: none;
+}
+
+.app-sidebar--ready {
+    transition:
+        padding 0.24s cubic-bezier(0.4, 0, 0.2, 1),
+        gap 0.24s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .app-sidebar--ready .app-sidebar__text,
@@ -354,6 +364,11 @@ html.sidebar-collapsed-pending .app-sidebar__brand-logo--mark {
     background: transparent;
     text-decoration: none;
     cursor: pointer;
+    transition:
+        color 0.18s ease,
+        background 0.18s ease,
+        border-color 0.18s ease,
+        box-shadow 0.18s ease;
 }
 
 .app-sidebar__link span,
@@ -368,6 +383,11 @@ html.sidebar-collapsed-pending .app-sidebar__brand-logo--mark {
     border: 1px solid rgba(148, 163, 184, 0.14);
     font-size: 11px;
     font-weight: 900;
+    transition:
+        width 0.2s ease,
+        height 0.2s ease,
+        background 0.18s ease,
+        border-color 0.18s ease;
 }
 
 .app-sidebar__icon-img {

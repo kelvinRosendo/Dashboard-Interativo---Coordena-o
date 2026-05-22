@@ -5,6 +5,7 @@ import br.com.escola.dashboard.dto.AgendaConflictDTO;
 import br.com.escola.dashboard.dto.GoogleCalendarEventDTO;
 import br.com.escola.dashboard.entity.Card;
 import br.com.escola.dashboard.repository.CardRepository;
+import br.com.escola.dashboard.repository.DemandaRepository;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.stereotype.Service;
 
@@ -22,10 +23,14 @@ public class AgendaConflictService {
     private static final String ORIGEM_GOOGLE = "Google Agenda";
 
     private final CardRepository cardRepository;
+    private final DemandaRepository demandaRepository;
     private final GoogleCalendarService googleCalendarService;
 
-    public AgendaConflictService(CardRepository cardRepository, GoogleCalendarService googleCalendarService) {
+    public AgendaConflictService(CardRepository cardRepository,
+                                 DemandaRepository demandaRepository,
+                                 GoogleCalendarService googleCalendarService) {
         this.cardRepository = cardRepository;
+        this.demandaRepository = demandaRepository;
         this.googleCalendarService = googleCalendarService;
     }
 
@@ -52,11 +57,28 @@ public class AgendaConflictService {
     }
 
     private List<AgendaConflictDTO> buscarConflitosInternos(LocalDate data, Long ignorarCardId) {
+        List<AgendaConflictDTO> conflitos = new ArrayList<>();
+        conflitos.addAll(buscarConflitosCards(data, ignorarCardId));
+        conflitos.addAll(buscarConflitosDemandas(data));
+        return conflitos;
+    }
+
+    private List<AgendaConflictDTO> buscarConflitosCards(LocalDate data, Long ignorarCardId) {
         return cardRepository.findByDataEventoOrderByTituloAsc(data).stream()
                 .filter(card -> ignorarCardId == null || !ignorarCardId.equals(card.getId()))
                 .map(card -> new AgendaConflictDTO(
                         card.getTitulo(),
                         formatarHorarioInterno(card),
+                        ORIGEM_SISTEMA
+                ))
+                .toList();
+    }
+
+    private List<AgendaConflictDTO> buscarConflitosDemandas(LocalDate data) {
+        return demandaRepository.findByDataPrazoOrderByTituloAsc(data).stream()
+                .map(demanda -> new AgendaConflictDTO(
+                        demanda.getTitulo(),
+                        "Prazo de demanda",
                         ORIGEM_SISTEMA
                 ))
                 .toList();

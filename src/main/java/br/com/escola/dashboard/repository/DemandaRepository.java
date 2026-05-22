@@ -6,6 +6,7 @@ import br.com.escola.dashboard.enums.StatusDemanda;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -24,6 +25,8 @@ public interface DemandaRepository extends JpaRepository<Demanda, Long> {
             SegmentoCoordenacao segmento,
             StatusDemanda status
     );
+
+    List<Demanda> findByDataPrazoOrderByTituloAsc(LocalDate dataPrazo);
 
     long countBySegmento(SegmentoCoordenacao segmento);
 
