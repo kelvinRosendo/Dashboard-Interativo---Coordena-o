@@ -16,16 +16,18 @@ function resolveInitialSidebarCollapsed(shell) {
 function applySidebarBootstrap() {
     const sidebar = document.querySelector(".app-sidebar");
     const shell = document.querySelector(".app-shell");
+
+    if (!sidebar) {
+        document.documentElement.classList.remove("sidebar-collapsed-pending");
+        return;
+    }
+
     const collapsed = resolveInitialSidebarCollapsed(shell);
 
     document.documentElement.classList.toggle("sidebar-collapsed-pending", collapsed);
 
     if (shell) {
         shell.classList.toggle("app-shell--sidebar-collapsed", collapsed);
-    }
-
-    if (!sidebar) {
-        return;
     }
 
     sidebar.classList.toggle("app-sidebar--collapsed", collapsed);
@@ -142,7 +144,7 @@ function initDashboardTimer() {
     }
 
     const countdown = timer.querySelector("[data-dashboard-countdown]");
-    const target = timer.dataset.dashboardTarget || "/tv/calendario?modo=mensal";
+    const target = timer.dataset.dashboardTarget || resolverDashboardTarget();
     const duration = Number.parseInt(timer.dataset.dashboardDuration || "30", 10);
     let remaining = Number.isFinite(duration) && duration > 0 ? duration : 30;
 
@@ -163,4 +165,10 @@ function initDashboardTimer() {
             window.location.assign(target);
         }
     }, 1000);
+}
+
+function resolverDashboardTarget() {
+    return window.location.pathname.includes("/tv/calendario")
+        ? "/tv/semana?modo=dashboard"
+        : "/tv/calendario?modo=dashboard";
 }

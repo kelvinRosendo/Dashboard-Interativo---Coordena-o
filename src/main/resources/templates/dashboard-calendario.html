@@ -5,12 +5,12 @@
     <title>Calendario Integrado</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body class="tv-page">
+<body class="tv-page tv-page--calendario" th:classappend="${modoDashboard} ? ' tv-page--dashboard tv-dashboard-mode' : ''">
 
-<div class="app-shell app-shell--tv">
-    <aside th:replace="~{fragments/sidebar :: sidebar('calendario', true)}"></aside>
+<div class="app-shell app-shell--tv" th:classappend="${modoDashboard} ? ' app-shell--dashboard-tv tv-dashboard-shell' : ''">
+    <aside th:if="${!modoDashboard}" th:replace="~{fragments/sidebar :: sidebar('calendario', true)}"></aside>
 
-<div class="tv-shell calendario-shell app-main app-main--tv">
+<div class="tv-shell calendario-shell app-main app-main--tv" th:classappend="${modoDashboard} ? ' tv-dashboard-main calendario-shell--dashboard' : ''">
     <header class="tv-topbar">
         <div class="tv-title-block">
             <img th:src="@{/img/logo-colegio-satelite.png}"
@@ -22,15 +22,26 @@
                 <p th:text="${tituloPeriodo}">Periodo</p>
             </div>
         </div>
-        <nav class="tv-switch" aria-label="Modo de visualizacao">
-            <a th:href="@{/tv/semana}" class="tv-switch-link">Semana em Foco</a>
-            <a th:href="@{/tv/calendario(modo='semanal')}"
-               class="tv-switch-link"
-               th:classappend="${modoSemanal ? ' tv-switch-link-active' : ''}">Semanal</a>
-            <a th:href="@{/tv/calendario(modo='mensal')}"
-               class="tv-switch-link"
-               th:classappend="${!modoSemanal ? ' tv-switch-link-active' : ''}">Mensal</a>
-        </nav>
+        <div class="tv-dashboard-toolbar">
+            <nav class="tv-switch" aria-label="Modo de visualizacao" th:if="${!modoDashboard}">
+                <a th:href="@{/tv/semana}" class="tv-switch-link">Semana em Foco</a>
+                <a th:href="@{/tv/calendario(modo='semanal')}"
+                   class="tv-switch-link"
+                   th:classappend="${modoSemanal ? ' tv-switch-link-active' : ''}">Semanal</a>
+                <a th:href="@{/tv/calendario(modo='mensal')}"
+                   class="tv-switch-link"
+                   th:classappend="${!modoSemanal ? ' tv-switch-link-active' : ''}">Mensal</a>
+            </nav>
+            <div class="tv-dashboard-timer"
+                 th:if="${modoDashboard}"
+                 data-dashboard-timer
+                 th:data-dashboard-duration="${timerSegundos}"
+                 th:data-dashboard-target="@{/tv/semana(modo='dashboard', timer=${timerSegundos})}"
+                 aria-live="polite">
+                <span>Semana em</span>
+                <strong data-dashboard-countdown th:text="${timerSegundos + 's'}">30s</strong>
+            </div>
+        </div>
     </header>
 
     <main class="calendario-layout">
@@ -99,5 +110,6 @@
 
 </div>
 
+<script th:if="${modoDashboard}" th:src="@{/js/dashboard-ui.js}"></script>
 </body>
 </html>

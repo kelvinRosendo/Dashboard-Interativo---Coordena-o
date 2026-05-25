@@ -1840,6 +1840,34 @@ body.tv-page {
     overflow-y: auto;
 }
 
+body.tv-dashboard-mode {
+    width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+}
+
+.tv-dashboard-shell {
+    width: 100vw;
+    height: 100vh;
+    min-height: 0;
+    grid-template-columns: minmax(0, 1fr);
+    overflow: hidden;
+}
+
+.tv-dashboard-main {
+    width: 100vw;
+    height: 100vh;
+    min-height: 0;
+    max-height: 100vh;
+    overflow: hidden;
+}
+
+.tv-dashboard-mode .app-sidebar,
+.tv-dashboard-mode .tv-switch {
+    display: none;
+}
+
 .tv-shell {
     min-height: 100vh;
     height: auto;
@@ -2281,6 +2309,20 @@ body.tv-page.tv-page--semana.tv-page--dashboard .app-main--tv.tv-shell--semana {
     text-align: right;
 }
 
+.tv-dashboard-mode .tv-topbar {
+    min-height: clamp(64px, 8.5vh, 88px);
+    padding: clamp(12px, 1.4vh, 18px) clamp(16px, 1.8vw, 24px);
+}
+
+.tv-dashboard-mode .tv-title-block {
+    gap: clamp(10px, 1vw, 14px);
+}
+
+.tv-dashboard-mode .tv-brand__logo {
+    width: clamp(42px, 4.2vw, 58px);
+    height: clamp(42px, 4.2vw, 58px);
+}
+
 .tv-shell--semana .tv-topbar h1 {
     font-size: clamp(26px, 2.6vw, 36px);
 }
@@ -2628,6 +2670,65 @@ body.tv-page.tv-page--semana.tv-page--dashboard .app-main--tv.tv-shell--semana {
 .calendario-resumo .tv-mini-card {
     background: rgba(37, 99, 235, 0.18);
     border-color: rgba(96, 165, 250, 0.26);
+}
+
+.tv-dashboard-mode .calendario-shell {
+    grid-template-rows: auto minmax(0, 1fr);
+    padding: clamp(10px, 1.2vh, 18px);
+    gap: clamp(10px, 1.2vh, 16px);
+}
+
+.tv-dashboard-mode .calendario-layout {
+    height: 100%;
+    min-height: 0;
+    grid-template-columns: minmax(0, 1fr);
+    overflow: hidden;
+}
+
+.tv-dashboard-mode .calendario-resumo {
+    display: none;
+}
+
+.tv-dashboard-mode .calendario-principal {
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.tv-dashboard-mode .calendario-weekdays,
+.tv-dashboard-mode .calendario-grid-tv {
+    gap: clamp(6px, 0.8vw, 10px);
+}
+
+.tv-dashboard-mode .calendario-weekdays span {
+    padding: clamp(8px, 1vh, 12px);
+    font-size: clamp(14px, 1.25vw, 19px);
+}
+
+.tv-dashboard-mode .calendario-grid-mensal {
+    grid-auto-rows: minmax(0, 1fr);
+}
+
+.tv-dashboard-mode .calendario-dia {
+    padding: clamp(8px, 0.9vw, 13px);
+    gap: clamp(6px, 0.8vh, 9px);
+}
+
+.tv-dashboard-mode .calendario-dia header strong {
+    font-size: clamp(24px, 2.1vw, 34px);
+}
+
+.tv-dashboard-mode .calendario-itens {
+    overflow: hidden;
+}
+
+.tv-dashboard-mode .calendario-grid-mensal .calendario-item {
+    min-height: clamp(28px, 3.5vh, 42px);
+    padding: clamp(6px, 0.8vh, 9px) clamp(8px, 0.9vw, 11px);
+}
+
+.tv-dashboard-mode .calendario-grid-mensal .calendario-item strong {
+    font-size: clamp(13px, 1.05vw, 17px);
 }
 
 /* ===================================== */

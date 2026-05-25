@@ -87,12 +87,15 @@ public class DashboardTvController {
 
     @GetMapping("/calendario")
     public String calendario(@RequestParam(name = "modo", defaultValue = "mensal") String modo,
+                             @RequestParam(name = "timer", defaultValue = "30") Integer timer,
                              @RequestParam(name = "referencia", required = false)
                              @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate referencia,
                              Authentication authentication,
                              Model model) {
         LocalDate dataReferencia = referencia != null ? referencia : LocalDate.now();
-        boolean modoSemanal = "semanal".equalsIgnoreCase(modo);
+        boolean modoDashboard = "dashboard".equalsIgnoreCase(modo);
+        boolean modoSemanal = !modoDashboard && "semanal".equalsIgnoreCase(modo);
+        int timerSegundos = normalizarTimer(timer);
 
         LocalDate inicio;
         LocalDate fim;
@@ -142,6 +145,8 @@ public class DashboardTvController {
 
         model.addAttribute("modo", modoSemanal ? "semanal" : "mensal");
         model.addAttribute("modoSemanal", modoSemanal);
+        model.addAttribute("modoDashboard", modoDashboard);
+        model.addAttribute("timerSegundos", timerSegundos);
         model.addAttribute("tituloPeriodo", tituloPeriodo);
         model.addAttribute("dias", dias);
         model.addAttribute("eventosHoje", itensPorData.getOrDefault(LocalDate.now(), List.of()));

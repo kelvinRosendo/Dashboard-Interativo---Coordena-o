@@ -5,12 +5,12 @@
     <title>Semana em Foco</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body class="tv-page tv-page--semana" th:classappend="${modoDashboard} ? ' tv-page--dashboard' : ''">
+<body class="tv-page tv-page--semana" th:classappend="${modoDashboard} ? ' tv-page--dashboard tv-dashboard-mode' : ''">
 
-<div class="app-shell app-shell--tv" th:classappend="${modoDashboard} ? ' app-shell--dashboard-tv' : ''">
+<div class="app-shell app-shell--tv" th:classappend="${modoDashboard} ? ' app-shell--dashboard-tv tv-dashboard-shell' : ''">
     <aside th:if="${!modoDashboard}" th:replace="~{fragments/sidebar :: sidebar('semana', true)}"></aside>
 
-<div class="tv-shell tv-shell--semana app-main app-main--tv">
+<div class="tv-shell tv-shell--semana app-main app-main--tv" th:classappend="${modoDashboard} ? ' tv-dashboard-main' : ''">
     <header class="tv-topbar">
         <div class="tv-title-block">
             <img th:src="@{/img/logo-colegio-satelite.png}"
@@ -30,7 +30,7 @@
                  th:if="${modoDashboard}"
                  data-dashboard-timer
                  th:data-dashboard-duration="${timerSegundos}"
-                 th:data-dashboard-target="@{/tv/calendario(modo='mensal')}"
+                 th:data-dashboard-target="@{/tv/calendario(modo='dashboard', timer=${timerSegundos})}"
                  aria-live="polite">
                 <span>Calendario em</span>
                 <strong data-dashboard-countdown th:text="${timerSegundos + 's'}">30s</strong>
