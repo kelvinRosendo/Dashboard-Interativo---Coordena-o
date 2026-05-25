@@ -21,12 +21,11 @@
        th:fragment="sidebar(active, tvMode)"
        th:classappend="${tvMode} ? ' app-sidebar--tv' : ''">
     <div class="app-sidebar__brand">
-        <img th:src="@{/img/logo-colegio-satelite-horizontal-branco.png}"
-             alt="Colegio Satelite"
-             class="app-sidebar__brand-logo app-sidebar__brand-logo--full">
-        <img th:src="@{/img/logo-colegio-satelite.png}"
-             alt="Colegio Satelite"
-             class="app-sidebar__brand-logo app-sidebar__brand-logo--mark">
+        <span class="brand-mark app-sidebar__brand-mark" aria-hidden="true"></span>
+        <span class="brand-text app-sidebar__brand-text app-sidebar__text">
+            <small>Colegio</small>
+            <strong>Satelite</strong>
+        </span>
     </div>
 
     <button type="button"

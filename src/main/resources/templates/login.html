@@ -10,9 +10,11 @@
 <main class="login-shell">
     <header class="login-navbar">
         <div class="brand-lockup">
-            <img th:src="@{/img/logo-colegio-satelite-horizontal-branco.png}"
-                 alt="Colegio Satelite"
-                 class="logo-main login-brand__logo">
+            <span class="brand-mark" aria-hidden="true"></span>
+            <span class="brand-text">
+                <small>Colegio</small>
+                <strong>Satelite</strong>
+            </span>
         </div>
         <nav class="login-nav" aria-label="Acesso rapido">
             <a th:href="@{/admin}">Admin</a>

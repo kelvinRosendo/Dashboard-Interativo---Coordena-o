@@ -124,6 +124,7 @@ a:hover {
 .brand-mark {
     width: 48px;
     height: 48px;
+    display: block;
     border-radius: 50%;
     background:
         linear-gradient(135deg, transparent 0 38%, var(--yellow) 39% 52%, transparent 53%),
@@ -136,6 +137,7 @@ a:hover {
 .brand-text {
     display: grid;
     gap: 0;
+    min-width: 0;
 }
 
 .brand-text small {
@@ -151,6 +153,10 @@ a:hover {
     font-size: 28px;
     line-height: 1;
     font-weight: 800;
+}
+
+.login-navbar .brand-lockup {
+    min-height: 58px;
 }
 
 .admin-kicker,
@@ -188,6 +194,7 @@ html.sidebar-collapsed-pending {
 }
 
 html.sidebar-collapsed-pending .app-sidebar__brand-logo--full,
+html.sidebar-collapsed-pending .app-sidebar__brand-text,
 html.sidebar-collapsed-pending .app-sidebar__text {
     opacity: 0;
 }
@@ -300,6 +307,24 @@ html.sidebar-collapsed-pending .app-sidebar__brand-logo--mark {
     display: none;
     width: 42px;
     height: 42px;
+}
+
+.app-sidebar__brand-mark {
+    width: 42px;
+    height: 42px;
+}
+
+.app-sidebar__brand-text {
+    text-align: left;
+}
+
+.app-sidebar__brand-text small {
+    font-size: 10px;
+    color: var(--muted);
+}
+
+.app-sidebar__brand-text strong {
+    font-size: 24px;
 }
 
 .app-sidebar__title {
@@ -486,6 +511,10 @@ html.sidebar-collapsed-pending .app-sidebar__brand-logo--mark {
     display: none;
 }
 
+.app-sidebar--collapsed .app-sidebar__brand-text {
+    display: none;
+}
+
 .app-sidebar--collapsed .app-sidebar__brand-logo--mark {
     display: block;
 }
@@ -545,6 +574,10 @@ html.sidebar-collapsed-pending .app-sidebar__brand-logo--mark {
     display: block;
     width: 38px;
     height: 38px;
+}
+
+.app-sidebar--tv .app-sidebar__brand-text {
+    display: none;
 }
 
 .app-sidebar--tv .app-sidebar__title,

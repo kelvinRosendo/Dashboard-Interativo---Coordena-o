@@ -13,9 +13,7 @@
 <div class="tv-shell tv-shell--semana app-main app-main--tv" th:classappend="${modoDashboard} ? ' tv-dashboard-main' : ''">
     <header class="tv-topbar">
         <div class="tv-title-block">
-            <img th:src="@{/img/logo-colegio-satelite.png}"
-                 alt="Colegio Satelite"
-                 class="tv-brand__logo">
+            <span class="brand-mark tv-brand__logo" aria-hidden="true"></span>
             <div>
                 <span class="tv-kicker">Colegio Satelite - Dashboard da Coordenacao</span>
                 <h1>Semana em Foco</h1>
