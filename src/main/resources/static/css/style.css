@@ -204,10 +204,9 @@ html.sidebar-collapsed-pending .app-sidebar__brand-logo--mark {
 }
 
 .app-shell {
-    --sidebar-width: 260px;
+    --sidebar-width: 228px;
     min-height: 100vh;
-    display: grid;
-    grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+    display: block;
     transition: none;
     background:
         linear-gradient(135deg, rgba(37, 99, 235, 0.1), transparent 34%),
@@ -215,16 +214,18 @@ html.sidebar-collapsed-pending .app-sidebar__brand-logo--mark {
 }
 
 .app-shell--sidebar-ready {
-    transition: grid-template-columns 0.24s cubic-bezier(0.4, 0, 0.2, 1);
+    /* transition handled by .app-main margin-left/width */
 }
 
 .app-shell--sidebar-collapsed {
-    --sidebar-width: 76px;
+    --sidebar-width: 68px;
 }
 
 .app-main {
     min-width: 0;
-    transition: none;
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+    transition: margin-left 220ms ease, width 220ms ease;
 }
 
 .app-shell--sidebar-ready .app-main {
@@ -547,7 +548,7 @@ html.sidebar-collapsed-pending .app-sidebar__brand-logo--mark {
 }
 
 .app-shell--tv {
-    --sidebar-width: 78px;
+    --sidebar-width: 68px;
 }
 
 .app-sidebar--tv {
@@ -1885,7 +1886,6 @@ body.tv-dashboard-mode {
     width: 100vw;
     height: 100vh;
     min-height: 0;
-    grid-template-columns: minmax(0, 1fr);
     overflow: hidden;
 }
 
@@ -2265,7 +2265,6 @@ body.tv-page.tv-page--semana .app-shell--dashboard-tv {
     width: 100vw;
     height: 100vh;
     min-height: 0;
-    grid-template-columns: minmax(0, 1fr);
     overflow: hidden;
 }
 
@@ -3202,85 +3201,7 @@ body.tv-page.tv-page--semana.tv-page--dashboard .app-main--tv.tv-shell--semana {
 }
 
 @media (max-width: 980px) {
-    .app-shell,
-    .app-shell--tv {
-        grid-template-columns: 1fr;
-    }
-
-    .app-sidebar,
-    .app-sidebar--tv {
-        position: sticky;
-        top: 0;
-        height: auto;
-        min-height: auto;
-        padding: 10px;
-        flex-direction: row;
-        align-items: center;
-        gap: 10px;
-        overflow-x: auto;
-        overflow-y: hidden;
-        border-right: 0;
-        border-bottom: 1px solid var(--line);
-        box-shadow: 0 18px 34px rgba(0, 0, 0, 0.26);
-    }
-
-    .app-sidebar__brand,
-    .app-sidebar--tv .app-sidebar__brand {
-        min-height: 48px;
-        min-width: 56px;
-        flex: 0 0 auto;
-    }
-
-    .app-sidebar__title,
-    .app-sidebar--tv .app-sidebar__title {
-        display: none;
-    }
-
-    .app-sidebar__nav {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        flex: 1 0 auto;
-    }
-
-    .app-sidebar__link,
-    .app-sidebar--tv .app-sidebar__link {
-        min-height: 44px;
-        min-width: max-content;
-        grid-template-columns: 30px minmax(0, auto);
-        padding: 6px 10px;
-    }
-
-    .app-sidebar--tv .app-sidebar__text,
-    .app-sidebar__text {
-        display: block;
-    }
-
-    .app-sidebar__link span,
-    .app-sidebar--tv .app-sidebar__link span {
-        width: 30px;
-        height: 30px;
-    }
-
-    .app-sidebar__link--disabled {
-        display: none;
-    }
-
-    .app-sidebar__logout {
-        margin-top: 0;
-        flex: 0 0 auto;
-    }
-
-    .app-sidebar__logout-button {
-        min-height: 44px;
-        grid-template-columns: 30px auto;
-        padding: 6px 10px;
-    }
-
-    .app-sidebar__logout-button span {
-        width: 30px;
-        height: 30px;
-    }
+    /* Sidebar rules handled by the later 980px block (fixed + collapsed) */
 
     .operation-dock {
         left: 50%;
@@ -3439,8 +3360,8 @@ body.tv-page.tv-page--semana.tv-page--dashboard .tv-week-feature.semana-hero h2 
 
 .app-shell {
     --sidebar-width: 228px;
-    display: grid;
-    grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+    display: block;
+    min-height: 100vh;
 }
 
 .app-shell--sidebar-collapsed,
@@ -3450,6 +3371,9 @@ html.sidebar-collapsed-pending {
 
 .app-main {
     min-width: 0;
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+    transition: margin-left 220ms ease, width 220ms ease;
 }
 
 /* Sidebar fixa e sem scroll interno */
@@ -3704,6 +3628,11 @@ html.sidebar-collapsed-pending .app-sidebar__text {
     --sidebar-width: 68px;
 }
 
+.app-shell--tv .app-main {
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+}
+
 .app-shell--tv .app-sidebar,
 .app-sidebar--tv {
     width: var(--sidebar-width);
@@ -3736,7 +3665,6 @@ html.sidebar-collapsed-pending .app-sidebar__text {
 .tv-dashboard-mode .app-shell,
 .app-shell--dashboard-tv {
     --sidebar-width: 0px;
-    grid-template-columns: minmax(0, 1fr);
 }
 
 .tv-dashboard-mode .app-sidebar,
@@ -3746,7 +3674,9 @@ html.sidebar-collapsed-pending .app-sidebar__text {
 
 .tv-dashboard-mode .app-main,
 .app-shell--dashboard-tv .app-main {
+    margin-left: 0;
     width: 100vw;
+    max-width: 100vw;
     min-height: 100vh;
 }
 
@@ -3754,7 +3684,11 @@ html.sidebar-collapsed-pending .app-sidebar__text {
 @media (max-width: 980px) {
     .app-shell {
         --sidebar-width: 68px;
-        grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+    }
+
+    .app-main {
+        margin-left: var(--sidebar-width);
+        width: calc(100% - var(--sidebar-width));
     }
 
     .app-sidebar {
