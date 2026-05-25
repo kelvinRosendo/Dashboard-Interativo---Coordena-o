@@ -1,40 +1,31 @@
 const SIDEBAR_STORAGE_KEY = "dashboardSidebarCollapsed";
 
+function isDashboardTvMode() {
+    return document.body.classList.contains("tv-dashboard-mode")
+        || document.querySelector(".app-shell--dashboard-tv") !== null;
+}
+
 function resolveInitialSidebarCollapsed(shell) {
+    if (isDashboardTvMode()) {
+        return true;
+    }
+
     try {
         const savedState = window.localStorage.getItem(SIDEBAR_STORAGE_KEY);
         const isTvShell = Boolean(shell && shell.classList.contains("app-shell--tv"));
-        const isCompactViewport = window.matchMedia("(max-width: 1100px)").matches;
-        return savedState === null
-            ? isTvShell || isCompactViewport
-            : savedState === "true";
+        const isCompactViewport = window.matchMedia("(max-width: 980px)").matches;
+
+        if (savedState === null) {
+            return isTvShell || isCompactViewport;
+        }
+
+        return savedState === "true";
     } catch {
         return false;
     }
 }
 
-function applySidebarBootstrap() {
-    const sidebar = document.querySelector(".app-sidebar");
-    const shell = document.querySelector(".app-shell");
-
-    if (!sidebar) {
-        document.documentElement.classList.remove("sidebar-collapsed-pending");
-        return;
-    }
-
-    const collapsed = resolveInitialSidebarCollapsed(shell);
-
-    document.documentElement.classList.toggle("sidebar-collapsed-pending", collapsed);
-
-    if (shell) {
-        shell.classList.toggle("app-shell--sidebar-collapsed", collapsed);
-    }
-
-    sidebar.classList.toggle("app-sidebar--collapsed", collapsed);
-
-    const toggle = sidebar.querySelector("[data-sidebar-toggle]");
-    const toggleIcon = sidebar.querySelector("[data-sidebar-toggle-icon]");
-
+function updateSidebarToggle(toggle, toggleIcon, collapsed) {
     if (toggle) {
         toggle.setAttribute("aria-expanded", String(!collapsed));
         toggle.setAttribute("aria-label", collapsed ? "Expandir menu" : "Recolher menu");
@@ -44,6 +35,34 @@ function applySidebarBootstrap() {
     if (toggleIcon) {
         toggleIcon.textContent = collapsed ? ">" : "<";
     }
+}
+
+function applySidebarBootstrap() {
+    const sidebar = document.querySelector(".app-sidebar");
+    const shell = document.querySelector(".app-shell");
+
+    if (!sidebar || isDashboardTvMode()) {
+        document.documentElement.classList.remove("sidebar-collapsed-pending");
+        return;
+    }
+
+    const collapsed = resolveInitialSidebarCollapsed(shell);
+
+    document.documentElement.classList.toggle("sidebar-collapsed-pending", collapsed);
+    sidebar.classList.toggle("app-sidebar--collapsed", collapsed);
+
+    if (shell) {
+        shell.classList.toggle("app-shell--sidebar-collapsed", collapsed);
+        shell.querySelectorAll(".app-main").forEach((main) => {
+            main.classList.toggle("app-main--sidebar-collapsed", collapsed);
+        });
+    }
+
+    updateSidebarToggle(
+        sidebar.querySelector("[data-sidebar-toggle]"),
+        sidebar.querySelector("[data-sidebar-toggle-icon]"),
+        collapsed
+    );
 }
 
 applySidebarBootstrap();
@@ -57,7 +76,8 @@ document.addEventListener("DOMContentLoaded", () => {
 function initSidebar() {
     const sidebar = document.querySelector(".app-sidebar");
 
-    if (!sidebar) {
+    if (!sidebar || isDashboardTvMode()) {
+        document.documentElement.classList.remove("sidebar-collapsed-pending");
         return;
     }
 
@@ -77,18 +97,12 @@ function initSidebar() {
             });
         }
 
-        if (toggle) {
-            toggle.setAttribute("aria-expanded", String(!collapsed));
-            toggle.setAttribute("aria-label", collapsed ? "Expandir menu" : "Recolher menu");
-            toggle.setAttribute("title", collapsed ? "Expandir menu" : "Recolher menu");
-        }
-
-        if (toggleIcon) {
-            toggleIcon.textContent = collapsed ? ">" : "<";
-        }
+        updateSidebarToggle(toggle, toggleIcon, collapsed);
 
         if (persist) {
-            window.localStorage.setItem(SIDEBAR_STORAGE_KEY, String(collapsed));
+            try {
+                window.localStorage.setItem(SIDEBAR_STORAGE_KEY, String(collapsed));
+            } catch {}
         }
     };
 
@@ -111,7 +125,6 @@ function initSidebar() {
         });
     }
 }
-
 function initConflictModal() {
     const modal = document.querySelector("[data-conflito-modal]");
 
