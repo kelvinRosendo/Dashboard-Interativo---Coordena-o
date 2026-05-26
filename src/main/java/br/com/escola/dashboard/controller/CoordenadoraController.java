@@ -1,10 +1,12 @@
 package br.com.escola.dashboard.controller;
 
 import br.com.escola.dashboard.dto.CardResponseDTO;
+import br.com.escola.dashboard.entity.SemanaEmFoco;
 import br.com.escola.dashboard.enums.CategoriaCard;
 import br.com.escola.dashboard.enums.SegmentoCoordenacao;
 import br.com.escola.dashboard.service.CardService;
 import br.com.escola.dashboard.service.DemandaService;
+import br.com.escola.dashboard.service.SemanaEmFocoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 @Controller
 public class CoordenadoraController {
@@ -27,10 +30,14 @@ public class CoordenadoraController {
 
     private final CardService cardService;
     private final DemandaService demandaService;
+    private final SemanaEmFocoService semanaEmFocoService;
 
-    public CoordenadoraController(CardService cardService, DemandaService demandaService) {
+    public CoordenadoraController(CardService cardService,
+                                  DemandaService demandaService,
+                                  SemanaEmFocoService semanaEmFocoService) {
         this.cardService = cardService;
         this.demandaService = demandaService;
+        this.semanaEmFocoService = semanaEmFocoService;
     }
 
     @GetMapping("/coordenadoras")
@@ -57,9 +64,17 @@ public class CoordenadoraController {
                 .filter(card -> contemSegmento(card, segmento.nome()))
                 .toList();
 
+        Optional<SemanaEmFoco> semanaAtivaOpt = semanaEmFocoService.buscarAtiva();
+        SemanaEmFoco semanaEmFoco = null;
+        if (semanaAtivaOpt.isPresent() && semanaAtivaOpt.get().getSegmento() == segmentoEnum) {
+            semanaEmFoco = semanaAtivaOpt.get();
+        }
+
+        model.addAttribute("semanaEmFoco", semanaEmFoco);
         model.addAttribute("segmento", segmento);
         model.addAttribute("segmentoEnum", segmentoEnum);
         model.addAttribute("semanas", semanas);
+
         model.addAttribute("tarefas", cardService.listarPorCategoria(CategoriaCard.ROTINA_COORDENADORES));
         model.addAttribute("avisos", cardService.listarPorCategoria(CategoriaCard.AVISO_NOTA));
         model.addAttribute("faltas", cardService.listarPorCategoria(CategoriaCard.FALTA_PROFESSOR));

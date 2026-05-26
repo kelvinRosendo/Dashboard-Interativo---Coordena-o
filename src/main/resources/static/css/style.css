@@ -3350,9 +3350,256 @@ body.tv-page.tv-page--semana.tv-page--dashboard .tv-week-maintenance-row {
         grid-template-columns: minmax(170px, 0.72fr) minmax(0, 1.4fr) minmax(190px, 0.86fr);
     }
 
-body.tv-page.tv-page--semana.tv-page--dashboard .tv-week-feature.semana-hero h2 {
+    body.tv-page.tv-page--semana.tv-page--dashboard .tv-week-feature.semana-hero h2 {
         font-size: clamp(28px, 5vw, 42px);
     }
+}
+
+/* ===================================== */
+/* POLIMENTO FINAL: SIDEBAR E TV FADE    */
+/* ===================================== */
+.app-sidebar {
+    overflow: hidden;
+}
+
+.app-sidebar__nav {
+    gap: 3px;
+}
+
+.app-sidebar__link,
+.app-sidebar__logout-button {
+    min-height: 36px;
+    grid-template-columns: 30px minmax(0, 1fr);
+    gap: 7px;
+    padding: 4px 7px;
+}
+
+.app-sidebar__link span,
+.app-sidebar__logout-button span {
+    width: 30px;
+    height: 30px;
+}
+
+.app-sidebar__icon {
+    display: grid;
+    place-items: center;
+}
+
+.app-sidebar__icon-img {
+    width: 19px;
+    height: 19px;
+    display: block;
+    object-fit: contain;
+}
+
+.app-sidebar--collapsed .app-sidebar__link,
+.app-sidebar--collapsed .app-sidebar__logout-button,
+.app-sidebar--tv .app-sidebar__link,
+.app-sidebar--tv .app-sidebar__logout-button {
+    min-height: 38px;
+    padding: 4px;
+}
+
+.app-sidebar--collapsed .app-sidebar__link span,
+.app-sidebar--collapsed .app-sidebar__logout-button span,
+.app-sidebar--tv .app-sidebar__link span,
+.app-sidebar--tv .app-sidebar__logout-button span {
+    width: 32px;
+    height: 32px;
+}
+
+.tv-dashboard-mode {
+    transition:
+        opacity 0.52s ease,
+        filter 0.52s ease,
+        transform 0.52s ease;
+}
+
+.tv-dashboard-mode.tv-page-transitioning {
+    opacity: 0;
+    filter: blur(8px);
+    transform: scale(0.992);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tv-dashboard-mode,
+    .app-sidebar__link,
+    .app-sidebar__logout-button,
+    .app-sidebar__link span,
+    .app-sidebar__logout-button span {
+        transition: none;
+    }
+
+    .tv-dashboard-mode.tv-page-transitioning {
+        opacity: 1;
+        filter: none;
+        transform: none;
+    }
+}
+
+/* ===================================== */
+/* ICONES VISUAIS DAS TELAS              */
+/* ===================================== */
+.ui-icon,
+.dashboard-card-icon {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    border-radius: 14px;
+    color: #ffffff;
+    background: rgba(37, 99, 235, 0.18);
+    border: 1px solid rgba(96, 165, 250, 0.22);
+}
+
+.ui-icon-img {
+    width: 22px;
+    height: 22px;
+    display: block;
+    object-fit: contain;
+    filter: invert(1);
+}
+
+.login-feature-icon {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    border-radius: 14px;
+    background: rgba(37, 99, 235, 0.2);
+    border: 1px solid rgba(96, 165, 250, 0.22);
+}
+
+.login-feature-yellow .login-feature-icon {
+    background: rgba(250, 204, 21, 0.18);
+    border-color: rgba(250, 204, 21, 0.24);
+}
+
+.login-feature-pink .login-feature-icon {
+    background: rgba(236, 72, 153, 0.18);
+    border-color: rgba(236, 72, 153, 0.24);
+}
+
+.login-feature-icon .ui-icon-img {
+    width: 23px;
+    height: 23px;
+    filter: invert(1);
+}
+
+.admin-section-header span,
+.tv-section-header h2,
+.tv-panel-block h2,
+.calendario-hoje h2 {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.admin-section-header span::before,
+.tv-section-header h2::before,
+.tv-panel-block h2::before,
+.calendario-hoje h2::before {
+    --screen-icon: url("/img/icons/icon-report.png");
+    content: "";
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    flex: 0 0 auto;
+    background: currentColor;
+    -webkit-mask: var(--screen-icon) center / contain no-repeat;
+    mask: var(--screen-icon) center / contain no-repeat;
+}
+
+.admin-main-column .admin-section:nth-of-type(1) .admin-section-header span::before,
+.calendario-hoje h2::before {
+    --screen-icon: url("/img/icons/icon-calendar.png");
+}
+
+.admin-main-column .admin-section:nth-of-type(2) .admin-section-header span::before,
+.admin-side-coordenadoras .admin-section-header span::before {
+    --screen-icon: url("/img/icons/icon-coordinators.png");
+}
+
+.admin-main-column .admin-section:nth-of-type(3) .admin-section-header span::before {
+    --screen-icon: url("/img/icons/icon-report.png");
+}
+
+.admin-side-column .admin-section:nth-of-type(1) .admin-section-header span::before,
+.tv-section-header h2::before {
+    --screen-icon: url("/img/icons/icon-week.png");
+}
+
+.tv-panel-block h2::before {
+    --screen-icon: url("/img/icons/icon-admin.png");
+}
+
+.tv-card--maintenance .tv-section-header h2::before {
+    --screen-icon: url("/img/icons/icon-settings.png");
+}
+
+.admin-side-coordenadoras .admin-mini-card {
+    position: relative;
+    padding-left: 58px;
+}
+
+.coordenadora-item,
+.demanda-card,
+.demanda-admin-card {
+    position: relative;
+    padding-left: 58px;
+}
+
+.admin-side-coordenadoras .admin-mini-card::before,
+.coordenadora-item::before,
+.demanda-card::before,
+.demanda-admin-card::before {
+    --screen-icon: url("/img/icons/icon-coordinators.png");
+    content: "";
+    position: absolute;
+    left: 16px;
+    top: 16px;
+    width: 26px;
+    height: 26px;
+    border-radius: 10px;
+    background: rgba(250, 204, 21, 0.18);
+    border: 1px solid rgba(250, 204, 21, 0.22);
+}
+
+.admin-side-coordenadoras .admin-mini-card::after,
+.coordenadora-item::after,
+.demanda-card::after,
+.demanda-admin-card::after {
+    --screen-icon: url("/img/icons/icon-coordinators.png");
+    content: "";
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    width: 18px;
+    height: 18px;
+    background: #ffffff;
+    -webkit-mask: var(--screen-icon) center / contain no-repeat;
+    mask: var(--screen-icon) center / contain no-repeat;
+}
+
+.coordenadora-item::after {
+    --screen-icon: url("/img/icons/icon-calendar.png");
+}
+
+.demanda-card::after,
+.demanda-admin-card::after {
+    --screen-icon: url("/img/icons/icon-add.png");
+}
+
+.admin-action-card::after {
+    content: "";
+    width: 16px;
+    height: 16px;
+    flex: 0 0 auto;
+    background: var(--yellow);
+    -webkit-mask: url("/img/icons/icon-add.png") center / contain no-repeat;
+    mask: url("/img/icons/icon-add.png") center / contain no-repeat;
 }
 /* ===================================== */
 /* SIDEBAR FINAL - FIXA, MINIMALISTA     */
@@ -3726,4 +3973,58 @@ html.sidebar-collapsed-pending .app-sidebar__text {
     .app-sidebar__logout-button span {
         transition: none !important;
     }
+}
+
+/* ==========================================================================
+   Demandas na TV (Semana em Foco)
+   ========================================================================== */
+.semana-demandas-tv {
+    margin: 22px auto;
+    padding: 20px;
+    border-radius: var(--radius);
+    background: rgba(15, 23, 42, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    text-align: left;
+    width: 100%;
+    max-width: 650px;
+    box-shadow: var(--shadow-soft);
+}
+
+.semana-demandas-tv__title {
+    display: block;
+    color: var(--yellow);
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: 900;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    padding-bottom: 8px;
+}
+
+.semana-demandas-tv__list {
+    display: grid;
+    gap: 10px;
+}
+
+.semana-demandas-tv__item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: rgba(2, 6, 23, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.semana-demandas-tv__item:hover {
+    transform: translateY(-2px);
+    border-color: rgba(96, 165, 250, 0.2);
+}
+
+.semana-demandas-tv__item strong {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 700;
 }

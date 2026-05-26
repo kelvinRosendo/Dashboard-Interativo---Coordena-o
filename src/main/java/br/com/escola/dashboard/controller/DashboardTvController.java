@@ -3,10 +3,14 @@ package br.com.escola.dashboard.controller;
 import br.com.escola.dashboard.dto.CalendarioDiaDTO;
 import br.com.escola.dashboard.dto.CardResponseDTO;
 import br.com.escola.dashboard.dto.GoogleCalendarEventDTO;
+import br.com.escola.dashboard.entity.Demanda;
+import br.com.escola.dashboard.entity.SemanaEmFoco;
 import br.com.escola.dashboard.enums.CategoriaCard;
 import br.com.escola.dashboard.enums.StatusCard;
 import br.com.escola.dashboard.service.CardService;
+import br.com.escola.dashboard.service.DemandaService;
 import br.com.escola.dashboard.service.GoogleCalendarService;
+import br.com.escola.dashboard.service.SemanaEmFocoService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
@@ -25,6 +29,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -38,13 +43,19 @@ public class DashboardTvController {
     private final CardService cardService;
     private final GoogleCalendarService googleCalendarService;
     private final OAuth2AuthorizedClientService authorizedClientService;
+    private final SemanaEmFocoService semanaEmFocoService;
+    private final DemandaService demandaService;
 
     public DashboardTvController(CardService cardService,
                                  GoogleCalendarService googleCalendarService,
-                                 OAuth2AuthorizedClientService authorizedClientService) {
+                                 OAuth2AuthorizedClientService authorizedClientService,
+                                 SemanaEmFocoService semanaEmFocoService,
+                                 DemandaService demandaService) {
         this.cardService = cardService;
         this.googleCalendarService = googleCalendarService;
         this.authorizedClientService = authorizedClientService;
+        this.semanaEmFocoService = semanaEmFocoService;
+        this.demandaService = demandaService;
     }
 
     @GetMapping({"", "/semana"})
@@ -71,6 +82,19 @@ public class DashboardTvController {
                 .limit(modoDashboard ? 4 : 6)
                 .toList();
 
+        Optional<SemanaEmFoco> semanaEmFocoOpt = semanaEmFocoService.buscarAtiva();
+        if (semanaEmFocoOpt.isPresent()) {
+            SemanaEmFoco semanaEmFoco = semanaEmFocoOpt.get();
+            model.addAttribute("semanaEmFoco", semanaEmFoco);
+            List<Demanda> demandasSemana = demandaService.listarPorSegmento(semanaEmFoco.getSegmento()).stream()
+                    .filter(demanda -> demanda.getStatus() != br.com.escola.dashboard.enums.StatusDemanda.CANCELADA)
+                    .toList();
+            model.addAttribute("demandasSemana", demandasSemana);
+        } else {
+            model.addAttribute("semanaEmFoco", null);
+            model.addAttribute("demandasSemana", List.of());
+        }
+
         model.addAttribute("semanaAtual", semanaAtual);
         model.addAttribute("segmentoSemana", resolverSegmentoSemana(semanaAtual));
         model.addAttribute("semanas", semanas);
@@ -84,6 +108,7 @@ public class DashboardTvController {
 
         return "dashboard-semana";
     }
+
 
     @GetMapping("/calendario")
     public String calendario(@RequestParam(name = "modo", defaultValue = "mensal") String modo,

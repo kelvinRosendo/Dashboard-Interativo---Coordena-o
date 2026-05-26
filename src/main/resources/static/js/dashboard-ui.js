@@ -175,7 +175,7 @@ function initDashboardTimer() {
 
         if (remaining <= 0) {
             window.clearInterval(interval);
-            window.location.assign(target);
+            redirectWithTvTransition(target);
         }
     }, 1000);
 }
@@ -184,4 +184,18 @@ function resolverDashboardTarget() {
     return window.location.pathname.includes("/tv/calendario")
         ? "/tv/semana?modo=dashboard"
         : "/tv/calendario?modo=dashboard";
+}
+
+function redirectWithTvTransition(target) {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (prefersReducedMotion) {
+        window.location.assign(target);
+        return;
+    }
+
+    document.body.classList.add("tv-page-transitioning");
+    window.setTimeout(() => {
+        window.location.assign(target);
+    }, 520);
 }

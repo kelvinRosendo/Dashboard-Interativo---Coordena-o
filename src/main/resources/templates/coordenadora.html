@@ -75,16 +75,29 @@
                 <strong th:text="${segmento.nome}">Segmento</strong>
             </div>
 
-            <p th:if="${semanas == null or #lists.isEmpty(semanas)}" class="admin-empty">
-                Nenhuma semana em foco especifica para este segmento ainda.
-            </p>
+            <!-- Semana em Foco ativa no banco para este segmento -->
+            <div th:if="${semanaEmFoco != null}" class="coordenadora-semana-foco-atual" style="padding: 10px 0;">
+                <h3 th:text="${semanaEmFoco.titulo}" style="color: var(--yellow); margin-bottom: 8px; font-size: 20px;">Titulo</h3>
+                <p th:text="${semanaEmFoco.descricao}" style="margin-bottom: 12px; font-size: 15px; color: var(--text);">Descricao</p>
+                <div class="demanda-meta" style="display: flex; gap: 15px; font-size: 13px;">
+                    <span th:text="${'Periodo: ' + #temporals.format(semanaEmFoco.dataInicio, 'dd/MM/yyyy') + ' a ' + #temporals.format(semanaEmFoco.dataFim, 'dd/MM/yyyy')}">Periodo</span>
+                    <span th:text="${'Prioridade: ' + semanaEmFoco.prioridade.titulo}">Prioridade</span>
+                </div>
+            </div>
 
-            <div class="coordenadora-list">
-                <article class="coordenadora-item" th:each="card : ${semanas}">
-                    <strong th:text="${card.titulo}">Titulo</strong>
-                    <p th:text="${card.descricao}">Descricao</p>
-                    <span th:text="${card.status}">Status</span>
-                </article>
+            <!-- Fallback para cards se nao houver Semana em Foco ativa -->
+            <div th:if="${semanaEmFoco == null}">
+                <p th:if="${semanas == null or #lists.isEmpty(semanas)}" class="admin-empty">
+                    Nenhuma semana em foco especifica para este segmento ainda.
+                </p>
+
+                <div class="coordenadora-list" th:if="${semanas != null and !#lists.isEmpty(semanas)}">
+                    <article class="coordenadora-item" th:each="card : ${semanas}">
+                        <strong th:text="${card.titulo}">Titulo</strong>
+                        <p th:text="${card.descricao}">Descricao</p>
+                        <span th:text="${card.status}">Status</span>
+                    </article>
+                </div>
             </div>
         </article>
 

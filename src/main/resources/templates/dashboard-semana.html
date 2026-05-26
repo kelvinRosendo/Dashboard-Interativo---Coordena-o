@@ -55,15 +55,40 @@
             </section>
 
             <section class="semana-hero tv-week-feature tv-card tv-card--featured">
-                <div class="semana-hero-label">Segmento em destaque</div>
-                <h2 th:text="${segmentoSemana}">Fundamental 1</h2>
-                <h3 th:text="${semanaAtual != null ? semanaAtual.titulo : 'Cadastre a Semana em Foco'}">Fundamental 1 em foco</h3>
-                <p th:text="${semanaAtual != null ? semanaAtual.descricao : 'Use o cadastro de cards para registrar o segmento, demandas e prioridades da semana.'}">
-                    Demandas da semana.
-                </p>
-                <div class="semana-hero-footer">
-                    <span th:text="${semanaAtual != null and semanaAtual.dataEvento != null ? semanaAtual.dataEvento : hoje}">Data</span>
-                    <span th:if="${semanaAtual != null}" th:text="${semanaAtual.prioridade}">Prioridade</span>
+                <!-- Se existir Semana em Foco ativa -->
+                <div th:if="${semanaEmFoco != null}" style="width: 100%;">
+                    <div class="semana-hero-label" th:text="${semanaEmFoco.segmento.titulo}">Segmento em destaque</div>
+                    <h2 th:text="${semanaEmFoco.titulo}">Fundamental 1 em Foco</h2>
+                    <p th:text="${semanaEmFoco.descricao}">
+                        Descricao da Semana em Foco.
+                    </p>
+
+                    <!-- Demandas vinculadas -->
+                    <div class="semana-demandas-tv" th:if="${demandasSemana != null and !#lists.isEmpty(demandasSemana)}">
+                        <strong class="semana-demandas-tv__title">Demandas da Semana</strong>
+                        <div class="semana-demandas-tv__list">
+                            <div class="semana-demandas-tv__item" th:each="demanda : ${demandasSemana}">
+                                <span class="demanda-badge"
+                                      th:classappend="| demanda-badge--status-${demanda.status.cssClass}|"
+                                      th:text="${demanda.status.titulo}">Status</span>
+                                <strong th:text="${demanda.titulo}">Titulo da Demanda</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="semana-hero-footer">
+                        <span>
+                            Periodo: <strong th:text="${#temporals.format(semanaEmFoco.dataInicio, 'dd/MM/yyyy') + ' a ' + #temporals.format(semanaEmFoco.dataFim, 'dd/MM/yyyy')}">20/05/2026 a 24/05/2026</strong>
+                        </span>
+                        <span th:text="${semanaEmFoco.prioridade.titulo}">Prioridade</span>
+                    </div>
+                </div>
+
+                <!-- Fallback se nao existir Semana em Foco ativa -->
+                <div th:if="${semanaEmFoco == null}">
+                    <div class="semana-hero-label">Semana em Foco</div>
+                    <h2>Nenhuma Semana em Foco configurada.</h2>
+                    <p>Defina as configuracoes da semana em foco no painel administrativo.</p>
                 </div>
             </section>
 
