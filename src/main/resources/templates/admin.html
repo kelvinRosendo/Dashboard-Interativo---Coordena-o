@@ -39,6 +39,59 @@
 
     <section class="admin-dashboard">
         <div class="admin-main-column">
+            <section class="admin-section week-focus-control"
+                     th:with="semanaControle=${semanaAtual != null ? semanaAtual : (semanaEmFoco != null ? semanaEmFoco : null)}">
+                <div class="admin-section-header">
+                    <div>
+                        <span>Controle editorial</span>
+                        <strong>Controle da Semana em Foco</strong>
+                    </div>
+                    <span class="week-focus-control__status"
+                          th:classappend="${semanaControle != null and semanaControle.ativa == true} ? ' week-focus-control__status--active' : ''"
+                          th:text="${semanaControle != null and semanaControle.ativa == true ? 'Ativa / publicada' : 'Aguardando publicacao'}">
+                        Ativa / publicada
+                    </span>
+                </div>
+
+                <div class="week-focus-control__preview">
+                    <div>
+                        <span class="week-focus-control__eyebrow">Segmento em destaque</span>
+                        <strong th:text="${semanaControle != null and semanaControle.segmento != null ? semanaControle.segmento.titulo : 'Nenhum segmento definido'}">
+                            Fundamental 1
+                        </strong>
+                    </div>
+
+                    <div class="week-focus-control__content">
+                        <h2 th:text="${semanaControle != null and semanaControle.titulo != null and !#strings.isEmpty(semanaControle.titulo) ? semanaControle.titulo : 'Semana em Foco ainda nao configurada'}">
+                            Semana em Foco
+                        </h2>
+                        <p th:text="${semanaControle != null and semanaControle.descricao != null and !#strings.isEmpty(semanaControle.descricao) ? semanaControle.descricao : 'Defina o foco semanal para orientar a exibicao do dashboard da TV.'}">
+                            Defina o foco semanal para orientar a exibicao do dashboard da TV.
+                        </p>
+                    </div>
+
+                    <div class="week-focus-control__meta">
+                        <span>Periodo</span>
+                        <strong th:if="${semanaControle != null and semanaControle.dataInicio != null and semanaControle.dataFim != null}"
+                                th:text="${#temporals.format(semanaControle.dataInicio, 'dd/MM') + ' a ' + #temporals.format(semanaControle.dataFim, 'dd/MM/yyyy')}">
+                            11/05 a 17/05/2026
+                        </strong>
+                        <strong th:unless="${semanaControle != null and semanaControle.dataInicio != null and semanaControle.dataFim != null}">
+                            Periodo nao definido
+                        </strong>
+                    </div>
+                </div>
+
+                <div class="week-focus-control__actions">
+                    <a th:href="@{/admin/semana-em-foco}" class="btn-editar week-focus-control__button">
+                        Editar Semana em Foco
+                    </a>
+                    <a th:href="@{/tv/semana(modo='dashboard')}" class="week-focus-control__button week-focus-control__button--ghost">
+                        Ver na TV
+                    </a>
+                </div>
+            </section>
+
             <section class="admin-section">
                 <div class="admin-section-header">
                     <div>
@@ -193,12 +246,6 @@
                             <img th:src="@{/img/icons/icon-week.png}" alt="">
                         </span>
                         <strong>Semana em Foco</strong>
-                    </a>
-                    <a th:href="@{/admin/semana-em-foco}" class="admin-action-card">
-                        <span class="admin-action-icon">
-                            <img th:src="@{/img/icons/icon-settings.png}" alt="">
-                        </span>
-                        <strong>Editar Semana em Foco</strong>
                     </a>
                     <a th:href="@{/tv/calendario(modo='semanal')}" class="admin-action-card">
                         <span class="admin-action-icon">
