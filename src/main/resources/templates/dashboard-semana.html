@@ -54,12 +54,21 @@
                 </div>
             </section>
 
-            <section class="semana-hero tv-week-feature tv-card tv-card--featured">
+            <section class="semana-hero tv-week-feature tv-card tv-card--featured"
+                     th:classappend="${semanaEmFoco != null and semanaEmFoco.segmento != null}
+                        ? (${semanaEmFoco.segmento.name() == 'EDUCACAO_INFANTIL'} ? ' tv-week-feature--infantil segmento-infantil'
+                        : (${semanaEmFoco.segmento.name() == 'FUNDAMENTAL_1'} ? ' tv-week-feature--fundamental-1 segmento-fundamental-1'
+                        : (${semanaEmFoco.segmento.name() == 'FUNDAMENTAL_2'} ? ' tv-week-feature--fundamental-2 segmento-fundamental-2'
+                        : (${semanaEmFoco.segmento.name() == 'ENSINO_MEDIO'} ? ' tv-week-feature--ensino-medio segmento-ensino-medio' : ''))) : ''">
                 <!-- Se existir Semana em Foco ativa -->
-                <div th:if="${semanaEmFoco != null}" style="width: 100%;">
-                    <div class="semana-hero-label" th:text="${semanaEmFoco.segmento.titulo}">Segmento em destaque</div>
-                    <h2 th:text="${semanaEmFoco.titulo}">Fundamental 1 em Foco</h2>
-                    <p th:text="${semanaEmFoco.descricao}">
+                <div class="tv-week-feature__content" th:if="${semanaEmFoco != null}">
+                    <span class="semana-hero-label tv-week-feature__label">Conteudo configurado pela direcao</span>
+                    <strong class="tv-week-feature__segment"
+                            th:text="${semanaEmFoco.segmento != null ? semanaEmFoco.segmento.titulo : 'Segmento em destaque'}">
+                        Segmento em destaque
+                    </strong>
+                    <h2 class="tv-week-feature__title" th:text="${semanaEmFoco.titulo}">Fundamental 1 em Foco</h2>
+                    <p class="tv-week-feature__description" th:text="${semanaEmFoco.descricao}">
                         Descricao da Semana em Foco.
                     </p>
 
@@ -76,19 +85,26 @@
                         </div>
                     </div>
 
-                    <div class="semana-hero-footer">
-                        <span>
+                    <div class="semana-hero-footer tv-week-feature__meta">
+                        <span th:if="${semanaEmFoco.dataInicio != null and semanaEmFoco.dataFim != null}">
                             Periodo: <strong th:text="${#temporals.format(semanaEmFoco.dataInicio, 'dd/MM/yyyy') + ' a ' + #temporals.format(semanaEmFoco.dataFim, 'dd/MM/yyyy')}">20/05/2026 a 24/05/2026</strong>
                         </span>
-                        <span th:text="${semanaEmFoco.prioridade.titulo}">Prioridade</span>
+                        <span th:if="${semanaEmFoco.dataInicio != null and semanaEmFoco.dataFim == null}">
+                            Periodo: <strong th:text="${#temporals.format(semanaEmFoco.dataInicio, 'dd/MM/yyyy')}">20/05/2026</strong>
+                        </span>
+                        <span th:if="${semanaEmFoco.prioridade != null}"
+                              th:text="${semanaEmFoco.prioridade.titulo}">Prioridade</span>
+                        <span th:if="${semanaEmFoco.ativa == true}">Ativa / publicada</span>
+                        <span th:if="${semanaEmFoco.ativa != true}">Em planejamento</span>
                     </div>
                 </div>
 
                 <!-- Fallback se nao existir Semana em Foco ativa -->
-                <div th:if="${semanaEmFoco == null}">
-                    <div class="semana-hero-label">Semana em Foco</div>
-                    <h2>Nenhuma Semana em Foco configurada.</h2>
-                    <p>Defina as configuracoes da semana em foco no painel administrativo.</p>
+                <div class="tv-week-feature__content tv-week-feature__content--empty" th:if="${semanaEmFoco == null}">
+                    <span class="semana-hero-label tv-week-feature__label">Semana em Foco</span>
+                    <strong class="tv-week-feature__segment">Aguardando configuracao</strong>
+                    <h2 class="tv-week-feature__title">Nenhuma Semana em Foco configurada.</h2>
+                    <p class="tv-week-feature__description">Defina as configuracoes da semana em foco no painel administrativo.</p>
                 </div>
             </section>
 
