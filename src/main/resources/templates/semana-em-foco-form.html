@@ -20,139 +20,172 @@
                 </p>
             </div>
 
-            <form th:action="@{/admin/semana-em-foco}"
-                  method="post"
-                  class="week-focus-form"
-                  th:object="${semana}">
+            <div class="week-focus-form-wrapper">
+                <form th:action="@{/admin/semana-em-foco}"
+                      method="post"
+                      class="week-focus-form"
+                      th:object="${semana}">
 
-                <th:block th:replace="~{fragments/csrf :: token}"></th:block>
+                    <th:block th:replace="~{fragments/csrf :: token}"></th:block>
 
-                <input type="hidden" th:field="*{id}" />
-                <input type="hidden" th:field="*{ativa}" id="ativaInput" />
+                    <input type="hidden" th:field="*{id}" />
+                    <input type="hidden" th:field="*{ativa}" id="ativaInput" />
 
-                <div class="form-alerta campo-completo" th:if="${#fields.hasAnyErrors()}">
-                    <p>Corrija os campos destacados antes de salvar.</p>
-                </div>
-
-                <!-- BLOCO 1: FOCO DA SEMANA -->
-                <div class="week-focus-form__section">
-                    <h2 class="week-focus-form__section-title">Foco da Semana</h2>
-
-                    <div class="formulario formulario--compact">
-                        <div class="campo">
-                            <label for="segmento">Segmento em Destaque</label>
-                            <select id="segmento"
-                                    th:field="*{segmento}"
-                                    required
-                                    th:classappend="${#fields.hasErrors('segmento')} ? ' campo-invalido'">
-                                <option value="">Selecione</option>
-                                <option th:each="segmentoItem : ${segmentos}"
-                                        th:value="${segmentoItem}"
-                                        th:text="${segmentoItem.titulo}">
-                                    Segmento
-                                </option>
-                            </select>
-                            <small class="campo-erro" th:if="${#fields.hasErrors('segmento')}" th:errors="*{segmento}">Erro</small>
-                        </div>
-
-                        <div class="campo">
-                            <label for="prioridade">Prioridade</label>
-                            <select id="prioridade"
-                                    th:field="*{prioridade}"
-                                    required
-                                    th:classappend="${#fields.hasErrors('prioridade')} ? ' campo-invalido'">
-                                <option value="">Selecione</option>
-                                <option th:each="prioridadeItem : ${prioridades}"
-                                        th:value="${prioridadeItem}"
-                                        th:text="${prioridadeItem.titulo}">
-                                    Prioridade
-                                </option>
-                            </select>
-                            <small class="campo-erro" th:if="${#fields.hasErrors('prioridade')}" th:errors="*{prioridade}">Erro</small>
-                        </div>
-
-                        <div class="campo campo-completo">
-                            <label for="titulo">Título</label>
-                            <input type="text"
-                                   id="titulo"
-                                   th:field="*{titulo}"
-                                   required
-                                   placeholder="Ex: Fundamental I em foco"
-                                   th:classappend="${#fields.hasErrors('titulo')} ? ' campo-invalido'">
-                            <small class="campo-erro" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}">Erro</small>
-                        </div>
-
-                        <div class="campo campo-completo">
-                            <label for="descricao">Descrição</label>
-                            <textarea id="descricao"
-                                      th:field="*{descricao}"
-                                      rows="4"
-                                      required
-                                      placeholder="Detalhe o foco da semana, reuniões e objetivos pedagógicos..."
-                                      th:classappend="${#fields.hasErrors('descricao')} ? ' campo-invalido'"></textarea>
-                            <small class="campo-erro" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}">Erro</small>
-                            <small class="campo-ajuda">Este conteúdo será exibido na TV durante toda a semana.</small>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- BLOCO 2: PERÍODO -->
-                <div class="week-focus-form__section">
-                    <h2 class="week-focus-form__section-title">Período de Exibição</h2>
-
-                    <div class="quick-date-actions">
-                        <button type="button" class="quick-date-btn" data-preset="current-week">Esta semana</button>
-                        <button type="button" class="quick-date-btn" data-preset="next-week">Próxima semana</button>
+                    <div class="form-alerta campo-completo" th:if="${#fields.hasAnyErrors()}">
+                        <p>Corrija os campos destacados antes de salvar.</p>
                     </div>
 
-                    <div class="formulario formulario--compact">
-                        <div class="campo">
-                            <label for="dataInicio">Data Inicial</label>
-                            <input type="date"
-                                   id="dataInicio"
-                                   th:field="*{dataInicio}"
-                                   required
-                                   th:classappend="${#fields.hasErrors('dataInicio')} ? ' campo-invalido'"
-                                   data-date-input="start">
-                            <small class="campo-erro" th:if="${#fields.hasErrors('dataInicio')}" th:errors="*{dataInicio}">Erro</small>
-                        </div>
+                    <!-- BLOCO 1: FOCO DA SEMANA -->
+                    <div class="week-focus-form__section">
+                        <h2 class="week-focus-form__section-title">Foco da Semana</h2>
 
-                        <div class="campo">
-                            <label for="dataFim">Data Final</label>
-                            <input type="date"
-                                   id="dataFim"
-                                   th:field="*{dataFim}"
-                                   required
-                                   th:classappend="${#fields.hasErrors('dataFim')} ? ' campo-invalido'"
-                                   data-date-input="end">
-                            <small class="campo-erro" th:if="${#fields.hasErrors('dataFim')}" th:errors="*{dataFim}">Erro</small>
-                            <small class="campo-ajuda" id="dataValidacao"></small>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- BLOCO 3: PUBLICAÇÃO -->
-                <div class="week-focus-form__section">
-                    <h2 class="week-focus-form__section-title">Publicação</h2>
-
-                    <div class="week-focus-status-toggle">
-                        <div class="status-info">
-                            <span class="status-label">Status de Exibição</span>
-                            <div class="status-badge" id="statusBadge" th:classappend="*{ativa} ? 'status-badge--active' : ''">
-                                <span th:text="*{ativa} ? 'Ativo - Exibindo na TV' : 'Inativo - Não exibindo'">Status</span>
+                        <div class="formulario formulario--compact">
+                            <div class="campo">
+                                <label for="segmento">Segmento em Destaque</label>
+                                <select id="segmento"
+                                        th:field="*{segmento}"
+                                        required
+                                        th:classappend="${#fields.hasErrors('segmento')} ? ' campo-invalido'"
+                                        data-preview-field="segment">
+                                    <option value="">Selecione</option>
+                                    <option th:each="segmentoItem : ${segmentos}"
+                                            th:value="${segmentoItem}"
+                                            th:text="${segmentoItem.titulo}">
+                                        Segmento
+                                    </option>
+                                </select>
+                                <small class="campo-erro" th:if="${#fields.hasErrors('segmento')}" th:errors="*{segmento}">Erro</small>
                             </div>
-                            <small class="campo-ajuda">O status será atualizado quando você salvar o formulário.</small>
+
+                            <div class="campo">
+                                <label for="prioridade">Prioridade</label>
+                                <select id="prioridade"
+                                        th:field="*{prioridade}"
+                                        required
+                                        th:classappend="${#fields.hasErrors('prioridade')} ? ' campo-invalido'">
+                                    <option value="">Selecione</option>
+                                    <option th:each="prioridadeItem : ${prioridades}"
+                                            th:value="${prioridadeItem}"
+                                            th:text="${prioridadeItem.titulo}">
+                                        Prioridade
+                                    </option>
+                                </select>
+                                <small class="campo-erro" th:if="${#fields.hasErrors('prioridade')}" th:errors="*{prioridade}">Erro</small>
+                            </div>
+
+                            <div class="campo campo-completo">
+                                <label for="titulo">Título</label>
+                                <input type="text"
+                                       id="titulo"
+                                       th:field="*{titulo}"
+                                       required
+                                       placeholder="Ex: Fundamental I em foco"
+                                       th:classappend="${#fields.hasErrors('titulo')} ? ' campo-invalido'"
+                                       data-preview-field="title">
+                                <small class="campo-erro" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}">Erro</small>
+                            </div>
+
+                            <div class="campo campo-completo">
+                                <label for="descricao">Descrição</label>
+                                <textarea id="descricao"
+                                          th:field="*{descricao}"
+                                          rows="4"
+                                          required
+                                          placeholder="Detalhe o foco da semana, reuniões e objetivos pedagógicos..."
+                                          th:classappend="${#fields.hasErrors('descricao')} ? ' campo-invalido'"
+                                          data-preview-field="description"></textarea>
+                                <small class="campo-erro" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}">Erro</small>
+                                <small class="campo-ajuda">Este conteúdo será exibido na TV durante toda a semana.</small>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- BOTÕES DE AÇÃO -->
-                <div class="week-focus-form__actions">
-                    <button type="submit" class="btn-editar">Salvar Semana em Foco</button>
-                    <a th:href="@{/admin}" class="btn-voltar">Voltar</a>
-                    <a th:href="@{/tv/semana-em-foco}" target="_blank" class="btn-preview">Ver na TV</a>
-                </div>
-            </form>
+                    <!-- BLOCO 2: PERÍODO -->
+                    <div class="week-focus-form__section">
+                        <h2 class="week-focus-form__section-title">Período de Exibição</h2>
+
+                        <div class="quick-date-actions">
+                            <button type="button" class="quick-date-btn" data-preset="current-week">Esta semana</button>
+                            <button type="button" class="quick-date-btn" data-preset="next-week">Próxima semana</button>
+                        </div>
+
+                        <div class="formulario formulario--compact">
+                            <div class="campo">
+                                <label for="dataInicio">Data Inicial</label>
+                                <input type="date"
+                                       id="dataInicio"
+                                       th:field="*{dataInicio}"
+                                       required
+                                       th:classappend="${#fields.hasErrors('dataInicio')} ? ' campo-invalido'"
+                                       data-date-input="start"
+                                       data-preview-field="dateStart">
+                                <small class="campo-erro" th:if="${#fields.hasErrors('dataInicio')}" th:errors="*{dataInicio}">Erro</small>
+                            </div>
+
+                            <div class="campo">
+                                <label for="dataFim">Data Final</label>
+                                <input type="date"
+                                       id="dataFim"
+                                       th:field="*{dataFim}"
+                                       required
+                                       th:classappend="${#fields.hasErrors('dataFim')} ? ' campo-invalido'"
+                                       data-date-input="end"
+                                       data-preview-field="dateEnd">
+                                <small class="campo-erro" th:if="${#fields.hasErrors('dataFim')}" th:errors="*{dataFim}">Erro</small>
+                                <small class="campo-ajuda" id="dataValidacao"></small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BLOCO 3: PUBLICAÇÃO -->
+                    <div class="week-focus-form__section">
+                        <h2 class="week-focus-form__section-title">Publicação</h2>
+
+                        <div class="week-focus-status-toggle">
+                            <div class="status-info">
+                                <span class="status-label">Status de Exibição</span>
+                                <div class="status-badge" id="statusBadge" th:classappend="*{ativa} ? 'status-badge--active' : ''">
+                                    <span th:text="*{ativa} ? 'Ativo - Exibindo na TV' : 'Inativo - Não exibindo'">Status</span>
+                                </div>
+                                <small class="campo-ajuda">O status será atualizado quando você salvar o formulário.</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BOTÕES DE AÇÃO -->
+                    <div class="week-focus-form__actions">
+                        <button type="submit" class="btn-editar">Salvar Semana em Foco</button>
+                        <a th:href="@{/admin}" class="btn-voltar">Voltar</a>
+                        <a th:href="@{/tv/semana-em-foco}" target="_blank" class="btn-preview">Ver na TV</a>
+                    </div>
+                </form>
+
+                <!-- PREVIEW DINÂMICO -->
+                <aside class="week-focus-preview">
+                    <div class="week-focus-preview__header">
+                        <span class="week-focus-preview__label">Prévia na TV</span>
+                    </div>
+                    <div class="week-focus-preview__card">
+                        <div class="week-focus-preview__segment" id="previewSegment">
+                            Segmento
+                        </div>
+                        <h3 class="week-focus-preview__title" id="previewTitle">
+                            Digite o título...
+                        </h3>
+                        <p class="week-focus-preview__description" id="previewDescription">
+                            Sua descrição aparecerá aqui conforme você digita.
+                        </p>
+                        <div class="week-focus-preview__meta">
+                            <span class="week-focus-preview__date" id="previewDate">
+                                Período: --
+                            </span>
+                            <span class="week-focus-preview__status" id="previewStatus">
+                                Inativo
+                            </span>
+                        </div>
+                    </div>
+                </aside>
+            </div>
         </div>
     </main>
 </div>
@@ -195,6 +228,9 @@
         dateInputStart.value = monday.toISOString().split('T')[0];
         dateInputEnd.value = friday.toISOString().split('T')[0];
         validateDates();
+
+        dateInputStart.dispatchEvent(new Event('change', { bubbles: true }));
+        dateInputEnd.dispatchEvent(new Event('change', { bubbles: true }));
     }
 
     quickDateBtns.forEach(btn => {

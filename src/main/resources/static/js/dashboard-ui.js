@@ -71,6 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initSidebar();
     initConflictModal();
     initDashboardTimer();
+    initWeekFocusPreview();
 });
 
 function initSidebar() {
@@ -198,4 +199,88 @@ function redirectWithTvTransition(target) {
     window.setTimeout(() => {
         window.location.assign(target);
     }, 520);
+}
+
+function initWeekFocusPreview() {
+    const form = document.querySelector(".week-focus-form");
+
+    if (!form) {
+        return;
+    }
+
+    const previewSegment = document.getElementById("previewSegment");
+    const previewTitle = document.getElementById("previewTitle");
+    const previewDescription = document.getElementById("previewDescription");
+    const previewDate = document.getElementById("previewDate");
+    const previewStatus = document.getElementById("previewStatus");
+    const ativaInput = document.getElementById("ativaInput");
+
+    const segmentoSelect = document.getElementById("segmento");
+    const tituloInput = document.getElementById("titulo");
+    const descricaoTextarea = document.getElementById("descricao");
+    const dataInicioInput = document.getElementById("dataInicio");
+    const dataFimInput = document.getElementById("dataFim");
+
+    function updatePreview() {
+        // Segment
+        const segmentText = segmentoSelect?.selectedOptions?.[0]?.text || "Segmento";
+        if (previewSegment) {
+            previewSegment.textContent = segmentText;
+        }
+
+        // Title
+        const titleText = tituloInput?.value?.trim() || "Digite o título...";
+        if (previewTitle) {
+            previewTitle.textContent = titleText;
+        }
+
+        // Description
+        const descText = descricaoTextarea?.value?.trim() || "Sua descrição aparecerá aqui conforme você digita.";
+        if (previewDescription) {
+            previewDescription.textContent = descText;
+        }
+
+        // Date range
+        const startDate = dataInicioInput?.value;
+        const endDate = dataFimInput?.value;
+        const dateText = (startDate && endDate)
+            ? `Período: ${formatDateForDisplay(startDate)} — ${formatDateForDisplay(endDate)}`
+            : "Período: --";
+        if (previewDate) {
+            previewDate.textContent = dateText;
+        }
+
+        // Status
+        const isActive = ativaInput?.value === "true";
+        if (previewStatus) {
+            previewStatus.textContent = isActive ? "Ativo na TV" : "Inativo";
+            previewStatus.classList.toggle("status-active", isActive);
+        }
+    }
+
+    function formatDateForDisplay(dateStr) {
+        if (!dateStr) return "";
+        const date = new Date(dateStr + "T00:00:00");
+        return date.toLocaleDateString("pt-BR", { month: "short", day: "numeric" });
+    }
+
+    // Listen to field changes
+    if (segmentoSelect) {
+        segmentoSelect.addEventListener("change", updatePreview);
+    }
+    if (tituloInput) {
+        tituloInput.addEventListener("input", updatePreview);
+    }
+    if (descricaoTextarea) {
+        descricaoTextarea.addEventListener("input", updatePreview);
+    }
+    if (dataInicioInput) {
+        dataInicioInput.addEventListener("change", updatePreview);
+    }
+    if (dataFimInput) {
+        dataFimInput.addEventListener("change", updatePreview);
+    }
+
+    // Initial update
+    updatePreview();
 }
