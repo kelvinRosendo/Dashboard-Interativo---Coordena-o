@@ -1614,6 +1614,81 @@ body.form-page {
     }
 }
 
+/* ===================================== */
+/* TV SEMANA - POLIMENTO FINAL           */
+/* ===================================== */
+
+.tv-page--semana.tv-dashboard-mode .tv-week-feature__content--empty {
+    max-width: 620px;
+    gap: clamp(8px, 1vh, 12px);
+    opacity: 0.92;
+}
+
+.tv-page--semana.tv-dashboard-mode .tv-week-feature__content--empty .tv-week-feature__segment {
+    font-size: clamp(15px, 1.25vw, 21px) !important;
+}
+
+.tv-page--semana.tv-dashboard-mode .tv-week-feature__content--empty .tv-week-feature__title {
+    max-width: 520px;
+    font-size: clamp(28px, 3.4vw, 48px) !important;
+    line-height: 1.04 !important;
+}
+
+.tv-page--semana.tv-dashboard-mode .tv-week-feature__content--empty .tv-week-feature__description {
+    max-width: 500px;
+    font-size: clamp(13px, 1.05vw, 17px) !important;
+    line-height: 1.35 !important;
+}
+
+.tv-page--semana.tv-dashboard-mode .tv-week-feature--sem-configuracao {
+    min-height: clamp(220px, 30vh, 330px);
+}
+
+.tv-page--semana.tv-dashboard-mode .tv-week-side {
+    gap: clamp(8px, 1vh, 12px);
+}
+
+.tv-page--semana.tv-dashboard-mode .tv-week-side .tv-panel-block {
+    display: flex;
+    flex-direction: column;
+}
+
+.tv-page--semana.tv-dashboard-mode .tv-week-side .tv-mini-card {
+    flex: 0 0 auto;
+}
+
+.tv-page--semana.tv-dashboard-mode .tv-week-maintenance-row {
+    padding-bottom: clamp(10px, 1vw, 14px);
+}
+
+.tv-page--semana.tv-dashboard-mode .tv-week-maintenance-grid {
+    align-items: stretch;
+}
+
+.tv-page--semana.tv-dashboard-mode .manutencao-card {
+    min-width: 0;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: 8px;
+}
+
+.tv-page--semana.tv-dashboard-mode .manutencao-card p {
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+}
+
+.tv-page--semana.tv-dashboard-mode .manutencao-card span {
+    max-width: 100%;
+    justify-self: start;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.tv-page--semana.tv-dashboard-mode [data-tv-autoscroll] [data-clone-scroll] {
+    pointer-events: none;
+}
+
 @media (max-width: 720px) {
     .week-focus-control .admin-section-header {
         align-items: flex-start;
@@ -2417,7 +2492,7 @@ body.tv-dashboard-mode {
     min-height: 0;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: clamp(8px, 1vh, 14px);
 }
 
 .tv-panel-block,
@@ -2431,20 +2506,21 @@ body.tv-dashboard-mode {
 }
 
 .tv-panel-block {
-    padding: 16px;
+    padding: clamp(10px, 1.2vw, 16px);
     overflow-y: auto;
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
     flex: 1 1 0;
 }
 
 .tv-panel-block h2,
 .tv-section h2 {
     color: #ffffff;
-    font-size: clamp(20px, 1.8vw, 22px);
-    line-height: 1.1;
+    font-size: clamp(16px, 1.4vw, 20px);
+    line-height: 1.15;
+    margin-bottom: 4px;
 }
 
 .tv-mini-card,
@@ -2459,9 +2535,9 @@ body.tv-dashboard-mode {
 .tv-mini-card,
 .tv-aviso {
     display: grid;
-    gap: 5px;
-    padding: 13px;
-    border-left: 5px solid var(--blue-2);
+    gap: 4px;
+    padding: clamp(8px, 1vw, 13px);
+    border-left: 4px solid var(--blue-2);
 }
 
 .tv-mini-card strong,
@@ -2543,12 +2619,13 @@ body.tv-dashboard-mode {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 10px;
+    gap: 8px;
     border-left: 5px solid var(--blue-2);
+    overflow: visible;
 }
 
 .manutencao-card p {
-    margin-top: 6px;
+    margin-top: 4px;
     display: -webkit-box;
     line-clamp: 2;
     -webkit-line-clamp: 2;
@@ -2558,12 +2635,17 @@ body.tv-dashboard-mode {
 
 .manutencao-card span {
     align-self: flex-start;
-    padding: 6px 8px;
+    flex: 0 0 auto;
+    padding: 4px 7px;
     border-radius: var(--radius);
     color: #0f172a;
     background: var(--yellow);
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 900;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
 }
 
 .avisos-tv-lista,
@@ -2697,7 +2779,7 @@ body.tv-page.tv-page--semana.tv-page--dashboard .app-main--tv.tv-shell--semana {
     min-height: 0;
     display: flex;
     flex-direction: column;
-    gap: clamp(8px, 1vh, 14px);
+    gap: clamp(6px, 0.8vh, 12px);
     overflow: visible;
 }
 
@@ -2710,7 +2792,7 @@ body.tv-page.tv-page--semana.tv-page--dashboard .app-main--tv.tv-shell--semana {
     min-height: 0;
     display: grid;
     grid-template-columns: minmax(220px, 0.82fr) minmax(0, 1.45fr) minmax(240px, 0.88fr);
-    gap: clamp(10px, 1.2vh, 16px);
+    gap: clamp(8px, 1vw, 14px);
     align-items: stretch;
 }
 
@@ -2813,13 +2895,13 @@ body.tv-page.tv-page--semana.tv-page--dashboard .app-main--tv.tv-shell--semana {
 .tv-week-maintenance-grid {
     min-height: 0;
     max-height: 100%;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
     overflow-y: visible;
     overflow-x: hidden;
 }
 
 .tv-week-maintenance-grid .manutencao-card {
-    min-height: clamp(108px, 14vh, 132px);
+    min-height: clamp(90px, 12vh, 120px);
 }
 
 .tv-page--dashboard .tv-week-main-grid {
@@ -4938,167 +5020,133 @@ html.sidebar-collapsed-pending .app-sidebar__text {
 /* ===================================== */
 
 .tv-week-feature__content--empty {
-    max-width: 720px;
+    max-width: 580px;
     margin: 0 auto;
     text-align: center;
+    padding: clamp(16px, 2vw, 28px);
+    gap: clamp(8px, 1.2vh, 14px);
+    opacity: 0.88;
 }
 
 .tv-week-feature__content--empty .tv-week-feature__segment {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 10px;
-    font-size: clamp(18px, 2vw, 28px);
+    margin-bottom: 4px;
+    font-size: clamp(13px, 1.2vw, 18px);
     line-height: 1.1;
     letter-spacing: 0.04em;
-    color: var(--yellow);
+    color: var(--subtle);
     text-transform: uppercase;
 }
 
 .tv-week-feature__content--empty .tv-week-feature__title {
-    max-width: 680px;
-    margin: 0 auto 14px;
-    font-size: clamp(34px, 5vw, 64px);
-    line-height: 0.96;
-    color: rgba(255, 255, 255, 0.9);
-    text-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
+    max-width: 520px;
+    margin: 0 auto 6px;
+    font-size: clamp(22px, 2.8vw, 36px);
+    line-height: 1.08;
+    color: rgba(255, 255, 255, 0.72);
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .tv-week-feature__content--empty .tv-week-feature__description {
-    max-width: 640px;
+    max-width: 480px;
     margin: 0 auto;
-    font-size: clamp(15px, 1.5vw, 22px);
-    line-height: 1.35;
-    color: rgba(226, 232, 240, 0.82);
+    font-size: clamp(12px, 1.05vw, 15px);
+    line-height: 1.4;
+    color: rgba(148, 163, 184, 0.72);
 }
 
 .tv-week-feature--sem-configuracao {
+    min-height: clamp(140px, 18vh, 220px);
     background:
-        linear-gradient(135deg, rgba(30, 41, 59, 0.94), rgba(15, 23, 42, 0.96)),
+        linear-gradient(135deg, rgba(17, 24, 39, 0.96), rgba(7, 12, 24, 0.98)),
         var(--surface);
-    border-color: rgba(96, 165, 250, 0.36);
+    border-color: rgba(59, 130, 246, 0.18);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
 }
 
 .tv-week-feature--sem-configuracao::before {
-    opacity: 0.35;
+    opacity: 0.1;
+}
+
+.tv-week-feature--sem-configuracao::after {
+    opacity: 0.4;
 }
 
 .tv-week-feature--sem-configuracao .tv-week-feature__label {
-    background: rgba(96, 165, 250, 0.16);
-    color: rgba(219, 234, 254, 0.92);
-    border-color: rgba(96, 165, 250, 0.28);
+    background: rgba(15, 23, 42, 0.6);
+    color: rgba(148, 163, 184, 0.8);
+    border-color: rgba(96, 165, 250, 0.16);
+    font-size: clamp(9px, 0.8vw, 11px);
 }
 
 /* Em telas menores, fallback mais compacto */
 @media (max-width: 1100px) {
     .tv-week-feature__content--empty .tv-week-feature__title {
-        font-size: clamp(30px, 4.5vw, 52px);
+        font-size: clamp(20px, 2.6vw, 32px);
     }
 
     .tv-week-feature__content--empty .tv-week-feature__segment {
-        font-size: clamp(16px, 1.8vw, 24px);
+        font-size: clamp(11px, 1vw, 15px);
     }
 }
 /* ===================================== */
 /* AJUSTE CONFORTO VISUAL - SEMANA EM FOCO */
 /* ===================================== */
 
-.tv-week-feature--sem-configuracao,
+/* Alias classe segmento quando não configurado */
 .segmento-sem-configuracao {
     background:
         linear-gradient(135deg, rgba(17, 24, 39, 0.96), rgba(7, 12, 24, 0.98)),
-        var(--surface) !important;
-    border-color: rgba(59, 130, 246, 0.24) !important;
-    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.28) !important;
+        var(--surface);
+    border-color: rgba(59, 130, 246, 0.18);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
 }
 
-.tv-week-feature--sem-configuracao::before,
 .segmento-sem-configuracao::before {
-    opacity: 0.12 !important;
+    opacity: 0.1;
 }
 
-.tv-week-feature--sem-configuracao .tv-week-feature__label {
-    background: rgba(15, 23, 42, 0.78) !important;
-    color: rgba(226, 232, 240, 0.9) !important;
-    border-color: rgba(96, 165, 250, 0.22) !important;
-}
-
-.tv-week-feature--sem-configuracao .tv-week-feature__title {
-    color: rgba(248, 250, 252, 0.92) !important;
-    text-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
-}
-
-.tv-week-feature--sem-configuracao .tv-week-feature__description {
-    color: rgba(203, 213, 225, 0.86) !important;
-}
-/* ===================================== */
-/* AJUSTE FINO - CONFORTO VISUAL SEMANA EM FOCO */
-/* ===================================== */
-
-/* Mantém o azul, mas reduz brilho/luminosidade */
-.tv-week-feature--sem-configuracao,
-.segmento-sem-configuracao {
-    background:
-        linear-gradient(135deg, rgba(20, 42, 74, 0.74), rgba(10, 18, 34, 0.96)),
-        var(--surface) !important;
-    border-color: rgba(59, 130, 246, 0.34) !important;
-    box-shadow:
-        0 14px 36px rgba(0, 0, 0, 0.24),
-        inset 0 0 0 1px rgba(255, 255, 255, 0.025) !important;
-}
-
-/* Reduz camada clara/efeito luminoso */
-.tv-week-feature--sem-configuracao::before,
-.segmento-sem-configuracao::before {
-    opacity: 0.16 !important;
-}
-
-/* Desktop/modo usuário: fonte mais controlada */
+/* Desktop/modo usuário: fonte discretamente controlada */
 .tv-page:not(.tv-dashboard-mode) .tv-week-feature__content--empty .tv-week-feature__segment {
-    font-size: clamp(16px, 1.4vw, 22px) !important;
+    font-size: clamp(11px, 1vw, 15px);
     letter-spacing: 0.035em;
 }
 
 .tv-page:not(.tv-dashboard-mode) .tv-week-feature__content--empty .tv-week-feature__title {
-    font-size: clamp(34px, 4vw, 56px) !important;
-    line-height: 1.02 !important;
-    max-width: 620px;
+    font-size: clamp(20px, 2.6vw, 32px);
+    line-height: 1.08;
+    max-width: 460px;
 }
 
 .tv-page:not(.tv-dashboard-mode) .tv-week-feature__content--empty .tv-week-feature__description {
-    font-size: clamp(14px, 1.2vw, 18px) !important;
-    line-height: 1.35 !important;
-    max-width: 560px;
+    font-size: clamp(12px, 1vw, 15px);
+    line-height: 1.4;
+    max-width: 420px;
 }
 
-/* TV/dashboard: ainda grande, mas sem exagero */
+/* TV/dashboard: discreto, mas legível à distância */
 .tv-dashboard-mode .tv-week-feature__content--empty .tv-week-feature__segment,
 .app-shell--dashboard-tv .tv-week-feature__content--empty .tv-week-feature__segment {
-    font-size: clamp(20px, 1.8vw, 30px) !important;
+    font-size: clamp(14px, 1.2vw, 20px);
+    color: var(--subtle);
 }
 
 .tv-dashboard-mode .tv-week-feature__content--empty .tv-week-feature__title,
 .app-shell--dashboard-tv .tv-week-feature__content--empty .tv-week-feature__title {
-    font-size: clamp(48px, 5.2vw, 82px) !important;
-    line-height: 1 !important;
-    max-width: 860px;
+    font-size: clamp(24px, 3vw, 42px);
+    line-height: 1.08;
+    max-width: 540px;
+    color: rgba(255, 255, 255, 0.68);
 }
 
 .tv-dashboard-mode .tv-week-feature__content--empty .tv-week-feature__description,
 .app-shell--dashboard-tv .tv-week-feature__content--empty .tv-week-feature__description {
-    font-size: clamp(20px, 1.7vw, 28px) !important;
-    line-height: 1.35 !important;
-    max-width: 820px;
-}
-
-/* Reduz contraste agressivo do branco */
-.tv-week-feature__title {
-    color: rgba(248, 250, 252, 0.92) !important;
-    text-shadow: 0 6px 16px rgba(0, 0, 0, 0.32) !important;
-}
-
-.tv-week-feature__description {
-    color: rgba(226, 232, 240, 0.84) !important;
+    font-size: clamp(13px, 1.1vw, 18px);
+    line-height: 1.4;
+    max-width: 500px;
+    color: rgba(148, 163, 184, 0.68);
 }
 
 /* ===================================== */

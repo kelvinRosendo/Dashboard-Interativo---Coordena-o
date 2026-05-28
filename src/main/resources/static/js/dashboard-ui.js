@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initConflictModal();
     initDashboardTimer();
     initWeekFocusPreview();
-    initTvAutoScroll();
+    initTvInfiniteAutoScroll();
 });
 
 function initSidebar() {
@@ -285,7 +285,19 @@ function initWeekFocusPreview() {
     updatePreview();
 }
 
-function initTvAutoScroll() {
+/* ================================================================
+   Auto-scroll infinito para TV/dashboard
+   ----------------------------------------------------------------
+   Estratégia:
+   1. Coleta todos os filhos diretos do container [data-tv-autoscroll].
+   2. Clona-os e insere no final (marcados com data-clone-scroll).
+   3. Scroll contínuo pixel a pixel; quando scrollTop atinge a
+      metade (= altura real do conteúdo), reseta para 0 – o clone
+      garante que não haja salto visual.
+   4. Pausa no hover/focus; reinicia após saída do mouse.
+   5. Só roda se conteúdo > container.
+   ================================================================ */
+function initTvInfiniteAutoScroll() {
     if (!isDashboardTvMode()) {
         return;
     }
@@ -296,64 +308,116 @@ function initTvAutoScroll() {
         return;
     }
 
-    const scrollableSelectors = [
-        "[data-tv-autoscroll]",
-        ".avisos-tv-lista",
-        ".tv-week-side .tv-panel-block",
-        ".manutencao-grid",
-        ".calendar-week-tasks"
-    ];
+    const SCROLL_SPEED_PX = 1;           // pixels por tick
+    const SCROLL_INTERVAL_MS = 50;       // ~20 fps — suave mas leve
+    const INITIAL_DELAY_MS = 2200;       // espera antes de iniciar
+    const RESTART_DELAY_MS = 1600;       // espera após mouseleave
+    const OVERFLOW_THRESHOLD_PX = 12;    // margem mínima de overflow
 
-    const scrollers = scrollableSelectors
-        .flatMap((selector) => Array.from(document.querySelectorAll(selector)))
-        .filter((element, index, list) => element !== null && list.indexOf(element) === index);
+    /** Encontra todos os containers marcados, sem duplicar */
+    const containers = Array.from(
+        document.querySelectorAll("[data-tv-autoscroll], [data-auto-scroll]")
+    );
 
-    scrollers.forEach((scroller) => {
-        let scrollInterval = null;
-        const scrollSpeed = 1;
-        const scrollDelay = 70;
-        const restartDelay = 1800;
-        let restartTimeout = null;
-
-        const startAutoScroll = () => {
-            if (scrollInterval || scroller.scrollHeight <= scroller.clientHeight + 8) {
-                return;
-            }
-
-            scrollInterval = window.setInterval(() => {
-                if (scroller.scrollHeight > scroller.clientHeight) {
-                    scroller.scrollTop += scrollSpeed;
-
-                    if (scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 10) {
-                        scroller.scrollTop = 0;
-                    }
-                }
-            }, scrollDelay);
-        };
-
-        const stopAutoScroll = () => {
-            if (scrollInterval) {
-                window.clearInterval(scrollInterval);
-                scrollInterval = null;
-            }
-
-            if (restartTimeout) {
-                window.clearTimeout(restartTimeout);
-                restartTimeout = null;
-            }
-        };
-
-        window.setTimeout(() => {
-            startAutoScroll();
-        }, restartDelay);
-
-        scroller.addEventListener("mouseenter", stopAutoScroll);
-        scroller.addEventListener("focusin", stopAutoScroll);
-        scroller.addEventListener("mouseleave", () => {
-            restartTimeout = window.setTimeout(startAutoScroll, restartDelay);
-        });
-        scroller.addEventListener("focusout", () => {
-            restartTimeout = window.setTimeout(startAutoScroll, restartDelay);
-        });
+    containers.forEach((container) => {
+        setupInfiniteScroller(container);
     });
+
+    function setupInfiniteScroller(scroller) {
+        // Verifica se já foi inicializado (segurança contra re-calls)
+        if (scroller.dataset.scrollerInit === "true") {
+            return;
+        }
+        scroller.dataset.scrollerInit = "true";
+
+        // Coleta os filhos originais (ignora nós de texto vazios)
+        const originalChildren = Array.from(scroller.children).filter(
+            (child) => !child.hasAttribute("data-clone-scroll")
+        );
+
+        if (originalChildren.length === 0) {
+            return;
+        }
+
+        // Aguarda render para medir dimensões corretas
+        window.requestAnimationFrame(() => {
+            const hasOverflow =
+                scroller.scrollHeight > scroller.clientHeight + OVERFLOW_THRESHOLD_PX;
+
+            if (!hasOverflow) {
+                return; // conteúdo cabe sem scroll
+            }
+
+            // Cria clones para efeito contínuo
+            const clones = originalChildren.map((child) => {
+                const clone = child.cloneNode(true);
+                clone.setAttribute("data-clone-scroll", "true");
+                clone.setAttribute("aria-hidden", "true");
+                return clone;
+            });
+
+            const fragment = document.createDocumentFragment();
+            clones.forEach((clone) => fragment.appendChild(clone));
+            scroller.appendChild(fragment);
+
+            // Calcula a "metade" — ponto onde os clones começam
+            // É a altura do conteúdo antes dos clones
+            const realContentHeight = scroller.scrollHeight / 2;
+
+            let rafId = null;
+            let intervalId = null;
+            let restartTimeout = null;
+            let paused = false;
+
+            const scrollTick = () => {
+                if (paused) {
+                    return;
+                }
+
+                scroller.scrollTop += SCROLL_SPEED_PX;
+
+                // Quando chegou ou passou da metade, reseta de volta ao início.
+                // Como o clone é idêntico, o visual não muda.
+                if (scroller.scrollTop >= realContentHeight) {
+                    scroller.scrollTop = scroller.scrollTop - realContentHeight;
+                }
+            };
+
+            const startScroll = () => {
+                if (intervalId !== null) {
+                    return;
+                }
+                paused = false;
+                intervalId = window.setInterval(scrollTick, SCROLL_INTERVAL_MS);
+            };
+
+            const stopScroll = () => {
+                paused = true;
+                if (intervalId !== null) {
+                    window.clearInterval(intervalId);
+                    intervalId = null;
+                }
+                if (restartTimeout !== null) {
+                    window.clearTimeout(restartTimeout);
+                    restartTimeout = null;
+                }
+            };
+
+            const scheduleRestart = () => {
+                if (restartTimeout !== null) {
+                    window.clearTimeout(restartTimeout);
+                }
+                restartTimeout = window.setTimeout(startScroll, RESTART_DELAY_MS);
+            };
+
+            // Pausa ao hover / focus
+            scroller.addEventListener("mouseenter", stopScroll);
+            scroller.addEventListener("focusin", stopScroll);
+            scroller.addEventListener("mouseleave", scheduleRestart);
+            scroller.addEventListener("focusout", scheduleRestart);
+
+            // Inicia após delay
+            window.setTimeout(startScroll, INITIAL_DELAY_MS);
+        });
+    }
 }
