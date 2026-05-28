@@ -55,11 +55,8 @@
             </section>
 
             <section class="tv-week-feature tv-card tv-card--featured"
-                     th:classappend="${semanaEmFoco != null and semanaEmFoco.segmento != null}
-                        ? (${semanaEmFoco.segmento.name() == 'EDUCACAO_INFANTIL'} ? ' tv-week-feature--infantil segmento-infantil'
-                        : (${semanaEmFoco.segmento.name() == 'FUNDAMENTAL_1'} ? ' tv-week-feature--fundamental-1 segmento-fundamental-1'
-                        : (${semanaEmFoco.segmento.name() == 'FUNDAMENTAL_2'} ? ' tv-week-feature--fundamental-2 segmento-fundamental-2'
-                        : (${semanaEmFoco.segmento.name() == 'ENSINO_MEDIO'} ? ' tv-week-feature--ensino-medio segmento-ensino-medio' : ''))) : ''">
+         th:with="segmentoSlug=${semanaEmFoco != null and semanaEmFoco.segmento != null ? semanaEmFoco.segmento.name().toLowerCase().replace('_','-') : 'sem-configuracao'}"
+         th:classappend="${' tv-week-feature--' + segmentoSlug + ' segmento-' + segmentoSlug}">
 
                 <!-- Semana em Foco Ativa -->
                 <div class="tv-week-feature__content" th:if="${semanaEmFoco != null}">
