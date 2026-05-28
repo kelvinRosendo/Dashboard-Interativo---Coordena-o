@@ -4753,3 +4753,171 @@ html.sidebar-collapsed-pending .app-sidebar__text {
         line-clamp: 2;
     }
 }
+
+/* ===================================== */
+/* AJUSTE VISUAL - FALLBACK SEMANA EM FOCO */
+/* ===================================== */
+
+.tv-week-feature__content--empty {
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.tv-week-feature__content--empty .tv-week-feature__segment {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    font-size: clamp(18px, 2vw, 28px);
+    line-height: 1.1;
+    letter-spacing: 0.04em;
+    color: var(--yellow);
+    text-transform: uppercase;
+}
+
+.tv-week-feature__content--empty .tv-week-feature__title {
+    max-width: 680px;
+    margin: 0 auto 14px;
+    font-size: clamp(34px, 5vw, 64px);
+    line-height: 0.96;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
+}
+
+.tv-week-feature__content--empty .tv-week-feature__description {
+    max-width: 640px;
+    margin: 0 auto;
+    font-size: clamp(15px, 1.5vw, 22px);
+    line-height: 1.35;
+    color: rgba(226, 232, 240, 0.82);
+}
+
+.tv-week-feature--sem-configuracao {
+    background:
+        linear-gradient(135deg, rgba(30, 41, 59, 0.94), rgba(15, 23, 42, 0.96)),
+        var(--surface);
+    border-color: rgba(96, 165, 250, 0.36);
+}
+
+.tv-week-feature--sem-configuracao::before {
+    opacity: 0.35;
+}
+
+.tv-week-feature--sem-configuracao .tv-week-feature__label {
+    background: rgba(96, 165, 250, 0.16);
+    color: rgba(219, 234, 254, 0.92);
+    border-color: rgba(96, 165, 250, 0.28);
+}
+
+/* Em telas menores, fallback mais compacto */
+@media (max-width: 1100px) {
+    .tv-week-feature__content--empty .tv-week-feature__title {
+        font-size: clamp(30px, 4.5vw, 52px);
+    }
+
+    .tv-week-feature__content--empty .tv-week-feature__segment {
+        font-size: clamp(16px, 1.8vw, 24px);
+    }
+}
+/* ===================================== */
+/* AJUSTE CONFORTO VISUAL - SEMANA EM FOCO */
+/* ===================================== */
+
+.tv-week-feature--sem-configuracao,
+.segmento-sem-configuracao {
+    background:
+        linear-gradient(135deg, rgba(17, 24, 39, 0.96), rgba(7, 12, 24, 0.98)),
+        var(--surface) !important;
+    border-color: rgba(59, 130, 246, 0.24) !important;
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.28) !important;
+}
+
+.tv-week-feature--sem-configuracao::before,
+.segmento-sem-configuracao::before {
+    opacity: 0.12 !important;
+}
+
+.tv-week-feature--sem-configuracao .tv-week-feature__label {
+    background: rgba(15, 23, 42, 0.78) !important;
+    color: rgba(226, 232, 240, 0.9) !important;
+    border-color: rgba(96, 165, 250, 0.22) !important;
+}
+
+.tv-week-feature--sem-configuracao .tv-week-feature__title {
+    color: rgba(248, 250, 252, 0.92) !important;
+    text-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+}
+
+.tv-week-feature--sem-configuracao .tv-week-feature__description {
+    color: rgba(203, 213, 225, 0.86) !important;
+}
+/* ===================================== */
+/* AJUSTE FINO - CONFORTO VISUAL SEMANA EM FOCO */
+/* ===================================== */
+
+/* Mantém o azul, mas reduz brilho/luminosidade */
+.tv-week-feature--sem-configuracao,
+.segmento-sem-configuracao {
+    background:
+        linear-gradient(135deg, rgba(20, 42, 74, 0.74), rgba(10, 18, 34, 0.96)),
+        var(--surface) !important;
+    border-color: rgba(59, 130, 246, 0.34) !important;
+    box-shadow:
+        0 14px 36px rgba(0, 0, 0, 0.24),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.025) !important;
+}
+
+/* Reduz camada clara/efeito luminoso */
+.tv-week-feature--sem-configuracao::before,
+.segmento-sem-configuracao::before {
+    opacity: 0.16 !important;
+}
+
+/* Desktop/modo usuário: fonte mais controlada */
+.tv-page:not(.tv-dashboard-mode) .tv-week-feature__content--empty .tv-week-feature__segment {
+    font-size: clamp(16px, 1.4vw, 22px) !important;
+    letter-spacing: 0.035em;
+}
+
+.tv-page:not(.tv-dashboard-mode) .tv-week-feature__content--empty .tv-week-feature__title {
+    font-size: clamp(34px, 4vw, 56px) !important;
+    line-height: 1.02 !important;
+    max-width: 620px;
+}
+
+.tv-page:not(.tv-dashboard-mode) .tv-week-feature__content--empty .tv-week-feature__description {
+    font-size: clamp(14px, 1.2vw, 18px) !important;
+    line-height: 1.35 !important;
+    max-width: 560px;
+}
+
+/* TV/dashboard: ainda grande, mas sem exagero */
+.tv-dashboard-mode .tv-week-feature__content--empty .tv-week-feature__segment,
+.app-shell--dashboard-tv .tv-week-feature__content--empty .tv-week-feature__segment {
+    font-size: clamp(20px, 1.8vw, 30px) !important;
+}
+
+.tv-dashboard-mode .tv-week-feature__content--empty .tv-week-feature__title,
+.app-shell--dashboard-tv .tv-week-feature__content--empty .tv-week-feature__title {
+    font-size: clamp(48px, 5.2vw, 82px) !important;
+    line-height: 1 !important;
+    max-width: 860px;
+}
+
+.tv-dashboard-mode .tv-week-feature__content--empty .tv-week-feature__description,
+.app-shell--dashboard-tv .tv-week-feature__content--empty .tv-week-feature__description {
+    font-size: clamp(20px, 1.7vw, 28px) !important;
+    line-height: 1.35 !important;
+    max-width: 820px;
+}
+
+/* Reduz contraste agressivo do branco */
+.tv-week-feature__title {
+    color: rgba(248, 250, 252, 0.92) !important;
+    text-shadow: 0 6px 16px rgba(0, 0, 0, 0.32) !important;
+}
+
+.tv-week-feature__description {
+    color: rgba(226, 232, 240, 0.84) !important;
+}
