@@ -72,6 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initConflictModal();
     initDashboardTimer();
     initWeekFocusPreview();
+    initTvAutoScroll();
 });
 
 function initSidebar() {
@@ -281,6 +282,78 @@ function initWeekFocusPreview() {
         dataFimInput.addEventListener("change", updatePreview);
     }
 
-    // Initial update
     updatePreview();
+}
+
+function initTvAutoScroll() {
+    if (!isDashboardTvMode()) {
+        return;
+    }
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (prefersReducedMotion) {
+        return;
+    }
+
+    const scrollableSelectors = [
+        "[data-tv-autoscroll]",
+        ".avisos-tv-lista",
+        ".tv-week-side .tv-panel-block",
+        ".manutencao-grid",
+        ".calendar-week-tasks"
+    ];
+
+    const scrollers = scrollableSelectors
+        .flatMap((selector) => Array.from(document.querySelectorAll(selector)))
+        .filter((element, index, list) => element !== null && list.indexOf(element) === index);
+
+    scrollers.forEach((scroller) => {
+        let scrollInterval = null;
+        const scrollSpeed = 1;
+        const scrollDelay = 70;
+        const restartDelay = 1800;
+        let restartTimeout = null;
+
+        const startAutoScroll = () => {
+            if (scrollInterval || scroller.scrollHeight <= scroller.clientHeight + 8) {
+                return;
+            }
+
+            scrollInterval = window.setInterval(() => {
+                if (scroller.scrollHeight > scroller.clientHeight) {
+                    scroller.scrollTop += scrollSpeed;
+
+                    if (scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 10) {
+                        scroller.scrollTop = 0;
+                    }
+                }
+            }, scrollDelay);
+        };
+
+        const stopAutoScroll = () => {
+            if (scrollInterval) {
+                window.clearInterval(scrollInterval);
+                scrollInterval = null;
+            }
+
+            if (restartTimeout) {
+                window.clearTimeout(restartTimeout);
+                restartTimeout = null;
+            }
+        };
+
+        window.setTimeout(() => {
+            startAutoScroll();
+        }, restartDelay);
+
+        scroller.addEventListener("mouseenter", stopAutoScroll);
+        scroller.addEventListener("focusin", stopAutoScroll);
+        scroller.addEventListener("mouseleave", () => {
+            restartTimeout = window.setTimeout(startAutoScroll, restartDelay);
+        });
+        scroller.addEventListener("focusout", () => {
+            restartTimeout = window.setTimeout(startAutoScroll, restartDelay);
+        });
+    });
 }

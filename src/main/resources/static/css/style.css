@@ -1443,6 +1443,177 @@ body.form-page {
     }
 }
 
+/* ===================================== */
+/* TV - REFINO DE ESCALA E AUTO-SCROLL   */
+/* ===================================== */
+
+.tv-dashboard-mode [data-tv-autoscroll] {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+    scroll-behavior: smooth;
+}
+
+.tv-dashboard-mode [data-tv-autoscroll]::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+.tv-dashboard-mode [data-tv-autoscroll]:hover,
+.tv-dashboard-mode [data-tv-autoscroll]:focus-within {
+    scrollbar-width: thin;
+}
+
+.tv-dashboard-mode [data-tv-autoscroll]:hover::-webkit-scrollbar,
+.tv-dashboard-mode [data-tv-autoscroll]:focus-within::-webkit-scrollbar {
+    width: 6px;
+}
+
+.tv-dashboard-mode [data-tv-autoscroll]:hover::-webkit-scrollbar-thumb,
+.tv-dashboard-mode [data-tv-autoscroll]:focus-within::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: rgba(96, 165, 250, 0.45);
+}
+
+.tv-page--semana.tv-dashboard-mode .tv-shell--semana {
+    gap: clamp(6px, 0.75vh, 10px);
+    padding: clamp(8px, 1vh, 14px);
+}
+
+.tv-page--semana.tv-dashboard-mode .tv-topbar {
+    min-height: clamp(56px, 7.4vh, 76px);
+    padding: clamp(9px, 1.1vh, 14px) clamp(12px, 1.4vw, 18px);
+}
+
+.tv-page--semana.tv-dashboard-mode .tv-topbar h1 {
+    font-size: clamp(24px, 2.2vw, 32px);
+}
+
+.tv-page--semana.tv-dashboard-mode .tv-kicker {
+    font-size: clamp(10px, 0.8vw, 12px);
+}
+
+.tv-page--semana.tv-dashboard-mode .tv-week-main-grid {
+    grid-template-columns: minmax(190px, 0.68fr) minmax(0, 1.45fr) minmax(220px, 0.82fr);
+    gap: clamp(8px, 0.9vw, 12px);
+}
+
+.tv-page--semana.tv-dashboard-mode .tv-card,
+.tv-page--semana.tv-dashboard-mode .tv-panel-block,
+.tv-page--semana.tv-dashboard-mode .tv-section {
+    border-radius: 14px;
+}
+
+.tv-page--semana.tv-dashboard-mode .tv-panel-block,
+.tv-page--semana.tv-dashboard-mode .tv-section {
+    padding: clamp(10px, 1vw, 14px);
+}
+
+.tv-page--semana.tv-dashboard-mode .tv-panel-block h2,
+.tv-page--semana.tv-dashboard-mode .tv-section h2 {
+    margin-bottom: 8px;
+    font-size: clamp(17px, 1.35vw, 22px);
+}
+
+.tv-page--semana.tv-dashboard-mode .tv-week-feature {
+    min-height: clamp(252px, 35vh, 380px);
+    max-height: 50vh;
+}
+
+.tv-page--semana.tv-dashboard-mode .tv-week-feature__content {
+    gap: clamp(7px, 0.9vh, 11px);
+    padding: clamp(10px, 1.35vw, 22px);
+}
+
+.tv-page--semana.tv-dashboard-mode .tv-week-feature__label {
+    min-height: 26px;
+    padding: 5px 10px;
+    font-size: clamp(10px, 0.78vw, 12px);
+}
+
+.tv-page--semana.tv-dashboard-mode .tv-week-feature__segment {
+    font-size: clamp(16px, 1.65vw, 25px);
+}
+
+.tv-page--semana.tv-dashboard-mode .tv-week-feature__title {
+    max-width: 14ch;
+    font-size: clamp(34px, 4.4vw, 66px);
+}
+
+.tv-page--semana.tv-dashboard-mode .tv-week-feature__description {
+    max-width: 54ch;
+    font-size: clamp(14px, 1.22vw, 19px);
+    line-height: 1.34;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+}
+
+.tv-page--semana.tv-dashboard-mode .tv-week-feature__meta {
+    gap: 7px;
+}
+
+.tv-page--semana.tv-dashboard-mode .tv-week-feature__meta span {
+    min-height: 30px;
+    padding: 6px 10px;
+    font-size: clamp(11px, 0.8vw, 13px);
+}
+
+.tv-page--semana.tv-dashboard-mode .semana-demandas-tv {
+    margin-top: 4px;
+    padding: 10px;
+    max-height: clamp(76px, 12vh, 112px);
+}
+
+.tv-page--semana.tv-dashboard-mode .semana-demandas-tv__list {
+    gap: 7px;
+}
+
+.tv-page--semana.tv-dashboard-mode .semana-demandas-tv__item {
+    padding: 7px 9px;
+}
+
+.tv-page--semana.tv-dashboard-mode .tv-aviso,
+.tv-page--semana.tv-dashboard-mode .tv-mini-card,
+.tv-page--semana.tv-dashboard-mode .manutencao-card {
+    padding: clamp(9px, 0.9vw, 12px);
+}
+
+.tv-page--semana.tv-dashboard-mode .tv-mini-card strong,
+.tv-page--semana.tv-dashboard-mode .tv-aviso strong,
+.tv-page--semana.tv-dashboard-mode .manutencao-card strong {
+    font-size: clamp(13px, 1.05vw, 16px);
+}
+
+.tv-page--semana.tv-dashboard-mode .tv-mini-card span,
+.tv-page--semana.tv-dashboard-mode .tv-aviso span,
+.tv-page--semana.tv-dashboard-mode .manutencao-card p {
+    font-size: clamp(12px, 0.88vw, 14px);
+    line-height: 1.32;
+}
+
+.tv-page--semana.tv-dashboard-mode .tv-week-maintenance-row {
+    flex-basis: clamp(136px, 20vh, 184px);
+    max-height: clamp(136px, 20vh, 184px);
+}
+
+.tv-page--semana.tv-dashboard-mode .tv-week-maintenance-grid {
+    gap: clamp(8px, 0.85vw, 12px);
+}
+
+.tv-page--semana.tv-dashboard-mode .tv-week-maintenance-grid .manutencao-card {
+    min-height: 0;
+}
+
+.calendar-dashboard-mode .calendar-week-tasks[data-tv-autoscroll] {
+    overflow-y: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tv-dashboard-mode [data-tv-autoscroll] {
+        scroll-behavior: auto;
+    }
+}
+
 @media (max-width: 720px) {
     .week-focus-control .admin-section-header {
         align-items: flex-start;
@@ -4938,16 +5109,19 @@ html.sidebar-collapsed-pending .app-sidebar__text {
     width: 100vw;
     height: 100vh;
     max-height: 100vh;
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
 }
 
 .calendar-dashboard-mode .calendario-layout {
+    flex: 1 1 auto;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) clamp(300px, 24vw, 420px);
+    grid-template-columns: minmax(0, 1fr) clamp(290px, 23vw, 390px);
     gap: clamp(12px, 1.35vw, 20px);
     align-items: stretch;
     min-height: 0;
-    height: 100%;
+    height: auto;
 }
 
 .calendar-dashboard-mode .calendario-principal,
@@ -4955,6 +5129,11 @@ html.sidebar-collapsed-pending .app-sidebar__text {
 .calendar-dashboard-mode .calendar-week-tasks {
     min-height: 0;
     overflow: hidden;
+}
+
+.calendar-dashboard-mode .calendario-resumo {
+    display: block;
+    height: 100%;
 }
 
 .calendar-dashboard-mode .calendario-weekdays {
@@ -5055,6 +5234,8 @@ html.sidebar-collapsed-pending .app-sidebar__text {
 }
 
 .calendar-dashboard-mode .calendar-week-tasks {
+    height: 100%;
+    max-height: none;
     border-color: rgba(96, 165, 250, 0.24);
     background:
         radial-gradient(circle at top right, rgba(37, 99, 235, 0.18), transparent 36%),
@@ -5105,8 +5286,50 @@ html.sidebar-collapsed-pending .app-sidebar__text {
 
     .calendar-dashboard-mode .calendario-grid-tv,
     .calendar-dashboard-mode .calendario-grid-semanal,
-    .calendar-dashboard-mode .calendario-grid-mensal {
+.calendar-dashboard-mode .calendario-grid-mensal {
         height: auto;
         grid-auto-rows: minmax(96px, auto);
+    }
+}
+
+/* ===================================== */
+/* TV - AJUSTE FINAL DE SCROLL INTERNO   */
+/* ===================================== */
+
+.tv-dashboard-mode [data-tv-autoscroll],
+.tv-page--semana.tv-dashboard-mode .avisos-tv-lista[data-tv-autoscroll],
+.tv-page--semana.tv-dashboard-mode .tv-week-side .tv-panel-block[data-tv-autoscroll],
+.tv-page--semana.tv-dashboard-mode .manutencao-grid[data-tv-autoscroll],
+.calendar-dashboard-mode .calendar-week-tasks[data-tv-autoscroll] {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+    scroll-behavior: smooth;
+}
+
+.tv-dashboard-mode [data-tv-autoscroll]::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+.tv-dashboard-mode [data-tv-autoscroll]:hover,
+.tv-dashboard-mode [data-tv-autoscroll]:focus-within {
+    scrollbar-width: thin;
+}
+
+.tv-dashboard-mode [data-tv-autoscroll]:hover::-webkit-scrollbar,
+.tv-dashboard-mode [data-tv-autoscroll]:focus-within::-webkit-scrollbar {
+    width: 6px;
+}
+
+.tv-dashboard-mode [data-tv-autoscroll]:hover::-webkit-scrollbar-thumb,
+.tv-dashboard-mode [data-tv-autoscroll]:focus-within::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: rgba(96, 165, 250, 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tv-dashboard-mode [data-tv-autoscroll] {
+        scroll-behavior: auto;
     }
 }

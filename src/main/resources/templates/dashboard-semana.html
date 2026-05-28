@@ -42,7 +42,7 @@
                 <div class="tv-section-header">
                     <h2>Avisos do dia</h2>
                 </div>
-                <div class="avisos-tv-lista">
+                <div class="avisos-tv-lista" data-tv-autoscroll>
                     <p th:if="${avisos == null or #lists.isEmpty(avisos)}" class="mensagem-vazia">Nenhum aviso ativo.</p>
                     <article class="tv-aviso"
                              th:each="card : ${avisos}"
@@ -111,7 +111,7 @@
             </section>
 
             <aside class="tv-week-side tv-side-panel">
-                <section class="tv-panel-block tv-card">
+                <section class="tv-panel-block tv-card" data-tv-autoscroll>
                     <h2>Faltas</h2>
                     <p th:if="${faltas == null or #lists.isEmpty(faltas)}" class="mensagem-vazia">Nenhuma falta registrada.</p>
                     <article class="tv-mini-card"
@@ -123,7 +123,7 @@
                     </article>
                 </section>
 
-                <section class="tv-panel-block tv-card">
+                <section class="tv-panel-block tv-card" data-tv-autoscroll>
                     <h2>Substituicoes</h2>
                     <p th:if="${substituicoes == null or #lists.isEmpty(substituicoes)}" class="mensagem-vazia">Nenhuma substituicao registrada.</p>
                     <article class="tv-mini-card"
@@ -141,7 +141,7 @@
             <div class="tv-section-header">
                 <h2>Cards de manutencao</h2>
             </div>
-            <div class="tv-week-maintenance-grid manutencao-grid">
+            <div class="tv-week-maintenance-grid manutencao-grid" data-tv-autoscroll>
                 <p th:if="${manutencao == null or #lists.isEmpty(manutencao)}" class="mensagem-vazia manutencao-empty">Nenhuma demanda de manutencao cadastrada.</p>
                 <article class="manutencao-card"
                          th:each="card : ${manutencao}"
