@@ -308,116 +308,128 @@ function initTvInfiniteAutoScroll() {
         return;
     }
 
-    const SCROLL_SPEED_PX = 1;           // pixels por tick
-    const SCROLL_INTERVAL_MS = 50;       // ~20 fps — suave mas leve
-    const INITIAL_DELAY_MS = 2200;       // espera antes de iniciar
-    const RESTART_DELAY_MS = 1600;       // espera após mouseleave
-    const OVERFLOW_THRESHOLD_PX = 12;    // margem mínima de overflow
+    const DEFAULT_SPEED = 0.35;
+    const INITIAL_DELAY_MS = 1800;
+    const END_PAUSE_MS = 1200;
+    const RESTART_DELAY_MS = 900;
+    const OVERFLOW_THRESHOLD_PX = 12;
 
-    /** Encontra todos os containers marcados, sem duplicar */
     const containers = Array.from(
         document.querySelectorAll("[data-tv-autoscroll], [data-auto-scroll]")
     );
 
     containers.forEach((container) => {
-        setupInfiniteScroller(container);
+        setupStableScroller(container);
     });
 
-    function setupInfiniteScroller(scroller) {
-        // Verifica se já foi inicializado (segurança contra re-calls)
+    function setupStableScroller(scroller) {
         if (scroller.dataset.scrollerInit === "true") {
             return;
         }
+
         scroller.dataset.scrollerInit = "true";
 
-        // Coleta os filhos originais (ignora nós de texto vazios)
-        const originalChildren = Array.from(scroller.children).filter(
-            (child) => !child.hasAttribute("data-clone-scroll")
-        );
-
-        if (originalChildren.length === 0) {
-            return;
-        }
-
-        // Aguarda render para medir dimensões corretas
         window.requestAnimationFrame(() => {
-            const hasOverflow =
-                scroller.scrollHeight > scroller.clientHeight + OVERFLOW_THRESHOLD_PX;
+            const maxScroll = scroller.scrollHeight - scroller.clientHeight;
 
-            if (!hasOverflow) {
-                return; // conteúdo cabe sem scroll
+            if (maxScroll <= OVERFLOW_THRESHOLD_PX) {
+                return;
             }
 
-            // Cria clones para efeito contínuo
-            const clones = originalChildren.map((child) => {
-                const clone = child.cloneNode(true);
-                clone.setAttribute("data-clone-scroll", "true");
-                clone.setAttribute("aria-hidden", "true");
-                return clone;
-            });
-
-            const fragment = document.createDocumentFragment();
-            clones.forEach((clone) => fragment.appendChild(clone));
-            scroller.appendChild(fragment);
-
-            // Calcula a "metade" — ponto onde os clones começam
-            // É a altura do conteúdo antes dos clones
-            const realContentHeight = scroller.scrollHeight / 2;
+            const customSpeed = Number.parseFloat(scroller.dataset.autoScrollSpeed || "");
+            const speed = Number.isFinite(customSpeed) && customSpeed > 0
+                ? Math.min(customSpeed / 20, 0.65)
+                : DEFAULT_SPEED;
 
             let rafId = null;
-            let intervalId = null;
-            let restartTimeout = null;
             let paused = false;
+            let waiting = false;
+            let restartTimeout = null;
+            let lastTimestamp = null;
 
-            const scrollTick = () => {
+            const step = (timestamp) => {
                 if (paused) {
+                    rafId = null;
+                    lastTimestamp = null;
                     return;
                 }
 
-                scroller.scrollTop += SCROLL_SPEED_PX;
-
-                // Quando chegou ou passou da metade, reseta de volta ao início.
-                // Como o clone é idêntico, o visual não muda.
-                if (scroller.scrollTop >= realContentHeight) {
-                    scroller.scrollTop = scroller.scrollTop - realContentHeight;
+                if (lastTimestamp === null) {
+                    lastTimestamp = timestamp;
                 }
+
+                const delta = timestamp - lastTimestamp;
+                lastTimestamp = timestamp;
+
+                scroller.scrollTop += speed * (delta / 16.67);
+
+                const currentMaxScroll = scroller.scrollHeight - scroller.clientHeight;
+
+                if (scroller.scrollTop >= currentMaxScroll - 1 && !waiting) {
+                    waiting = true;
+
+                    window.setTimeout(() => {
+                        scroller.scrollTo({
+                            top: 0,
+                            behavior: "smooth"
+                        });
+
+                        window.setTimeout(() => {
+                            waiting = false;
+                            lastTimestamp = null;
+                            rafId = window.requestAnimationFrame(step);
+                        }, 550);
+                    }, END_PAUSE_MS);
+
+                    rafId = null;
+                    return;
+                }
+
+                rafId = window.requestAnimationFrame(step);
             };
 
-            const startScroll = () => {
-                if (intervalId !== null) {
+            const start = () => {
+                if (rafId !== null || waiting) {
                     return;
                 }
+
                 paused = false;
-                intervalId = window.setInterval(scrollTick, SCROLL_INTERVAL_MS);
+                rafId = window.requestAnimationFrame(step);
             };
 
-            const stopScroll = () => {
+            const stop = () => {
                 paused = true;
-                if (intervalId !== null) {
-                    window.clearInterval(intervalId);
-                    intervalId = null;
+
+                if (rafId !== null) {
+                    window.cancelAnimationFrame(rafId);
+                    rafId = null;
                 }
+
                 if (restartTimeout !== null) {
                     window.clearTimeout(restartTimeout);
                     restartTimeout = null;
                 }
+
+                lastTimestamp = null;
             };
 
             const scheduleRestart = () => {
                 if (restartTimeout !== null) {
                     window.clearTimeout(restartTimeout);
                 }
-                restartTimeout = window.setTimeout(startScroll, RESTART_DELAY_MS);
+
+                restartTimeout = window.setTimeout(() => {
+                    paused = false;
+                    start();
+                }, RESTART_DELAY_MS);
             };
 
-            // Pausa ao hover / focus
-            scroller.addEventListener("mouseenter", stopScroll);
-            scroller.addEventListener("focusin", stopScroll);
+            scroller.addEventListener("mouseenter", stop);
+            scroller.addEventListener("focusin", stop);
             scroller.addEventListener("mouseleave", scheduleRestart);
             scroller.addEventListener("focusout", scheduleRestart);
 
-            // Inicia após delay
-            window.setTimeout(startScroll, INITIAL_DELAY_MS);
+            window.setTimeout(start, INITIAL_DELAY_MS);
         });
     }
 }
