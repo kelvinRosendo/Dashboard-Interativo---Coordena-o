@@ -213,10 +213,6 @@ html.sidebar-collapsed-pending .app-sidebar__brand-logo--mark {
         linear-gradient(180deg, #0a1020 0%, #070b15 52%, #060912 100%);
 }
 
-.app-shell--sidebar-ready {
-    /* transition handled by .app-main margin-left/width */
-}
-
 .app-shell--sidebar-collapsed {
     --sidebar-width: 68px;
 }
@@ -3569,6 +3565,7 @@ body.tv-page.tv-page--semana.tv-page--dashboard .app-main--tv.tv-shell--semana {
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     flex-grow: 1;
 }
@@ -4882,8 +4879,6 @@ html.sidebar-collapsed-pending .app-sidebar__text {
     line-height: 1;
     text-wrap: balance;
     letter-spacing: -0.02em;
-    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-}
     text-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
 }
 

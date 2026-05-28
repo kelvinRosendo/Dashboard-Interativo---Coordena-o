@@ -7,6 +7,7 @@ import br.com.escola.dashboard.enums.StatusCard;
 import br.com.escola.dashboard.repository.CardRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
