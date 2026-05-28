@@ -5,7 +5,7 @@
     <title>Calendario Integrado</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body class="tv-page tv-page--calendario" th:classappend="${modoDashboard} ? ' tv-page--dashboard tv-dashboard-mode' : ''">
+<body class="tv-page tv-page--calendario" th:classappend="${modoDashboard} ? ' tv-page--dashboard tv-dashboard-mode calendar-dashboard-mode' : ''">
 
 <div class="app-shell app-shell--tv" th:classappend="${modoDashboard} ? ' app-shell--dashboard-tv tv-dashboard-shell' : ''">
     <aside th:if="${!modoDashboard}" th:replace="~{fragments/sidebar :: sidebar('calendario', true)}"></aside>
@@ -54,7 +54,7 @@
                 <span>Dom</span>
             </div>
 
-            <div class="calendario-grid-tv" th:classappend="${modoSemanal ? ' calendario-grid-semanal' : ' calendario-grid-mensal'}">
+            <div class="calendario-grid-tv" th:classappend="${modoDashboard or !modoSemanal ? ' calendario-grid-mensal calendar-tv-month' : ' calendario-grid-semanal'}">
                 <article class="calendario-dia"
                          th:each="dia : ${dias}"
                          th:classappend="${(dia.hoje ? ' calendario-dia-hoje' : '') + (dia.foraDoMes ? ' calendario-dia-fora' : '')}">
@@ -84,19 +84,22 @@
         </section>
 
         <aside class="calendario-resumo">
-            <section class="tv-panel-block calendario-hoje">
-                <h2>Hoje</h2>
+            <section class="tv-panel-block calendario-hoje calendar-week-tasks">
+                <h2 th:text="${modoDashboard} ? 'O que temos para fazer na semana' : 'Hoje'">Hoje</h2>
                 <p th:if="${calendarErro != null}" class="mensagem-vazia" th:text="${calendarErro}">Erro no Google Agenda.</p>
                 <p th:if="${(eventosHoje == null or #lists.isEmpty(eventosHoje)) and (eventosGoogleHoje == null or #lists.isEmpty(eventosGoogleHoje))}"
-                   class="mensagem-vazia">Nenhum compromisso para hoje.</p>
-                <article class="tv-mini-card"
+                   class="mensagem-vazia"
+                   th:text="${modoDashboard} ? 'Nenhum compromisso para esta semana.' : 'Nenhum compromisso para hoje.'">
+                    Nenhum compromisso para hoje.
+                </p>
+                <article class="tv-mini-card calendar-week-tasks__item"
                          th:each="card : ${eventosHoje}"
                          th:classappend="${card.prioridade.name() == 'ALTA'} ? ' tv-card-alta' :
                                          (${card.prioridade.name() == 'MEDIA'} ? ' tv-card-media' : ' tv-card-baixa')">
                     <strong th:text="${card.titulo}">Evento</strong>
                     <span th:text="${card.responsavel != null and !#strings.isEmpty(card.responsavel) ? card.responsavel : card.categoria.tituloDashboard}">Responsavel</span>
                 </article>
-                <article class="tv-mini-card tv-card-google"
+                <article class="tv-mini-card tv-card-google calendar-week-tasks__item"
                          th:each="evento : ${eventosGoogleHoje}">
                     <strong th:text="${evento.titulo}">Evento Google</strong>
                     <span th:text="${evento.diaInteiro ? 'Google Agenda' : #temporals.format(evento.inicio, 'HH:mm')}">Google Agenda</span>

@@ -2395,12 +2395,11 @@ body.tv-dashboard-mode {
     font-weight: 900;
 }
 
-.avisos-tv-lista {
-    max-height: calc(100% - 46px);
-    display: grid;
-    gap: 10px;
-    overflow-y: auto;
-    overflow-x: hidden;
+.avisos-tv-lista,
+.tv-panel-block .tv-mini-card,
+.manutencao-grid,
+.calendar-week-tasks {
+    scroll-behavior: smooth;
 }
 
 /* ===================================== */
@@ -2866,8 +2865,10 @@ body.tv-page.tv-page--semana.tv-page--dashboard .app-main--tv.tv-shell--semana {
     opacity: 0;
 }
 
-.calendario-resumo .tv-panel-block {
-    padding: 16px;
+.tv-dashboard-mode .calendario-resumo .tv-panel-block {
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .calendario-resumo .tv-mini-card {
@@ -2884,12 +2885,17 @@ body.tv-page.tv-page--semana.tv-page--dashboard .app-main--tv.tv-shell--semana {
 .tv-dashboard-mode .calendario-layout {
     height: 100%;
     min-height: 0;
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
     overflow: hidden;
+    gap: clamp(10px, 1.2vw, 14px);
 }
 
 .tv-dashboard-mode .calendario-resumo {
-    display: none;
+    min-height: 0;
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(8px, 1vh, 12px);
 }
 
 .tv-dashboard-mode .calendario-principal {
@@ -4531,8 +4537,8 @@ html.sidebar-collapsed-pending .app-sidebar__text {
 
     position: relative;
     isolation: isolate;
-    min-height: clamp(320px, 40vh, 480px);
-    max-height: 60vh;
+    min-height: clamp(260px, 32vh, 360px);
+    max-height: 48vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -4618,11 +4624,13 @@ html.sidebar-collapsed-pending .app-sidebar__text {
 .tv-week-feature__title {
     max-width: 22ch;
     color: #ffffff;
-    font-size: clamp(48px, 6.5vw, 100px);
+    font-size: clamp(36px, 4.8vw, 64px);
     font-weight: 950;
     line-height: 1;
     text-wrap: balance;
     letter-spacing: -0.02em;
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
     text-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
 }
 
@@ -4920,4 +4928,185 @@ html.sidebar-collapsed-pending .app-sidebar__text {
 
 .tv-week-feature__description {
     color: rgba(226, 232, 240, 0.84) !important;
+}
+
+/* ===================================== */
+/* CALENDARIO TV - MODO DASHBOARD MENSAL */
+/* ===================================== */
+
+.calendar-dashboard-mode .calendario-shell--dashboard {
+    width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+}
+
+.calendar-dashboard-mode .calendario-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(300px, 24vw, 420px);
+    gap: clamp(12px, 1.35vw, 20px);
+    align-items: stretch;
+    min-height: 0;
+    height: 100%;
+}
+
+.calendar-dashboard-mode .calendario-principal,
+.calendar-dashboard-mode .calendario-resumo,
+.calendar-dashboard-mode .calendar-week-tasks {
+    min-height: 0;
+    overflow: hidden;
+}
+
+.calendar-dashboard-mode .calendario-weekdays {
+    gap: clamp(7px, 0.7vw, 11px);
+    margin-bottom: clamp(7px, 0.8vw, 11px);
+}
+
+.calendar-dashboard-mode .calendario-weekdays span {
+    min-height: clamp(34px, 4.8vh, 48px);
+    border-color: rgba(96, 165, 250, 0.2);
+    background: rgba(15, 23, 42, 0.86);
+    color: var(--yellow);
+    font-size: clamp(14px, 1vw, 17px);
+}
+
+.calendar-dashboard-mode .calendario-grid-tv,
+.calendar-dashboard-mode .calendario-grid-semanal,
+.calendar-dashboard-mode .calendario-grid-mensal,
+.calendar-tv-grid,
+.calendar-tv-month {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-auto-rows: minmax(clamp(76px, 11.2vh, 118px), 1fr);
+    gap: clamp(7px, 0.7vw, 11px);
+    height: min(100%, calc(100vh - 180px));
+    min-height: 0;
+}
+
+.calendar-dashboard-mode .calendario-grid-semanal .calendario-dia,
+.calendar-dashboard-mode .calendario-grid-mensal .calendario-dia,
+.calendar-dashboard-mode .calendario-dia,
+.calendar-tv-day {
+    min-height: 0;
+    height: auto;
+    padding: clamp(9px, 0.9vw, 13px);
+    border-color: rgba(96, 165, 250, 0.22);
+    background: rgba(15, 23, 42, 0.8);
+}
+
+.calendar-dashboard-mode .calendario-dia:hover {
+    transform: none;
+}
+
+.calendar-dashboard-mode .calendario-dia header strong {
+    color: #ffffff;
+    font-size: clamp(20px, 1.8vw, 30px);
+    line-height: 1;
+}
+
+.calendar-dashboard-mode .calendario-dia-hoje {
+    border-color: rgba(250, 204, 21, 0.88);
+    box-shadow:
+        inset 0 0 0 1px rgba(250, 204, 21, 0.32),
+        0 0 30px rgba(250, 204, 21, 0.12);
+}
+
+.calendar-dashboard-mode .calendario-dia header span {
+    background: var(--yellow);
+    color: #08111f;
+    font-size: 11px;
+    font-weight: 950;
+}
+
+.calendar-dashboard-mode .calendario-itens {
+    gap: 5px;
+    margin-top: 8px;
+    overflow: hidden;
+}
+
+.calendar-dashboard-mode .calendario-item,
+.calendar-dashboard-mode .calendario-evento,
+.calendar-dashboard-mode .calendario-google-evento,
+.calendar-tv-event {
+    min-height: 0;
+    padding: 5px 7px;
+    border-left: 3px solid var(--blue);
+    border-radius: 8px;
+    background: rgba(37, 99, 235, 0.24);
+    color: #ffffff;
+    font-size: clamp(11px, 0.82vw, 13px);
+    font-weight: 850;
+    line-height: 1.18;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.calendar-dashboard-mode .calendario-google-evento {
+    border-left-color: var(--yellow);
+    background: rgba(250, 204, 21, 0.15);
+}
+
+.calendar-dashboard-mode .calendario-sem-registro,
+.calendar-dashboard-mode .calendario-dia-sem-registro {
+    color: rgba(203, 213, 225, 0.42);
+    font-size: clamp(11px, 0.8vw, 13px);
+    font-style: italic;
+}
+
+.calendar-dashboard-mode .calendar-week-tasks {
+    border-color: rgba(96, 165, 250, 0.24);
+    background:
+        radial-gradient(circle at top right, rgba(37, 99, 235, 0.18), transparent 36%),
+        rgba(15, 23, 42, 0.84);
+}
+
+.calendar-dashboard-mode .calendar-week-tasks h2 {
+    max-width: 13ch;
+    color: #ffffff;
+    font-size: clamp(20px, 1.7vw, 28px);
+    line-height: 1.08;
+}
+
+.calendar-dashboard-mode .calendar-week-tasks h2::before {
+    --screen-icon: url("/img/icons/icon-calendar.png");
+}
+
+.calendar-dashboard-mode .calendar-week-tasks .mensagem-vazia {
+    color: var(--subtle);
+    font-size: clamp(14px, 1vw, 16px);
+    line-height: 1.45;
+}
+
+.calendar-dashboard-mode .calendar-week-tasks__item {
+    border-left: 4px solid var(--blue);
+    background: rgba(30, 64, 175, 0.32);
+}
+
+.calendar-dashboard-mode .calendar-week-tasks__item strong {
+    font-size: clamp(14px, 1vw, 17px);
+}
+
+.calendar-dashboard-mode .calendar-week-tasks__item span {
+    color: #cbd5e1;
+}
+
+@media (max-width: 1100px) {
+    .calendar-dashboard-mode .calendario-shell--dashboard {
+        height: auto;
+        max-height: none;
+        overflow: auto;
+    }
+
+    .calendar-dashboard-mode .calendario-layout {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+
+    .calendar-dashboard-mode .calendario-grid-tv,
+    .calendar-dashboard-mode .calendario-grid-semanal,
+    .calendar-dashboard-mode .calendario-grid-mensal {
+        height: auto;
+        grid-auto-rows: minmax(96px, auto);
+    }
 }
