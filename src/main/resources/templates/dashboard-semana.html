@@ -54,22 +54,26 @@
                 </div>
             </section>
 
-            <section class="semana-hero tv-week-feature tv-card tv-card--featured"
+            <section class="tv-week-feature tv-card tv-card--featured"
                      th:classappend="${semanaEmFoco != null and semanaEmFoco.segmento != null}
                         ? (${semanaEmFoco.segmento.name() == 'EDUCACAO_INFANTIL'} ? ' tv-week-feature--infantil segmento-infantil'
                         : (${semanaEmFoco.segmento.name() == 'FUNDAMENTAL_1'} ? ' tv-week-feature--fundamental-1 segmento-fundamental-1'
                         : (${semanaEmFoco.segmento.name() == 'FUNDAMENTAL_2'} ? ' tv-week-feature--fundamental-2 segmento-fundamental-2'
                         : (${semanaEmFoco.segmento.name() == 'ENSINO_MEDIO'} ? ' tv-week-feature--ensino-medio segmento-ensino-medio' : ''))) : ''">
-                <!-- Se existir Semana em Foco ativa -->
+
+                <!-- Semana em Foco Ativa -->
                 <div class="tv-week-feature__content" th:if="${semanaEmFoco != null}">
-                    <span class="semana-hero-label tv-week-feature__label">Conteudo configurado pela direcao</span>
+                    <span class="tv-week-feature__label">Conteúdo configurado pela direção</span>
+
                     <strong class="tv-week-feature__segment"
-                            th:text="${semanaEmFoco.segmento != null ? semanaEmFoco.segmento.titulo : 'Segmento em destaque'}">
-                        Segmento em destaque
+                            th:text="${semanaEmFoco.segmento != null ? semanaEmFoco.segmento.titulo : 'Segmento'}">
+                        Segmento
                     </strong>
-                    <h2 class="tv-week-feature__title" th:text="${semanaEmFoco.titulo}">Fundamental 1 em Foco</h2>
+
+                    <h2 class="tv-week-feature__title" th:text="${semanaEmFoco.titulo}">Título da Semana em Foco</h2>
+
                     <p class="tv-week-feature__description" th:text="${semanaEmFoco.descricao}">
-                        Descricao da Semana em Foco.
+                        Descrição da Semana em Foco configurada.
                     </p>
 
                     <!-- Demandas vinculadas -->
@@ -80,17 +84,18 @@
                                 <span class="demanda-badge"
                                       th:classappend="| demanda-badge--status-${demanda.status.cssClass}|"
                                       th:text="${demanda.status.titulo}">Status</span>
-                                <strong th:text="${demanda.titulo}">Titulo da Demanda</strong>
+                                <strong th:text="${demanda.titulo}">Título da Demanda</strong>
                             </div>
                         </div>
                     </div>
 
-                    <div class="semana-hero-footer tv-week-feature__meta">
+                    <!-- Período e Status -->
+                    <div class="tv-week-feature__meta">
                         <span th:if="${semanaEmFoco.dataInicio != null and semanaEmFoco.dataFim != null}">
-                            Periodo: <strong th:text="${#temporals.format(semanaEmFoco.dataInicio, 'dd/MM/yyyy') + ' a ' + #temporals.format(semanaEmFoco.dataFim, 'dd/MM/yyyy')}">20/05/2026 a 24/05/2026</strong>
+                            Período: <strong th:text="${#temporals.format(semanaEmFoco.dataInicio, 'dd/MM/yyyy') + ' a ' + #temporals.format(semanaEmFoco.dataFim, 'dd/MM/yyyy')}">20/05/2026 a 24/05/2026</strong>
                         </span>
                         <span th:if="${semanaEmFoco.dataInicio != null and semanaEmFoco.dataFim == null}">
-                            Periodo: <strong th:text="${#temporals.format(semanaEmFoco.dataInicio, 'dd/MM/yyyy')}">20/05/2026</strong>
+                            Período: <strong th:text="${#temporals.format(semanaEmFoco.dataInicio, 'dd/MM/yyyy')}">20/05/2026</strong>
                         </span>
                         <span th:if="${semanaEmFoco.prioridade != null}"
                               th:text="${semanaEmFoco.prioridade.titulo}">Prioridade</span>
@@ -99,12 +104,12 @@
                     </div>
                 </div>
 
-                <!-- Fallback se nao existir Semana em Foco ativa -->
+                <!-- Fallback: Nenhuma Semana em Foco -->
                 <div class="tv-week-feature__content tv-week-feature__content--empty" th:if="${semanaEmFoco == null}">
-                    <span class="semana-hero-label tv-week-feature__label">Semana em Foco</span>
-                    <strong class="tv-week-feature__segment">Aguardando configuracao</strong>
-                    <h2 class="tv-week-feature__title">Nenhuma Semana em Foco configurada.</h2>
-                    <p class="tv-week-feature__description">Defina as configuracoes da semana em foco no painel administrativo.</p>
+                    <span class="tv-week-feature__label">Semana em Foco</span>
+                    <strong class="tv-week-feature__segment">Aguardando configuração</strong>
+                    <h2 class="tv-week-feature__title">Nenhuma Semana em Foco configurada</h2>
+                    <p class="tv-week-feature__description">Defina as configurações da semana em foco no painel administrativo.</p>
                 </div>
             </section>
 

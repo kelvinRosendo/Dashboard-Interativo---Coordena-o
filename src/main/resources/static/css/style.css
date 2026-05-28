@@ -2152,70 +2152,73 @@ body.tv-dashboard-mode {
     gap: 16px;
 }
 
+/* Backwards compatibility - .semana-hero é um alias para .tv-week-feature na TV */
 .semana-hero {
     min-width: 0;
     min-height: 0;
     position: relative;
     overflow: hidden;
-    padding: clamp(26px, 3vw, 38px);
     border-radius: var(--radius);
-    border: 1px solid rgba(96, 165, 250, 0.24);
-    background:
-        linear-gradient(135deg, rgba(37, 99, 235, 0.26), transparent 42%),
-        linear-gradient(180deg, rgba(21, 31, 49, 0.94), rgba(7, 11, 21, 0.94));
-    box-shadow: var(--shadow);
     display: flex;
     flex-direction: column;
     justify-content: center;
-}
-
-.semana-hero::after {
-    content: "";
-    position: absolute;
-    right: 36px;
-    top: 36px;
-    width: 118px;
-    height: 118px;
-    border-radius: 50%;
-    background: rgba(250, 204, 21, 0.16);
-    border: 1px solid rgba(250, 204, 21, 0.34);
+    align-items: center;
+    text-align: center;
 }
 
 .semana-hero-label {
-    color: var(--yellow);
-    font-size: 15px;
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    min-height: 34px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    color: #ffffff;
+    font-size: clamp(11px, 1vw, 14px);
     font-weight: 900;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
-    margin-bottom: 16px;
 }
 
 .semana-hero h2 {
     position: relative;
     z-index: 1;
     color: #ffffff;
-    font-size: clamp(44px, 5.5vw, 70px);
+    font-size: clamp(46px, 6.2vw, 96px);
+    font-weight: 950;
     line-height: 1;
-    max-width: 14ch;
-    overflow-wrap: anywhere;
+    margin: 0;
+    text-wrap: balance;
+    letter-spacing: -0.02em;
 }
 
 .semana-hero h3 {
     position: relative;
     z-index: 1;
-    margin-top: 16px;
-    color: var(--yellow);
-    font-size: clamp(24px, 2.5vw, 30px);
-    line-height: 1.15;
+    margin: 0;
+    padding: 0;
+    font-size: clamp(22px, 2.4vw, 38px);
+    font-weight: 950;
+    line-height: 1.05;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .semana-hero p {
     position: relative;
     z-index: 1;
-    margin-top: 18px;
-    max-width: 52ch;
-    color: var(--muted);
-    font-size: clamp(18px, 1.8vw, 22px);
-    line-height: 1.45;
+    margin: 0;
+    max-width: 62ch;
+    font-size: clamp(18px, 1.7vw, 28px);
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .semana-hero-footer {
@@ -2224,7 +2227,7 @@ body.tv-dashboard-mode {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    margin-top: 26px;
+    justify-content: center;
 }
 
 .semana-hero-footer span {
@@ -2235,7 +2238,6 @@ body.tv-dashboard-mode {
     border-radius: var(--radius);
     color: #ffffff;
     font-weight: 900;
-    background: rgba(15, 23, 42, 0.64);
     border: 1px solid var(--line);
 }
 
@@ -2611,13 +2613,21 @@ body.tv-page.tv-page--semana.tv-page--dashboard .app-main--tv.tv-shell--semana {
     overflow: hidden;
 }
 
+.tv-week-notices,
+.tv-week-side,
+.tv-week-maintenance-row {
+    border-color: rgba(148, 163, 184, 0.18);
+    background: rgba(15, 23, 42, 0.64);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.24);
+}
+
 .tv-card--notice,
 .tv-card--maintenance {
-    border-color: rgba(96, 165, 250, 0.22);
+    border-color: rgba(96, 165, 250, 0.14) !important;
 }
 
 .tv-card--featured {
-    border-color: rgba(250, 204, 21, 0.28);
+    border-color: transparent;
 }
 
 .tv-week-maintenance-row {
@@ -3625,36 +3635,35 @@ body.tv-page.tv-page--semana.tv-page--dashboard .app-main--tv.tv-shell--semana {
 }
 
 @media (max-height: 820px) {
-    .tv-shell:not(.tv-shell--semana) {
-        grid-template-rows: auto auto auto;
+    .tv-week-feature {
+        min-height: clamp(280px, 35vh, 380px);
+        max-height: 50vh;
     }
 
-    .tv-shell--semana .tv-week-feature.semana-hero {
-        padding: clamp(14px, 1.8vh, 22px);
+    .tv-week-feature__content {
+        gap: 10px;
+        padding: clamp(18px, 2.2vw, 32px);
     }
 
-    .tv-shell--semana .tv-week-feature.semana-hero h2 {
-        font-size: clamp(28px, 3.6vw, 44px);
+    .tv-week-feature__title {
+        font-size: clamp(36px, 4.8vw, 72px);
+    }
+
+    .tv-week-feature__description {
+        font-size: clamp(14px, 1.4vw, 22px);
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+    }
+
+    .tv-shell--semana .semana-hero::after {
+        width: clamp(72px, 8vw, 96px);
+        height: clamp(72px, 8vw, 96px);
+        right: clamp(16px, 2vw, 28px);
+        top: clamp(16px, 2vw, 28px);
     }
 
     .tv-shell--semana .tv-week-maintenance-row {
         max-height: clamp(118px, 21vh, 180px);
-    }
-
-    .semana-hero:not(.tv-week-feature) {
-        min-height: 300px;
-    }
-
-    .tv-panel-block {
-        max-height: 250px;
-    }
-
-    .tv-bottom-grid {
-        min-height: 250px;
-    }
-
-    .calendario-grid-semanal .calendario-dia {
-        min-height: 360px;
     }
 }
 
@@ -4512,19 +4521,34 @@ html.sidebar-collapsed-pending .app-sidebar__text {
 }
 
 /* ==========================================================================
-   Semana em Foco - Destaque editorial por segmento
+   Semana em Foco - Destaque editorial forte por segmento
    ========================================================================== */
 .tv-week-feature {
     --week-accent: var(--blue);
     --week-accent-strong: #60a5fa;
     --week-accent-soft: rgba(37, 99, 235, 0.18);
     --week-panel: rgba(15, 23, 42, 0.72);
+
+    position: relative;
     isolation: isolate;
-    border-color: color-mix(in srgb, var(--week-accent) 48%, rgba(148, 163, 184, 0.32));
+    min-height: clamp(320px, 40vh, 480px);
+    max-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-width: 2px;
+    border-style: solid;
+    border-color: color-mix(in srgb, var(--week-accent) 72%, rgba(148, 163, 184, 0.5));
+    border-radius: var(--radius);
     background:
-        radial-gradient(circle at 88% 18%, color-mix(in srgb, var(--week-accent) 22%, transparent), transparent 26%),
+        radial-gradient(circle at 88% 18%, color-mix(in srgb, var(--week-accent) 32%, transparent), transparent 38%),
         linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(15, 34, 67, 0.94));
-    box-shadow: 0 28px 72px rgba(2, 6, 23, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+    box-shadow:
+        0 0 48px color-mix(in srgb, var(--week-accent) 32%, transparent),
+        0 32px 80px rgba(2, 6, 23, 0.6),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    overflow: hidden;
 }
 
 .tv-week-feature::before {
@@ -4532,25 +4556,34 @@ html.sidebar-collapsed-pending .app-sidebar__text {
     position: absolute;
     inset: 0 auto 0 0;
     z-index: 0;
-    width: clamp(6px, 0.7vw, 10px);
+    width: clamp(8px, 0.9vw, 14px);
+    border-radius: var(--radius) 0 0 var(--radius);
     background: linear-gradient(180deg, var(--week-accent), var(--yellow));
-    box-shadow: 0 0 28px color-mix(in srgb, var(--week-accent) 48%, transparent);
+    box-shadow: 0 0 40px color-mix(in srgb, var(--week-accent) 64%, transparent);
 }
 
 .tv-week-feature::after {
-    border-color: color-mix(in srgb, var(--week-accent) 46%, rgba(250, 204, 21, 0.2));
-    background: color-mix(in srgb, var(--week-accent) 18%, rgba(250, 204, 21, 0.16));
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: var(--radius);
+    border-color: color-mix(in srgb, var(--week-accent) 48%, rgba(250, 204, 21, 0.22));
+    background: color-mix(in srgb, var(--week-accent) 24%, rgba(250, 204, 21, 0.16));
+    pointer-events: none;
 }
 
 .tv-week-feature__content {
     position: relative;
     z-index: 1;
-    width: min(100%, 860px);
+    width: min(100%, 920px);
     display: grid;
-    gap: clamp(10px, 1.5vh, 16px);
+    gap: clamp(14px, 2vh, 24px);
     justify-items: center;
+    align-items: center;
     margin: 0 auto;
-    padding: clamp(4px, 0.6vw, 10px);
+    padding: clamp(24px, 3vw, 48px);
+    text-align: center;
 }
 
 .tv-week-feature__label {
@@ -4558,94 +4591,110 @@ html.sidebar-collapsed-pending .app-sidebar__text {
     align-items: center;
     justify-content: center;
     width: fit-content;
-    min-height: 30px;
-    padding: 7px 12px;
-    border: 1px solid color-mix(in srgb, var(--week-accent) 46%, rgba(255, 255, 255, 0.1));
+    min-height: 36px;
+    padding: 9px 16px;
+    border: 1.5px solid color-mix(in srgb, var(--week-accent) 72%, rgba(255, 255, 255, 0.18));
     border-radius: 999px;
     background: var(--week-accent-soft);
     color: #ffffff;
-    font-size: clamp(11px, 0.9vw, 13px);
-    letter-spacing: 0;
+    font-size: clamp(11px, 1.1vw, 15px);
+    font-weight: 950;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--week-accent) 56%, transparent);
 }
 
 .tv-week-feature__segment {
     display: block;
     color: var(--week-accent-strong);
-    font-size: clamp(20px, 2.2vw, 34px);
+    font-size: clamp(20px, 2.2vw, 36px);
     font-weight: 950;
     line-height: 1.05;
     text-transform: uppercase;
+    letter-spacing: 0.6px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 .tv-week-feature__title {
-    max-width: 13ch;
+    max-width: 22ch;
     color: #ffffff;
-    font-size: clamp(42px, 5.5vw, 88px);
+    font-size: clamp(48px, 6.5vw, 100px);
     font-weight: 950;
-    line-height: 0.98;
+    line-height: 1;
     text-wrap: balance;
+    letter-spacing: -0.02em;
+    text-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
 }
 
 .tv-week-feature__description {
-    max-width: 58ch;
-    margin-top: 0;
+    max-width: 66ch;
+    margin: 0;
     color: #dbeafe;
-    font-size: clamp(17px, 1.55vw, 24px);
-    line-height: 1.42;
+    font-size: clamp(16px, 1.6vw, 26px);
+    line-height: 1.55;
+    font-weight: 500;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 .tv-week-feature__meta {
+    display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    margin-top: clamp(2px, 0.8vh, 10px);
+    gap: 8px;
+    margin-top: clamp(4px, 0.6vh, 12px);
 }
 
 .tv-week-feature__meta span {
-    border-color: color-mix(in srgb, var(--week-accent) 36%, rgba(148, 163, 184, 0.28));
-    background: rgba(2, 6, 23, 0.42);
+    border-color: color-mix(in srgb, var(--week-accent) 42%, rgba(148, 163, 184, 0.32));
+    background: rgba(2, 6, 23, 0.52);
     color: #eff6ff;
+    font-size: clamp(12px, 1vw, 16px);
 }
 
 .tv-week-feature .semana-demandas-tv {
-    width: min(100%, 720px);
-    margin: clamp(6px, 1vh, 10px) auto 0;
-    border-color: color-mix(in srgb, var(--week-accent) 28%, rgba(148, 163, 184, 0.2));
-    background: rgba(2, 6, 23, 0.3);
+    width: min(100%, 780px);
+    margin: clamp(8px, 1.2vh, 14px) auto 0;
+    border-color: color-mix(in srgb, var(--week-accent) 32%, rgba(148, 163, 184, 0.24));
+    background: rgba(2, 6, 23, 0.38);
 }
 
 .tv-week-feature .semana-demandas-tv__title {
     color: var(--week-accent-strong);
+    font-size: clamp(12px, 1.1vw, 15px);
 }
 
 .tv-week-feature .semana-demandas-tv__list {
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
 }
 
 .tv-week-feature .semana-demandas-tv__item {
     min-width: 0;
-    border-color: rgba(148, 163, 184, 0.18);
-    background: rgba(15, 23, 42, 0.64);
+    border-color: rgba(148, 163, 184, 0.22);
+    background: rgba(15, 23, 42, 0.72);
+    font-size: clamp(13px, 1vw, 15px);
 }
 
 .tv-week-feature__content--empty .tv-week-feature__segment {
     color: var(--yellow);
 }
 
+/* Cores por segmento */
 .tv-week-feature--infantil,
 .segmento-infantil {
     --week-accent: #34d399;
-    --week-accent-strong: #86efac;
+    --week-accent-strong: #a7f3d0;
     --week-accent-soft: rgba(52, 211, 153, 0.16);
 }
 
 .tv-week-feature--fundamental-1,
 .segmento-fundamental-1 {
     --week-accent: #3b82f6;
-    --week-accent-strong: #93c5fd;
+    --week-accent-strong: #bfdbfe;
     --week-accent-soft: rgba(59, 130, 246, 0.18);
 }
 
@@ -4663,38 +4712,43 @@ html.sidebar-collapsed-pending .app-sidebar__text {
     --week-accent-soft: rgba(232, 121, 249, 0.16);
 }
 
-.tv-week-notices,
-.tv-week-side,
-.tv-week-maintenance-row {
-    border-color: rgba(148, 163, 184, 0.2);
-    background: rgba(15, 23, 42, 0.74);
+.tv-page--dashboard .tv-week-feature {
+    min-height: clamp(300px, 38vh, 420px);
+    max-height: 55vh;
 }
 
 .tv-page--dashboard .tv-week-feature__title {
-    font-size: clamp(38px, 5vw, 76px);
+    font-size: clamp(40px, 5.2vw, 80px);
 }
 
 .tv-page--dashboard .tv-week-feature__description {
-    max-width: 54ch;
-    -webkit-line-clamp: 3;
-    line-clamp: 3;
+    max-width: 58ch;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    font-size: clamp(15px, 1.4vw, 23px);
 }
 
 .tv-page--dashboard .tv-week-feature .semana-demandas-tv {
-    max-height: clamp(92px, 15vh, 138px);
+    max-height: clamp(100px, 14vh, 140px);
     overflow: hidden;
 }
 
 @media (max-height: 820px) {
+    .tv-week-feature {
+        min-height: clamp(280px, 35vh, 360px);
+    }
+
     .tv-week-feature__content {
-        gap: 8px;
+        gap: 10px;
+        padding: clamp(18px, 2.2vw, 32px);
     }
 
     .tv-week-feature__title {
-        font-size: clamp(34px, 4.4vw, 62px);
+        font-size: clamp(36px, 4.8vw, 72px);
     }
 
     .tv-week-feature__description {
+        font-size: clamp(14px, 1.4vw, 22px);
         -webkit-line-clamp: 2;
         line-clamp: 2;
     }
