@@ -1428,6 +1428,123 @@ body.form-page {
     color: #ffffff;
 }
 
+.week-focus-collapsible__details {
+    position: relative;
+    z-index: 1;
+}
+
+.week-focus-collapsible__summary {
+    list-style: none;
+    cursor: pointer;
+}
+
+.week-focus-collapsible__summary::-webkit-details-marker {
+    display: none;
+}
+
+.week-focus-collapsible__summary:focus-visible {
+    outline: 2px solid rgba(250, 204, 21, 0.58);
+    outline-offset: 6px;
+    border-radius: var(--radius);
+}
+
+.week-focus-collapsible__header {
+    margin-bottom: 0;
+}
+
+.week-focus-collapsible__summary-meta {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.week-focus-collapsible__summary-meta span::before {
+    content: none;
+    display: none;
+}
+
+.week-focus-collapsible__segment {
+    min-height: 32px;
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(96, 165, 250, 0.26);
+    background: rgba(37, 99, 235, 0.14);
+    color: #bfdbfe;
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: none;
+    white-space: nowrap;
+}
+
+.week-focus-collapsible__toggle {
+    min-height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    border-radius: var(--radius);
+    border: 1px solid rgba(250, 204, 21, 0.36);
+    background: rgba(250, 204, 21, 0.14);
+    color: #fde68a;
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.week-focus-collapsible__toggle::after {
+    content: "";
+    width: 8px;
+    height: 8px;
+    margin-left: 8px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg) translateY(-2px);
+    transition: transform 180ms ease;
+}
+
+.week-focus-collapsible__toggle-closed {
+    display: none;
+}
+
+.week-focus-collapsible__details:not([open]) .week-focus-collapsible__toggle-open {
+    display: none;
+}
+
+.week-focus-collapsible__details:not([open]) .week-focus-collapsible__toggle-closed {
+    display: inline;
+}
+
+.week-focus-collapsible__details:not([open]) .week-focus-collapsible__toggle::after {
+    transform: rotate(-45deg) translateY(1px);
+}
+
+.week-focus-collapsible__content {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.week-focus-collapsible__details:not([open]) .week-focus-collapsible__content {
+    opacity: 0;
+    transform: translateY(-4px);
+}
+
+@supports selector(::details-content) {
+    .week-focus-collapsible__details::details-content {
+        block-size: 0;
+        overflow: hidden;
+        transition: block-size 220ms ease, content-visibility 220ms ease allow-discrete;
+    }
+
+    .week-focus-collapsible__details[open]::details-content {
+        block-size: auto;
+    }
+}
+
 /* ===================================== */
 /* ADMIN DASHBOARD - ALISSANDRA          */
 /* ===================================== */
