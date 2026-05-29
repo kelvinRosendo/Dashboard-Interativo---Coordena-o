@@ -130,29 +130,7 @@
                 </div>
             </section>
 
-            <section class="admin-section admin-progress-panel">
-                <div class="admin-section-header">
-                    <span>Acompanhamento</span>
-                    <strong>Progresso por segmento</strong>
-                </div>
 
-                <div class="admin-progress-list">
-                    <article class="admin-progress-item"
-                             th:each="progresso : ${demandaResumo.progressos}">
-                        <div class="admin-progress-item__header">
-                            <strong th:text="${progresso.titulo}">Segmento</strong>
-                            <span th:text="${progresso.percentual + '%'}">0%</span>
-                        </div>
-                        <div class="admin-progress-bar">
-                            <span class="admin-progress-bar__fill"
-                                  th:style="'width: ' + ${progresso.percentual} + '%'"></span>
-                        </div>
-                        <small th:text="${progresso.concluidas + ' de ' + progresso.total + ' demandas concluidas'}">
-                            0 de 0 demandas concluidas
-                        </small>
-                    </article>
-                </div>
-            </section>
 
             <section class="admin-section demanda-admin-panel admin-demand-feed">
                 <div class="admin-section-header">
@@ -297,19 +275,31 @@
                 </div>
             </section>
 
-            <section class="admin-section admin-side-coordenadoras">
+            <section class="admin-section admin-progress-panel">
                 <div class="admin-section-header">
-                    <span>Coordenadoras</span>
-                    <strong>Telas de teste</strong>
+                    <span>Acompanhamento</span>
+                    <strong>Progresso por segmento</strong>
                 </div>
 
-                <div class="admin-coordinator-grid">
-                    <a th:each="coordenadora : ${coordenadoras}"
-                       th:href="@{/coordenadoras/{slug}(slug=${coordenadora.slug})}"
-                       class="admin-mini-card">
-                        <strong th:text="${coordenadora.nome}">Segmento</strong>
-                        <span th:text="${coordenadora.descricao}">Descricao</span>
-                    </a>
+                <p class="admin-empty" th:if="${demandaResumo == null or demandaResumo.progressos == null or #lists.isEmpty(demandaResumo.progressos)}">
+                    Nenhum progresso registrado ainda.
+                </p>
+
+                <div class="admin-progress-list" th:if="${demandaResumo != null and demandaResumo.progressos != null and !#lists.isEmpty(demandaResumo.progressos)}">
+                    <article class="admin-progress-item"
+                             th:each="progresso : ${demandaResumo.progressos}">
+                        <div class="admin-progress-item__header">
+                            <strong th:text="${progresso.titulo}">Segmento</strong>
+                            <span th:text="${progresso.percentual + '%'}">0%</span>
+                        </div>
+                        <div class="admin-progress-bar">
+                            <span class="admin-progress-bar__fill"
+                                  th:style="'width: ' + ${progresso.percentual} + '%'"></span>
+                        </div>
+                        <small th:text="${progresso.concluidas + ' de ' + progresso.total + ' demandas concluidas'}">
+                            0 de 0 demandas concluidas
+                        </small>
+                    </article>
                 </div>
             </section>
         </aside>
