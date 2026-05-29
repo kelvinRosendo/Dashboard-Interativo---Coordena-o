@@ -11,19 +11,24 @@
     <aside th:replace="~{fragments/sidebar :: sidebar('admin', false)}"></aside>
 
 <main class="admin-shell app-main">
-    <header class="admin-header">
-        <div>
-            <span class="admin-kicker">Colegio Satelite - Area interna</span>
-            <h1>Painel administrativo</h1>
-            <p th:if="${email != null}">
-                Logado como <strong th:text="${nome}">Usuario</strong> - <span th:text="${email}">email</span>
-            </p>
+    <header class="admin-header admin-header--dashboard">
+        <div class="admin-header__brand">
+            <span class="admin-kicker">Colegio Satelite</span>
+            <h1>Painel Administrativo</h1>
+            <p>Central de controle da rotina escolar, demandas, agenda e coordenacoes.</p>
         </div>
 
-        <form th:action="@{/logout}" method="post">
-            <th:block th:replace="~{fragments/csrf :: token}"></th:block>
-            <button type="submit" class="admin-logout-button">Sair</button>
-        </form>
+        <div class="admin-header__account">
+            <div class="admin-user-card">
+                <span>Direcao</span>
+                <strong th:text="${nome != null and !#strings.isEmpty(nome) ? nome : 'Alissandra'}">Alissandra</strong>
+                <small th:if="${email != null}" th:text="${email}">email</small>
+            </div>
+            <form th:action="@{/logout}" method="post">
+                <th:block th:replace="~{fragments/csrf :: token}"></th:block>
+                <button type="submit" class="admin-logout-button">Sair</button>
+            </form>
+        </div>
     </header>
 
     <p class="admin-flash admin-flash--success"
@@ -37,8 +42,8 @@
         Mensagem de erro
     </p>
 
-    <section class="admin-dashboard">
-        <div class="admin-main-column">
+    <section class="admin-dashboard admin-dashboard--control">
+        <div class="admin-main-column admin-main-column--control">
             <section class="admin-section week-focus-control"
                      th:with="semanaControle=${semanaAtual != null ? semanaAtual : (semanaEmFoco != null ? semanaEmFoco : null)}">
                 <div class="admin-section-header">
@@ -92,70 +97,70 @@
                 </div>
             </section>
 
-            <section class="admin-section">
+            <section class="admin-section admin-summary-panel">
                 <div class="admin-section-header">
                     <div>
-                        <span>Google Agenda</span>
-                        <strong>Proximos 7 dias</strong>
-                    </div>
-                    <a th:href="@{/agenda/eventos/novo(origem='admin')}"
-                       class="btn-editar demanda-new-button">
-                        Novo evento
-                    </a>
-                </div>
-
-                <p class="admin-empty admin-alert" th:if="${calendarErro != null}" th:text="${calendarErro}">
-                    Erro ao carregar calendario.
-                </p>
-
-                <p class="admin-empty" th:if="${calendarErro == null and (eventosGoogle == null or #lists.isEmpty(eventosGoogle))}">
-                    Nenhum evento encontrado na agenda principal.
-                </p>
-
-                <div class="admin-calendar-list" th:if="${eventosGoogle != null and !#lists.isEmpty(eventosGoogle)}">
-                    <article class="admin-calendar-item" th:each="evento : ${eventosGoogle}">
-                        <div class="admin-calendar-date">
-                            <strong th:text="${#temporals.format(evento.data, 'dd')}">13</strong>
-                            <span th:text="${#temporals.format(evento.data, 'MMM')}">mai</span>
-                        </div>
-                        <div>
-                            <strong th:text="${evento.titulo}">Evento</strong>
-                            <p th:text="${evento.diaInteiro ? 'Dia inteiro' : #temporals.format(evento.inicio, 'HH:mm')}">Horario</p>
-                        </div>
-                    </article>
-                </div>
-            </section>
-
-            <section class="admin-section demanda-admin-panel">
-                <div class="admin-section-header">
-                    <div>
-                        <span>Demandas das coordenacoes</span>
-                        <strong>Acompanhamento real</strong>
+                        <span>Resumo da rotina</span>
+                        <strong>Status das demandas</strong>
                     </div>
                     <a th:href="@{/admin/demandas/nova}" class="btn-editar demanda-new-button">Nova demanda</a>
                 </div>
 
-                <div class="demanda-summary-grid">
-                    <article class="demanda-summary-card">
-                        <span>Total</span>
-                        <strong th:text="${demandaResumo.total}">0</strong>
-                    </article>
-                    <article class="demanda-summary-card">
+                <div class="demanda-summary-grid admin-stat-grid">
+                    <article class="demanda-summary-card admin-stat-card admin-stat-card--pending">
                         <span>Pendentes</span>
                         <strong th:text="${demandaResumo.pendentes}">0</strong>
+                        <small>Aguardando inicio</small>
                     </article>
-                    <article class="demanda-summary-card">
+                    <article class="demanda-summary-card admin-stat-card admin-stat-card--progress">
                         <span>Em andamento</span>
                         <strong th:text="${demandaResumo.emAndamento}">0</strong>
+                        <small>Dentro do fluxo</small>
                     </article>
-                    <article class="demanda-summary-card">
+                    <article class="demanda-summary-card admin-stat-card admin-stat-card--done">
                         <span>Concluidas</span>
                         <strong th:text="${demandaResumo.concluidas}">0</strong>
+                        <small>Ja finalizadas</small>
                     </article>
-                    <article class="demanda-summary-card demanda-summary-card--warning">
-                        <span>Proximas do prazo</span>
+                    <article class="demanda-summary-card demanda-summary-card--warning admin-stat-card admin-stat-card--urgent">
+                        <span>Urgentes / prazo</span>
                         <strong th:text="${demandaResumo.proximasDoPrazo}">0</strong>
+                        <small>Pedem atencao</small>
                     </article>
+                </div>
+            </section>
+
+            <section class="admin-section admin-progress-panel">
+                <div class="admin-section-header">
+                    <span>Acompanhamento</span>
+                    <strong>Progresso por segmento</strong>
+                </div>
+
+                <div class="admin-progress-list">
+                    <article class="admin-progress-item"
+                             th:each="progresso : ${demandaResumo.progressos}">
+                        <div class="admin-progress-item__header">
+                            <strong th:text="${progresso.titulo}">Segmento</strong>
+                            <span th:text="${progresso.percentual + '%'}">0%</span>
+                        </div>
+                        <div class="admin-progress-bar">
+                            <span class="admin-progress-bar__fill"
+                                  th:style="'width: ' + ${progresso.percentual} + '%'"></span>
+                        </div>
+                        <small th:text="${progresso.concluidas + ' de ' + progresso.total + ' demandas concluidas'}">
+                            0 de 0 demandas concluidas
+                        </small>
+                    </article>
+                </div>
+            </section>
+
+            <section class="admin-section demanda-admin-panel admin-demand-feed">
+                <div class="admin-section-header">
+                    <div>
+                        <span>Demandas das coordenacoes</span>
+                        <strong>Fila de acompanhamento</strong>
+                    </div>
+                    <small th:text="${demandaResumo.total + ' demandas'}">0 demandas</small>
                 </div>
 
                 <p class="admin-empty" th:if="${demandasAdmin == null or #lists.isEmpty(demandasAdmin)}">
@@ -207,57 +212,87 @@
                     </article>
                 </div>
             </section>
-
-            <section class="admin-section admin-progress-panel">
-                <div class="admin-section-header">
-                    <span>Acompanhamento</span>
-                    <strong>Progresso das coordenadoras</strong>
-                </div>
-
-                <div class="admin-progress-list">
-                    <article class="admin-progress-item"
-                             th:each="progresso : ${demandaResumo.progressos}">
-                        <div class="admin-progress-item__header">
-                            <strong th:text="${progresso.titulo}">Segmento</strong>
-                            <span th:text="${progresso.percentual + '%'}">0%</span>
-                        </div>
-                        <div class="admin-progress-bar">
-                            <span class="admin-progress-bar__fill"
-                                  th:style="'width: ' + ${progresso.percentual} + '%'"></span>
-                        </div>
-                        <small th:text="${progresso.concluidas + ' de ' + progresso.total + ' demandas concluidas'}">
-                            0 de 0 demandas concluidas
-                        </small>
-                    </article>
-                </div>
-            </section>
         </div>
 
-        <aside class="admin-side-column">
-            <section class="admin-section">
+        <aside class="admin-side-column admin-side-column--control">
+            <section class="admin-section admin-agenda-panel">
                 <div class="admin-section-header">
-                    <span>TV</span>
-                    <strong>Dashboards</strong>
+                    <div>
+                        <span>Agenda</span>
+                        <strong>Proximos dias</strong>
+                    </div>
+                    <a th:href="@{/tv/calendario(modo='mensal')}" class="admin-side-link">Ver tudo</a>
                 </div>
 
-                <div class="admin-action-list">
+                <p class="admin-empty admin-alert" th:if="${calendarErro != null}" th:text="${calendarErro}">
+                    Erro ao carregar calendario.
+                </p>
+
+                <p class="admin-empty" th:if="${calendarErro == null and (eventosGoogle == null or #lists.isEmpty(eventosGoogle))}">
+                    Nenhum evento encontrado na agenda principal.
+                </p>
+
+                <div class="admin-calendar-list" th:if="${eventosGoogle != null and !#lists.isEmpty(eventosGoogle)}">
+                    <article class="admin-calendar-item" th:each="evento : ${eventosGoogle}">
+                        <div class="admin-calendar-date">
+                            <strong th:text="${#temporals.format(evento.data, 'dd')}">13</strong>
+                            <span th:text="${#temporals.format(evento.data, 'MMM')}">mai</span>
+                        </div>
+                        <div>
+                            <strong th:text="${evento.titulo}">Evento</strong>
+                            <p th:text="${evento.diaInteiro ? 'Dia inteiro' : #temporals.format(evento.inicio, 'HH:mm')}">Horario</p>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="admin-side-actions">
+                    <a th:href="@{/agenda/eventos/novo(origem='admin')}" class="admin-inline-action">Novo evento</a>
+                    <a th:href="@{/tv/calendario(modo='semanal')}" class="admin-inline-action">Calendario semanal</a>
+                </div>
+            </section>
+
+            <section class="admin-section admin-quick-panel">
+                <div class="admin-section-header">
+                    <span>Atalhos</span>
+                    <strong>Acoes rapidas</strong>
+                </div>
+
+                <div class="admin-quick-grid">
+                    <a th:href="@{/admin/demandas/nova}" class="admin-action-card">
+                        <span class="admin-action-icon">
+                            <img th:src="@{/img/icons/icon-add.png}" alt="">
+                        </span>
+                        <strong>Nova demanda</strong>
+                    </a>
+                    <a th:href="@{/agenda/eventos/novo(origem='admin')}" class="admin-action-card">
+                        <span class="admin-action-icon">
+                            <img th:src="@{/img/icons/icon-calendar.png}" alt="">
+                        </span>
+                        <strong>Novo evento</strong>
+                    </a>
+                    <a th:href="@{/novo-card}" class="admin-action-card">
+                        <span class="admin-action-icon">
+                            <img th:src="@{/img/icons/icon-report.png}" alt="">
+                        </span>
+                        <strong>Novo aviso</strong>
+                    </a>
+                    <a th:href="@{/novo-card}" class="admin-action-card">
+                        <span class="admin-action-icon">
+                            <img th:src="@{/img/icons/icon-admin.png}" alt="">
+                        </span>
+                        <strong>Registrar falta</strong>
+                    </a>
+                    <a th:href="@{/admin/semana-em-foco}" class="admin-action-card">
+                        <span class="admin-action-icon">
+                            <img th:src="@{/img/icons/icon-week.png}" alt="">
+                        </span>
+                        <strong>Editar Semana</strong>
+                    </a>
                     <a th:href="@{/tv/semana}" class="admin-action-card">
                         <span class="admin-action-icon">
                             <img th:src="@{/img/icons/icon-week.png}" alt="">
                         </span>
-                        <strong>Semana em Foco</strong>
-                    </a>
-                    <a th:href="@{/tv/calendario(modo='semanal')}" class="admin-action-card">
-                        <span class="admin-action-icon">
-                            <img th:src="@{/img/icons/icon-calendar.png}" alt="">
-                        </span>
-                        <strong>Calendario semanal</strong>
-                    </a>
-                    <a th:href="@{/tv/calendario(modo='mensal')}" class="admin-action-card">
-                        <span class="admin-action-icon">
-                            <img th:src="@{/img/icons/icon-calendar.png}" alt="">
-                        </span>
-                        <strong>Calendario mensal</strong>
+                        <strong>Semana na TV</strong>
                     </a>
                 </div>
             </section>

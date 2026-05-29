@@ -39,10 +39,8 @@
     <main class="tv-semana-layout tv-week-shell">
         <div class="tv-week-main-grid">
             <section class="tv-week-notices tv-section tv-card tv-card--notice">
-                <div class="tv-section-header">
-                    <h2>Avisos do dia</h2>
-                </div>
-                <div class="avisos-tv-lista" data-tv-autoscroll data-auto-scroll data-auto-scroll-speed="8">
+                <h2>Avisos do dia</h2>
+                <div class="tv-panel-scroll-body" data-tv-autoscroll>
                     <p th:if="${avisos == null or #lists.isEmpty(avisos)}" class="mensagem-vazia">Nenhum aviso ativo.</p>
                     <article class="tv-aviso"
                              th:each="card : ${avisos}"
@@ -112,54 +110,51 @@
 
             <aside class="tv-week-side tv-side-panel">
                 <section class="tv-panel-block tv-card">
-    <h2>Faltas</h2>
-
-    <div class="tv-panel-scroll-body" data-tv-autoscroll data-auto-scroll data-auto-scroll-speed="7">
-        <p th:if="${faltas == null or #lists.isEmpty(faltas)}" class="mensagem-vazia">Nenhuma falta registrada.</p>
-        <article class="tv-mini-card"
-                 th:each="card : ${faltas}"
-                 th:classappend="${card.prioridade.name() == 'ALTA'} ? ' tv-card-alta' :
-                                 (${card.prioridade.name() == 'MEDIA'} ? ' tv-card-media' : ' tv-card-baixa')">
-            <strong th:text="${card.responsavel != null and !#strings.isEmpty(card.responsavel) ? card.responsavel : card.titulo}">Professor</strong>
-            <span th:text="${card.observacoes != null and !#strings.isEmpty(card.observacoes) ? card.observacoes : card.descricao}">Detalhe</span>
-        </article>
-    </div>
-</section>
+                    <h2>Faltas</h2>
+                    <div class="tv-panel-scroll-body" data-tv-autoscroll>
+                        <p th:if="${faltas == null or #lists.isEmpty(faltas)}" class="mensagem-vazia">Nenhuma falta registrada.</p>
+                        <article class="tv-mini-card"
+                                 th:each="card : ${faltas}"
+                                 th:classappend="${card.prioridade.name() == 'ALTA'} ? ' tv-card-alta' :
+                                                 (${card.prioridade.name() == 'MEDIA'} ? ' tv-card-media' : ' tv-card-baixa')">
+                            <strong th:text="${card.responsavel != null and !#strings.isEmpty(card.responsavel) ? card.responsavel : card.titulo}">Professor</strong>
+                            <span th:text="${card.observacoes != null and !#strings.isEmpty(card.observacoes) ? card.observacoes : card.descricao}">Detalhe</span>
+                        </article>
+                    </div>
+                </section>
 
                 <section class="tv-panel-block tv-card">
-   <section class="tv-panel-block tv-card">
-    <h2>Substituicoes</h2>
-
-    <div class="tv-panel-scroll-body" data-tv-autoscroll data-auto-scroll data-auto-scroll-speed="7">
-        <p th:if="${substituicoes == null or #lists.isEmpty(substituicoes)}" class="mensagem-vazia">Nenhuma substituicao registrada.</p>
-        <article class="tv-mini-card"
-                 th:each="card : ${substituicoes}"
-                 th:classappend="${card.prioridade.name() == 'ALTA'} ? ' tv-card-alta' :
-                                 (${card.prioridade.name() == 'MEDIA'} ? ' tv-card-media' : ' tv-card-baixa')">
-            <strong th:text="${card.titulo}">Substituicao</strong>
-            <span th:text="${card.responsavel != null and !#strings.isEmpty(card.responsavel) ? card.responsavel : 'Responsavel nao definido'}">Responsavel</span>
-        </article>
-    </div>
-</section>
+                    <h2>Substituicoes</h2>
+                    <div class="tv-panel-scroll-body" data-tv-autoscroll>
+                        <p th:if="${substituicoes == null or #lists.isEmpty(substituicoes)}" class="mensagem-vazia">Nenhuma substituicao registrada.</p>
+                        <article class="tv-mini-card"
+                                 th:each="card : ${substituicoes}"
+                                 th:classappend="${card.prioridade.name() == 'ALTA'} ? ' tv-card-alta' :
+                                                 (${card.prioridade.name() == 'MEDIA'} ? ' tv-card-media' : ' tv-card-baixa')">
+                            <strong th:text="${card.titulo}">Substituicao</strong>
+                            <span th:text="${card.responsavel != null and !#strings.isEmpty(card.responsavel) ? card.responsavel : 'Responsavel nao definido'}">Responsavel</span>
+                        </article>
+                    </div>
+                </section>
             </aside>
         </div>
 
         <section class="tv-week-maintenance-row tv-section tv-card tv-card--maintenance">
-            <div class="tv-section-header">
-                <h2>Cards de manutencao</h2>
-            </div>
-            <div class="tv-week-maintenance-grid manutencao-grid" data-tv-autoscroll data-auto-scroll data-auto-scroll-speed="9">
+            <h2>Cards de manutencao</h2>
+            <div class="tv-panel-scroll-body" data-tv-autoscroll>
                 <p th:if="${manutencao == null or #lists.isEmpty(manutencao)}" class="mensagem-vazia manutencao-empty">Nenhuma demanda de manutencao cadastrada.</p>
-                <article class="manutencao-card"
-                         th:each="card : ${manutencao}"
-                         th:classappend="${card.prioridade.name() == 'ALTA'} ? ' manutencao-alta' :
-                                         (${card.prioridade.name() == 'MEDIA'} ? ' manutencao-media' : ' manutencao-baixa')">
-                    <div>
-                        <strong th:text="${card.titulo}">Tarefa</strong>
-                        <p th:text="${card.descricao != null and !#strings.isEmpty(card.descricao) ? card.descricao : 'Sem descricao.'}">Descricao</p>
-                    </div>
-                    <span th:text="${card.status}">Status</span>
-                </article>
+                <div class="tv-week-maintenance-grid manutencao-grid">
+                    <article class="manutencao-card"
+                             th:each="card : ${manutencao}"
+                             th:classappend="${card.prioridade.name() == 'ALTA'} ? ' manutencao-alta' :
+                                             (${card.prioridade.name() == 'MEDIA'} ? ' manutencao-media' : ' manutencao-baixa')">
+                        <div>
+                            <strong th:text="${card.titulo}">Tarefa</strong>
+                            <p th:text="${card.descricao != null and !#strings.isEmpty(card.descricao) ? card.descricao : 'Sem descricao.'}">Descricao</p>
+                        </div>
+                        <span th:text="${card.status}">Status</span>
+                    </article>
+                </div>
             </div>
         </section>
     </main>

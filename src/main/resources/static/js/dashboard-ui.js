@@ -303,12 +303,96 @@ function initTvInfiniteAutoScroll() {
     }
 
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
     if (prefersReducedMotion) {
         return;
     }
 
-    const DEFAULT_SPEED = 0.35;
+    const DURATION_MS = 30000;
+    const OVERFLOW_THRESHOLD_PX = 12;
+    const INITIAL_DELAY_MS = 1000;
+    const PAUSE_AT_END_MS = 800;
+
+    Array.from(document.querySelectorAll("[data-tv-autoscroll]")).forEach((scroller) => {
+        if (scroller.dataset.autoScrollInit === "true") {
+            return;
+        }
+
+        scroller.dataset.autoScrollInit = "true";
+
+        window.requestAnimationFrame(() => {
+            const maxScroll = scroller.scrollHeight - scroller.clientHeight;
+            if (maxScroll <= OVERFLOW_THRESHOLD_PX) {
+                return;
+            }
+
+            const speed = maxScroll / DURATION_MS;
+            let animId = null;
+            let isPaused = false;
+            let startTime = null;
+
+            const scroll = (timestamp) => {
+                if (isPaused) {
+                    animId = null;
+                    startTime = null;
+                    return;
+                }
+
+                if (startTime === null) {
+                    startTime = timestamp;
+                }
+
+                const elapsed = timestamp - startTime;
+                const newScrollTop = speed * elapsed;
+
+                if (newScrollTop >= maxScroll) {
+                    scroller.scrollTop = maxScroll;
+                    window.setTimeout(() => {
+                        scroller.scrollTop = 0;
+                        startTime = null;
+                        if (!isPaused) {
+                            animId = window.requestAnimationFrame(scroll);
+                        }
+                    }, PAUSE_AT_END_MS);
+                    animId = null;
+                    return;
+                }
+
+                scroller.scrollTop = newScrollTop;
+                animId = window.requestAnimationFrame(scroll);
+            };
+
+            const startScroll = () => {
+                if (animId !== null) {
+                    return;
+                }
+                isPaused = false;
+                startTime = null;
+                animId = window.requestAnimationFrame(scroll);
+            };
+
+            const stopScroll = () => {
+                isPaused = true;
+                if (animId !== null) {
+                    window.cancelAnimationFrame(animId);
+                    animId = null;
+                }
+                startTime = null;
+            };
+
+            const resumeScroll = () => {
+                stopScroll();
+                startScroll();
+            };
+
+            scroller.addEventListener("mouseenter", stopScroll);
+            scroller.addEventListener("focusin", stopScroll);
+            scroller.addEventListener("mouseleave", resumeScroll);
+            scroller.addEventListener("focusout", resumeScroll);
+
+            window.setTimeout(startScroll, INITIAL_DELAY_MS);
+        });
+    });
+}
     const INITIAL_DELAY_MS = 1800;
     const END_PAUSE_MS = 1200;
     const RESTART_DELAY_MS = 900;
@@ -432,4 +516,3 @@ function initTvInfiniteAutoScroll() {
             window.setTimeout(start, INITIAL_DELAY_MS);
         });
     }
-}
