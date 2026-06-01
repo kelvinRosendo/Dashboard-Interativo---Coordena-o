@@ -49,6 +49,7 @@ public class AdminController {
 
         model.addAttribute("nome", nome);
         model.addAttribute("email", email);
+        model.addAttribute("semanaEmFoco", semanaEmFocoService.buscarAtiva().orElse(null));
         model.addAttribute("coordenadoras", Arrays.stream(SegmentoCoordenacao.values())
                 .map(segmento -> new CoordenadoraResumo(
                         segmento.getSlug(),
