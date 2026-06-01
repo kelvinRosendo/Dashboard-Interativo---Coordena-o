@@ -72,6 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initConflictModal();
     initDashboardTimer();
     initWeekFocusPreview();
+    initWeekFocusCollapsible();
     initTvInfiniteAutoScroll();
 });
 
@@ -127,6 +128,24 @@ function initSidebar() {
         });
     }
 }
+
+function initWeekFocusCollapsible() {
+    const details = document.querySelector(".week-focus-collapsible__details");
+    const summary = document.querySelector(".week-focus-collapsible__summary");
+
+    if (!details || !summary) {
+        return;
+    }
+
+    const updateAriaExpanded = () => {
+        summary.setAttribute("aria-expanded", String(details.hasAttribute("open")));
+    };
+
+    updateAriaExpanded();
+
+    details.addEventListener("toggle", updateAriaExpanded);
+}
+
 function initConflictModal() {
     const modal = document.querySelector("[data-conflito-modal]");
 
