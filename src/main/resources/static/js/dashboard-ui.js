@@ -130,20 +130,101 @@ function initSidebar() {
 }
 
 function initWeekFocusCollapsible() {
-    const details = document.querySelector(".week-focus-collapsible__details");
-    const summary = document.querySelector(".week-focus-collapsible__summary");
+    const collapsibles = document.querySelectorAll(".week-focus-collapsible__details");
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    if (!details || !summary) {
+    if (!collapsibles.length) {
         return;
     }
 
-    const updateAriaExpanded = () => {
-        summary.setAttribute("aria-expanded", String(details.hasAttribute("open")));
-    };
+    collapsibles.forEach((details) => {
+        const summary = details.querySelector(".week-focus-collapsible__summary");
+        const content = details.querySelector(".week-focus-collapsible__content");
 
-    updateAriaExpanded();
+        if (!summary || !content) {
+            return;
+        }
 
-    details.addEventListener("toggle", updateAriaExpanded);
+        const setExpanded = (expanded) => {
+            summary.setAttribute("aria-expanded", String(expanded));
+            details.classList.toggle("is-collapsed", !expanded);
+        };
+
+        const finishAnimation = (expanded) => {
+            details.classList.remove("is-animating");
+            content.style.maxHeight = "";
+            content.style.opacity = "";
+            content.style.transform = "";
+
+            if (!expanded) {
+                details.removeAttribute("open");
+            }
+        };
+
+        const animate = (expanded) => {
+            if (prefersReducedMotion) {
+                details.toggleAttribute("open", expanded);
+                setExpanded(expanded);
+                return;
+            }
+
+            details.classList.add("is-animating");
+
+            if (expanded) {
+                details.setAttribute("open", "");
+                setExpanded(true);
+                content.style.maxHeight = "0px";
+                content.style.opacity = "0";
+                content.style.transform = "translateY(-6px)";
+
+                window.requestAnimationFrame(() => {
+                    content.style.maxHeight = `${content.scrollHeight}px`;
+                    content.style.opacity = "1";
+                    content.style.transform = "translateY(0)";
+                });
+            } else {
+                content.style.maxHeight = `${content.scrollHeight}px`;
+                content.style.opacity = "1";
+                content.style.transform = "translateY(0)";
+
+                window.requestAnimationFrame(() => {
+                    setExpanded(false);
+                    content.style.maxHeight = "0px";
+                    content.style.opacity = "0";
+                    content.style.transform = "translateY(-6px)";
+                });
+            }
+
+            const fallbackTimer = window.setTimeout(() => {
+                content.removeEventListener("transitionend", onEnd);
+                finishAnimation(expanded);
+            }, 420);
+
+            const onEnd = (event) => {
+                if (event.target !== content || event.propertyName !== "max-height") {
+                    return;
+                }
+
+                window.clearTimeout(fallbackTimer);
+                content.removeEventListener("transitionend", onEnd);
+                finishAnimation(expanded);
+            };
+
+            content.addEventListener("transitionend", onEnd);
+        };
+
+        setExpanded(details.hasAttribute("open"));
+
+        summary.addEventListener("click", (event) => {
+            event.preventDefault();
+
+            if (details.classList.contains("is-animating")) {
+                return;
+            }
+
+            animate(!details.hasAttribute("open"));
+        });
+    });
 }
 
 function initConflictModal() {
