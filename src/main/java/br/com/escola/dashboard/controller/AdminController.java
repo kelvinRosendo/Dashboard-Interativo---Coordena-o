@@ -9,6 +9,7 @@ import br.com.escola.dashboard.service.DemandaService;
 import br.com.escola.dashboard.service.GoogleCalendarService;
 import br.com.escola.dashboard.service.SemanaEmFocoService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,7 +24,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class AdminController {
@@ -31,6 +34,9 @@ public class AdminController {
     private final GoogleCalendarService googleCalendarService;
     private final DemandaService demandaService;
     private final SemanaEmFocoService semanaEmFocoService;
+
+    @Value("${app.admin.authorized-emails}")
+    private String authorizedEmailsConfig;
 
     public AdminController(GoogleCalendarService googleCalendarService,
                            DemandaService demandaService,
@@ -43,9 +49,15 @@ public class AdminController {
     @GetMapping("/admin")
     public String painelAdministrativo(@AuthenticationPrincipal OAuth2User usuario,
                                        @RegisteredOAuth2AuthorizedClient("google") OAuth2AuthorizedClient googleClient,
-                                       Model model) {
+                                       Model model,
+                                       RedirectAttributes redirectAttributes) {
         String nome = usuario != null ? usuario.getAttribute("name") : "Usuario";
         String email = usuario != null ? usuario.getAttribute("email") : null;
+
+        if (!isAdminEmailAuthorized(email)) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado. Seu e-mail nao esta autorizado para acessar o painel administrativo.");
+            return "redirect:/";
+        }
 
         model.addAttribute("nome", nome);
         model.addAttribute("email", email);
@@ -77,8 +89,33 @@ public class AdminController {
         return "admin";
     }
 
+    private boolean isAdminEmailAuthorized(String email) {
+        if (email == null || email.isBlank()) {
+            return false;
+        }
+
+        Set<String> authorizedEmails = new HashSet<>();
+        if (authorizedEmailsConfig != null && !authorizedEmailsConfig.isBlank()) {
+            String[] emails = authorizedEmailsConfig.split(",");
+            for (String authorizedEmail : emails) {
+                authorizedEmails.add(authorizedEmail.trim().toLowerCase());
+            }
+        }
+
+        return authorizedEmails.contains(email.trim().toLowerCase());
+    }
+
     @GetMapping("/admin/semana-em-foco")
-    public String editarSemanaEmFoco(Model model) {
+    public String editarSemanaEmFoco(@AuthenticationPrincipal OAuth2User usuario,
+                                     Model model,
+                                     RedirectAttributes redirectAttributes) {
+        String email = usuario != null ? usuario.getAttribute("email") : null;
+
+        if (!isAdminEmailAuthorized(email)) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado. Seu e-mail nao esta autorizado para acessar o painel administrativo.");
+            return "redirect:/";
+        }
+
         SemanaEmFoco semana = semanaEmFocoService.buscarAtiva()
                 .orElseGet(() -> {
                     SemanaEmFoco nova = new SemanaEmFoco();
@@ -93,10 +130,18 @@ public class AdminController {
     }
 
     @PostMapping("/admin/semana-em-foco")
-    public String salvarSemanaEmFoco(@Valid @ModelAttribute("semana") SemanaEmFoco semana,
+    public String salvarSemanaEmFoco(@AuthenticationPrincipal OAuth2User usuario,
+                                     @Valid @ModelAttribute("semana") SemanaEmFoco semana,
                                      BindingResult bindingResult,
                                      Model model,
                                      RedirectAttributes redirectAttributes) {
+        String email = usuario != null ? usuario.getAttribute("email") : null;
+
+        if (!isAdminEmailAuthorized(email)) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado. Seu e-mail nao esta autorizado para acessar o painel administrativo.");
+            return "redirect:/";
+        }
+
         if (bindingResult.hasErrors()) {
             model.addAttribute("segmentos", SegmentoCoordenacao.values());
             model.addAttribute("prioridades", PrioridadeDemanda.values());
