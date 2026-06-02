@@ -42,7 +42,7 @@
         </div>
     </header>
 
-    <main class="calendario-layout">
+    <main class="calendario-layout" th:classappend="${modoDashboard} ? ' calendar-tv-dashboard' : ''">
         <section class="calendario-principal">
             <div class="calendario-weekdays">
                 <span>Seg</span>
@@ -54,7 +54,8 @@
                 <span>Dom</span>
             </div>
 
-            <div class="calendario-grid-tv" th:classappend="${modoDashboard or !modoSemanal ? ' calendario-grid-mensal calendar-tv-month' : ' calendario-grid-semanal'}">
+            <div class="calendario-grid-tv"
+                 th:classappend="${modoDashboard ? ' calendario-grid-mensal calendar-tv-month calendar-tv-month-grid' : (!modoSemanal ? ' calendario-grid-mensal calendar-tv-month' : ' calendario-grid-semanal')}">
                 <article class="calendario-dia"
                          th:each="dia : ${dias}"
                          th:classappend="${(dia.hoje ? ' calendario-dia-hoje' : '') + (dia.foraDoMes ? ' calendario-dia-fora' : '')}">
@@ -84,34 +85,46 @@
         </section>
 
         <aside class="calendario-resumo">
-            <section class="tv-panel-block calendario-hoje calendar-week-tasks"
+            <section class="tv-panel-block calendario-hoje calendar-week-tasks calendar-week-summary"
                      data-tv-autoscroll
-                     th:with="eventosSemanaSistema=${eventosSemana != null ? eventosSemana : eventosHoje},
-                              eventosSemanaGoogle=${eventosGoogleSemana != null ? eventosGoogleSemana : eventosGoogleHoje},
-                              demandasSemanaCalendario=${demandasSemana != null ? demandasSemana : null}">
+                     th:with="eventosLateralSistema=${modoDashboard ? eventosSemana : eventosHoje},
+                              eventosLateralGoogle=${modoDashboard ? eventosGoogleSemana : eventosGoogleHoje},
+                              demandasLateral=${modoDashboard ? demandasSemana : null}">
                 <h2 th:text="${modoDashboard} ? 'O que temos para fazer na semana' : 'Hoje'">Hoje</h2>
                 <p th:if="${calendarErro != null}" class="mensagem-vazia" th:text="${calendarErro}">Erro no Google Agenda.</p>
-                <p th:if="${(eventosSemanaSistema == null or #lists.isEmpty(eventosSemanaSistema)) and (eventosSemanaGoogle == null or #lists.isEmpty(eventosSemanaGoogle)) and (demandasSemanaCalendario == null or #lists.isEmpty(demandasSemanaCalendario))}"
+                <p th:if="${(eventosLateralSistema == null or #lists.isEmpty(eventosLateralSistema)) and (eventosLateralGoogle == null or #lists.isEmpty(eventosLateralGoogle)) and (demandasLateral == null or #lists.isEmpty(demandasLateral))}"
                    class="mensagem-vazia"
                    th:text="${modoDashboard} ? 'Nenhum compromisso para esta semana.' : 'Nenhum compromisso para hoje.'">
                     Nenhum compromisso para hoje.
                 </p>
                 <article class="tv-mini-card calendar-week-tasks__item"
-                         th:each="demanda : ${demandasSemanaCalendario}">
+                         th:each="demanda : ${demandasLateral}">
+                    <div class="calendar-week-tasks__meta">
+                        <span th:text="${demanda.dataPrazo != null ? #temporals.format(demanda.dataPrazo, 'dd/MM') : 'Sem prazo'}">Prazo</span>
+                        <span>Demanda</span>
+                    </div>
                     <strong th:text="${demanda.titulo}">Demanda</strong>
                     <span th:text="${demanda.status != null ? demanda.status.titulo : 'Demanda da semana'}">Demanda da semana</span>
                 </article>
                 <article class="tv-mini-card calendar-week-tasks__item"
-                         th:each="card : ${eventosSemanaSistema}"
+                         th:each="card : ${eventosLateralSistema}"
                          th:classappend="${card.prioridade.name() == 'ALTA'} ? ' tv-card-alta' :
                                          (${card.prioridade.name() == 'MEDIA'} ? ' tv-card-media' : ' tv-card-baixa')">
+                    <div class="calendar-week-tasks__meta">
+                        <span th:text="${card.dataEvento != null ? #temporals.format(card.dataEvento, 'dd/MM') : 'Sem data'}">Data</span>
+                        <span>Sistema</span>
+                    </div>
                     <strong th:text="${card.titulo}">Evento</strong>
                     <span th:text="${card.responsavel != null and !#strings.isEmpty(card.responsavel) ? card.responsavel : card.categoria.tituloDashboard}">Responsavel</span>
                 </article>
                 <article class="tv-mini-card tv-card-google calendar-week-tasks__item"
-                         th:each="evento : ${eventosSemanaGoogle}">
+                         th:each="evento : ${eventosLateralGoogle}">
+                    <div class="calendar-week-tasks__meta">
+                        <span th:text="${evento.data != null ? #temporals.format(evento.data, 'dd/MM') : 'Google'}">Data</span>
+                        <span>Google Agenda</span>
+                    </div>
                     <strong th:text="${evento.titulo}">Evento Google</strong>
-                    <span th:text="${evento.diaInteiro ? 'Google Agenda' : #temporals.format(evento.inicio, 'HH:mm')}">Google Agenda</span>
+                    <span th:text="${evento.diaInteiro ? 'Dia todo' : #temporals.format(evento.inicio, 'HH:mm')}">Horario</span>
                 </article>
             </section>
         </aside>
