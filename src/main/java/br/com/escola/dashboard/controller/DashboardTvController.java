@@ -178,6 +178,33 @@ public class DashboardTvController {
         model.addAttribute("eventosGoogleHoje", googlePorData.getOrDefault(LocalDate.now(), List.of()));
         model.addAttribute("calendarErro", calendarErro);
 
+        // Dados semanais para a lateral do dashboard
+        if (modoDashboard) {
+            LocalDate inicioSemana = LocalDate.now().with(DayOfWeek.MONDAY);
+            LocalDate fimSemana = inicioSemana.plusDays(6);
+
+            List<CardResponseDTO> eventosSemana = cardService.listarTodos().stream()
+                    .filter(card -> card.getDataEvento() != null)
+                    .filter(card -> !card.getDataEvento().isBefore(inicioSemana) && !card.getDataEvento().isAfter(fimSemana))
+                    .sorted(comparadorPainel())
+                    .toList();
+
+            List<GoogleCalendarEventDTO> eventosGoogleSemana = eventosGoogle.stream()
+                    .filter(evento -> !evento.getData().isBefore(inicioSemana) && !evento.getData().isAfter(fimSemana))
+                    .toList();
+
+            List<Demanda> demandasSemana = demandaService.listarTodasParaAdmin().stream()
+                    .filter(demanda -> demanda.getDataPrazo() != null)
+                    .filter(demanda -> !demanda.getDataPrazo().isBefore(inicioSemana) && !demanda.getDataPrazo().isAfter(fimSemana))
+                    .filter(demanda -> demanda.getStatus() != br.com.escola.dashboard.enums.StatusDemanda.CANCELADA)
+                    .sorted(Comparator.comparing(Demanda::getDataPrazo))
+                    .toList();
+
+            model.addAttribute("eventosSemana", eventosSemana);
+            model.addAttribute("eventosGoogleSemana", eventosGoogleSemana);
+            model.addAttribute("demandasSemana", demandasSemana);
+        }
+
         return "dashboard-calendario";
     }
 
