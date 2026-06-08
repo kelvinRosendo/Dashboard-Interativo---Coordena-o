@@ -2,6 +2,7 @@ package br.com.escola.dashboard.controller;
 
 import br.com.escola.dashboard.dto.GoogleCalendarEventDTO;
 import br.com.escola.dashboard.entity.SemanaEmFoco;
+import br.com.escola.dashboard.enums.CategoriaCard;
 import br.com.escola.dashboard.enums.PrioridadeDemanda;
 import br.com.escola.dashboard.enums.SegmentoCoordenacao;
 import br.com.escola.dashboard.enums.StatusDemanda;

@@ -1,8 +1,8 @@
 package br.com.escola.dashboard.service;
 
 import br.com.escola.dashboard.entity.SemanaEmFoco;
-import br.com.escola.dashboard.enums.PrioridadeDemanda;
-import br.com.escola.dashboard.enums.SegmentoCoordenacao;
+///import br.com.escola.dashboard.enums.PrioridadeDemanda;
+///import br.com.escola.dashboard.enums.SegmentoCoordenacao;
 import br.com.escola.dashboard.repository.SemanaEmFocoRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,7 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDate;
+///import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.times;
+///import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 class SemanaEmFocoServiceTest {
@@ -55,7 +55,10 @@ class SemanaEmFocoServiceTest {
         semanaExistenteAtiva.setAtiva(true);
 
         when(repository.findAll()).thenReturn(List.of(semanaExistenteAtiva));
-        when(repository.save(any(SemanaEmFoco.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(repository.save(any(SemanaEmFoco.class))).thenAnswer(invocation -> {
+            SemanaEmFoco arg = invocation.getArgument(0, SemanaEmFoco.class);
+            return arg;
+        });
 
         SemanaEmFoco salva = service.salvar(novaSemana);
 

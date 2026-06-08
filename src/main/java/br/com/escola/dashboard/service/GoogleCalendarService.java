@@ -74,13 +74,16 @@ public class GoogleCalendarService {
                 .toUri();
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(googleClient.getAccessToken().getTokenValue());
+        String tokenValue = googleClient.getAccessToken().getTokenValue();
+        if (tokenValue != null) {
+            headers.setBearerAuth(tokenValue);
+        }
 
         try {
             ResponseEntity<JsonNode> response = restTemplate.exchange(
                     uri,
                     HttpMethod.GET,
-                    new HttpEntity<>(headers),
+                    new HttpEntity<String>(headers),
                     JsonNode.class
             );
 
