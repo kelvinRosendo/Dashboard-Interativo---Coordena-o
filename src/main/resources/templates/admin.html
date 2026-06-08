@@ -157,9 +157,28 @@
                     <small th:text="${demandaResumo.total + ' demandas'}">0 demandas</small>
                 </div>
 
-                <p class="admin-empty" th:if="${demandasAdmin == null or #lists.isEmpty(demandasAdmin)}">
-                    Nenhuma demanda cadastrada ainda.
-                </p>
+<section class="admin-section avisos-admin-panel">
+    <div class="admin-section-header">
+        <div>
+            <span>Avisos</span>
+            <strong>Gestão de avisos</strong>
+        </div>
+        <small th:text="${avisos.size() + ' avisos'}"></small>
+    </div>
+    <div th:if="${avisos == null or #lists.isEmpty(avisos)}" class="admin-empty">
+        Nenhum aviso encontrado.
+    </div>
+    <div class="avisos-list" th:if="${avisos != null and !#lists.isEmpty(avisos)}">
+        <article class="aviso-card" th:each="aviso : ${avisos}">
+            <h3 th:text="${aviso.titulo}">Título</h3>
+            <p th:text="${aviso.descricao}">Descrição</p>
+            <form th:action="@{/admin/avisos/{id}/delete(id=${aviso.id})}" method="post" th:onsubmit="return confirm('Deseja realmente excluir este aviso?')">
+                <th:block th:replace="~{fragments/csrf :: token}" />
+                <button type="submit" class="btn-editar">Excluir</button>
+            </form>
+        </article>
+    </div>
+</section>
 
                 <div class="demanda-admin-list" th:if="${demandasAdmin != null and !#lists.isEmpty(demandasAdmin)}">
                     <article class="demanda-admin-card"
