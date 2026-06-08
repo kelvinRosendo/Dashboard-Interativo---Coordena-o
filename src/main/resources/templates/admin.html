@@ -44,34 +44,32 @@
 
     <section class="admin-dashboard admin-dashboard--control">
         <div class="admin-main-column admin-main-column--control">
-            <section class="admin-section week-focus-control week-focus-collapsible"
+            <!-- ====== SEMANA EM FOCO (collapsible) ====== -->
+            <section class="admin-section week-focus-control avisos-collapsible" id="semana-panel"
                      th:with="semanaControle=${semanaAtual != null ? semanaAtual : (semanaEmFoco != null ? semanaEmFoco : null)}">
-                <details class="week-focus-collapsible__details" open>
-                    <summary class="week-focus-collapsible__summary" aria-expanded="true">
-                        <div class="admin-section-header week-focus-collapsible__header">
-                            <div>
-                                <span>Controle editorial</span>
-                                <strong>Controle da Semana em Foco</strong>
-                            </div>
-                            <div class="week-focus-collapsible__summary-meta">
-                                <span class="week-focus-collapsible__segment"
-                                      th:text="${semanaControle != null and semanaControle.segmento != null ? semanaControle.segmento.titulo : 'Sem segmento'}">
-                                    Fundamental 1
-                                </span>
-                                <span class="week-focus-control__status"
-                                      th:classappend="${semanaControle != null and semanaControle.ativa == true} ? ' week-focus-control__status--active' : ''"
-                                      th:text="${semanaControle != null and semanaControle.ativa == true ? 'Ativa / publicada' : 'Aguardando publicacao'}">
-                                    Ativa / publicada
-                                </span>
-                                <span class="week-focus-collapsible__toggle" aria-hidden="true">
-                                    <span class="week-focus-collapsible__toggle-open">Recolher</span>
-                                    <span class="week-focus-collapsible__toggle-closed">Expandir</span>
-                                </span>
-                            </div>
+                <button type="button"
+                        class="avisos-collapsible__toggle"
+                        id="semana-toggle"
+                        aria-expanded="false"
+                        aria-controls="semana-content"
+                        onclick="toggleCollapsible('semana-panel','semana-content','semana-toggle')">
+                    <div class="avisos-collapsible__header">
+                        <div>
+                            <span>&#127919; Semana em Foco</span>
+                            <strong>Controle da Semana em Foco</strong>
                         </div>
-                    </summary>
-
-                    <div class="week-focus-collapsible__content">
+                        <div class="avisos-collapsible__meta">
+                            <small class="week-focus-control__status"
+                                   th:classappend="${semanaControle != null and semanaControle.ativa == true} ? ' week-focus-control__status--active' : ''"
+                                   th:text="${semanaControle != null and semanaControle.ativa == true ? 'Ativa / publicada' : 'Aguardando publicacao'}">
+                                Ativa / publicada
+                            </small>
+                            <span class="avisos-collapsible__arrow" aria-hidden="true">&#9654;</span>
+                        </div>
+                    </div>
+                </button>
+                <div class="avisos-collapsible__body" id="semana-content" aria-hidden="true">
+                    <div class="avisos-collapsible__inner">
                         <div class="week-focus-control__preview">
                             <div>
                                 <span class="week-focus-control__eyebrow">Segmento em destaque</span>
@@ -110,7 +108,7 @@
                             </a>
                         </div>
                     </div>
-                </details>
+                </div>
             </section>
 
             <section class="admin-section admin-summary-panel">
@@ -147,7 +145,50 @@
             </section>
 
 
+            <!-- ====== AVISOS (collapsible) ====== -->
+            <section class="admin-section avisos-admin-panel avisos-collapsible" id="avisos-panel">
+                <button type="button"
+                        class="avisos-collapsible__toggle"
+                        id="avisos-toggle"
+                        aria-expanded="false"
+                        aria-controls="avisos-content"
+                        onclick="toggleCollapsible('avisos-panel','avisos-content','avisos-toggle')">
+                    <div class="avisos-collapsible__header">
+                        <div>
+                            <span>&#128226; Avisos</span>
+                            <strong>Gestão de avisos</strong>
+                        </div>
+                        <div class="avisos-collapsible__meta">
+                            <small th:text="${avisos.size() + ' avisos'}"></small>
+                            <span class="avisos-collapsible__arrow" aria-hidden="true">&#9654;</span>
+                        </div>
+                    </div>
+                </button>
+                <div class="avisos-collapsible__body" id="avisos-content" aria-hidden="true">
+                    <div class="avisos-collapsible__inner">
+                        <div th:if="${avisos == null or #lists.isEmpty(avisos)}" class="admin-empty">
+                            Nenhum aviso encontrado.
+                        </div>
+                        <div class="avisos-list" th:if="${avisos != null and !#lists.isEmpty(avisos)}">
+                            <article class="aviso-card" th:each="aviso : ${avisos}">
+                                <div class="aviso-card__content">
+                                    <h3 th:text="${aviso.titulo}">Título</h3>
+                                    <p th:text="${aviso.descricao}">Descrição</p>
+                                </div>
+                                <form th:action="@{/admin/avisos/{id}/delete(id=${aviso.id})}" method="post"
+                                      onsubmit="return confirm('Deseja realmente excluir este aviso?')">
+                                    <th:block th:replace="~{fragments/csrf :: token}" />
+                                    <button type="submit" class="btn-excluir-aviso" title="Excluir aviso">
+                                        &#128465; Excluir
+                                    </button>
+                                </form>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
+            <!-- ====== FILA DE ACOMPANHAMENTO ====== -->
             <section class="admin-section demanda-admin-panel admin-demand-feed">
                 <div class="admin-section-header">
                     <div>
@@ -156,29 +197,6 @@
                     </div>
                     <small th:text="${demandaResumo.total + ' demandas'}">0 demandas</small>
                 </div>
-
-<section class="admin-section avisos-admin-panel">
-    <div class="admin-section-header">
-        <div>
-            <span>Avisos</span>
-            <strong>Gestão de avisos</strong>
-        </div>
-        <small th:text="${avisos.size() + ' avisos'}"></small>
-    </div>
-    <div th:if="${avisos == null or #lists.isEmpty(avisos)}" class="admin-empty">
-        Nenhum aviso encontrado.
-    </div>
-    <div class="avisos-list" th:if="${avisos != null and !#lists.isEmpty(avisos)}">
-        <article class="aviso-card" th:each="aviso : ${avisos}">
-            <h3 th:text="${aviso.titulo}">Título</h3>
-            <p th:text="${aviso.descricao}">Descrição</p>
-            <form th:action="@{/admin/avisos/{id}/delete(id=${aviso.id})}" method="post" th:onsubmit="return confirm('Deseja realmente excluir este aviso?')">
-                <th:block th:replace="~{fragments/csrf :: token}" />
-                <button type="submit" class="btn-editar">Excluir</button>
-            </form>
-        </article>
-    </div>
-</section>
 
                 <div class="demanda-admin-list" th:if="${demandasAdmin != null and !#lists.isEmpty(demandasAdmin)}">
                     <article class="demanda-admin-card"
@@ -342,6 +360,48 @@
 </main>
 
 </div>
+
+<script>
+/**
+ * Função genérica para expandir/recolher qualquer seção collapsible.
+ * Reutilizável em qualquer área do sistema:
+ *   toggleCollapsible('meu-panel', 'meu-content', 'meu-toggle')
+ *
+ * Requisitos no HTML:
+ *   - Elemento raiz com id=panelId e classe "avisos-collapsible"
+ *   - Corpo colapsável com id=bodyId e classe "avisos-collapsible__body"
+ *   - Botão trigger com id=toggleId e aria-expanded
+ */
+function toggleCollapsible(panelId, bodyId, toggleId) {
+    var panel = document.getElementById(panelId);
+    var body  = document.getElementById(bodyId);
+    var toggle = document.getElementById(toggleId);
+    var isOpen = panel.classList.contains('avisos-collapsible--open');
+
+    if (isOpen) {
+        /* Collapse: animate height to 0 */
+        body.style.maxHeight = body.scrollHeight + 'px';
+        body.offsetHeight; /* force reflow */
+        body.style.maxHeight = '0';
+        panel.classList.remove('avisos-collapsible--open');
+        toggle.setAttribute('aria-expanded', 'false');
+        body.setAttribute('aria-hidden', 'true');
+    } else {
+        /* Expand: animate height from 0 to content height */
+        panel.classList.add('avisos-collapsible--open');
+        toggle.setAttribute('aria-expanded', 'true');
+        body.setAttribute('aria-hidden', 'false');
+        body.style.maxHeight = body.scrollHeight + 'px';
+        /* After transition, remove inline max-height so content can resize */
+        body.addEventListener('transitionend', function handler() {
+            if (panel.classList.contains('avisos-collapsible--open')) {
+                body.style.maxHeight = 'none';
+            }
+            body.removeEventListener('transitionend', handler);
+        });
+    }
+}
+</script>
 
 </body>
 </html>
