@@ -111,6 +111,56 @@
                 </div>
             </section>
 
+            <!-- ====== RELATÓRIO DA SEMANA EM FOCO ====== -->
+            <section class="admin-section relatorio-card"
+                     th:if="${semanaEmFoco != null}">
+                <div class="relatorio-card__header">
+                    <div>
+                        <div class="relatorio-card__title">📋 Relatório da Semana em Foco</div>
+                        <div class="relatorio-card__meta">
+                            <span>Status:
+                                <span class="relatorio-status"
+                                      th:if="${semanaEmFoco.relatorio == null}"
+                                      style="background: rgba(226, 232, 240, 0.12); color: var(--subtle);">
+                                    Não iniciado
+                                </span>
+                                <span class="relatorio-status relatorio-status--draft"
+                                      th:if="${semanaEmFoco.relatorio != null and semanaEmFoco.relatorio.status.name() == 'RASCUNHO'}">
+                                    Rascunho
+                                </span>
+                                <span class="relatorio-status relatorio-status--finalized"
+                                      th:if="${semanaEmFoco.relatorio != null and semanaEmFoco.relatorio.status.name() == 'FINALIZADO'}">
+                                    Finalizado
+                                </span>
+                            </span>
+                            <span th:if="${semanaEmFoco.relatorio != null and semanaEmFoco.relatorio.status.name() == 'RASCUNHO'}">
+                                Última atualização: <span th:text="${#temporals.format(semanaEmFoco.relatorio.atualizadoEm, 'dd/MM HH:mm')}">-</span>
+                            </span>
+                            <span th:if="${semanaEmFoco.relatorio != null and semanaEmFoco.relatorio.status.name() == 'FINALIZADO'}">
+                                Finalizado em: <span th:text="${#temporals.format(semanaEmFoco.relatorio.finalizadoEm, 'dd/MM HH:mm')}">-</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="relatorio-card__actions" style="display: flex; gap: 8px;">
+                    <a th:if="${semanaEmFoco.relatorio == null}"
+                       th:href="@{/relatorio/__${semanaEmFoco.id}__}"
+                       class="relatorio-card__button">
+                        ✏️ Iniciar Relatório
+                    </a>
+                    <a th:if="${semanaEmFoco.relatorio != null and semanaEmFoco.relatorio.status.name() == 'RASCUNHO'}"
+                       th:href="@{/relatorio/__${semanaEmFoco.id}__}"
+                       class="relatorio-card__button">
+                        ✏️ Continuar edição
+                    </a>
+                    <a th:if="${semanaEmFoco.relatorio != null and semanaEmFoco.relatorio.status.name() == 'FINALIZADO'}"
+                       th:href="@{/relatorio/visualizar/__${semanaEmFoco.id}__}"
+                       class="relatorio-card__button">
+                        👁️ Visualizar
+                    </a>
+                </div>
+            </section>
+
             <section class="admin-section admin-summary-panel">
                 <div class="admin-section-header">
                     <div>

@@ -9,6 +9,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -60,6 +61,9 @@ public class SemanaEmFoco {
 
     @Column(nullable = false)
     private LocalDateTime atualizadoEm;
+
+    @OneToOne(mappedBy = "semanaEmFoco")
+    private RelatorioSemanaEmFoco relatorio;
 
     @PrePersist
     public void prePersist() {
@@ -144,5 +148,13 @@ public class SemanaEmFoco {
 
     public void setAtualizadoEm(LocalDateTime atualizadoEm) {
         this.atualizadoEm = atualizadoEm;
+    }
+
+    public RelatorioSemanaEmFoco getRelatorio() {
+        return relatorio;
+    }
+
+    public void setRelatorio(RelatorioSemanaEmFoco relatorio) {
+        this.relatorio = relatorio;
     }
 }

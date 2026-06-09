@@ -1578,215 +1578,6 @@ body.form-page {
 }
 
 /* ===================================== */
-/* AVISOS COLLAPSIBLE PANEL              */
-/* ===================================== */
-.avisos-collapsible {
-    padding: 0 !important;
-    overflow: hidden;
-}
-
-.avisos-collapsible__toggle {
-    width: 100%;
-    display: block;
-    padding: clamp(18px, 2vw, 24px);
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    text-align: left;
-    color: inherit;
-    font-family: inherit;
-    transition: background 0.2s ease;
-}
-
-.avisos-collapsible__toggle:hover {
-    background: rgba(96, 165, 250, 0.06);
-}
-
-.avisos-collapsible__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-}
-
-.avisos-collapsible__header > div:first-child {
-    display: grid;
-    gap: 4px;
-    min-width: 0;
-}
-
-.avisos-collapsible__header span {
-    color: var(--yellow);
-    font-size: 12px;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-}
-
-.avisos-collapsible__header strong {
-    color: #ffffff;
-    font-size: clamp(19px, 1.8vw, 22px);
-    line-height: 1.15;
-}
-
-.avisos-collapsible__meta {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
-}
-
-.avisos-collapsible__meta small {
-    color: var(--subtle);
-    font-size: 12px;
-    font-weight: 800;
-    white-space: nowrap;
-}
-
-.avisos-collapsible__arrow {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 999px;
-    border: 1px solid rgba(250, 204, 21, 0.24);
-    background: rgba(250, 204, 21, 0.1);
-    color: #fde68a;
-    font-size: 12px;
-    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-                border-color 0.2s ease,
-                background 0.2s ease;
-}
-
-.avisos-collapsible--open .avisos-collapsible__arrow {
-    transform: rotate(90deg);
-    border-color: rgba(250, 204, 21, 0.42);
-    background: rgba(250, 204, 21, 0.16);
-}
-
-.avisos-collapsible__body {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 350ms cubic-bezier(0.22, 1, 0.36, 1),
-                opacity 250ms ease;
-    opacity: 0;
-}
-
-.avisos-collapsible--open .avisos-collapsible__body {
-    opacity: 1;
-}
-
-.avisos-collapsible__inner {
-    padding: 0 clamp(18px, 2vw, 24px) clamp(18px, 2vw, 24px);
-}
-
-.avisos-list {
-    display: grid;
-    gap: 10px;
-}
-
-.aviso-card {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 14px;
-    padding: 14px 16px;
-    border-radius: var(--radius);
-    border: 1px solid var(--line);
-    border-left: 4px solid var(--yellow);
-    background: rgba(2, 6, 23, 0.22);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.aviso-card:hover {
-    border-color: var(--line-strong);
-    box-shadow: 0 8px 24px rgba(2, 6, 23, 0.3);
-}
-
-.aviso-card__content {
-    min-width: 0;
-    flex: 1;
-}
-
-.aviso-card__content h3 {
-    margin: 0;
-    color: #ffffff;
-    font-size: 15px;
-    font-weight: 900;
-    line-height: 1.3;
-}
-
-.aviso-card__content p {
-    margin: 4px 0 0;
-    color: var(--muted);
-    font-size: 13px;
-    line-height: 1.45;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.btn-excluir-aviso {
-    flex-shrink: 0;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    min-height: 34px;
-    padding: 0 12px;
-    border-radius: var(--radius);
-    border: 1px solid rgba(239, 68, 68, 0.3);
-    background: rgba(239, 68, 68, 0.1);
-    color: #fca5a5;
-    font-size: 12px;
-    font-weight: 800;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
-}
-
-.btn-excluir-aviso:hover {
-    border-color: rgba(239, 68, 68, 0.55);
-    background: rgba(239, 68, 68, 0.2);
-    color: #fecaca;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .avisos-collapsible__body,
-    .avisos-collapsible__arrow {
-        transition: none;
-    }
-}
-
-/* ===================================== */
-/* SEMANA EM FOCO + COLLAPSIBLE COMPAT   */
-/* ===================================== */
-.week-focus-control.avisos-collapsible {
-    padding: 0 !important;
-}
-
-.week-focus-control.avisos-collapsible .avisos-collapsible__toggle {
-    position: relative;
-    z-index: 1;
-}
-
-.week-focus-control.avisos-collapsible .avisos-collapsible__inner {
-    position: relative;
-    z-index: 1;
-    padding: 0 clamp(22px, 2vw, 30px) clamp(22px, 2vw, 30px);
-}
-
-.week-focus-control.avisos-collapsible .avisos-collapsible__header span {
-    color: #fde68a;
-}
-
-.week-focus-control.avisos-collapsible .avisos-collapsible__meta .week-focus-control__status {
-    font-size: 11px;
-    padding: 5px 10px;
-    min-height: auto;
-}
-
-/* ===================================== */
 /* ADMIN DASHBOARD - ALISSANDRA          */
 /* ===================================== */
 .admin-header--dashboard {
@@ -6138,113 +5929,282 @@ html.sidebar-collapsed-pending .app-sidebar__text {
         scroll-behavior: auto;
     }
 }
-.calendar-week-tasks__meta {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
-    margin-bottom: 0.35rem;
-    color: var(--muted);
-    font-size: 0.72rem;
-    font-weight: 800;
-    letter-spacing: 0;
-    text-transform: uppercase;
-}
 
-.calendar-week-tasks__meta span:last-child {
-    color: var(--yellow);
-    white-space: nowrap;
-}
+/* ===================================== */
+/* RELATÓRIO DA SEMANA EM FOCO          */
+/* ===================================== */
 
-.calendar-dashboard-mode .calendario-shell--dashboard {
-    width: 100vw;
-    height: 100vh;
-    max-width: none;
-    padding: clamp(0.75rem, 1.15vw, 1.25rem);
-    overflow: hidden;
-}
-
-.calendar-dashboard-mode .tv-topbar {
-    min-height: auto;
-    margin-bottom: clamp(0.65rem, 1vw, 1rem);
-    padding: clamp(0.75rem, 1vw, 1rem) clamp(1rem, 1.35vw, 1.5rem);
-}
-
-.calendar-dashboard-mode .tv-title-block h1 {
-    font-size: clamp(1.8rem, 2.35vw, 2.7rem);
-}
-
-.calendar-tv-dashboard {
+.relatorio-form {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(260px, 22vw);
-    gap: clamp(0.75rem, 1vw, 1rem);
-    min-height: 0;
-    height: calc(100vh - clamp(6.2rem, 8vw, 8rem));
-    overflow: hidden;
+    gap: 32px;
 }
 
-.calendar-tv-dashboard .calendario-principal,
-.calendar-tv-dashboard .calendario-resumo {
-    min-height: 0;
+.relatorio-form__section {
+    display: grid;
+    gap: 16px;
 }
 
-.calendar-tv-month-grid {
-    height: 100%;
-    min-height: 0;
-    grid-template-rows: repeat(6, minmax(0, 1fr));
+.relatorio-form__label {
+    display: grid;
+    gap: 8px;
 }
 
-.calendar-dashboard-mode .calendario-semana {
-    gap: 0.45rem;
-    margin-bottom: 0.45rem;
+.relatorio-form__label span {
+    font-weight: 600;
+    color: var(--text);
+    font-size: 14px;
 }
 
-.calendar-dashboard-mode .calendario-semana span {
-    min-height: 2.35rem;
-    font-size: clamp(0.82rem, 0.95vw, 1rem);
+.relatorio-form__textarea {
+    padding: 12px 14px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.6;
+    font-family: "Courier New", monospace;
+    resize: vertical;
+    transition: border-color 0.18s ease, background 0.18s ease;
 }
 
-.calendar-dashboard-mode .calendario-dia {
-    min-height: 0;
-    padding: clamp(0.5rem, 0.75vw, 0.75rem);
+.relatorio-form__textarea:focus {
+    outline: none;
+    border-color: var(--blue-2);
+    background: var(--surface-2);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
 }
 
-.calendar-dashboard-mode .calendario-dia-numero {
-    font-size: clamp(1.15rem, 1.65vw, 1.75rem);
+.relatorio-form__textarea:disabled,
+.relatorio-form__textarea--disabled {
+    opacity: 0.72;
+    cursor: not-allowed;
+    background: var(--surface);
 }
 
-.calendar-dashboard-mode .calendario-evento,
-.calendar-dashboard-mode .calendario-google-evento {
-    max-width: 100%;
-    padding: 0.28rem 0.42rem;
-    font-size: clamp(0.68rem, 0.78vw, 0.8rem);
+.relatorio-form__status {
+    display: flex;
+    gap: 12px;
+    align-items: center;
 }
 
-.calendar-week-summary {
-    height: 100%;
-    min-height: 0;
-    overflow: hidden;
+.relatorio-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: var(--radius);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-.calendar-week-summary h2 {
-    font-size: clamp(1.1rem, 1.35vw, 1.45rem);
-    line-height: 1.15;
+.relatorio-status--draft {
+    background: rgba(250, 204, 21, 0.18);
+    color: var(--yellow);
+    border: 1px solid rgba(250, 204, 21, 0.34);
 }
 
-.calendar-week-summary .tv-mini-card {
-    padding: clamp(0.65rem, 0.8vw, 0.85rem);
+.relatorio-status--finalized {
+    background: rgba(34, 197, 94, 0.18);
+    color: var(--green);
+    border: 1px solid rgba(34, 197, 94, 0.34);
 }
 
-@media (max-width: 1100px) {
-    .calendar-tv-dashboard {
-        grid-template-columns: 1fr;
-        height: auto;
-        overflow: visible;
-    }
+.relatorio-form__actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+}
 
-    .calendar-dashboard-mode .calendario-shell--dashboard {
-        height: auto;
-        min-height: 100vh;
-        overflow: visible;
-    }
+.relatorio-form__button {
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    border: 1px solid transparent;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.18s ease;
+}
+
+.relatorio-form__button--primary {
+    background: var(--blue);
+    color: #ffffff;
+    border-color: var(--blue);
+}
+
+.relatorio-form__button--primary:hover {
+    background: var(--blue-2);
+    border-color: var(--blue-2);
+}
+
+.relatorio-form__button--success {
+    background: var(--green);
+    color: #ffffff;
+    border-color: var(--green);
+}
+
+.relatorio-form__button--success:hover {
+    background: rgba(34, 197, 94, 0.88);
+    border-color: rgba(34, 197, 94, 0.88);
+}
+
+.relatorio-form__button--secondary {
+    background: transparent;
+    color: var(--muted);
+    border-color: var(--border);
+}
+
+.relatorio-form__button--secondary:hover {
+    background: var(--surface-2);
+    color: var(--text);
+    border-color: var(--line-strong);
+}
+
+.relatorio-view {
+    display: grid;
+    gap: 32px;
+}
+
+.relatorio-view__status {
+    display: flex;
+    gap: 12px;
+}
+
+.relatorio-view__section {
+    display: grid;
+    gap: 12px;
+}
+
+.relatorio-view__section h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.relatorio-view__text {
+    padding: 12px 14px;
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    border-left: 4px solid var(--blue-2);
+}
+
+.relatorio-view__actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+}
+
+.relatorio-info {
+    margin-top: 32px;
+    padding: 16px;
+    border-radius: var(--radius);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--subtle);
+    line-height: 1.8;
+}
+
+.relatorio-metadata {
+    margin-top: 32px;
+}
+
+.relatorio-metadata__group {
+    padding: 16px;
+    border-radius: var(--radius);
+    background: var(--surface);
+    border: 1px solid var(--border);
+}
+
+.relatorio-metadata__group h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 12px;
+}
+
+.relatorio-metadata__group dl {
+    display: grid;
+    gap: 8px;
+    font-size: 13px;
+}
+
+.relatorio-metadata__group dt {
+    font-weight: 600;
+    color: var(--muted);
+}
+
+.relatorio-metadata__group dd {
+    color: var(--text);
+    padding-left: 12px;
+}
+
+/* Card do Relatório no Dashboard */
+
+.relatorio-card {
+    padding: 16px;
+    border-radius: var(--radius);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    display: grid;
+    gap: 12px;
+}
+
+.relatorio-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    gap: 12px;
+}
+
+.relatorio-card__title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.relatorio-card__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--subtle);
+}
+
+.relatorio-card__button {
+    padding: 8px 12px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--blue);
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    transition: all 0.18s ease;
+}
+
+.relatorio-card__button:hover {
+    background: var(--blue-2);
+    border-color: var(--blue-2);
 }

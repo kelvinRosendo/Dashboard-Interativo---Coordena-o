@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório da Semana em Foco</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="form-page">
+
+<div class="app-shell">
+    <aside th:replace="~{fragments/sidebar :: sidebar('relatorio', false)}"></aside>
+
+    <main class="app-main form-main">
+        <header class="form-header">
+            <div class="form-header__content">
+                <span class="form-kicker">Documentação</span>
+                <h1>Relatório da Semana em Foco</h1>
+                <p th:text="'Período: ' + ${#temporals.format(semana.dataInicio, 'dd/MM/yyyy')} + ' a ' + ${#temporals.format(semana.dataFim, 'dd/MM/yyyy')}">
+                    Período: 11/05/2026 a 17/05/2026
+                </p>
+            </div>
+            <a href="/admin" class="form-header__back">← Voltar</a>
+        </header>
+
+        <div class="form-container">
+            <form th:action="@{/relatorio/__${semana.id}__}" method="post" class="relatorio-form">
+                <th:block th:replace="~{fragments/csrf :: token}"></th:block>
+
+                <div class="relatorio-form__section">
+                    <div class="relatorio-form__status">
+                        <span class="relatorio-status"
+                              th:classappend="${relatorio.status.name() == 'RASCUNHO'} ? 'relatorio-status--draft' : 'relatorio-status--finalized'"
+                              th:text="${relatorio.status.label}">
+                            Rascunho
+                        </span>
+                    </div>
+                </div>
+
+                <div class="relatorio-form__section">
+                    <label class="relatorio-form__label">
+                        <span>Resumo da Semana</span>
+                        <textarea name="resumoSemana"
+                                  class="relatorio-form__textarea"
+                                  placeholder="Faça um resumo geral da semana..."
+                                  th:text="${relatorio.resumoSemana}"
+                                  th:disabled="${relatorio.status.name() == 'FINALIZADO'}"
+                                  rows="5"></textarea>
+                    </label>
+                </div>
+
+                <div class="relatorio-form__section">
+                    <label class="relatorio-form__label">
+                        <span>Atividades Executadas</span>
+                        <textarea name="atividadesExecutadas"
+                                  class="relatorio-form__textarea"
+                                  placeholder="Detalhe as atividades desenvolvidas durante a semana..."
+                                  th:text="${relatorio.atividadesExecutadas}"
+                                  th:disabled="${relatorio.status.name() == 'FINALIZADO'}"
+                                  rows="5"></textarea>
+                    </label>
+                </div>
+
+                <div class="relatorio-form__section">
+                    <label class="relatorio-form__label">
+                        <span>Pendências</span>
+                        <textarea name="pendencias"
+                                  class="relatorio-form__textarea"
+                                  placeholder="Liste as demandas não concluídas..."
+                                  th:text="${relatorio.pendencias}"
+                                  th:disabled="${relatorio.status.name() == 'FINALIZADO'}"
+                                  rows="5"></textarea>
+                    </label>
+                </div>
+
+                <div class="relatorio-form__section">
+                    <label class="relatorio-form__label">
+                        <span>Observações</span>
+                        <textarea name="observacoes"
+                                  class="relatorio-form__textarea"
+                                  placeholder="Informações complementares..."
+                                  th:text="${relatorio.observacoes}"
+                                  th:disabled="${relatorio.status.name() == 'FINALIZADO'}"
+                                  rows="5"></textarea>
+                    </label>
+                </div>
+
+                <div class="relatorio-form__section">
+                    <label class="relatorio-form__label">
+                        <span>Conclusão</span>
+                        <textarea name="conclusao"
+                                  class="relatorio-form__textarea"
+                                  placeholder="Encerramento oficial da Semana em Foco..."
+                                  th:text="${relatorio.conclusao}"
+                                  th:disabled="${relatorio.status.name() == 'FINALIZADO'}"
+                                  rows="5"></textarea>
+                    </label>
+                </div>
+
+                <div class="relatorio-form__actions">
+                    <th:block th:if="${relatorio.status.name() == 'RASCUNHO'}">
+                        <button type="submit" class="relatorio-form__button relatorio-form__button--primary">
+                            💾 Salvar Rascunho
+                        </button>
+                        <button type="button"
+                                class="relatorio-form__button relatorio-form__button--success"
+                                onclick="document.getElementById('formFinalizar').submit()">
+                            ✓ Finalizar Relatório
+                        </button>
+                    </th:block>
+                    <th:block th:if="${relatorio.status.name() == 'FINALIZADO'}">
+                        <a href="/admin" class="relatorio-form__button relatorio-form__button--secondary">
+                            Voltar
+                        </a>
+                    </th:block>
+                </div>
+            </form>
+
+            <form th:if="${relatorio.status.name() == 'RASCUNHO'}"
+                  th:action="@{/relatorio/__${semana.id}__/finalizar}"
+                  method="post"
+                  id="formFinalizar"
+                  style="display: none;">
+                <th:block th:replace="~{fragments/csrf :: token}"></th:block>
+            </form>
+        </div>
+
+        <div class="relatorio-info">
+            <small>
+                <strong>Criado em:</strong> <span th:text="${#temporals.format(relatorio.criadoEm, 'dd/MM/yyyy HH:mm')}">-</span><br>
+                <strong>Última atualização:</strong> <span th:text="${#temporals.format(relatorio.atualizadoEm, 'dd/MM/yyyy HH:mm')}">-</span>
+                <th:block th:if="${relatorio.finalizadoEm != null}">
+                    <br><strong>Finalizado em:</strong> <span th:text="${#temporals.format(relatorio.finalizadoEm, 'dd/MM/yyyy HH:mm')}">-</span>
+                    <br><strong>Por:</strong> <span th:text="${relatorio.finalizadoPor}">-</span>
+                </th:block>
+            </small>
+        </div>
+    </main>
+</div>
+
+<script th:inline="javascript">
+    document.querySelectorAll('.relatorio-form__textarea').forEach(textarea => {
+        if (textarea.disabled) {
+            textarea.classList.add('relatorio-form__textarea--disabled');
+        }
+    });
+</script>
+
+</body>
+</html>

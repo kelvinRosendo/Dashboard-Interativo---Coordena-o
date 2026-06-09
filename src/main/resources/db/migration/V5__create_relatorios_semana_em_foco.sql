@@ -1,0 +1,25 @@
+-- Create table for RelatorioSemanaEmFoco
+CREATE TABLE IF NOT EXISTS relatorios_semana_em_foco (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    semana_em_foco_id BIGINT NOT NULL UNIQUE,
+    coordenadora_id VARCHAR(255) NOT NULL,
+    coordenadora_nome VARCHAR(150) NOT NULL,
+    coordenadora_email VARCHAR(150) NOT NULL,
+    data_inicio DATE NOT NULL,
+    data_fim DATE NOT NULL,
+    resumo_semana LONGTEXT,
+    atividades_executadas LONGTEXT,
+    pendencias LONGTEXT,
+    observacoes LONGTEXT,
+    conclusao LONGTEXT,
+    status VARCHAR(50) NOT NULL DEFAULT 'RASCUNHO',
+    criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    atualizado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    finalizado_em DATETIME,
+    finalizado_por VARCHAR(255),
+    CONSTRAINT uk_relatorio_semana UNIQUE (semana_em_foco_id),
+    CONSTRAINT fk_relatorio_semana FOREIGN KEY (semana_em_foco_id) REFERENCES semanas_em_foco(id) ON DELETE CASCADE,
+    INDEX idx_coordenadora (coordenadora_id),
+    INDEX idx_status (status),
+    INDEX idx_criado_em (criado_em)
+);
