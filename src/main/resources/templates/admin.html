@@ -209,7 +209,7 @@
                             <strong>Gestão de avisos</strong>
                         </div>
                         <div class="avisos-collapsible__meta">
-                            <small th:text="${avisos.size() + ' avisos'}"></small>
+                            <small th:text="${avisos == null ? '0 avisos' : avisos.size() + ' avisos'}"></small>
                             <span class="avisos-collapsible__arrow" aria-hidden="true">&#9654;</span>
                         </div>
                     </div>
