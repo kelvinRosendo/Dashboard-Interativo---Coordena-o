@@ -6208,3 +6208,165 @@ html.sidebar-collapsed-pending .app-sidebar__text {
     background: var(--blue-2);
     border-color: var(--blue-2);
 }
+
+/* ===================================== */
+/* COLLAPSIBLE (SEMANA EM FOCO / AVISOS) */
+/* ===================================== */
+
+.avisos-collapsible {
+    width: 100%;
+}
+
+.avisos-collapsible__toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background: transparent;
+    border: none;
+
+    padding: 0;
+    margin: 0;
+
+    cursor: pointer;
+    text-align: left;
+}
+
+.avisos-collapsible__header {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 22px;
+}
+
+.avisos-collapsible__meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avisos-collapsible__body {
+    overflow: hidden;
+    max-height: 0;
+
+    transition:
+        max-height 0.3s ease,
+        opacity 0.3s ease;
+
+    opacity: 0;
+}
+
+.avisos-collapsible--open .avisos-collapsible__body {
+    opacity: 1;
+}
+
+.avisos-collapsible__inner {
+    padding: 0 22px 22px;
+}
+
+.avisos-collapsible__arrow {
+    transition: transform 0.3s ease;
+}
+
+.avisos-collapsible--open .avisos-collapsible__arrow {
+    transform: rotate(90deg);
+}
+
+/* ===================================== */
+/* CABEÇALHO PADRÃO DOS PAINÉIS          */
+/* ===================================== */
+
+.avisos-collapsible__header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    width:100%;
+    min-height:64px;
+
+    padding:12px 18px;
+
+    border-radius:12px;
+
+    background:linear-gradient(
+        90deg,
+        #0b2b68 0%,
+        #123f91 50%,
+        #1b57c7 100%
+    );
+
+    border:1px solid rgba(255,255,255,.12);
+
+    box-shadow:
+        0 4px 18px rgba(0,0,0,.25),
+        inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+/* BLOCO ESQUERDO */
+
+.avisos-collapsible__header > div:first-child{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+/* ÍCONE */
+
+.avisos-collapsible__header > div:first-child::before{
+    content:"🎯";
+    font-size:20px;
+}
+
+/* SUBTÍTULO */
+
+.avisos-collapsible__header span{
+    display:block;
+
+    color:#cfe0ff;
+
+    font-size:12px;
+    font-weight:600;
+
+    text-transform:uppercase;
+    letter-spacing:.08em;
+}
+
+/* TÍTULO */
+
+.avisos-collapsible__header strong{
+    display:block;
+
+    color:#fff;
+
+    font-size:22px;
+    font-weight:800;
+
+    line-height:1.1;
+}
+
+/* CONTADOR / STATUS */
+
+.avisos-collapsible__meta{
+    color:#fff;
+
+    background:rgba(255,255,255,.12);
+
+    border:1px solid rgba(255,255,255,.15);
+
+    padding:8px 14px;
+
+    border-radius:999px;
+
+    font-weight:700;
+}
+
+/* SETA */
+
+.avisos-collapsible__arrow{
+    color:#fff;
+    font-size:18px;
+}

@@ -38,8 +38,13 @@ public class GoogleCalendarService {
     private static final String CALENDAR_FULL_SCOPE = "https://www.googleapis.com/auth/calendar";
     private static final ZoneId DEFAULT_ZONE = ZoneId.of("America/Sao_Paulo");
 
-    private final RestTemplate restTemplate = new RestTemplate();
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper;
+
+    public GoogleCalendarService() {
+        this.restTemplate = new RestTemplate();
+        this.objectMapper = new ObjectMapper();
+    }
 
     public boolean podeConsultar(OAuth2AuthorizedClient googleClient) {
         if (googleClient == null || googleClient.getAccessToken() == null) {
