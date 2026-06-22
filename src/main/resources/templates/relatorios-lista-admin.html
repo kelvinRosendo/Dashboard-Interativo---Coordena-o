@@ -15,10 +15,11 @@
         <div class="admin-header__brand">
             <span class="admin-kicker">Colegio Satelite</span>
             <h1>Relatorios da Semana em Foco</h1>
-            <p>Lista de relatorios enviados pelas coordenadoras.</p>
+            <p>Gerencie os relatorios enviados pelas coordenadoras.</p>
         </div>
 
         <div class="admin-actions">
+            <a th:href="@{/relatorio/admin/relatorios/novo}" class="admin-logout-button admin-link-button">Novo relatorio</a>
             <a th:href="@{/admin}" class="admin-logout-button admin-link-button">Voltar ao Admin</a>
         </div>
     </header>
@@ -52,8 +53,9 @@
                 <div class="demanda-card-header">
                     <div>
                         <strong th:text="${relatorio.coordenadoraNome}">Coordenadora</strong>
-                        <span th:text="${'Semana: ' + #temporals.format(relatorio.dataInicio, 'dd/MM/yyyy') + ' a ' + #temporals.format(relatorio.dataFim, 'dd/MM/yyyy')}">
-                            Semana
+                        <span th:text="${relatorio.semanaEmFoco != null ? relatorio.semanaEmFoco.titulo : 'Semana'}">Semana</span>
+                        <span th:text="${'Periodo: ' + #temporals.format(relatorio.dataInicio, 'dd/MM/yyyy') + ' a ' + #temporals.format(relatorio.dataFim, 'dd/MM/yyyy')}">
+                            Periodo
                         </span>
                     </div>
                     <div class="demanda-badge-row">
@@ -77,17 +79,26 @@
                     </span>
                 </div>
 
-                <div class="demanda-actions">
-                    <a th:if="${relatorio.status.name() == 'RASCUNHO'}"
-                       th:href="@{/relatorio/visualizar/__${relatorio.semanaEmFoco.id}__}"
+                <div class="demanda-actions" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <a th:href="@{/relatorio/admin/relatorios/__${relatorio.id}__/editar}"
+                       class="btn-editar demanda-action-button"
+                       th:if="${relatorio.status.name() == 'RASCUNHO'}">
+                        Editar
+                    </a>
+                    <a th:href="@{/relatorio/visualizar/__${relatorio.semanaEmFoco.id}__}"
                        class="btn-editar demanda-action-button">
                         Visualizar
                     </a>
-                    <a th:if="${relatorio.status.name() == 'FINALIZADO'}"
-                       th:href="@{/relatorio/visualizar/__${relatorio.semanaEmFoco.id}__}"
-                       class="btn-editar demanda-action-button">
-                        Visualizar
-                    </a>
+                    <form th:if="${relatorio.status.name() == 'RASCUNHO'}"
+                          th:action="@{/relatorio/admin/relatorios/__${relatorio.id}__/excluir}"
+                          method="post"
+                          onsubmit="return confirm('Deseja realmente excluir este relatorio?')"
+                          style="display: inline;">
+                        <th:block th:replace="~{fragments/csrf :: token}"></th:block>
+                        <button type="submit" class="btn-excluir-aviso" title="Excluir relatorio">
+                            Excluir
+                        </button>
+                    </form>
                 </div>
             </article>
         </div>

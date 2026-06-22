@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashSet;
@@ -196,6 +197,143 @@ public class RelatorioController {
         model.addAttribute("relatorios", relatorios);
 
         return "relatorios-lista-admin";
+    }
+
+    @GetMapping("/admin/relatorios/novo")
+    public String exibirFormularioNovo(@AuthenticationPrincipal OAuth2User usuario,
+                                       Model model,
+                                       RedirectAttributes redirectAttributes) {
+        if (usuario == null) {
+            return "redirect:/login";
+        }
+
+        String email = usuario.getAttribute("email");
+        if (!isAdminEmailAuthorized(email)) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado");
+            return "redirect:/";
+        }
+
+        List<SemanaEmFoco> semanas = semanaEmFocoService.listarTodas();
+        model.addAttribute("semanas", semanas);
+        model.addAttribute("semanaSelecionada", null);
+        model.addAttribute("modoEdicao", false);
+        return "relatorio-admin-form";
+    }
+
+    @PostMapping("/admin/relatorios/novo")
+    public String salvarNovo(@AuthenticationPrincipal OAuth2User usuario,
+                             @RequestParam Long semanaEmFocoId,
+                             @RequestParam(required = false) String resumoSemana,
+                             @RequestParam(required = false) String atividadesExecutadas,
+                             @RequestParam(required = false) String pendencias,
+                             @RequestParam(required = false) String observacoes,
+                             @RequestParam(required = false) String conclusao,
+                             RedirectAttributes redirectAttributes) {
+        if (usuario == null) {
+            return "redirect:/login";
+        }
+
+        String email = usuario.getAttribute("email");
+        if (!isAdminEmailAuthorized(email)) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado");
+            return "redirect:/";
+        }
+
+        String nome = usuario.getAttribute("name");
+
+        try {
+            relatorioService.criarAdmin(semanaEmFocoId, email, nome, email,
+                    resumoSemana, atividadesExecutadas, pendencias, observacoes, conclusao);
+            redirectAttributes.addFlashAttribute("mensagemSucesso", "Relatorio criado com sucesso");
+        } catch (IllegalStateException | IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("mensagemErro", e.getMessage());
+        }
+
+        return "redirect:/relatorio/admin/relatorios";
+    }
+
+    @GetMapping("/admin/relatorios/{id}/editar")
+    public String exibirFormularioEdicao(@PathVariable Long id,
+                                         @AuthenticationPrincipal OAuth2User usuario,
+                                         Model model,
+                                         RedirectAttributes redirectAttributes) {
+        if (usuario == null) {
+            return "redirect:/login";
+        }
+
+        String email = usuario.getAttribute("email");
+        if (!isAdminEmailAuthorized(email)) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado");
+            return "redirect:/";
+        }
+
+        Optional<RelatorioSemanaEmFoco> relatorio = relatorioService.obterPorId(id);
+        if (relatorio.isEmpty()) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Relatorio nao encontrado");
+            return "redirect:/relatorio/admin/relatorios";
+        }
+
+        List<SemanaEmFoco> semanas = semanaEmFocoService.listarTodas();
+        model.addAttribute("relatorio", relatorio.get());
+        model.addAttribute("semanas", semanas);
+        model.addAttribute("semanaSelecionada", relatorio.get().getSemanaEmFoco().getId());
+        model.addAttribute("modoEdicao", true);
+        return "relatorio-admin-form";
+    }
+
+    @PostMapping("/admin/relatorios/{id}/editar")
+    public String salvarEdicao(@PathVariable Long id,
+                               @AuthenticationPrincipal OAuth2User usuario,
+                               @RequestParam Long semanaEmFocoId,
+                               @RequestParam(required = false) String resumoSemana,
+                               @RequestParam(required = false) String atividadesExecutadas,
+                               @RequestParam(required = false) String pendencias,
+                               @RequestParam(required = false) String observacoes,
+                               @RequestParam(required = false) String conclusao,
+                               RedirectAttributes redirectAttributes) {
+        if (usuario == null) {
+            return "redirect:/login";
+        }
+
+        String email = usuario.getAttribute("email");
+        if (!isAdminEmailAuthorized(email)) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado");
+            return "redirect:/";
+        }
+
+        try {
+            relatorioService.atualizarAdmin(id, semanaEmFocoId,
+                    resumoSemana, atividadesExecutadas, pendencias, observacoes, conclusao);
+            redirectAttributes.addFlashAttribute("mensagemSucesso", "Relatorio atualizado com sucesso");
+        } catch (IllegalStateException | IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("mensagemErro", e.getMessage());
+        }
+
+        return "redirect:/relatorio/admin/relatorios";
+    }
+
+    @PostMapping("/admin/relatorios/{id}/excluir")
+    public String excluir(@PathVariable Long id,
+                          @AuthenticationPrincipal OAuth2User usuario,
+                          RedirectAttributes redirectAttributes) {
+        if (usuario == null) {
+            return "redirect:/login";
+        }
+
+        String email = usuario.getAttribute("email");
+        if (!isAdminEmailAuthorized(email)) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado");
+            return "redirect:/";
+        }
+
+        try {
+            relatorioService.excluir(id);
+            redirectAttributes.addFlashAttribute("mensagemSucesso", "Relatorio excluido com sucesso");
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("mensagemErro", e.getMessage());
+        }
+
+        return "redirect:/relatorio/admin/relatorios";
     }
 
     private boolean isAdminEmailAuthorized(String email) {

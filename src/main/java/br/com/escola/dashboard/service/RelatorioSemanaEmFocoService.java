@@ -41,6 +41,80 @@ public class RelatorioSemanaEmFocoService {
     }
 
     @Transactional
+    public RelatorioSemanaEmFoco criarAdmin(Long semanaEmFocoId, String coordenadoraId,
+                                            String coordenadoraNome, String coordenadoraEmail,
+                                            String resumoSemana, String atividadesExecutadas,
+                                            String pendencias, String observacoes, String conclusao) {
+        Optional<RelatorioSemanaEmFoco> existente = repository.findBySemanaEmFocoId(semanaEmFocoId);
+        if (existente.isPresent()) {
+            throw new IllegalStateException("Ja existe um relatorio para esta Semana em Foco.");
+        }
+
+        SemanaEmFoco semana = semanaEmFocoService.buscarAtiva().orElse(null);
+        if (semana == null || !semana.getId().equals(semanaEmFocoId)) {
+            SemanaEmFoco semanaPorId = semanaEmFocoService.buscarPorId(semanaEmFocoId)
+                    .orElseThrow(() -> new IllegalArgumentException("Semana em Foco nao encontrada."));
+            semana = semanaPorId;
+        }
+
+        RelatorioSemanaEmFoco novo = new RelatorioSemanaEmFoco();
+        novo.setSemanaEmFoco(semana);
+        novo.setCoordenadoraId(coordenadoraId);
+        novo.setCoordenadoraNome(coordenadoraNome);
+        novo.setCoordenadoraEmail(coordenadoraEmail);
+        novo.setDataInicio(semana.getDataInicio());
+        novo.setDataFim(semana.getDataFim());
+        novo.setResumoSemana(resumoSemana);
+        novo.setAtividadesExecutadas(atividadesExecutadas);
+        novo.setPendencias(pendencias);
+        novo.setObservacoes(observacoes);
+        novo.setConclusao(conclusao);
+        novo.setStatus(StatusRelatorio.RASCUNHO);
+
+        return repository.save(novo);
+    }
+
+    @Transactional
+    public RelatorioSemanaEmFoco atualizarAdmin(Long relatorioId, Long semanaEmFocoId,
+                                                 String resumoSemana, String atividadesExecutadas,
+                                                 String pendencias, String observacoes, String conclusao) {
+        RelatorioSemanaEmFoco relatorio = repository.findById(relatorioId)
+                .orElseThrow(() -> new IllegalArgumentException("Relatorio nao encontrado"));
+
+        if (relatorio.getStatus() == StatusRelatorio.FINALIZADO) {
+            throw new IllegalStateException("Nao e possivel editar um relatorio finalizado");
+        }
+
+        if (semanaEmFocoId != null && !relatorio.getSemanaEmFoco().getId().equals(semanaEmFocoId)) {
+            Optional<RelatorioSemanaEmFoco> existente = repository.findBySemanaEmFocoId(semanaEmFocoId);
+            if (existente.isPresent()) {
+                throw new IllegalStateException("Ja existe um relatorio para esta Semana em Foco.");
+            }
+            SemanaEmFoco semana = semanaEmFocoService.buscarPorId(semanaEmFocoId)
+                    .orElseThrow(() -> new IllegalArgumentException("Semana em Foco nao encontrada."));
+            relatorio.setSemanaEmFoco(semana);
+            relatorio.setDataInicio(semana.getDataInicio());
+            relatorio.setDataFim(semana.getDataFim());
+        }
+
+        relatorio.setResumoSemana(resumoSemana);
+        relatorio.setAtividadesExecutadas(atividadesExecutadas);
+        relatorio.setPendencias(pendencias);
+        relatorio.setObservacoes(observacoes);
+        relatorio.setConclusao(conclusao);
+
+        return repository.save(relatorio);
+    }
+
+    @Transactional
+    public void excluir(Long relatorioId) {
+        if (!repository.existsById(relatorioId)) {
+            throw new IllegalArgumentException("Relatorio nao encontrado");
+        }
+        repository.deleteById(relatorioId);
+    }
+
+    @Transactional
     public RelatorioSemanaEmFoco criarOuObter(SemanaEmFoco semana, String coordenadoraId,
                                               String coordenadoraNome, String coordenadoraEmail) {
         Optional<RelatorioSemanaEmFoco> existente = repository.findBySemanaEmFocoId(semana.getId());

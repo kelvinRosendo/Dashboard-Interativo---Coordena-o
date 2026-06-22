@@ -21,6 +21,14 @@ public class SemanaEmFocoService {
         return repository.findByAtivaTrueOrderByAtualizadoEmDesc().stream().findFirst();
     }
 
+    public Optional<SemanaEmFoco> buscarPorId(Long id) {
+        return repository.findById(id);
+    }
+
+    public List<SemanaEmFoco> listarTodas() {
+        return repository.findAll();
+    }
+
     @Transactional
     public SemanaEmFoco salvar(SemanaEmFoco semana) {
         if (semana.isAtiva()) {
