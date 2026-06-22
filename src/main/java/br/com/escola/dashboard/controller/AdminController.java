@@ -5,6 +5,7 @@ import br.com.escola.dashboard.entity.SemanaEmFoco;
 import br.com.escola.dashboard.enums.PrioridadeDemanda;
 import br.com.escola.dashboard.enums.SegmentoCoordenacao;
 import br.com.escola.dashboard.enums.StatusDemanda;
+import br.com.escola.dashboard.service.ComunicadoService;
 import br.com.escola.dashboard.service.DemandaService;
 import br.com.escola.dashboard.service.GoogleCalendarService;
 import br.com.escola.dashboard.service.RelatorioSemanaEmFocoService;
@@ -20,7 +21,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
@@ -36,6 +39,7 @@ public class AdminController {
     private final DemandaService demandaService;
     private final SemanaEmFocoService semanaEmFocoService;
     private final RelatorioSemanaEmFocoService relatorioService;
+    private final ComunicadoService comunicadoService;
 
     @Value("${app.admin.authorized-emails}")
     private String authorizedEmailsConfig;
@@ -43,11 +47,13 @@ public class AdminController {
     public AdminController(GoogleCalendarService googleCalendarService,
                            DemandaService demandaService,
                            SemanaEmFocoService semanaEmFocoService,
-                           RelatorioSemanaEmFocoService relatorioService) {
+                           RelatorioSemanaEmFocoService relatorioService,
+                           ComunicadoService comunicadoService) {
         this.googleCalendarService = googleCalendarService;
         this.demandaService = demandaService;
         this.semanaEmFocoService = semanaEmFocoService;
         this.relatorioService = relatorioService;
+        this.comunicadoService = comunicadoService;
     }
 
     @GetMapping("/admin")
@@ -76,6 +82,7 @@ public class AdminController {
         model.addAttribute("demandaResumo", demandaService.resumoGeral());
         model.addAttribute("demandasAdmin", demandaService.listarTodasParaAdmin());
         model.addAttribute("statusDemandas", StatusDemanda.values());
+        model.addAttribute("comunicados", comunicadoService.listarTodos());
 
         try {
             List<GoogleCalendarEventDTO> eventosGoogle = googleCalendarService.listarEventos(
@@ -154,6 +161,44 @@ public class AdminController {
 
         semanaEmFocoService.salvar(semana);
         redirectAttributes.addFlashAttribute("mensagemSucesso", "Semana em Foco atualizada com sucesso.");
+        return "redirect:/admin";
+    }
+
+    @PostMapping("/admin/comunicados")
+    public String criarComunicado(@AuthenticationPrincipal OAuth2User usuario,
+                                  @RequestParam String titulo,
+                                  @RequestParam(required = false) String conteudo,
+                                  RedirectAttributes redirectAttributes) {
+        String email = usuario != null ? usuario.getAttribute("email") : null;
+
+        if (!isAdminEmailAuthorized(email)) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
+            return "redirect:/";
+        }
+
+        try {
+            comunicadoService.criar(titulo, conteudo);
+            redirectAttributes.addFlashAttribute("mensagemSucesso", "Comunicado publicado com sucesso.");
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("mensagemErro", e.getMessage());
+        }
+
+        return "redirect:/admin";
+    }
+
+    @PostMapping("/admin/comunicados/{id}/delete")
+    public String excluirComunicado(@AuthenticationPrincipal OAuth2User usuario,
+                                    @PathVariable Long id,
+                                    RedirectAttributes redirectAttributes) {
+        String email = usuario != null ? usuario.getAttribute("email") : null;
+
+        if (!isAdminEmailAuthorized(email)) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
+            return "redirect:/";
+        }
+
+        comunicadoService.excluir(id);
+        redirectAttributes.addFlashAttribute("mensagemSucesso", "Comunicado excluido com sucesso.");
         return "redirect:/admin";
     }
 

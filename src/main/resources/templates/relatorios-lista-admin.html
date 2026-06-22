@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Relatorios - Admin</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="admin-page">
+
+<div class="app-shell">
+    <aside th:replace="~{fragments/sidebar :: sidebar('admin', false)}"></aside>
+
+<main class="admin-shell app-main">
+    <header class="admin-header admin-header--dashboard">
+        <div class="admin-header__brand">
+            <span class="admin-kicker">Colegio Satelite</span>
+            <h1>Relatorios da Semana em Foco</h1>
+            <p>Lista de relatorios enviados pelas coordenadoras.</p>
+        </div>
+
+        <div class="admin-actions">
+            <a th:href="@{/admin}" class="admin-logout-button admin-link-button">Voltar ao Admin</a>
+        </div>
+    </header>
+
+    <p class="admin-flash admin-flash--success"
+       th:if="${mensagemSucesso != null}"
+       th:text="${mensagemSucesso}">
+        Mensagem de sucesso
+    </p>
+    <p class="admin-flash admin-flash--error"
+       th:if="${mensagemErro != null}"
+       th:text="${mensagemErro}">
+        Mensagem de erro
+    </p>
+
+    <section class="admin-section">
+        <div class="admin-section-header">
+            <div>
+                <span>Relatorios</span>
+                <strong>Todos os relatorios</strong>
+            </div>
+            <small th:text="${relatorios != null ? relatorios.size() + ' relatorios' : '0 relatorios'}"></small>
+        </div>
+
+        <div th:if="${relatorios == null or #lists.isEmpty(relatorios)}" class="admin-empty">
+            Nenhum relatorio encontrado.
+        </div>
+
+        <div class="demanda-admin-list" th:if="${relatorios != null and !#lists.isEmpty(relatorios)}">
+            <article class="demanda-admin-card" th:each="relatorio : ${relatorios}">
+                <div class="demanda-card-header">
+                    <div>
+                        <strong th:text="${relatorio.coordenadoraNome}">Coordenadora</strong>
+                        <span th:text="${'Semana: ' + #temporals.format(relatorio.dataInicio, 'dd/MM/yyyy') + ' a ' + #temporals.format(relatorio.dataFim, 'dd/MM/yyyy')}">
+                            Semana
+                        </span>
+                    </div>
+                    <div class="demanda-badge-row">
+                        <span class="demanda-badge demanda-badge--status-done"
+                              th:if="${relatorio.status.name() == 'FINALIZADO'}">
+                            Finalizado
+                        </span>
+                        <span class="demanda-badge demanda-badge--status-progress"
+                              th:if="${relatorio.status.name() == 'RASCUNHO'}">
+                            Rascunho
+                        </span>
+                    </div>
+                </div>
+
+                <div class="demanda-meta">
+                    <span th:text="${'Coordenadora: ' + relatorio.coordenadoraEmail}">Email</span>
+                    <span th:text="${'Criado em: ' + #temporals.format(relatorio.criadoEm, 'dd/MM/yyyy HH:mm')}">Criado</span>
+                    <span th:if="${relatorio.finalizadoEm != null}"
+                          th:text="${'Finalizado em: ' + #temporals.format(relatorio.finalizadoEm, 'dd/MM/yyyy HH:mm')}">
+                        Finalizado
+                    </span>
+                </div>
+
+                <div class="demanda-actions">
+                    <a th:if="${relatorio.status.name() == 'RASCUNHO'}"
+                       th:href="@{/relatorio/visualizar/__${relatorio.semanaEmFoco.id}__}"
+                       class="btn-editar demanda-action-button">
+                        Visualizar
+                    </a>
+                    <a th:if="${relatorio.status.name() == 'FINALIZADO'}"
+                       th:href="@{/relatorio/visualizar/__${relatorio.semanaEmFoco.id}__}"
+                       class="btn-editar demanda-action-button">
+                        Visualizar
+                    </a>
+                </div>
+            </article>
+        </div>
+    </section>
+</main>
+
+</div>
+
+</body>
+</html>

@@ -195,40 +195,56 @@
             </section>
 
 
-            <!-- ====== AVISOS (collapsible) ====== -->
-            <section class="admin-section avisos-admin-panel avisos-collapsible" id="avisos-panel">
+            <!-- ====== COMUNICADOS (collapsible) ====== -->
+            <section class="admin-section avisos-admin-panel avisos-collapsible" id="comunicados-panel">
                 <button type="button"
                         class="avisos-collapsible__toggle"
-                        id="avisos-toggle"
+                        id="comunicados-toggle"
                         aria-expanded="false"
-                        aria-controls="avisos-content"
-                        onclick="toggleCollapsible('avisos-panel','avisos-content','avisos-toggle')">
+                        aria-controls="comunicados-content"
+                        onclick="toggleCollapsible('comunicados-panel','comunicados-content','comunicados-toggle')">
                     <div class="avisos-collapsible__header">
                         <div>
-                            <span>&#128226; Avisos</span>
-                            <strong>Gestão de avisos</strong>
+                            <span>&#128226; Comunicados</span>
+                            <strong>Gestao de comunicados</strong>
                         </div>
                         <div class="avisos-collapsible__meta">
-                            <small th:text="${avisos == null ? '0 avisos' : avisos.size() + ' avisos'}"></small>
+                            <small th:text="${comunicados == null ? '0 comunicados' : comunicados.size() + ' comunicados'}"></small>
                             <span class="avisos-collapsible__arrow" aria-hidden="true">&#9654;</span>
                         </div>
                     </div>
                 </button>
-                <div class="avisos-collapsible__body" id="avisos-content" aria-hidden="true">
+                <div class="avisos-collapsible__body" id="comunicados-content" aria-hidden="true">
                     <div class="avisos-collapsible__inner">
-                        <div th:if="${avisos == null or #lists.isEmpty(avisos)}" class="admin-empty">
-                            Nenhum aviso encontrado.
+                        <form th:action="@{/admin/comunicados}" method="post" class="comunicado-form">
+                            <th:block th:replace="~{fragments/csrf :: token}"></th:block>
+                            <div class="campo">
+                                <label for="comunicado-titulo">Titulo</label>
+                                <input type="text" id="comunicado-titulo" name="titulo" required placeholder="Titulo do comunicado">
+                            </div>
+                            <div class="campo campo-completo">
+                                <label for="comunicado-conteudo">Conteudo</label>
+                                <textarea id="comunicado-conteudo" name="conteudo" rows="3" placeholder="Descricao do comunicado"></textarea>
+                            </div>
+                            <div class="acoes campo-completo">
+                                <button type="submit" class="btn-editar">Publicar comunicado</button>
+                            </div>
+                        </form>
+
+                        <div th:if="${comunicados == null or #lists.isEmpty(comunicados)}" class="admin-empty">
+                            Nenhum comunicado publicado.
                         </div>
-                        <div class="avisos-list" th:if="${avisos != null and !#lists.isEmpty(avisos)}">
-                            <article class="aviso-card" th:each="aviso : ${avisos}">
+                        <div class="avisos-list" th:if="${comunicados != null and !#lists.isEmpty(comunicados)}">
+                            <article class="aviso-card" th:each="comunicado : ${comunicados}">
                                 <div class="aviso-card__content">
-                                    <h3 th:text="${aviso.titulo}">Título</h3>
-                                    <p th:text="${aviso.descricao}">Descrição</p>
+                                    <h3 th:text="${comunicado.titulo}">Titulo</h3>
+                                    <p th:text="${comunicado.conteudo}">Conteudo</p>
+                                    <small th:text="${#temporals.format(comunicado.dataCriacao, 'dd/MM/yyyy HH:mm')}">Data</small>
                                 </div>
-                                <form th:action="@{/admin/avisos/{id}/delete(id=${aviso.id})}" method="post"
-                                      onsubmit="return confirm('Deseja realmente excluir este aviso?')">
+                                <form th:action="@{/admin/comunicados/{id}/delete(id=${comunicado.id})}" method="post"
+                                      onsubmit="return confirm('Deseja realmente excluir este comunicado?')">
                                     <th:block th:replace="~{fragments/csrf :: token}" />
-                                    <button type="submit" class="btn-excluir-aviso" title="Excluir aviso">
+                                    <button type="submit" class="btn-excluir-aviso" title="Excluir comunicado">
                                         &#128465; Excluir
                                     </button>
                                 </form>
@@ -355,7 +371,7 @@
                         <span class="admin-action-icon">
                             <img th:src="@{/img/icons/icon-report.png}" alt="">
                         </span>
-                        <strong>Novo aviso</strong>
+                        <strong>Novo comunicado</strong>
                     </a>
                     <a th:href="@{/novo-card}" class="admin-action-card">
                         <span class="admin-action-icon">

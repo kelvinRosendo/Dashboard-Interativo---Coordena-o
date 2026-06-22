@@ -195,9 +195,13 @@
             </div>
 
             <div class="coordenadora-list">
-                <article class="coordenadora-item" th:each="card : ${avisos}">
-                    <strong th:text="${card.titulo}">Aviso</strong>
-                    <p th:text="${card.descricao}">Descricao</p>
+                <p th:if="${comunicados == null or #lists.isEmpty(comunicados)}" class="admin-empty">
+                    Nenhum comunicado publicado.
+                </p>
+                <article class="coordenadora-item" th:each="comunicado : ${comunicados}">
+                    <strong th:text="${comunicado.titulo}">Comunicado</strong>
+                    <p th:text="${comunicado.conteudo}">Conteudo</p>
+                    <small th:text="${#temporals.format(comunicado.dataCriacao, 'dd/MM/yyyy HH:mm')}">Data</small>
                 </article>
             </div>
         </article>
