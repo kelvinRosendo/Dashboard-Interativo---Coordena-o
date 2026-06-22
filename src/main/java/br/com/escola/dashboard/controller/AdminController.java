@@ -164,6 +164,42 @@ public class AdminController {
         return "redirect:/admin";
     }
 
+    @GetMapping("/admin/comunicados/novo")
+    public String exibirFormularioComunicado(@AuthenticationPrincipal OAuth2User usuario,
+                                             Model model,
+                                             RedirectAttributes redirectAttributes) {
+        String email = usuario != null ? usuario.getAttribute("email") : null;
+
+        if (!isAdminEmailAuthorized(email)) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
+            return "redirect:/";
+        }
+
+        return "novo-comunicado";
+    }
+
+    @PostMapping("/admin/comunicados/novo")
+    public String salvarComunicadoViaFormulario(@AuthenticationPrincipal OAuth2User usuario,
+                                                @RequestParam String titulo,
+                                                @RequestParam(required = false) String conteudo,
+                                                RedirectAttributes redirectAttributes) {
+        String email = usuario != null ? usuario.getAttribute("email") : null;
+
+        if (!isAdminEmailAuthorized(email)) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
+            return "redirect:/";
+        }
+
+        try {
+            comunicadoService.criar(titulo, conteudo);
+            redirectAttributes.addFlashAttribute("mensagemSucesso", "Comunicado publicado com sucesso.");
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("mensagemErro", e.getMessage());
+        }
+
+        return "redirect:/admin";
+    }
+
     @PostMapping("/admin/comunicados")
     public String criarComunicado(@AuthenticationPrincipal OAuth2User usuario,
                                   @RequestParam String titulo,

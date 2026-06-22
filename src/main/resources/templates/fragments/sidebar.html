@@ -78,14 +78,14 @@
             <strong class="app-sidebar__text">Coordenadoras</strong>
         </a>
 
-        <a th:href="@{/novo-card(categoria='AVISO_NOTA')}"
+        <a th:href="@{/admin/comunicados/novo}"
            class="app-sidebar__link"
-           title="Novo Aviso"
-           th:classappend="${active == 'novo-card'} ? ' app-sidebar__link--active' : ''">
+           title="Novo Comunicado"
+           th:classappend="${active == 'novo-comunicado'} ? ' app-sidebar__link--active' : ''">
             <span class="app-sidebar__icon">
                 <img th:src="@{/img/icons/icon-add.png}" alt="" class="app-sidebar__icon-img">
             </span>
-            <strong class="app-sidebar__text">Novo Aviso</strong>
+            <strong class="app-sidebar__text">Novo Comunicado</strong>
         </a>
 
         <span class="app-sidebar__link app-sidebar__link--disabled" aria-disabled="true" title="Relatorios">
