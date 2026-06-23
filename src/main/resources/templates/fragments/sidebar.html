@@ -88,12 +88,15 @@
             <strong class="app-sidebar__text">Novo Comunicado</strong>
         </a>
 
-        <span class="app-sidebar__link app-sidebar__link--disabled" aria-disabled="true" title="Relatorios">
+        <a th:href="@{/relatorio/admin/relatorios}"
+           class="app-sidebar__link"
+           title="Relatorios"
+           th:classappend="${active == 'relatorios'} ? ' app-sidebar__link--active' : ''">
             <span class="app-sidebar__icon">
                 <img th:src="@{/img/icons/icon-report.png}" alt="" class="app-sidebar__icon-img">
             </span>
             <strong class="app-sidebar__text">Relatorios</strong>
-        </span>
+        </a>
 
         <span class="app-sidebar__link app-sidebar__link--disabled" aria-disabled="true" title="Configuracoes">
             <span class="app-sidebar__icon">

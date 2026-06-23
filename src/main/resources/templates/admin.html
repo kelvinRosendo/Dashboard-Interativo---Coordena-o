@@ -225,7 +225,7 @@
                 </button>
                 <div class="avisos-collapsible__body" id="comunicados-content" aria-hidden="true">
                     <div class="avisos-collapsible__inner">
-                        <form th:action="@{/admin/comunicados}" method="post" class="comunicado-form">
+                        <form th:action="@{/admin/comunicados/novo}" method="post" class="comunicado-form">
                             <th:block th:replace="~{fragments/csrf :: token}"></th:block>
                             <div class="campo">
                                 <label for="comunicado-titulo">Titulo</label>

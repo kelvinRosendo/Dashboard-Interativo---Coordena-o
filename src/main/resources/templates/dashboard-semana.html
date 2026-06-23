@@ -39,15 +39,13 @@
     <main class="tv-semana-layout tv-week-shell">
         <div class="tv-week-main-grid">
             <section class="tv-week-notices tv-section tv-card tv-card--notice">
-                <h2>Avisos do dia</h2>
+                <h2>Comunicados</h2>
                 <div class="tv-panel-scroll-body" data-tv-autoscroll>
-                    <p th:if="${avisos == null or #lists.isEmpty(avisos)}" class="mensagem-vazia">Nenhum aviso ativo.</p>
+                    <p th:if="${comunicados == null or #lists.isEmpty(comunicados)}" class="mensagem-vazia">Nenhum comunicado ativo.</p>
                     <article class="tv-aviso"
-                             th:each="card : ${avisos}"
-                             th:classappend="${card.prioridade.name() == 'ALTA'} ? ' tv-card-alta' :
-                                             (${card.prioridade.name() == 'MEDIA'} ? ' tv-card-media' : ' tv-card-baixa')">
-                        <strong th:text="${card.titulo}">Aviso</strong>
-                        <span th:text="${card.descricao}">Mensagem</span>
+                             th:each="comunicado : ${comunicados}">
+                        <strong th:text="${comunicado.titulo}">Comunicado</strong>
+                        <span th:text="${comunicado.conteudo}">Mensagem</span>
                     </article>
                 </div>
             </section>

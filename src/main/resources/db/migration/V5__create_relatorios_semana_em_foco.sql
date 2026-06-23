@@ -1,25 +1,26 @@
--- Create table for RelatorioSemanaEmFoco
+-- Create table for RelatorioSemanaEmFoco (PostgreSQL)
 CREATE TABLE IF NOT EXISTS relatorios_semana_em_foco (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    id BIGSERIAL PRIMARY KEY,
     semana_em_foco_id BIGINT NOT NULL UNIQUE,
     coordenadora_id VARCHAR(255) NOT NULL,
     coordenadora_nome VARCHAR(150) NOT NULL,
     coordenadora_email VARCHAR(150) NOT NULL,
     data_inicio DATE NOT NULL,
     data_fim DATE NOT NULL,
-    resumo_semana LONGTEXT,
-    atividades_executadas LONGTEXT,
-    pendencias LONGTEXT,
-    observacoes LONGTEXT,
-    conclusao LONGTEXT,
+    resumo_semana TEXT,
+    atividades_executadas TEXT,
+    pendencias TEXT,
+    observacoes TEXT,
+    conclusao TEXT,
     status VARCHAR(50) NOT NULL DEFAULT 'RASCUNHO',
-    criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    atualizado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    finalizado_em DATETIME,
+    criado_em TIMESTAMP NOT NULL DEFAULT NOW(),
+    atualizado_em TIMESTAMP NOT NULL DEFAULT NOW(),
+    finalizado_em TIMESTAMP,
     finalizado_por VARCHAR(255),
     CONSTRAINT uk_relatorio_semana UNIQUE (semana_em_foco_id),
-    CONSTRAINT fk_relatorio_semana FOREIGN KEY (semana_em_foco_id) REFERENCES semanas_em_foco(id) ON DELETE CASCADE,
-    INDEX idx_coordenadora (coordenadora_id),
-    INDEX idx_status (status),
-    INDEX idx_criado_em (criado_em)
+    CONSTRAINT fk_relatorio_semana FOREIGN KEY (semana_em_foco_id) REFERENCES semanas_em_foco(id) ON DELETE CASCADE
 );
+
+CREATE INDEX IF NOT EXISTS idx_coordenadora ON relatorios_semana_em_foco (coordenadora_id);
+CREATE INDEX IF NOT EXISTS idx_status ON relatorios_semana_em_foco (status);
+CREATE INDEX IF NOT EXISTS idx_criado_em ON relatorios_semana_em_foco (criado_em);

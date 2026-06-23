@@ -1,10 +1,12 @@
 package br.com.escola.dashboard.config;
 
 import br.com.escola.dashboard.entity.Card;
+import br.com.escola.dashboard.entity.Comunicado;
 import br.com.escola.dashboard.enums.CategoriaCard;
 import br.com.escola.dashboard.enums.PrioridadeCard;
 import br.com.escola.dashboard.enums.StatusCard;
 import br.com.escola.dashboard.repository.CardRepository;
+import br.com.escola.dashboard.repository.ComunicadoRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 ///import org.springframework.lang.NonNull;
@@ -20,9 +22,11 @@ import java.util.Objects;
 public class DataInitializer implements CommandLineRunner {
 
     private final CardRepository cardRepository;
+    private final ComunicadoRepository comunicadoRepository;
 
-    public DataInitializer(CardRepository cardRepository) {
+    public DataInitializer(CardRepository cardRepository, ComunicadoRepository comunicadoRepository) {
         this.cardRepository = cardRepository;
+        this.comunicadoRepository = comunicadoRepository;
     }
 
     @Override
@@ -89,6 +93,34 @@ public class DataInitializer implements CommandLineRunner {
                         criarCard("Manutencao do foco semanal", "Conferir se as demandas do segmento estao atualizadas para exibicao na TV.", CategoriaCard.SEMANA_EM_FOCO, PrioridadeCard.MEDIA, StatusCard.PENDENTE, LocalDate.now().plusDays(1), "Coordenacao", "Atualizar cards de manutencao.", agora.plusHours(10))
                 )
         );
+
+        salvarComunicadosSeNecessario();
+    }
+
+    private void salvarComunicadosSeNecessario() {
+        if (comunicadoRepository.count() > 0) {
+            return;
+        }
+
+        comunicadoRepository.saveAll(List.of(
+                criarComunicado("Regras de conduta para o periodo de provas",
+                        "Durante o periodo de avaliacao, todos os alunos devem seguir o regimento interno. "
+                        + "Celulares devem ser entregues na entrada da sala. Qualquer irregularidade sera registrada "
+                        + "e comunicada aos responsaveis."),
+                criarComunicado("Reuniao de pais e mestres",
+                        "A reuniao trimestral de pais e mestres sera realizada na quinta-feira as 19h no auditorio. "
+                        + "A presenca e obrigatoria para todos os responsaveis de alunos do Ensino Fundamental I."),
+                criarComunicado("Campanha de arrecadacao solidaria",
+                        "A escola promove uma campanha de arrecadacao de alimentos nao pereciveis. "
+                        + "As doacoes podem ser entregues na recepcao da escola ate o dia 30/05.")
+        ));
+    }
+
+    private Comunicado criarComunicado(String titulo, String conteudo) {
+        Comunicado comunicado = new Comunicado();
+        comunicado.setTitulo(titulo);
+        comunicado.setConteudo(conteudo);
+        return comunicado;
     }
 
     private void salvarCategoriaSeNecessario(CategoriaCard categoria, List<Card> cards) {

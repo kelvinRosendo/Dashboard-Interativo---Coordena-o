@@ -3,11 +3,13 @@ package br.com.escola.dashboard.controller;
 import br.com.escola.dashboard.dto.CalendarioDiaDTO;
 import br.com.escola.dashboard.dto.CardResponseDTO;
 import br.com.escola.dashboard.dto.GoogleCalendarEventDTO;
+import br.com.escola.dashboard.entity.Comunicado;
 import br.com.escola.dashboard.entity.Demanda;
 import br.com.escola.dashboard.entity.SemanaEmFoco;
 import br.com.escola.dashboard.enums.CategoriaCard;
 import br.com.escola.dashboard.enums.StatusCard;
 import br.com.escola.dashboard.service.CardService;
+import br.com.escola.dashboard.service.ComunicadoService;
 import br.com.escola.dashboard.service.DemandaService;
 import br.com.escola.dashboard.service.GoogleCalendarService;
 import br.com.escola.dashboard.service.SemanaEmFocoService;
@@ -45,17 +47,20 @@ public class DashboardTvController {
     private final OAuth2AuthorizedClientService authorizedClientService;
     private final SemanaEmFocoService semanaEmFocoService;
     private final DemandaService demandaService;
+    private final ComunicadoService comunicadoService;
 
     public DashboardTvController(CardService cardService,
                                  GoogleCalendarService googleCalendarService,
                                  OAuth2AuthorizedClientService authorizedClientService,
                                  SemanaEmFocoService semanaEmFocoService,
-                                 DemandaService demandaService) {
+                                 DemandaService demandaService,
+                                 ComunicadoService comunicadoService) {
         this.cardService = cardService;
         this.googleCalendarService = googleCalendarService;
         this.authorizedClientService = authorizedClientService;
         this.semanaEmFocoService = semanaEmFocoService;
         this.demandaService = demandaService;
+        this.comunicadoService = comunicadoService;
     }
 
     @GetMapping({"", "/semana"})
@@ -97,7 +102,10 @@ public class DashboardTvController {
         model.addAttribute("segmentoSemana", resolverSegmentoSemana(semanaAtual));
         model.addAttribute("semanas", semanas);
         model.addAttribute("manutencao", manutencao);
-        model.addAttribute("avisos", limitar(filtrarPorCategoria(cards, CategoriaCard.AVISO_NOTA), modoDashboard ? 3 : 4));
+        List<Comunicado> comunicados = comunicadoService.listarTodos();
+        int limiteComunicados = modoDashboard ? 3 : 4;
+        List<Comunicado> comunicadosLimitados = comunicados.stream().limit(limiteComunicados).toList();
+        model.addAttribute("comunicados", comunicadosLimitados);
         model.addAttribute("faltas", limitar(filtrarPorCategoria(cards, CategoriaCard.FALTA_PROFESSOR), modoDashboard ? 3 : 5));
         model.addAttribute("substituicoes", limitar(filtrarPorCategoria(cards, CategoriaCard.SUBSTITUICAO), modoDashboard ? 3 : 5));
         model.addAttribute("hoje", LocalDate.now());

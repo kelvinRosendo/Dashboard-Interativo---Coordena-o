@@ -44,31 +44,36 @@
         <div class="campo campo-completo">
             <label for="resumoSemana">Resumo da Semana</label>
             <textarea id="resumoSemana" name="resumoSemana" rows="5"
-                      placeholder="Resumo geral da semana...">${relatorio?.resumoSemana}</textarea>
+                      placeholder="Resumo geral da semana..."
+                      th:text="${relatorio?.resumoSemana}"></textarea>
         </div>
 
         <div class="campo campo-completo">
             <label for="atividadesExecutadas">Atividades Executadas</label>
             <textarea id="atividadesExecutadas" name="atividadesExecutadas" rows="5"
-                      placeholder="Atividades desenvolvidas durante a semana...">${relatorio?.atividadesExecutadas}</textarea>
+                      placeholder="Atividades desenvolvidas durante a semana..."
+                      th:text="${relatorio?.atividadesExecutadas}"></textarea>
         </div>
 
         <div class="campo campo-completo">
             <label for="pendencias">Pendencias</label>
             <textarea id="pendencias" name="pendencias" rows="5"
-                      placeholder="Demandas nao concluidas...">${relatorio?.pendencias}</textarea>
+                      placeholder="Demandas nao concluidas..."
+                      th:text="${relatorio?.pendencias}"></textarea>
         </div>
 
         <div class="campo campo-completo">
             <label for="observacoes">Observacoes</label>
             <textarea id="observacoes" name="observacoes" rows="5"
-                      placeholder="Informacoes complementares...">${relatorio?.observacoes}</textarea>
+                      placeholder="Informacoes complementares..."
+                      th:text="${relatorio?.observacoes}"></textarea>
         </div>
 
         <div class="campo campo-completo">
             <label for="conclusao">Conclusao</label>
             <textarea id="conclusao" name="conclusao" rows="5"
-                      placeholder="Encerramento oficial da Semana em Foco...">${relatorio?.conclusao}</textarea>
+                      placeholder="Encerramento oficial da Semana em Foco..."
+                      th:text="${relatorio?.conclusao}"></textarea>
         </div>
 
         <div class="acoes campo-completo">

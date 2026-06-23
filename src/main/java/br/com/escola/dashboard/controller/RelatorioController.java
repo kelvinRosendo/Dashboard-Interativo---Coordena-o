@@ -3,10 +3,10 @@ package br.com.escola.dashboard.controller;
 import br.com.escola.dashboard.dto.RelatorioSemanaEmFocoDTO;
 import br.com.escola.dashboard.entity.RelatorioSemanaEmFoco;
 import br.com.escola.dashboard.entity.SemanaEmFoco;
+import br.com.escola.dashboard.service.AdminAuthService;
 import br.com.escola.dashboard.service.RelatorioSemanaEmFocoService;
 import br.com.escola.dashboard.service.SemanaEmFocoService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
@@ -20,10 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/relatorio")
@@ -31,14 +29,14 @@ public class RelatorioController {
 
     private final RelatorioSemanaEmFocoService relatorioService;
     private final SemanaEmFocoService semanaEmFocoService;
-
-    @Value("${app.admin.authorized-emails}")
-    private String authorizedEmailsConfig;
+    private final AdminAuthService adminAuthService;
 
     public RelatorioController(RelatorioSemanaEmFocoService relatorioService,
-                              SemanaEmFocoService semanaEmFocoService) {
+                               SemanaEmFocoService semanaEmFocoService,
+                               AdminAuthService adminAuthService) {
         this.relatorioService = relatorioService;
         this.semanaEmFocoService = semanaEmFocoService;
+        this.adminAuthService = adminAuthService;
     }
 
     @GetMapping("/{semanaId}")
@@ -188,7 +186,7 @@ public class RelatorioController {
 
         String email = usuario.getAttribute("email");
 
-        if (!isAdminEmailAuthorized(email)) {
+        if (!adminAuthService.isAdminEmailAuthorized(email)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado");
             return "redirect:/";
         }
@@ -208,7 +206,7 @@ public class RelatorioController {
         }
 
         String email = usuario.getAttribute("email");
-        if (!isAdminEmailAuthorized(email)) {
+        if (!adminAuthService.isAdminEmailAuthorized(email)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado");
             return "redirect:/";
         }
@@ -234,7 +232,7 @@ public class RelatorioController {
         }
 
         String email = usuario.getAttribute("email");
-        if (!isAdminEmailAuthorized(email)) {
+        if (!adminAuthService.isAdminEmailAuthorized(email)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado");
             return "redirect:/";
         }
@@ -262,7 +260,7 @@ public class RelatorioController {
         }
 
         String email = usuario.getAttribute("email");
-        if (!isAdminEmailAuthorized(email)) {
+        if (!adminAuthService.isAdminEmailAuthorized(email)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado");
             return "redirect:/";
         }
@@ -296,7 +294,7 @@ public class RelatorioController {
         }
 
         String email = usuario.getAttribute("email");
-        if (!isAdminEmailAuthorized(email)) {
+        if (!adminAuthService.isAdminEmailAuthorized(email)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado");
             return "redirect:/";
         }
@@ -321,7 +319,7 @@ public class RelatorioController {
         }
 
         String email = usuario.getAttribute("email");
-        if (!isAdminEmailAuthorized(email)) {
+        if (!adminAuthService.isAdminEmailAuthorized(email)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado");
             return "redirect:/";
         }
@@ -334,21 +332,5 @@ public class RelatorioController {
         }
 
         return "redirect:/relatorio/admin/relatorios";
-    }
-
-    private boolean isAdminEmailAuthorized(String email) {
-        if (email == null || email.isBlank()) {
-            return false;
-        }
-
-        Set<String> authorizedEmails = new HashSet<>();
-        if (authorizedEmailsConfig != null && !authorizedEmailsConfig.isBlank()) {
-            String[] emails = authorizedEmailsConfig.split(",");
-            for (String authorizedEmail : emails) {
-                authorizedEmails.add(authorizedEmail.trim().toLowerCase());
-            }
-        }
-
-        return authorizedEmails.contains(email.trim().toLowerCase());
     }
 }
