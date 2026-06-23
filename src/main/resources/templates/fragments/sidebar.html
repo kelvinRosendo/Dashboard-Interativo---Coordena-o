@@ -20,7 +20,7 @@
 <aside class="app-sidebar"
        th:fragment="sidebar(active, tvMode)"
        th:classappend="${tvMode} ? ' app-sidebar--tv' : ''">
-    <div class="app-sidebar__brand">
+    <div class="app-sidebar__brand" data-sidebar-toggle role="button" tabindex="0" aria-label="Recolher menu">
         <span class="brand-mark app-sidebar__brand-mark" aria-hidden="true"></span>
         <span class="brand-text app-sidebar__brand-text app-sidebar__text">
             <small>Colegio</small>

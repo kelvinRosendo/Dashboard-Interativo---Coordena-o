@@ -85,8 +85,9 @@ function initSidebar() {
     }
 
     const shell = sidebar.closest(".app-shell");
-    const toggle = sidebar.querySelector("[data-sidebar-toggle]");
+    const toggleButton = sidebar.querySelector("button[data-sidebar-toggle]");
     const toggleIcon = sidebar.querySelector("[data-sidebar-toggle-icon]");
+    const toggleTriggers = sidebar.querySelectorAll("[data-sidebar-toggle]");
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const setCollapsed = (collapsed, persist = true) => {
@@ -100,7 +101,7 @@ function initSidebar() {
             });
         }
 
-        updateSidebarToggle(toggle, toggleIcon, collapsed);
+        updateSidebarToggle(toggleButton, toggleIcon, collapsed);
 
         if (persist) {
             try {
@@ -112,12 +113,12 @@ function initSidebar() {
     setCollapsed(resolveInitialSidebarCollapsed(shell), false);
     document.documentElement.classList.remove("sidebar-collapsed-pending");
 
-    if (toggle) {
-        toggle.addEventListener("click", () => {
+    toggleTriggers.forEach((trigger) => {
+        trigger.addEventListener("click", () => {
             const collapsed = !sidebar.classList.contains("app-sidebar--collapsed");
             setCollapsed(collapsed);
         });
-    }
+    });
 
     if (!prefersReducedMotion) {
         window.requestAnimationFrame(() => {
