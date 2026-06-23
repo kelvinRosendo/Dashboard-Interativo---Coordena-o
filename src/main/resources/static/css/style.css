@@ -190,7 +190,7 @@ a:hover {
 /* APP SHELL / SIDEBAR                   */
 /* ===================================== */
 html.sidebar-collapsed-pending {
-    --sidebar-width: 76px;
+    --sidebar-width: 60px;
 }
 
 html.sidebar-collapsed-pending .app-sidebar__brand-logo--full,
@@ -214,7 +214,7 @@ html.sidebar-collapsed-pending .app-sidebar__brand-logo--mark {
 }
 
 .app-shell--sidebar-collapsed {
-    --sidebar-width: 68px;
+    --sidebar-width: 60px;
 }
 
 .app-main {
@@ -498,19 +498,21 @@ html.sidebar-collapsed-pending .app-sidebar__brand-logo--mark {
 
 .app-sidebar--collapsed {
     align-items: center;
-    padding-inline: 10px;
+    padding-inline: 6px;
+    gap: 10px;
 }
 
 .app-sidebar--collapsed .app-sidebar__brand {
-    width: 56px;
+    width: 48px;
+    min-height: 52px;
     justify-content: center;
-    padding: 8px;
+    padding: 6px;
 }
 
 .app-sidebar--collapsed .app-sidebar__logo,
 .app-sidebar--collapsed .app-sidebar__brand-logo--mark {
-    width: 36px;
-    height: 36px;
+    width: 30px;
+    height: 30px;
 }
 
 .app-sidebar--collapsed .app-sidebar__brand-logo--full {
@@ -537,19 +539,32 @@ html.sidebar-collapsed-pending .app-sidebar__brand-logo--mark {
 
 .app-sidebar--collapsed .app-sidebar__toggle {
     align-self: center;
+    width: 32px;
+    height: 30px;
+    font-size: 14px;
+}
+
+.app-sidebar--collapsed .app-sidebar__nav {
+    gap: 4px;
 }
 
 .app-sidebar--collapsed .app-sidebar__link,
 .app-sidebar--collapsed .app-sidebar__logout-button {
     grid-template-columns: 1fr;
     justify-items: center;
-    padding: 7px;
+    min-height: 40px;
+    padding: 5px;
 }
 
 .app-sidebar--collapsed .app-sidebar__link span,
 .app-sidebar--collapsed .app-sidebar__logout-button span {
-    width: 36px;
-    height: 36px;
+    width: 30px;
+    height: 30px;
+}
+
+.app-sidebar--collapsed .app-sidebar__icon-img {
+    width: 18px;
+    height: 18px;
 }
 
 .app-shell--tv {
@@ -5246,7 +5261,7 @@ html.sidebar-collapsed-pending .app-sidebar__text {
 /* Responsivo: lateral recolhida e fixa */
 @media (max-width: 980px) {
     .app-shell {
-        --sidebar-width: 68px;
+        --sidebar-width: 60px;
     }
 
     .app-main {
@@ -5256,13 +5271,14 @@ html.sidebar-collapsed-pending .app-sidebar__text {
 
     .app-sidebar {
         width: var(--sidebar-width);
-        padding: 10px 8px;
+        padding: 8px 6px;
         align-items: center;
     }
 
     .app-sidebar__brand {
         justify-content: center;
-        padding: 6px;
+        padding: 5px;
+        min-height: 48px;
     }
 
     .app-sidebar__brand-text,
@@ -5274,7 +5290,23 @@ html.sidebar-collapsed-pending .app-sidebar__text {
     .app-sidebar__logout-button {
         grid-template-columns: 1fr;
         justify-items: center;
-        padding: 5px;
+        min-height: 38px;
+        padding: 4px;
+    }
+
+    .app-sidebar__link span,
+    .app-sidebar__logout-button span {
+        width: 28px;
+        height: 28px;
+    }
+
+    .app-sidebar__icon-img {
+        width: 16px;
+        height: 16px;
+    }
+
+    .app-sidebar__nav {
+        gap: 4px;
     }
 }
 
