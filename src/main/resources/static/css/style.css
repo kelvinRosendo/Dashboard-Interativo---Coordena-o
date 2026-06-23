@@ -4586,6 +4586,14 @@ body.tv-page.tv-page--semana.tv-page--dashboard .app-main--tv.tv-shell--semana {
     .week-focus-form__section-title {
         font-size: 16px;
     }
+
+    .aviso-card {
+        grid-template-columns: 1fr;
+    }
+
+    .btn-excluir-aviso {
+        width: 100%;
+    }
 }
 
 body.tv-page.tv-page--semana.tv-page--dashboard {
@@ -6369,4 +6377,156 @@ html.sidebar-collapsed-pending .app-sidebar__text {
 .avisos-collapsible__arrow{
     color:#fff;
     font-size:18px;
+}
+
+/* ===================================== */
+/* COMUNICADOS / AVISOS - ESTILIZACAO    */
+/* ===================================== */
+
+/* Painel de comunicados - identidade visual distinta */
+.avisos-admin-panel {
+    border-color: rgba(96, 165, 250, 0.22);
+}
+
+/* Remover icone duplicado (::before) no header dos comunicados */
+.avisos-admin-panel .avisos-collapsible__header > div:first-child::before {
+    content: none;
+}
+
+/* Formulario de criacao de comunicado */
+.comunicado-form {
+    display: grid;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--line);
+}
+
+.comunicado-form .campo label {
+    display: block;
+    margin-bottom: 6px;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.comunicado-form .campo input,
+.comunicado-form .campo textarea {
+    width: 100%;
+    min-height: 42px;
+    padding: 10px 14px;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    outline: none;
+    color: #ffffff;
+    background: rgba(2, 6, 23, 0.34);
+    font-family: var(--font);
+    font-size: 14px;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.comunicado-form .campo textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.comunicado-form .campo input:focus,
+.comunicado-form .campo textarea:focus {
+    border-color: rgba(96, 165, 250, 0.82);
+    background: rgba(2, 6, 23, 0.52);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+/* Lista de comunicados */
+.avisos-list {
+    display: grid;
+    gap: 12px;
+}
+
+/* Card individual de comunicado */
+.aviso-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 14px;
+    align-items: start;
+    padding: 16px;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    background: rgba(2, 6, 23, 0.22);
+    border-left: 4px solid var(--blue-2);
+    transition: border-color 0.18s ease;
+}
+
+.aviso-card:hover {
+    border-color: var(--line-strong);
+}
+
+.aviso-card__content {
+    min-width: 0;
+    display: grid;
+    gap: 4px;
+}
+
+.aviso-card__content h3 {
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.aviso-card__content p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.45;
+}
+
+.aviso-card__content small {
+    color: var(--subtle);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+/* Botao excluir comunicado */
+.btn-excluir-aviso {
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 12px;
+    border: 1px solid rgba(239, 68, 68, 0.28);
+    border-radius: var(--radius);
+    background: rgba(239, 68, 68, 0.1);
+    color: #fecaca;
+    font-weight: 700;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: var(--font);
+    transition: background 0.18s ease, border-color 0.18s ease;
+}
+
+.btn-excluir-aviso:hover {
+    background: rgba(239, 68, 68, 0.22);
+    border-color: rgba(239, 68, 68, 0.48);
+}
+
+/* ===================================== */
+/* RELATORIO - AJUSTES VISUAIS           */
+/* ===================================== */
+
+.relatorio-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.relatorio-card__button--ghost {
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--muted);
+}
+
+.relatorio-card__button--ghost:hover {
+    background: rgba(37, 99, 235, 0.12);
+    border-color: rgba(96, 165, 250, 0.34);
+    color: #ffffff;
 }
