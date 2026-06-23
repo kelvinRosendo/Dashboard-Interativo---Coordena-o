@@ -86,9 +86,7 @@ public class DashboardTvController {
         if (semanaEmFocoOpt.isPresent()) {
             SemanaEmFoco semanaEmFoco = semanaEmFocoOpt.get();
             model.addAttribute("semanaEmFoco", semanaEmFoco);
-            List<Demanda> demandasSemana = demandaService.listarPorSegmento(semanaEmFoco.getSegmento()).stream()
-                    .filter(demanda -> demanda.getStatus() != br.com.escola.dashboard.enums.StatusDemanda.CANCELADA)
-                    .toList();
+            List<Demanda> demandasSemana = demandaService.listarAtivasPorSegmento(semanaEmFoco.getSegmento());
             model.addAttribute("demandasSemana", demandasSemana);
         } else {
             model.addAttribute("semanaEmFoco", null);
@@ -193,10 +191,9 @@ public class DashboardTvController {
                     .filter(evento -> !evento.getData().isBefore(inicioSemana) && !evento.getData().isAfter(fimSemana))
                     .toList();
 
-            List<Demanda> demandasSemana = demandaService.listarTodasParaAdmin().stream()
+            List<Demanda> demandasSemana = demandaService.listarAtivas().stream()
                     .filter(demanda -> demanda.getDataPrazo() != null)
                     .filter(demanda -> !demanda.getDataPrazo().isBefore(inicioSemana) && !demanda.getDataPrazo().isAfter(fimSemana))
-                    .filter(demanda -> demanda.getStatus() != br.com.escola.dashboard.enums.StatusDemanda.CANCELADA)
                     .sorted(Comparator.comparing(Demanda::getDataPrazo))
                     .toList();
 

@@ -175,6 +175,11 @@
                 </div>
 
                 <div class="demanda-summary-grid admin-stat-grid">
+                    <article class="demanda-summary-card admin-stat-card admin-stat-card--active">
+                        <span>Ativas</span>
+                        <strong th:text="${demandaResumo.ativas}">0</strong>
+                        <small>Pendentes + em andamento</small>
+                    </article>
                     <article class="demanda-summary-card admin-stat-card admin-stat-card--pending">
                         <span>Pendentes</span>
                         <strong th:text="${demandaResumo.pendentes}">0</strong>

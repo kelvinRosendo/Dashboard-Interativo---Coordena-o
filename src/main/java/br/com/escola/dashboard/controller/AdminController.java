@@ -81,6 +81,7 @@ public class AdminController {
                 .toList());
         model.addAttribute("demandaResumo", demandaService.resumoGeral());
         model.addAttribute("demandasAdmin", demandaService.listarTodasParaAdmin());
+        model.addAttribute("demandasAtivas", demandaService.listarAtivas());
         model.addAttribute("statusDemandas", StatusDemanda.values());
         model.addAttribute("comunicados", comunicadoService.listarTodos());
 

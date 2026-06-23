@@ -127,6 +127,12 @@
                 Voce tem demandas pendentes
             </p>
 
+            <p class="admin-empty demanda-alerta--ativas"
+               th:if="${demandasAtivas != null and !#lists.isEmpty(demandasAtivas)}"
+               th:text="${demandasAtivas.size() + ' demanda' + (demandasAtivas.size() == 1 ? '' : 's') + ' ativa' + (demandasAtivas.size() == 1 ? '' : 's') + ' (pendentes + em andamento)'}">
+                Demandas ativas
+            </p>
+
             <p class="admin-empty" th:if="${demandas == null or #lists.isEmpty(demandas)}">
                 Nenhuma demanda atribuida para este segmento.
             </p>

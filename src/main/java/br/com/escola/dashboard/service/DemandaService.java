@@ -17,6 +17,11 @@ import java.util.List;
 @Service
 public class DemandaService {
 
+    public static final List<StatusDemanda> STATUS_ATIVOS = List.of(
+            StatusDemanda.PENDENTE,
+            StatusDemanda.EM_ANDAMENTO
+    );
+
     private final DemandaRepository demandaRepository;
 
     public DemandaService(DemandaRepository demandaRepository) {
@@ -43,6 +48,14 @@ public class DemandaService {
 
     public List<Demanda> listarPorSegmento(SegmentoCoordenacao segmento) {
         return demandaRepository.findBySegmentoOrderByDataPrazoAscDataCriacaoDesc(segmento);
+    }
+
+    public List<Demanda> listarAtivas() {
+        return demandaRepository.findByStatusInOrderByDataPrazoAscDataCriacaoDesc(STATUS_ATIVOS);
+    }
+
+    public List<Demanda> listarAtivasPorSegmento(SegmentoCoordenacao segmento) {
+        return demandaRepository.findBySegmentoAndStatusInOrderByDataPrazoAscDataCriacaoDesc(segmento, STATUS_ATIVOS);
     }
 
     public Demanda atualizarStatus(Long id, StatusDemanda status) {
@@ -74,13 +87,14 @@ public class DemandaService {
         long emAndamento = demandaRepository.countByStatus(StatusDemanda.EM_ANDAMENTO);
         long concluidas = demandaRepository.countByStatus(StatusDemanda.CONCLUIDA);
         long canceladas = demandaRepository.countByStatus(StatusDemanda.CANCELADA);
+        long ativas = demandaRepository.countByStatusIn(STATUS_ATIVOS);
         long proximasDoPrazo = contarProximasDoPrazo();
 
         List<ProgressoSegmento> progressos = Arrays.stream(SegmentoCoordenacao.values())
                 .map(this::calcularProgressoPorSegmento)
                 .toList();
 
-        return new ResumoDemandas(total, pendentes, emAndamento, concluidas, canceladas, proximasDoPrazo, progressos);
+        return new ResumoDemandas(total, pendentes, emAndamento, concluidas, canceladas, ativas, proximasDoPrazo, progressos);
     }
 
     public ProgressoSegmento calcularProgressoPorSegmento(SegmentoCoordenacao segmento) {
@@ -89,6 +103,7 @@ public class DemandaService {
         long emAndamento = demandaRepository.countBySegmentoAndStatus(segmento, StatusDemanda.EM_ANDAMENTO);
         long concluidas = demandaRepository.countBySegmentoAndStatus(segmento, StatusDemanda.CONCLUIDA);
         long canceladas = demandaRepository.countBySegmentoAndStatus(segmento, StatusDemanda.CANCELADA);
+        long ativas = demandaRepository.countBySegmentoAndStatusIn(segmento, STATUS_ATIVOS);
         int percentual = total > 0 ? (int) Math.round((concluidas * 100.0) / total) : 0;
 
         return new ProgressoSegmento(
@@ -100,6 +115,7 @@ public class DemandaService {
                 emAndamento,
                 concluidas,
                 canceladas,
+                ativas,
                 percentual
         );
     }
@@ -152,6 +168,7 @@ public class DemandaService {
             long emAndamento,
             long concluidas,
             long canceladas,
+            long ativas,
             long proximasDoPrazo,
             List<ProgressoSegmento> progressos
     ) {
@@ -166,6 +183,7 @@ public class DemandaService {
             long emAndamento,
             long concluidas,
             long canceladas,
+            long ativas,
             int percentual
     ) {
     }

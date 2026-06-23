@@ -4,6 +4,8 @@ import br.com.escola.dashboard.entity.Demanda;
 import br.com.escola.dashboard.enums.SegmentoCoordenacao;
 import br.com.escola.dashboard.enums.StatusDemanda;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -35,5 +37,20 @@ public interface DemandaRepository extends JpaRepository<Demanda, Long> {
     long countBySegmentoAndStatus(SegmentoCoordenacao segmento, StatusDemanda status);
 
     long countBySegmentoAndStatusAndVisualizadaPelaCoordenadoraFalse(SegmentoCoordenacao segmento,
-                                                                     StatusDemanda status);
+                                                                      StatusDemanda status);
+
+    @Query("SELECT COUNT(d) FROM Demanda d WHERE d.status IN :statuses")
+    long countByStatusIn(@Param("statuses") List<StatusDemanda> statuses);
+
+    @Query("SELECT COUNT(d) FROM Demanda d WHERE d.segmento = :segmento AND d.status IN :statuses")
+    long countBySegmentoAndStatusIn(@Param("segmento") SegmentoCoordenacao segmento,
+                                     @Param("statuses") List<StatusDemanda> statuses);
+
+    @Query("SELECT d FROM Demanda d WHERE d.status IN :statuses ORDER BY d.dataPrazo ASC, d.dataCriacao DESC")
+    List<Demanda> findByStatusInOrderByDataPrazoAscDataCriacaoDesc(@Param("statuses") List<StatusDemanda> statuses);
+
+    @Query("SELECT d FROM Demanda d WHERE d.segmento = :segmento AND d.status IN :statuses ORDER BY d.dataPrazo ASC, d.dataCriacao DESC")
+    List<Demanda> findBySegmentoAndStatusInOrderByDataPrazoAscDataCriacaoDesc(
+            @Param("segmento") SegmentoCoordenacao segmento,
+            @Param("statuses") List<StatusDemanda> statuses);
 }

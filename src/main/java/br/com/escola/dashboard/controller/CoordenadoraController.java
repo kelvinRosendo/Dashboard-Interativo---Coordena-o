@@ -83,6 +83,7 @@ public class CoordenadoraController {
         model.addAttribute("comunicados", comunicadoService.listarTodos());
         model.addAttribute("faltas", cardService.listarPorCategoria(CategoriaCard.FALTA_PROFESSOR));
         model.addAttribute("demandas", demandaService.listarPorSegmento(segmentoEnum));
+        model.addAttribute("demandasAtivas", demandaService.listarAtivasPorSegmento(segmentoEnum));
         model.addAttribute("demandaProgresso", demandaService.calcularProgressoPorSegmento(segmentoEnum));
         model.addAttribute("demandasPendentes", demandaService.contarPendentesPorSegmento(segmentoEnum));
         model.addAttribute("demandasNovas", demandaService.listarNovasPendentesPorSegmento(segmentoEnum));
