@@ -5,6 +5,7 @@ import br.com.escola.dashboard.dto.DemandaRequestDTO;
 import br.com.escola.dashboard.enums.PrioridadeDemanda;
 import br.com.escola.dashboard.enums.SegmentoCoordenacao;
 import br.com.escola.dashboard.enums.StatusDemanda;
+import br.com.escola.dashboard.service.AdminAuthService;
 import br.com.escola.dashboard.service.AgendaConflictService;
 import br.com.escola.dashboard.service.DemandaService;
 import jakarta.validation.Valid;
@@ -27,26 +28,41 @@ public class DemandaController {
 
     private final DemandaService demandaService;
     private final AgendaConflictService agendaConflictService;
+    private final AdminAuthService adminAuthService;
 
-    public DemandaController(DemandaService demandaService, AgendaConflictService agendaConflictService) {
+    public DemandaController(DemandaService demandaService,
+                             AgendaConflictService agendaConflictService,
+                             AdminAuthService adminAuthService) {
         this.demandaService = demandaService;
         this.agendaConflictService = agendaConflictService;
+        this.adminAuthService = adminAuthService;
     }
 
     @GetMapping("/admin/demandas/nova")
-    public String novaDemanda(Model model) {
+    public String novaDemanda(@AuthenticationPrincipal OAuth2User usuario,
+                              RedirectAttributes redirectAttributes,
+                              Model model) {
+        if (!isAdmin(usuario)) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
+            return "redirect:/";
+        }
         prepararFormulario(model, new DemandaRequestDTO());
         return "nova-demanda";
     }
 
     @PostMapping("/admin/demandas")
-    public String criarDemanda(@Valid @ModelAttribute("demanda") DemandaRequestDTO demanda,
+    public String criarDemanda(@AuthenticationPrincipal OAuth2User usuario,
+                               @Valid @ModelAttribute("demanda") DemandaRequestDTO demanda,
                                BindingResult bindingResult,
                                @RequestParam(name = "confirmarConflito", defaultValue = "false") boolean confirmarConflito,
                                @RegisteredOAuth2AuthorizedClient("google") OAuth2AuthorizedClient googleClient,
-                               @AuthenticationPrincipal OAuth2User usuario,
                                Model model,
                                RedirectAttributes redirectAttributes) {
+        if (!isAdmin(usuario)) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
+            return "redirect:/";
+        }
+
         if (bindingResult.hasErrors()) {
             prepararFormulario(model, demanda);
             return "nova-demanda";
@@ -71,9 +87,15 @@ public class DemandaController {
     }
 
     @PostMapping("/admin/demandas/{id}/status")
-    public String atualizarStatusAdmin(@PathVariable Long id,
+    public String atualizarStatusAdmin(@AuthenticationPrincipal OAuth2User usuario,
+                                       @PathVariable Long id,
                                        @RequestParam StatusDemanda status,
                                        RedirectAttributes redirectAttributes) {
+        if (!isAdmin(usuario)) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
+            return "redirect:/";
+        }
+
         demandaService.atualizarStatus(id, status);
         redirectAttributes.addFlashAttribute("mensagemSucesso", "Status da demanda atualizado.");
         return "redirect:/admin";
@@ -105,6 +127,13 @@ public class DemandaController {
         demandaService.marcarNovasPendentesComoVisualizadas(segmentoEnum);
         redirectAttributes.addFlashAttribute("mensagemSucesso", "Demandas novas marcadas como vistas.");
         return "redirect:/coordenadoras/" + segmentoEnum.getSlug();
+    }
+
+    private boolean isAdmin(OAuth2User usuario) {
+        if (usuario == null) {
+            return false;
+        }
+        return adminAuthService.isAdminEmailAuthorized(usuario.getAttribute("email"));
     }
 
     private void prepararFormulario(Model model, DemandaRequestDTO demanda) {

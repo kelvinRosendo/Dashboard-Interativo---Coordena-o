@@ -53,4 +53,10 @@ public interface DemandaRepository extends JpaRepository<Demanda, Long> {
     List<Demanda> findBySegmentoAndStatusInOrderByDataPrazoAscDataCriacaoDesc(
             @Param("segmento") SegmentoCoordenacao segmento,
             @Param("statuses") List<StatusDemanda> statuses);
+
+    @Query("SELECT COUNT(d) FROM Demanda d WHERE d.dataPrazo IS NOT NULL AND d.dataPrazo >= :inicio AND d.dataPrazo <= :fim AND d.status NOT IN :statusExcluidos")
+    long countByDataPrazoBetweenAndStatusNotIn(
+            @Param("inicio") LocalDate inicio,
+            @Param("fim") LocalDate fim,
+            @Param("statusExcluidos") List<StatusDemanda> statusExcluidos);
 }

@@ -9,7 +9,7 @@
 <body class="form-page">
 
 <div class="app-shell">
-    <aside th:replace="~{fragments/sidebar :: sidebar('relatorio', false)}"></aside>
+    <aside th:replace="~{fragments/sidebar :: sidebar('admin', false)}"></aside>
 
     <main class="app-main form-main">
         <header class="form-header">
@@ -20,7 +20,7 @@
                     Período: 11/05/2026 a 17/05/2026
                 </p>
             </div>
-            <a href="/admin" class="form-header__back">← Voltar</a>
+            <a th:href="@{/admin}" class="form-header__back">← Voltar</a>
         </header>
 
         <div class="form-container">
@@ -109,7 +109,7 @@
                         </button>
                     </th:block>
                     <th:block th:if="${relatorio.status.name() == 'FINALIZADO'}">
-                        <a href="/admin" class="relatorio-form__button relatorio-form__button--secondary">
+                        <a th:href="@{/admin}" class="relatorio-form__button relatorio-form__button--secondary">
                             Voltar
                         </a>
                     </th:block>

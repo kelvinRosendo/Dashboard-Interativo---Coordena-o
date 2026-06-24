@@ -149,13 +149,10 @@ public class DemandaService {
         LocalDate hoje = LocalDate.now();
         LocalDate limite = hoje.plusDays(7);
 
-        return demandaRepository.findAll().stream()
-                .filter(demanda -> demanda.getDataPrazo() != null)
-                .filter(demanda -> !demanda.getDataPrazo().isBefore(hoje))
-                .filter(demanda -> !demanda.getDataPrazo().isAfter(limite))
-                .filter(demanda -> demanda.getStatus() != StatusDemanda.CONCLUIDA)
-                .filter(demanda -> demanda.getStatus() != StatusDemanda.CANCELADA)
-                .count();
+        return demandaRepository.countByDataPrazoBetweenAndStatusNotIn(
+                hoje, limite,
+                List.of(StatusDemanda.CONCLUIDA, StatusDemanda.CANCELADA)
+        );
     }
 
     private String limparTexto(String valor) {
