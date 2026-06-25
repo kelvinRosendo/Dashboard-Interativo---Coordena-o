@@ -46,7 +46,7 @@
         <div class="admin-main-column admin-main-column--control">
             <!-- ====== SEMANA EM FOCO (collapsible) ====== -->
             <section class="admin-section week-focus-control avisos-collapsible" id="semana-panel"
-                     th:with="semanaControle=${semanaAtual != null ? semanaAtual : (semanaEmFoco != null ? semanaEmFoco : null)}">
+                     th:with="semanaControle=${semanaEmFoco}">
                 <button type="button"
                         class="avisos-collapsible__toggle"
                         id="semana-toggle"
@@ -382,7 +382,7 @@
                         </span>
                         <strong>Novo comunicado</strong>
                     </a>
-                    <a th:href="@{/novo-card}" class="admin-action-card">
+                    <a th:href="@{/admin/demandas/nova}" class="admin-action-card">
                         <span class="admin-action-icon">
                             <img th:src="@{/img/icons/icon-admin.png}" alt="">
                         </span>

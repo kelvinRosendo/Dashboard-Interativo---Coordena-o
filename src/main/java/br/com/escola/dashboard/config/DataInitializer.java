@@ -32,14 +32,6 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) {
         LocalDateTime agora = LocalDateTime.now();
-        salvarCategoriaSeNecessario(
-                CategoriaCard.AVISO_NOTA,
-                List.of(
-                        criarCard("Uso obrigatorio de cracha", "Toda a equipe deve utilizar cracha visivel durante o expediente.", CategoriaCard.AVISO_NOTA, PrioridadeCard.MEDIA, StatusCard.PENDENTE, null, null, "Reforcar orientacao na entrada.", agora.minusHours(9)),
-                        criarCard("Prazo para lancamento de notas", "O lancamento de notas do trimestre deve ser concluido ate 25/04.", CategoriaCard.AVISO_NOTA, PrioridadeCard.ALTA, StatusCard.EM_ANDAMENTO, null, null, "Conferir pendencias por turma.", agora.minusHours(8)),
-                        criarCard("Reuniao com responsaveis", "Reuniao geral com responsaveis na sexta-feira as 18h no auditorio.", CategoriaCard.AVISO_NOTA, PrioridadeCard.ALTA, StatusCard.PENDENTE, null, null, "Preparar lista de presenca.", agora.minusHours(7))
-                )
-        );
 
         salvarCategoriaSeNecessario(
                 CategoriaCard.SUBSTITUICAO,
