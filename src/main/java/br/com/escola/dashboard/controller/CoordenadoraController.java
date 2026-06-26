@@ -4,14 +4,18 @@ import br.com.escola.dashboard.dto.CardResponseDTO;
 import br.com.escola.dashboard.entity.SemanaEmFoco;
 import br.com.escola.dashboard.enums.CategoriaCard;
 import br.com.escola.dashboard.enums.SegmentoCoordenacao;
+import br.com.escola.dashboard.service.AdminAuthService;
 import br.com.escola.dashboard.service.CardService;
 import br.com.escola.dashboard.service.ComunicadoService;
 import br.com.escola.dashboard.service.DemandaService;
 import br.com.escola.dashboard.service.SemanaEmFocoService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Arrays;
 import java.util.List;
@@ -33,25 +37,43 @@ public class CoordenadoraController {
     private final DemandaService demandaService;
     private final SemanaEmFocoService semanaEmFocoService;
     private final ComunicadoService comunicadoService;
+    private final AdminAuthService adminAuthService;
 
     public CoordenadoraController(CardService cardService,
                                   DemandaService demandaService,
                                   SemanaEmFocoService semanaEmFocoService,
-                                  ComunicadoService comunicadoService) {
+                                  ComunicadoService comunicadoService,
+                                  AdminAuthService adminAuthService) {
         this.cardService = cardService;
         this.demandaService = demandaService;
         this.semanaEmFocoService = semanaEmFocoService;
         this.comunicadoService = comunicadoService;
+        this.adminAuthService = adminAuthService;
     }
 
     @GetMapping("/coordenadoras")
-    public String listarCoordenadoras(Model model) {
+    public String listarCoordenadoras(@AuthenticationPrincipal OAuth2User usuario,
+                                      Model model,
+                                      RedirectAttributes redirectAttributes) {
+        if (!isAdmin(usuario)) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
+            return "redirect:/";
+        }
+
         model.addAttribute("segmentos", SEGMENTOS);
         return "coordenadoras";
     }
 
     @GetMapping("/coordenadoras/{slug}")
-    public String painelCoordenadora(@PathVariable String slug, Model model) {
+    public String painelCoordenadora(@AuthenticationPrincipal OAuth2User usuario,
+                                     @PathVariable String slug,
+                                     Model model,
+                                     RedirectAttributes redirectAttributes) {
+        if (!isAdmin(usuario)) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
+            return "redirect:/";
+        }
+
         SegmentoCoordenacao segmentoEnum = SegmentoCoordenacao.fromSlug(slug);
 
         if (segmentoEnum == null) {
@@ -90,6 +112,13 @@ public class CoordenadoraController {
         model.addAttribute("quantidadeDemandasNovas", demandaService.contarNovasPendentesPorSegmento(segmentoEnum));
 
         return "coordenadora";
+    }
+
+    private boolean isAdmin(OAuth2User usuario) {
+        if (usuario == null) {
+            return false;
+        }
+        return adminAuthService.isAdminEmailAuthorized(usuario.getAttribute("email"));
     }
 
     private boolean contemSegmento(CardResponseDTO card, String segmento) {

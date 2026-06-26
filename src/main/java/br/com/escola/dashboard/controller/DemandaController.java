@@ -102,10 +102,16 @@ public class DemandaController {
     }
 
     @PostMapping("/coordenadoras/{segmento}/demandas/{id}/status")
-    public String atualizarStatusCoordenadora(@PathVariable String segmento,
-                                              @PathVariable Long id,
-                                              @RequestParam StatusDemanda status,
-                                              RedirectAttributes redirectAttributes) {
+    public String atualizarStatusCoordenadora(@AuthenticationPrincipal OAuth2User usuario,
+                                               @PathVariable String segmento,
+                                               @PathVariable Long id,
+                                               @RequestParam StatusDemanda status,
+                                               RedirectAttributes redirectAttributes) {
+        if (!isAdmin(usuario)) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
+            return "redirect:/";
+        }
+
         SegmentoCoordenacao segmentoEnum = SegmentoCoordenacao.fromSlug(segmento);
         if (segmentoEnum == null) {
             return "redirect:/coordenadoras";
@@ -117,8 +123,14 @@ public class DemandaController {
     }
 
     @PostMapping("/coordenadoras/{segmento}/demandas/visualizar")
-    public String visualizarDemandasCoordenadora(@PathVariable String segmento,
-                                                 RedirectAttributes redirectAttributes) {
+    public String visualizarDemandasCoordenadora(@AuthenticationPrincipal OAuth2User usuario,
+                                                  @PathVariable String segmento,
+                                                  RedirectAttributes redirectAttributes) {
+        if (!isAdmin(usuario)) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
+            return "redirect:/";
+        }
+
         SegmentoCoordenacao segmentoEnum = SegmentoCoordenacao.fromSlug(segmento);
         if (segmentoEnum == null) {
             return "redirect:/coordenadoras";

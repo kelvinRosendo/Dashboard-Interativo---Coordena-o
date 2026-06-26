@@ -67,14 +67,10 @@ public class CardService {
         Card card = cardRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Card nao encontrado com id: " + id));
 
-        if (card != null) {
-            preencherCard(card, requestDTO);
+        preencherCard(card, requestDTO);
 
-            Card cardAtualizado = cardRepository.save(card);
-            return converterParaResponseDTO(cardAtualizado);
-        }
-        
-        throw new ResourceNotFoundException("Card nao encontrado com id: " + id);
+        Card cardAtualizado = cardRepository.save(card);
+        return converterParaResponseDTO(cardAtualizado);
     }
 
     public void deletarCard(Long id) {
@@ -109,10 +105,6 @@ public class CardService {
 
         if (exigeResponsavel(categoria) && !StringUtils.hasText(requestDTO.getResponsavel())) {
             throw new IllegalArgumentException("Informe o responsavel para este tipo de card.");
-        }
-
-        if (categoria == CategoriaCard.AVISO_NOTA && !StringUtils.hasText(requestDTO.getDescricao())) {
-            throw new IllegalArgumentException("Avisos e notas precisam de uma descricao.");
         }
     }
 

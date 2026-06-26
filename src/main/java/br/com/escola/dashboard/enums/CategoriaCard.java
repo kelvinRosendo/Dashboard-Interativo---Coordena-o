@@ -7,7 +7,7 @@ public enum CategoriaCard {
     ROTINA_ADMINISTRATIVA("Rotina Administrativa", "Rotina Administrativa"),
     ROTINA_COORDENADORES("Rotina dos Coordenadores", "Rotina dos Coordenadores"),
     SEMANA_EM_FOCO("Semana em Foco", "Semana em Foco"),
-    /** @deprecated Use Comunicado module instead. This category is kept for legacy Card compatibility only. */
+    @Deprecated(since = "Fase 2", forRemoval = true)
     AVISO_NOTA("Avisos / Notas", "Avisos / Notas");
 
     private final String tituloFormulario;

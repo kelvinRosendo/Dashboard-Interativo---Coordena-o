@@ -9,7 +9,6 @@ import br.com.escola.dashboard.repository.CardRepository;
 import br.com.escola.dashboard.repository.ComunicadoRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
-///import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;

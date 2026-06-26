@@ -8,7 +8,7 @@
 <body class="form-page">
 
 <div class="app-shell">
-    <aside th:replace="~{fragments/sidebar :: sidebar('novo-card', false)}"></aside>
+    <aside th:replace="~{fragments/sidebar :: sidebar('admin', false)}"></aside>
 
 <main class="app-main form-main">
 <div class="container">
@@ -21,7 +21,7 @@
     </div>
 
     <form id="formComConflito"
-          th:action="${modoEdicao ? '/atualizar-card/' + cardId : '/salvar-card'}"
+          th:action="${modoEdicao} ? @{/atualizar-card/__${cardId}__} : @{/salvar-card}"
           method="post"
           class="formulario"
           th:object="${card}">
@@ -50,7 +50,6 @@
                 <option value="ROTINA_ADMINISTRATIVA">Rotina Administrativa</option>
                 <option value="ROTINA_COORDENADORES">Rotina dos Coordenadores</option>
                 <option value="SEMANA_EM_FOCO">Semana em Foco</option>
-                <option value="AVISO_NOTA">Avisos / Notas</option>
             </select>
             <small class="campo-erro" th:if="${#fields.hasErrors('categoria')}" th:errors="*{categoria}">Erro</small>
         </div>
@@ -109,7 +108,7 @@
                 Salvar
             </button>
 
-            <a href="/admin" class="btn-deletar">Cancelar</a>
+            <a th:href="@{/admin}" class="btn-deletar">Cancelar</a>
         </div>
     </form>
 </div>

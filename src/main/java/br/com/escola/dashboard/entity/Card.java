@@ -45,10 +45,11 @@ public class Card {
     private String descricao;
 
     /**
-     * 🔹 Categoria do card
+     * Categoria do card
      *
      * Exemplo:
-     * EVENTO, AVISO, TAREFA
+     * EVENTO, FALTA_PROFESSOR, SUBSTITUICAO, ROTINA_ADMINISTRATIVA,
+     * ROTINA_COORDENADORES, SEMANA_EM_FOCO
      */
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

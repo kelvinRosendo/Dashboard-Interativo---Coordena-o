@@ -9,7 +9,6 @@ import br.com.escola.dashboard.service.AdminAuthService;
 import br.com.escola.dashboard.service.ComunicadoService;
 import br.com.escola.dashboard.service.DemandaService;
 import br.com.escola.dashboard.service.GoogleCalendarService;
-import br.com.escola.dashboard.service.RelatorioSemanaEmFocoService;
 import br.com.escola.dashboard.service.SemanaEmFocoService;
 import jakarta.validation.Valid;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
@@ -36,20 +35,17 @@ public class AdminController {
     private final GoogleCalendarService googleCalendarService;
     private final DemandaService demandaService;
     private final SemanaEmFocoService semanaEmFocoService;
-    private final RelatorioSemanaEmFocoService relatorioService;
     private final ComunicadoService comunicadoService;
     private final AdminAuthService adminAuthService;
 
     public AdminController(GoogleCalendarService googleCalendarService,
                            DemandaService demandaService,
                            SemanaEmFocoService semanaEmFocoService,
-                           RelatorioSemanaEmFocoService relatorioService,
                            ComunicadoService comunicadoService,
                            AdminAuthService adminAuthService) {
         this.googleCalendarService = googleCalendarService;
         this.demandaService = demandaService;
         this.semanaEmFocoService = semanaEmFocoService;
-        this.relatorioService = relatorioService;
         this.comunicadoService = comunicadoService;
         this.adminAuthService = adminAuthService;
     }

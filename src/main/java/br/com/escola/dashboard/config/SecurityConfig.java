@@ -33,7 +33,9 @@ public class SecurityConfig {
                                 "/deletar-card/**",
                                 "/cards/**",
                                 "/relatorio",
-                                "/relatorio/**"
+                                "/relatorio/**",
+                                "/coordenadoras",
+                                "/coordenadoras/**"
                         ).authenticated()
                         .anyRequest().authenticated()
                 )

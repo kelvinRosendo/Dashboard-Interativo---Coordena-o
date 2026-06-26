@@ -5,11 +5,14 @@ import br.com.escola.dashboard.dto.CardResponseDTO;
 import br.com.escola.dashboard.enums.CategoriaCard;
 import br.com.escola.dashboard.enums.StatusCard;
 import br.com.escola.dashboard.dto.AgendaConflictCheckDTO;
+import br.com.escola.dashboard.service.AdminAuthService;
 import br.com.escola.dashboard.service.AgendaConflictService;
 import br.com.escola.dashboard.service.CardService;
 import jakarta.validation.Valid;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,16 +21,20 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class ViewController {
 
     private final CardService cardService;
     private final AgendaConflictService agendaConflictService;
+    private final AdminAuthService adminAuthService;
 
-    public ViewController(CardService cardService, AgendaConflictService agendaConflictService) {
+    public ViewController(CardService cardService, AgendaConflictService agendaConflictService,
+                          AdminAuthService adminAuthService) {
         this.cardService = cardService;
         this.agendaConflictService = agendaConflictService;
+        this.adminAuthService = adminAuthService;
     }
 
     @GetMapping("/")
@@ -84,9 +91,17 @@ public class ViewController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/deletar-card/{id}")
-    public String deletarCard(@PathVariable Long id) {
+    @PostMapping("/deletar-card/{id}")
+    public String deletarCard(@AuthenticationPrincipal OAuth2User usuario,
+                              @PathVariable Long id,
+                              RedirectAttributes redirectAttributes) {
+        if (!isAdmin(usuario)) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
+            return "redirect:/";
+        }
+
         cardService.deletarCard(id);
+        redirectAttributes.addFlashAttribute("mensagemSucesso", "Card excluido com sucesso.");
         return "redirect:/admin";
     }
 
@@ -163,6 +178,13 @@ public class ViewController {
         model.addAttribute("conflitos", conflitos.conflitos());
         model.addAttribute("googleAgendaIndisponivel", conflitos.googleIndisponivel());
         model.addAttribute("avisoGoogle", conflitos.avisoGoogle());
+    }
+
+    private boolean isAdmin(OAuth2User usuario) {
+        if (usuario == null) {
+            return false;
+        }
+        return adminAuthService.isAdminEmailAuthorized(usuario.getAttribute("email"));
     }
 
 }
