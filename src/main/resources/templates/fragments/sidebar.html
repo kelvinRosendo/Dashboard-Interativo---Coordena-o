@@ -43,7 +43,7 @@
            title="Painel Admin"
            th:classappend="${active == 'admin'} ? ' app-sidebar__link--active' : ''">
             <span class="app-sidebar__icon">
-                <img th:src="@{/img/icons/icon-admin.png}" alt="" class="app-sidebar__icon-img">
+                <img th:src="@{/img/icons/icon-admin.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
             </span>
             <strong class="app-sidebar__text">Painel Admin</strong>
         </a>
@@ -53,7 +53,7 @@
            title="Calendario"
            th:classappend="${active == 'calendario'} ? ' app-sidebar__link--active' : ''">
             <span class="app-sidebar__icon">
-                <img th:src="@{/img/icons/icon-calendar.png}" alt="" class="app-sidebar__icon-img">
+                <img th:src="@{/img/icons/icon-calendar.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
             </span>
             <strong class="app-sidebar__text">Calendario</strong>
         </a>
@@ -63,7 +63,7 @@
            title="Semana em Foco"
            th:classappend="${active == 'semana'} ? ' app-sidebar__link--active' : ''">
             <span class="app-sidebar__icon">
-                <img th:src="@{/img/icons/icon-week.png}" alt="" class="app-sidebar__icon-img">
+                <img th:src="@{/img/icons/icon-week.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
             </span>
             <strong class="app-sidebar__text">Semana em Foco</strong>
         </a>
@@ -73,7 +73,7 @@
            title="Coordenadoras"
            th:classappend="${active == 'coordenadoras'} ? ' app-sidebar__link--active' : ''">
             <span class="app-sidebar__icon">
-                <img th:src="@{/img/icons/icon-coordinators.png}" alt="" class="app-sidebar__icon-img">
+                <img th:src="@{/img/icons/icon-coordinators.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
             </span>
             <strong class="app-sidebar__text">Coordenadoras</strong>
         </a>
@@ -83,7 +83,7 @@
            title="Novo Comunicado"
            th:classappend="${active == 'novo-comunicado'} ? ' app-sidebar__link--active' : ''">
             <span class="app-sidebar__icon">
-                <img th:src="@{/img/icons/icon-add.png}" alt="" class="app-sidebar__icon-img">
+                <img th:src="@{/img/icons/icon-add.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
             </span>
             <strong class="app-sidebar__text">Novo Comunicado</strong>
         </a>
@@ -93,14 +93,14 @@
            title="Relatorios"
            th:classappend="${active == 'relatorios'} ? ' app-sidebar__link--active' : ''">
             <span class="app-sidebar__icon">
-                <img th:src="@{/img/icons/icon-report.png}" alt="" class="app-sidebar__icon-img">
+                <img th:src="@{/img/icons/icon-report.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
             </span>
             <strong class="app-sidebar__text">Relatorios</strong>
         </a>
 
         <span class="app-sidebar__link app-sidebar__link--disabled" aria-disabled="true" title="Configuracoes">
             <span class="app-sidebar__icon">
-                <img th:src="@{/img/icons/icon-settings.png}" alt="" class="app-sidebar__icon-img">
+                <img th:src="@{/img/icons/icon-settings.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
             </span>
             <strong class="app-sidebar__text">Configuracoes</strong>
         </span>
@@ -110,7 +110,7 @@
         <th:block th:replace="~{fragments/csrf :: token}"></th:block>
         <button type="submit" class="app-sidebar__logout-button" title="Sair">
             <span class="app-sidebar__icon">
-                <img th:src="@{/img/icons/icon-logout.png}" alt="" class="app-sidebar__icon-img">
+                <img th:src="@{/img/icons/icon-logout.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
             </span>
             <strong class="app-sidebar__text">Sair</strong>
         </button>

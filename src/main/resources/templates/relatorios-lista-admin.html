@@ -2,6 +2,7 @@
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Relatorios - Admin</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
@@ -79,7 +80,7 @@
                     </span>
                 </div>
 
-                <div class="demanda-actions" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <div class="demanda-actions">
                     <a th:href="@{/relatorio/admin/relatorios/__${relatorio.id}__/editar}"
                        class="btn-editar demanda-action-button"
                        th:if="${relatorio.status.name() == 'RASCUNHO'}">
@@ -93,7 +94,7 @@
                           th:action="@{/relatorio/admin/relatorios/__${relatorio.id}__/excluir}"
                           method="post"
                           onsubmit="return confirm('Deseja realmente excluir este relatorio?')"
-                          style="display: inline;">
+                          class="form-inline">
                         <th:block th:replace="~{fragments/csrf :: token}"></th:block>
                         <button type="submit" class="btn-excluir-aviso" title="Excluir relatorio">
                             Excluir

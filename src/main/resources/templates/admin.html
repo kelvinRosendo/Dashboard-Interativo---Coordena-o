@@ -2,6 +2,7 @@
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Dashboard da Coordenacao</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
@@ -119,9 +120,8 @@
                         <div class="relatorio-card__title">📋 Relatório da Semana em Foco</div>
                         <div class="relatorio-card__meta">
                             <span>Status:
-                                <span class="relatorio-status"
-                                      th:if="${semanaEmFoco.relatorio == null}"
-                                      style="background: rgba(226, 232, 240, 0.12); color: var(--subtle);">
+                                <span class="relatorio-status relatorio-status--not-started"
+                                      th:if="${semanaEmFoco.relatorio == null}">
                                     Não iniciado
                                 </span>
                                 <span class="relatorio-status relatorio-status--draft"
@@ -366,37 +366,37 @@
                 <div class="admin-quick-grid">
                     <a th:href="@{/admin/demandas/nova}" class="admin-action-card">
                         <span class="admin-action-icon">
-                            <img th:src="@{/img/icons/icon-add.png}" alt="">
+                            <img th:src="@{/img/icons/icon-add.png}" alt="" aria-hidden="true">
                         </span>
                         <strong>Nova demanda</strong>
                     </a>
                     <a th:href="@{/agenda/eventos/novo(origem='admin')}" class="admin-action-card">
                         <span class="admin-action-icon">
-                            <img th:src="@{/img/icons/icon-calendar.png}" alt="">
+                            <img th:src="@{/img/icons/icon-calendar.png}" alt="" aria-hidden="true">
                         </span>
                         <strong>Novo evento</strong>
                     </a>
                     <a th:href="@{/admin/comunicados/novo}" class="admin-action-card">
                         <span class="admin-action-icon">
-                            <img th:src="@{/img/icons/icon-report.png}" alt="">
+                            <img th:src="@{/img/icons/icon-report.png}" alt="" aria-hidden="true">
                         </span>
                         <strong>Novo comunicado</strong>
                     </a>
                     <a th:href="@{/novo-card(categoria='FALTA_PROFESSOR')}" class="admin-action-card">
                         <span class="admin-action-icon">
-                            <img th:src="@{/img/icons/icon-admin.png}" alt="">
+                            <img th:src="@{/img/icons/icon-admin.png}" alt="" aria-hidden="true">
                         </span>
                         <strong>Registrar falta</strong>
                     </a>
                     <a th:href="@{/admin/semana-em-foco}" class="admin-action-card">
                         <span class="admin-action-icon">
-                            <img th:src="@{/img/icons/icon-week.png}" alt="">
+                            <img th:src="@{/img/icons/icon-week.png}" alt="" aria-hidden="true">
                         </span>
                         <strong>Editar Semana</strong>
                     </a>
                     <a th:href="@{/tv/semana}" class="admin-action-card">
                         <span class="admin-action-icon">
-                            <img th:src="@{/img/icons/icon-week.png}" alt="">
+                            <img th:src="@{/img/icons/icon-week.png}" alt="" aria-hidden="true">
                         </span>
                         <strong>Semana na TV</strong>
                     </a>

@@ -120,7 +120,7 @@
                   th:action="@{/relatorio/__${semana.id}__/finalizar}"
                   method="post"
                   id="formFinalizar"
-                  style="display: none;">
+                  class="hidden">
                 <th:block th:replace="~{fragments/csrf :: token}"></th:block>
             </form>
         </div>

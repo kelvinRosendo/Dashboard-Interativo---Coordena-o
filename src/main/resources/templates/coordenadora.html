@@ -2,6 +2,7 @@
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${segmento.nome + ' - Coordenadora'}">Coordenadora</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
@@ -76,10 +77,10 @@
             </div>
 
             <!-- Semana em Foco ativa no banco para este segmento -->
-            <div th:if="${semanaEmFoco != null}" class="coordenadora-semana-foco-atual" style="padding: 10px 0;">
-                <h3 th:text="${semanaEmFoco.titulo}" style="color: var(--yellow); margin-bottom: 8px; font-size: 20px;">Titulo</h3>
-                <p th:text="${semanaEmFoco.descricao}" style="margin-bottom: 12px; font-size: 15px; color: var(--text);">Descricao</p>
-                <div class="demanda-meta" style="display: flex; gap: 15px; font-size: 13px;">
+            <div th:if="${semanaEmFoco != null}" class="coordenadora-semana-foco-atual">
+                <h3 th:text="${semanaEmFoco.titulo}">Titulo</h3>
+                <p th:text="${semanaEmFoco.descricao}">Descricao</p>
+                <div class="demanda-meta">
                     <span th:text="${'Periodo: ' + #temporals.format(semanaEmFoco.dataInicio, 'dd/MM/yyyy') + ' a ' + #temporals.format(semanaEmFoco.dataFim, 'dd/MM/yyyy')}">Periodo</span>
                     <span th:text="${'Prioridade: ' + semanaEmFoco.prioridade.titulo}">Prioridade</span>
                 </div>
