@@ -9,3 +9,22 @@
 .env
 .env.*
 .env.example
+PROJECT_PRINCIPLES.md
+SYSTEM_ARCHITECTURE.md
+COMMIT_GUIDELINES.md
+academy/
+sprints/
+
+# OADF - Organiza+ AI Development Framework
+AGENTS.md
+.cursorrules
+PROJECT_PLAYBOOK.md
+PROJECT_CONTEXT.md
+ROADMAP.md
+CHANGELOG.md
+DEVELOPMENT_PROTOCOL.md
+DIARIO_DE_BORDO.md
+docs/decisoes-design.md
+prompts/
+ADR/
+checklists/

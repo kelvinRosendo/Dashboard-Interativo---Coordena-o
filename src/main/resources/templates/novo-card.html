@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${modoEdicao ? 'Editar ' + tituloFormulario : tituloFormulario}">Novo Card</title>
+    <link rel="icon" type="image/png" th:href="@{/img/logo-colegio-satelite.png}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body class="form-page">
@@ -29,7 +30,7 @@
 
         <th:block th:replace="~{fragments/csrf :: token}"></th:block>
 
-        <div class="form-alerta campo-completo" th:if="${#fields.hasAnyErrors()}">
+        <div class="form-alerta campo-completo" role="alert" th:if="${#fields.hasAnyErrors()}">
             <p>Corrija os campos destacados antes de salvar.</p>
             <ul class="lista-erros" th:if="${#fields.hasGlobalErrors()}">
                 <li th:each="erro : ${#fields.globalErrors()}" th:text="${erro}">Erro</li>
@@ -39,7 +40,7 @@
         <div class="campo">
             <label for="titulo">Titulo</label>
             <input type="text" id="titulo" th:field="*{titulo}" required th:classappend="${#fields.hasErrors('titulo')} ? ' campo-invalido'">
-            <small class="campo-erro" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}">Erro</small>
+            <small class="campo-erro" role="alert" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}">Erro</small>
         </div>
 
         <div class="campo">
@@ -52,7 +53,7 @@
                 <option value="ROTINA_COORDENADORES">Rotina dos Coordenadores</option>
                 <option value="SEMANA_EM_FOCO">Semana em Foco</option>
             </select>
-            <small class="campo-erro" th:if="${#fields.hasErrors('categoria')}" th:errors="*{categoria}">Erro</small>
+            <small class="campo-erro" role="alert" th:if="${#fields.hasErrors('categoria')}" th:errors="*{categoria}">Erro</small>
         </div>
 
         <div class="campo">
@@ -63,7 +64,7 @@
                 <option value="MEDIA">Media</option>
                 <option value="ALTA">Alta</option>
             </select>
-            <small class="campo-erro" th:if="${#fields.hasErrors('prioridade')}" th:errors="*{prioridade}">Erro</small>
+            <small class="campo-erro" role="alert" th:if="${#fields.hasErrors('prioridade')}" th:errors="*{prioridade}">Erro</small>
         </div>
 
         <div class="campo">
@@ -74,25 +75,25 @@
                 <option value="EM_ANDAMENTO">Em andamento</option>
                 <option value="CONCLUIDO">Concluido</option>
             </select>
-            <small class="campo-erro" th:if="${#fields.hasErrors('status')}" th:errors="*{status}">Erro</small>
+            <small class="campo-erro" role="alert" th:if="${#fields.hasErrors('status')}" th:errors="*{status}">Erro</small>
         </div>
 
         <div class="campo">
             <label for="dataEvento">Data</label>
             <input type="date" id="dataEvento" th:field="*{dataEvento}" th:classappend="${#fields.hasErrors('dataEvento')} ? ' campo-invalido'">
-            <small class="campo-erro" th:if="${#fields.hasErrors('dataEvento')}" th:errors="*{dataEvento}">Erro</small>
+            <small class="campo-erro" role="alert" th:if="${#fields.hasErrors('dataEvento')}" th:errors="*{dataEvento}">Erro</small>
         </div>
 
         <div class="campo">
             <label for="responsavel">Responsavel</label>
             <input type="text" id="responsavel" th:field="*{responsavel}" placeholder="Ex: Coordenacao" th:classappend="${#fields.hasErrors('responsavel')} ? ' campo-invalido'">
-            <small class="campo-erro" th:if="${#fields.hasErrors('responsavel')}" th:errors="*{responsavel}">Erro</small>
+            <small class="campo-erro" role="alert" th:if="${#fields.hasErrors('responsavel')}" th:errors="*{responsavel}">Erro</small>
         </div>
 
         <div class="campo campo-completo">
             <label for="descricao">Descricao</label>
             <textarea id="descricao" th:field="*{descricao}" rows="3" th:classappend="${#fields.hasErrors('descricao')} ? ' campo-invalido'"></textarea>
-            <small class="campo-erro" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}">Erro</small>
+            <small class="campo-erro" role="alert" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}">Erro</small>
         </div>
 
         <div class="campo campo-completo">
@@ -100,7 +101,7 @@
             <textarea id="observacoes" th:field="*{observacoes}" rows="3"
                       th:classappend="${#fields.hasErrors('observacoes')} ? ' campo-invalido'"
                       placeholder="Informacoes adicionais para a equipe"></textarea>
-            <small class="campo-erro" th:if="${#fields.hasErrors('observacoes')}" th:errors="*{observacoes}">Erro</small>
+            <small class="campo-erro" role="alert" th:if="${#fields.hasErrors('observacoes')}" th:errors="*{observacoes}">Erro</small>
         </div>
 
         <div class="acoes campo-completo">

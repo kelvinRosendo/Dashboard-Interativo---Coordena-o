@@ -118,17 +118,63 @@ a:hover {
     object-position: left center;
 }
 
-.brand-mark {
-    width: 48px;
-    height: 48px;
+/* ===================================== */
+/* BRANDING - PADRAO INSTITUCIONAL       */
+/* ===================================== */
+
+/* Login: logo vertical */
+.brand-login {
     display: block;
-    border-radius: 50%;
-    background:
-        linear-gradient(135deg, transparent 0 38%, var(--yellow) 39% 52%, transparent 53%),
-        linear-gradient(135deg, #1d4ed8 0%, #0f172a 58%, #0a1020 100%);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.14);
+    width: min(180px, 40vw);
+    height: auto;
+    max-height: 120px;
+    object-fit: contain;
     flex: 0 0 auto;
+}
+
+/* Sidebar expandida: logo horizontal branca */
+.brand-sidebar-expanded {
+    display: block;
+    width: 100%;
+    height: 42px;
+    object-fit: contain;
+    object-position: left center;
+    flex: 0 0 auto;
+}
+
+/* Sidebar recolhida: somente simbolo */
+.brand-sidebar-collapsed {
+    display: none;
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+    flex: 0 0 auto;
+}
+
+/* TV: logo horizontal colorida */
+.brand-tv {
+    display: block;
+    width: clamp(120px, 14vw, 200px);
+    height: auto;
+    max-height: 64px;
+    object-fit: contain;
+    flex: 0 0 auto;
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(96, 165, 250, 0.18);
+    padding: 6px 12px;
+    box-shadow: 0 12px 26px rgba(37, 99, 235, 0.18);
+}
+
+/* Admin header: logo horizontal branca */
+.brand-admin {
+    display: block;
+    width: min(160px, 30vw);
+    height: auto;
+    max-height: 48px;
+    object-fit: contain;
+    flex: 0 0 auto;
+    margin-bottom: 8px;
 }
 
 .brand-text {
@@ -296,7 +342,19 @@ html.sidebar-collapsed-pending .app-sidebar__brand-logo--mark {
 
 .app-sidebar__brand-logo {
     display: block;
+    width: 100%;
+    height: 42px;
     object-fit: contain;
+    object-position: left center;
+    flex: 0 0 auto;
+}
+
+.app-sidebar__brand-logo--expanded {
+    display: block;
+}
+
+.app-sidebar__brand-logo--collapsed {
+    display: none;
 }
 
 .app-sidebar__brand-logo--full {
@@ -349,27 +407,6 @@ html.sidebar-collapsed-pending .app-sidebar__brand-logo--mark {
     text-transform: uppercase;
 }
 
-.app-sidebar__toggle {
-    width: 38px;
-    height: 34px;
-    align-self: flex-end;
-    display: grid;
-    place-items: center;
-    border-radius: var(--radius);
-    border: 1px solid rgba(96, 165, 250, 0.22);
-    color: #ffffff;
-    background: rgba(37, 99, 235, 0.12);
-    cursor: pointer;
-    font-size: 18px;
-    font-weight: 700;
-}
-
-.app-sidebar__toggle:hover,
-.app-sidebar__toggle:focus-visible {
-    outline: none;
-    border-color: rgba(250, 204, 21, 0.36);
-    background: rgba(250, 204, 21, 0.08);
-}
 
 .app-sidebar__nav {
     display: grid;
@@ -499,10 +536,25 @@ html.sidebar-collapsed-pending .app-sidebar__brand-logo--mark {
 }
 
 .app-sidebar--collapsed .app-sidebar__brand {
-    width: 48px;
+    width: 52px;
     min-height: 52px;
     justify-content: center;
-    padding: 6px;
+    padding: 4px;
+}
+
+.app-sidebar--collapsed .app-sidebar__brand-logo {
+    width: 44px;
+    height: 44px;
+}
+
+.app-sidebar--collapsed .app-sidebar__brand-logo--expanded {
+    display: none;
+}
+
+.app-sidebar--collapsed .app-sidebar__brand-logo--collapsed {
+    display: block;
+    width: 44px;
+    height: 44px;
 }
 
 .app-sidebar--collapsed .app-sidebar__logo,
@@ -533,12 +585,6 @@ html.sidebar-collapsed-pending .app-sidebar__brand-logo--mark {
     padding: 0;
 }
 
-.app-sidebar--collapsed .app-sidebar__toggle {
-    align-self: center;
-    width: 32px;
-    height: 30px;
-    font-size: 14px;
-}
 
 .app-sidebar--collapsed .app-sidebar__nav {
     gap: 4px;
@@ -576,6 +622,11 @@ html.sidebar-collapsed-pending .app-sidebar__brand-logo--mark {
     min-height: 58px;
     justify-content: center;
     padding: 8px;
+}
+
+.app-sidebar--tv .app-sidebar__brand-logo {
+    width: 38px;
+    height: 38px;
 }
 
 .app-sidebar--tv .app-sidebar__logo {
@@ -2871,13 +2922,15 @@ body.tv-dashboard-mode {
 }
 
 .tv-brand__logo {
-    width: clamp(44px, 4.8vw, 64px);
-    height: clamp(44px, 4.8vw, 64px);
+    width: clamp(120px, 14vw, 200px);
+    height: auto;
+    max-height: 64px;
     flex: 0 0 auto;
     object-fit: contain;
     border-radius: var(--radius);
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(96, 165, 250, 0.18);
+    padding: 6px 12px;
     box-shadow: 0 12px 26px rgba(37, 99, 235, 0.18);
 }
 
@@ -4958,29 +5011,6 @@ html.sidebar-collapsed-pending {
     line-height: 1;
 }
 
-/* Botão de recolher */
-.app-sidebar__toggle {
-    width: 34px;
-    height: 30px;
-    align-self: flex-end;
-    display: grid;
-    place-items: center;
-    border-radius: 10px;
-    border: 1px solid rgba(96, 165, 250, 0.2);
-    background: rgba(15, 23, 42, 0.72);
-    color: #ffffff;
-    cursor: pointer;
-    font-size: 15px;
-    font-weight: 700;
-}
-
-.app-sidebar__toggle:hover,
-.app-sidebar__toggle:focus-visible {
-    outline: none;
-    border-color: rgba(250, 204, 21, 0.42);
-    background: rgba(250, 204, 21, 0.12);
-}
-
 /* Navegação sem scroll */
 .app-sidebar__nav {
     width: 100%;
@@ -5052,14 +5082,25 @@ html.sidebar-collapsed-pending {
 }
 
 .app-sidebar--collapsed .app-sidebar__brand {
+    width: 52px;
     justify-content: center;
     min-height: 46px;
-    padding: 6px;
+    padding: 4px;
+}
+
+.app-sidebar--collapsed .app-sidebar__brand-logo--expanded {
+    display: none;
+}
+
+.app-sidebar--collapsed .app-sidebar__brand-logo--collapsed {
+    display: block;
+    width: 44px;
+    height: 44px;
 }
 
 .app-sidebar--collapsed .app-sidebar__brand-mark {
-    width: 34px;
-    height: 34px;
+    width: 44px;
+    height: 44px;
 }
 
 .app-sidebar--collapsed .app-sidebar__brand-text,
@@ -5083,9 +5124,6 @@ html.sidebar-collapsed-pending .app-sidebar__text {
         max-width 180ms ease;
 }
 
-.app-sidebar--collapsed .app-sidebar__toggle {
-    align-self: center;
-}
 
 .app-sidebar--collapsed .app-sidebar__link,
 .app-sidebar--collapsed .app-sidebar__logout-button {
@@ -6179,16 +6217,6 @@ html.sidebar-collapsed-pending .app-sidebar__text {
 
     cursor: pointer;
     text-align: left;
-}
-
-.avisos-collapsible__header {
-    width: 100%;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 18px 22px;
 }
 
 .avisos-collapsible__meta {

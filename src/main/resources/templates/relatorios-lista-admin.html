@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Relatorios - Admin</title>
+    <link rel="icon" type="image/png" th:href="@{/img/logo-colegio-satelite.png}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body class="admin-page">
@@ -20,17 +21,17 @@
         </div>
 
         <div class="admin-actions">
-            <a th:href="@{/relatorio/admin/relatorios/novo}" class="admin-logout-button admin-link-button">Novo relatorio</a>
-            <a th:href="@{/admin}" class="admin-logout-button admin-link-button">Voltar ao Admin</a>
+            <a th:href="@{/relatorio/admin/relatorios/novo}" class="btn-voltar">Novo relatorio</a>
+            <a th:href="@{/admin}" class="btn-voltar">Voltar ao Admin</a>
         </div>
     </header>
 
-    <p class="admin-flash admin-flash--success"
+    <p class="admin-flash admin-flash--success" aria-live="polite"
        th:if="${mensagemSucesso != null}"
        th:text="${mensagemSucesso}">
         Mensagem de sucesso
     </p>
-    <p class="admin-flash admin-flash--error"
+    <p class="admin-flash admin-flash--error" aria-live="polite"
        th:if="${mensagemErro != null}"
        th:text="${mensagemErro}">
         Mensagem de erro

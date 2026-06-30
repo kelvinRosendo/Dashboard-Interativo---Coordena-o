@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Novo evento - Google Agenda</title>
+    <link rel="icon" type="image/png" th:href="@{/img/logo-colegio-satelite.png}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body class="form-page">
@@ -32,7 +33,7 @@
                 <input type="hidden" th:field="*{origem}">
                 <input type="hidden" th:field="*{segmento}">
 
-                <div class="form-alerta campo-completo" th:if="${#fields.hasAnyErrors()}">
+                <div class="form-alerta campo-completo" role="alert" th:if="${#fields.hasAnyErrors()}">
                     <p>Corrija os campos destacados antes de salvar o evento.</p>
                     <ul class="lista-erros" th:if="${#fields.hasGlobalErrors()}">
                         <li th:each="erro : ${#fields.globalErrors()}" th:text="${erro}">Erro</li>
@@ -47,7 +48,7 @@
                            required
                            placeholder="Ex: Reuniao pedagogica"
                            th:classappend="${#fields.hasErrors('titulo')} ? ' campo-invalido'">
-                    <small class="campo-erro" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}">Erro</small>
+                    <small class="campo-erro" role="alert" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}">Erro</small>
                 </div>
 
                 <div class="campo campo-completo">
@@ -56,7 +57,7 @@
                               th:field="*{descricao}"
                               rows="4"
                               placeholder="Detalhes importantes para a agenda."></textarea>
-                    <small class="campo-erro" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}">Erro</small>
+                    <small class="campo-erro" role="alert" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}">Erro</small>
                 </div>
 
                 <div class="campo">
@@ -66,7 +67,7 @@
                            th:field="*{data}"
                            required
                            th:classappend="${#fields.hasErrors('data')} ? ' campo-invalido'">
-                    <small class="campo-erro" th:if="${#fields.hasErrors('data')}" th:errors="*{data}">Erro</small>
+                    <small class="campo-erro" role="alert" th:if="${#fields.hasErrors('data')}" th:errors="*{data}">Erro</small>
                 </div>
 
                 <div class="campo">
@@ -76,7 +77,7 @@
                            th:field="*{inicio}"
                            required
                            th:classappend="${#fields.hasErrors('inicio')} ? ' campo-invalido'">
-                    <small class="campo-erro" th:if="${#fields.hasErrors('inicio')}" th:errors="*{inicio}">Erro</small>
+                    <small class="campo-erro" role="alert" th:if="${#fields.hasErrors('inicio')}" th:errors="*{inicio}">Erro</small>
                 </div>
 
                 <div class="campo">
@@ -86,7 +87,7 @@
                            th:field="*{fim}"
                            required
                            th:classappend="${#fields.hasErrors('fim')} ? ' campo-invalido'">
-                    <small class="campo-erro" th:if="${#fields.hasErrors('fim')}" th:errors="*{fim}">Erro</small>
+                    <small class="campo-erro" role="alert" th:if="${#fields.hasErrors('fim')}" th:errors="*{fim}">Erro</small>
                 </div>
 
                 <div class="acoes campo-completo">

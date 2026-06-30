@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Semana em Foco - Dashboard da Coordenacao</title>
+    <link rel="icon" type="image/png" th:href="@{/img/logo-colegio-satelite.png}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body class="form-page">
@@ -32,7 +33,7 @@
                     <input type="hidden" th:field="*{id}" />
                     <input type="hidden" th:field="*{ativa}" id="ativaInput" />
 
-                    <div class="form-alerta campo-completo" th:if="${#fields.hasAnyErrors()}">
+                    <div class="form-alerta campo-completo" role="alert" th:if="${#fields.hasAnyErrors()}">
                         <p>Corrija os campos destacados antes de salvar.</p>
                     </div>
 
@@ -55,7 +56,7 @@
                                         Segmento
                                     </option>
                                 </select>
-                                <small class="campo-erro" th:if="${#fields.hasErrors('segmento')}" th:errors="*{segmento}">Erro</small>
+                                <small class="campo-erro" role="alert" th:if="${#fields.hasErrors('segmento')}" th:errors="*{segmento}">Erro</small>
                             </div>
 
                             <div class="campo">
@@ -71,7 +72,7 @@
                                         Prioridade
                                     </option>
                                 </select>
-                                <small class="campo-erro" th:if="${#fields.hasErrors('prioridade')}" th:errors="*{prioridade}">Erro</small>
+                                <small class="campo-erro" role="alert" th:if="${#fields.hasErrors('prioridade')}" th:errors="*{prioridade}">Erro</small>
                             </div>
 
                             <div class="campo campo-completo">
@@ -83,7 +84,7 @@
                                        placeholder="Ex: Fundamental I em foco"
                                        th:classappend="${#fields.hasErrors('titulo')} ? ' campo-invalido'"
                                        data-preview-field="title">
-                                <small class="campo-erro" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}">Erro</small>
+                                <small class="campo-erro" role="alert" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}">Erro</small>
                             </div>
 
                             <div class="campo campo-completo">
@@ -95,7 +96,7 @@
                                           placeholder="Detalhe o foco da semana, reuniões e objetivos pedagógicos..."
                                           th:classappend="${#fields.hasErrors('descricao')} ? ' campo-invalido'"
                                           data-preview-field="description"></textarea>
-                                <small class="campo-erro" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}">Erro</small>
+                                <small class="campo-erro" role="alert" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}">Erro</small>
                                 <small class="campo-ajuda">Este conteúdo será exibido na TV durante toda a semana.</small>
                             </div>
                         </div>
@@ -120,7 +121,7 @@
                                        th:classappend="${#fields.hasErrors('dataInicio')} ? ' campo-invalido'"
                                        data-date-input="start"
                                        data-preview-field="dateStart">
-                                <small class="campo-erro" th:if="${#fields.hasErrors('dataInicio')}" th:errors="*{dataInicio}">Erro</small>
+                                <small class="campo-erro" role="alert" th:if="${#fields.hasErrors('dataInicio')}" th:errors="*{dataInicio}">Erro</small>
                             </div>
 
                             <div class="campo">
@@ -132,7 +133,7 @@
                                        th:classappend="${#fields.hasErrors('dataFim')} ? ' campo-invalido'"
                                        data-date-input="end"
                                        data-preview-field="dateEnd">
-                                <small class="campo-erro" th:if="${#fields.hasErrors('dataFim')}" th:errors="*{dataFim}">Erro</small>
+                                <small class="campo-erro" role="alert" th:if="${#fields.hasErrors('dataFim')}" th:errors="*{dataFim}">Erro</small>
                                 <small class="campo-ajuda" id="dataValidacao"></small>
                             </div>
                         </div>

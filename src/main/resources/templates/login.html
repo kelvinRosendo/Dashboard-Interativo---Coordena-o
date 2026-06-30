@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Dashboard da Coordenacao</title>
+    <link rel="icon" type="image/png" th:href="@{/img/logo-colegio-satelite.png}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body class="login-page">
@@ -11,7 +12,7 @@
 <main class="login-shell">
     <header class="login-navbar">
         <div class="brand-lockup">
-            <span class="brand-mark" aria-hidden="true"></span>
+            <th:block th:replace="~{fragments/brand :: brand-login}"></th:block>
             <span class="brand-text">
                 <small>Colegio</small>
                 <strong>Satelite</strong>

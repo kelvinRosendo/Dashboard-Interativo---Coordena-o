@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Dashboard da Coordenacao</title>
+    <link rel="icon" type="image/png" th:href="@{/img/logo-colegio-satelite.png}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body class="admin-page">
@@ -14,6 +15,7 @@
 <main class="admin-shell app-main">
     <header class="admin-header admin-header--dashboard">
         <div class="admin-header__brand">
+            <th:block th:replace="~{fragments/brand :: brand-admin}"></th:block>
             <span class="admin-kicker">Colegio Satelite</span>
             <h1>Painel Administrativo</h1>
             <p>Central de controle da rotina escolar, demandas, agenda e coordenacoes.</p>
@@ -22,7 +24,7 @@
         <div class="admin-header__account">
             <div class="admin-user-card">
                 <span>Direcao</span>
-                <strong th:text="${nome != null and !#strings.isEmpty(nome) ? nome : 'Alissandra'}">Alissandra</strong>
+                <strong th:text="${nome != null and !#strings.isEmpty(nome) ? nome : 'Direcao'}">Direcao</strong>
                 <small th:if="${email != null}" th:text="${email}">email</small>
             </div>
             <form th:action="@{/logout}" method="post">
@@ -32,12 +34,12 @@
         </div>
     </header>
 
-    <p class="admin-flash admin-flash--success"
+    <p class="admin-flash admin-flash--success" aria-live="polite"
        th:if="${mensagemSucesso != null}"
        th:text="${mensagemSucesso}">
         Mensagem de sucesso
     </p>
-    <p class="admin-flash admin-flash--error"
+    <p class="admin-flash admin-flash--error" aria-live="polite"
        th:if="${mensagemErro != null}"
        th:text="${mensagemErro}">
         Mensagem de erro

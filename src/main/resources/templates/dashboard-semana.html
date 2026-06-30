@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Semana em Foco</title>
+    <link rel="icon" type="image/png" th:href="@{/img/logo-colegio-satelite.png}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body class="tv-page tv-page--semana" th:classappend="${modoDashboard} ? ' tv-page--dashboard tv-dashboard-mode' : ''">
@@ -14,7 +15,7 @@
 <div class="tv-shell tv-shell--semana app-main app-main--tv" th:classappend="${modoDashboard} ? ' tv-dashboard-main' : ''">
     <header class="tv-topbar">
         <div class="tv-title-block">
-            <span class="brand-mark tv-brand__logo" aria-hidden="true"></span>
+            <th:block th:replace="~{fragments/brand :: brand-tv}"></th:block>
             <div>
                 <span class="tv-kicker">Colegio Satelite - Dashboard da Coordenacao</span>
                 <h1>Semana em Foco</h1>

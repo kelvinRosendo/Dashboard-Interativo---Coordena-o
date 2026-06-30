@@ -18,6 +18,7 @@ public class SecurityConfig {
                                 "/error",
                                 "/css/**",
                                 "/js/**",
+                                "/img/**",
                                 "/tv/**",
                                 "/oauth2/**",
                                 "/login/oauth2/**"

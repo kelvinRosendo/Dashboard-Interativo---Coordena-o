@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nova demanda - Dashboard da Coordenacao</title>
+    <link rel="icon" type="image/png" th:href="@{/img/logo-colegio-satelite.png}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body class="form-page">
@@ -17,7 +18,7 @@
                 <span class="form-kicker">Colegio Satelite - Demandas das coordenacoes</span>
                 <h1>Nova demanda</h1>
                 <p class="texto-lateral">
-                    Cadastre uma tarefa da Alissandra para uma coordenacao acompanhar e concluir.
+                    Cadastre uma tarefa para uma coordenacao acompanhar e concluir.
                 </p>
             </div>
 
@@ -29,7 +30,7 @@
 
                 <th:block th:replace="~{fragments/csrf :: token}"></th:block>
 
-                <div class="form-alerta campo-completo" th:if="${#fields.hasAnyErrors()}">
+                <div class="form-alerta campo-completo" role="alert" th:if="${#fields.hasAnyErrors()}">
                     <p>Corrija os campos destacados antes de salvar.</p>
                 </div>
 
@@ -41,7 +42,7 @@
                            required
                            placeholder="Ex: Revisar plano semanal do Fundamental 1"
                            th:classappend="${#fields.hasErrors('titulo')} ? ' campo-invalido'">
-                    <small class="campo-erro" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}">Erro</small>
+                    <small class="campo-erro" role="alert" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}">Erro</small>
                 </div>
 
                 <div class="campo campo-completo">
@@ -52,7 +53,7 @@
                               required
                               placeholder="Detalhe o que deve ser feito, contexto e expectativa de entrega."
                               th:classappend="${#fields.hasErrors('descricao')} ? ' campo-invalido'"></textarea>
-                    <small class="campo-erro" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}">Erro</small>
+                    <small class="campo-erro" role="alert" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}">Erro</small>
                 </div>
 
                 <div class="campo">
@@ -68,7 +69,7 @@
                             Segmento
                         </option>
                     </select>
-                    <small class="campo-erro" th:if="${#fields.hasErrors('segmento')}" th:errors="*{segmento}">Erro</small>
+                    <small class="campo-erro" role="alert" th:if="${#fields.hasErrors('segmento')}" th:errors="*{segmento}">Erro</small>
                 </div>
 
                 <div class="campo">
@@ -84,7 +85,7 @@
                             Prioridade
                         </option>
                     </select>
-                    <small class="campo-erro" th:if="${#fields.hasErrors('prioridade')}" th:errors="*{prioridade}">Erro</small>
+                    <small class="campo-erro" role="alert" th:if="${#fields.hasErrors('prioridade')}" th:errors="*{prioridade}">Erro</small>
                 </div>
 
                 <div class="campo">
@@ -93,7 +94,7 @@
                            id="dataPrazo"
                            th:field="*{dataPrazo}"
                            th:classappend="${#fields.hasErrors('dataPrazo')} ? ' campo-invalido'">
-                    <small class="campo-erro" th:if="${#fields.hasErrors('dataPrazo')}" th:errors="*{dataPrazo}">Erro</small>
+                    <small class="campo-erro" role="alert" th:if="${#fields.hasErrors('dataPrazo')}" th:errors="*{dataPrazo}">Erro</small>
                 </div>
 
                 <div class="acoes campo-completo">

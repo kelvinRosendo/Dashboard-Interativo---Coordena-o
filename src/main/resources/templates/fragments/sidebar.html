@@ -21,21 +21,17 @@
        th:fragment="sidebar(active, tvMode)"
        th:classappend="${tvMode} ? ' app-sidebar--tv' : ''">
     <div class="app-sidebar__brand" data-sidebar-toggle role="button" tabindex="0" aria-label="Recolher menu">
-        <span class="brand-mark app-sidebar__brand-mark" aria-hidden="true"></span>
+        <img th:src="@{/img/logo-colegio-satelite-horizontal-branco.png}"
+             alt="Colegio Satelite"
+             class="app-sidebar__brand-logo app-sidebar__brand-logo--expanded">
+        <img th:src="@{/img/logo-colegio-satelite.png}"
+             alt="Colegio Satelite"
+             class="app-sidebar__brand-logo app-sidebar__brand-logo--collapsed">
         <span class="brand-text app-sidebar__brand-text app-sidebar__text">
             <small>Colegio</small>
             <strong>Satelite</strong>
         </span>
     </div>
-
-    <button type="button"
-            class="app-sidebar__toggle"
-            data-sidebar-toggle
-            aria-label="Recolher menu"
-            aria-expanded="true"
-            title="Recolher menu">
-        <span data-sidebar-toggle-icon>&lt;</span>
-    </button>
 
     <nav class="app-sidebar__nav" aria-label="Navegacao principal">
         <a th:href="@{/admin}"
@@ -98,7 +94,7 @@
             <strong class="app-sidebar__text">Relatorios</strong>
         </a>
 
-        <span class="app-sidebar__link app-sidebar__link--disabled" aria-disabled="true" title="Configuracoes">
+        <span class="app-sidebar__link app-sidebar__link--disabled" aria-disabled="true" title="Funcionalidade disponivel em breve">
             <span class="app-sidebar__icon">
                 <img th:src="@{/img/icons/icon-settings.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
             </span>
@@ -106,7 +102,7 @@
         </span>
     </nav>
 
-    <form th:if="${!tvMode}" class="app-sidebar__logout" th:action="@{/logout}" method="post">
+    <form th:if="${!tvMode}" class="app-sidebar__logout" th:action="@{/logout}" method="post" onsubmit="return confirm('Deseja realmente sair?')">
         <th:block th:replace="~{fragments/csrf :: token}"></th:block>
         <button type="submit" class="app-sidebar__logout-button" title="Sair">
             <span class="app-sidebar__icon">

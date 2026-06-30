@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${segmento.nome + ' - Coordenadora'}">Coordenadora</title>
+    <link rel="icon" type="image/png" th:href="@{/img/logo-colegio-satelite.png}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body class="admin-page">
@@ -21,20 +22,20 @@
 
         <div class="admin-actions">
             <a th:href="@{/agenda/eventos/novo(origem='coordenadora', segmento=${segmento.slug})}"
-               class="admin-logout-button admin-link-button">
+               class="btn-voltar">
                 Novo evento
             </a>
-            <a th:href="@{/coordenadoras}" class="admin-logout-button admin-link-button">Coordenadoras</a>
-            <a th:href="@{/admin}" class="admin-logout-button admin-link-button">Admin</a>
+            <a th:href="@{/coordenadoras}" class="btn-voltar">Coordenadoras</a>
+            <a th:href="@{/admin}" class="btn-voltar">Voltar ao Admin</a>
         </div>
     </header>
 
-    <p class="admin-flash admin-flash--success"
+    <p class="admin-flash admin-flash--success" aria-live="polite"
        th:if="${mensagemSucesso != null}"
        th:text="${mensagemSucesso}">
         Mensagem de sucesso
     </p>
-    <p class="admin-flash admin-flash--error"
+    <p class="admin-flash admin-flash--error" aria-live="polite"
        th:if="${mensagemErro != null}"
        th:text="${mensagemErro}">
         Mensagem de erro
@@ -46,7 +47,7 @@
              aria-labelledby="nova-demanda-titulo">
         <div class="demanda-notification__card">
             <span class="demanda-notification__eyebrow">Nova demanda recebida</span>
-            <h2 id="nova-demanda-titulo">A Alissandra atribuiu uma nova demanda para este segmento.</h2>
+            <h2 id="nova-demanda-titulo">Uma nova demanda foi atribuida para este segmento.</h2>
             <p th:text="${quantidadeDemandasNovas == 1 ? 'Existe 1 demanda pendente ainda nao visualizada.' : 'Existem ' + quantidadeDemandasNovas + ' demandas pendentes ainda nao visualizadas.'}">
                 Existem demandas novas.
             </p>
@@ -104,7 +105,7 @@
 
         <article class="coordenadora-panel coordenadora-panel-wide demanda-coordenadora-panel">
             <div class="admin-section-header">
-                <span>Demandas da Alissandra</span>
+                <span>Demandas da coordenacao</span>
                 <strong>Plano de acao</strong>
                 <small class="demanda-progress-label" th:text="${demandaProgresso.percentual + '% concluido'}">0% concluido</small>
             </div>
