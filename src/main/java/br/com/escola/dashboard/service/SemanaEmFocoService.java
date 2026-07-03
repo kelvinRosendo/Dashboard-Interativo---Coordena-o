@@ -32,9 +32,7 @@ public class SemanaEmFocoService {
     @Transactional
     public SemanaEmFoco salvar(SemanaEmFoco semana) {
         if (semana.isAtiva()) {
-            List<SemanaEmFoco> ativas = repository.findAll().stream()
-                    .filter(SemanaEmFoco::isAtiva)
-                    .toList();
+            List<SemanaEmFoco> ativas = repository.findByAtivaTrueOrderByAtualizadoEmDesc();
             for (SemanaEmFoco ativa : ativas) {
                 if (semana.getId() == null || !ativa.getId().equals(semana.getId())) {
                     ativa.setAtiva(false);

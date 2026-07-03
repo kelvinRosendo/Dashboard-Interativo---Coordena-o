@@ -8,6 +8,7 @@ import br.com.escola.dashboard.enums.StatusDemanda;
 import br.com.escola.dashboard.service.AdminAuthService;
 import br.com.escola.dashboard.service.AgendaConflictService;
 import br.com.escola.dashboard.service.DemandaService;
+import br.com.escola.dashboard.utils.ConflitoModelHelper;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
@@ -76,7 +77,7 @@ public class DemandaController {
             );
             if (conflitos.temConflitos()) {
                 prepararFormulario(model, demanda);
-                adicionarConflitosAoModelo(model, conflitos);
+                ConflitoModelHelper.adicionarConflitosAoModelo(model, conflitos);
                 return "nova-demanda";
             }
         }
@@ -145,13 +146,6 @@ public class DemandaController {
         model.addAttribute("demanda", demanda);
         model.addAttribute("segmentosDemanda", SegmentoCoordenacao.values());
         model.addAttribute("prioridadesDemanda", PrioridadeDemanda.values());
-    }
-
-    private void adicionarConflitosAoModelo(Model model, AgendaConflictCheckDTO conflitos) {
-        model.addAttribute("exibirModalConflito", true);
-        model.addAttribute("conflitos", conflitos.conflitos());
-        model.addAttribute("googleAgendaIndisponivel", conflitos.googleIndisponivel());
-        model.addAttribute("avisoGoogle", conflitos.avisoGoogle());
     }
 
     private String obterAutor(OAuth2User usuario) {

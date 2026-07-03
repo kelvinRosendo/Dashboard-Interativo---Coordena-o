@@ -6,6 +6,7 @@ import br.com.escola.dashboard.enums.SegmentoCoordenacao;
 import br.com.escola.dashboard.service.AdminAuthService;
 import br.com.escola.dashboard.service.AgendaConflictService;
 import br.com.escola.dashboard.service.GoogleCalendarService;
+import br.com.escola.dashboard.utils.ConflitoModelHelper;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
@@ -84,7 +85,7 @@ public class GoogleCalendarController {
             AgendaConflictCheckDTO conflitos = agendaConflictService.buscarConflitos(googleClient, evento.getData(), null);
             if (conflitos.temConflitos()) {
                 prepararFormulario(model, evento);
-                adicionarConflitosAoModelo(model, conflitos);
+                ConflitoModelHelper.adicionarConflitosAoModelo(model, conflitos);
                 return "novo-evento";
             }
         }
@@ -109,13 +110,6 @@ public class GoogleCalendarController {
         model.addAttribute("evento", evento);
         model.addAttribute("voltarUrl", resolverDestino(evento));
         model.addAttribute("sidebarActive", "coordenadora".equals(evento.getOrigem()) ? "coordenadoras" : "admin");
-    }
-
-    private void adicionarConflitosAoModelo(Model model, AgendaConflictCheckDTO conflitos) {
-        model.addAttribute("exibirModalConflito", true);
-        model.addAttribute("conflitos", conflitos.conflitos());
-        model.addAttribute("googleAgendaIndisponivel", conflitos.googleIndisponivel());
-        model.addAttribute("avisoGoogle", conflitos.avisoGoogle());
     }
 
     private String resolverDestino(GoogleCalendarEventRequestDTO evento) {

@@ -8,6 +8,7 @@ import br.com.escola.dashboard.dto.AgendaConflictCheckDTO;
 import br.com.escola.dashboard.service.AdminAuthService;
 import br.com.escola.dashboard.service.AgendaConflictService;
 import br.com.escola.dashboard.service.CardService;
+import br.com.escola.dashboard.utils.ConflitoModelHelper;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
@@ -88,7 +89,7 @@ public class ViewController {
             );
             if (conflitos.temConflitos()) {
                 preencherModeloFormulario(model, cardRequestDTO, false, null);
-                adicionarConflitosAoModelo(model, conflitos);
+                ConflitoModelHelper.adicionarConflitosAoModelo(model, conflitos);
                 return "novo-card";
             }
         }
@@ -172,7 +173,7 @@ public class ViewController {
             );
             if (conflitos.temConflitos()) {
                 preencherModeloFormulario(model, cardRequestDTO, true, id);
-                adicionarConflitosAoModelo(model, conflitos);
+                ConflitoModelHelper.adicionarConflitosAoModelo(model, conflitos);
                 return "novo-card";
             }
         }
@@ -200,13 +201,6 @@ public class ViewController {
         if (cardId != null) {
             model.addAttribute("cardId", cardId);
         }
-    }
-
-    private void adicionarConflitosAoModelo(Model model, AgendaConflictCheckDTO conflitos) {
-        model.addAttribute("exibirModalConflito", true);
-        model.addAttribute("conflitos", conflitos.conflitos());
-        model.addAttribute("googleAgendaIndisponivel", conflitos.googleIndisponivel());
-        model.addAttribute("avisoGoogle", conflitos.avisoGoogle());
     }
 
 }
