@@ -104,13 +104,13 @@
         </article>
 
         <article class="coordenadora-panel coordenadora-panel-wide demanda-coordenadora-panel">
-            <div class="admin-section-header">
+            <div class="admin-section-header" th:if="${demandaProgresso != null}">
                 <span>Demandas da coordenacao</span>
                 <strong>Plano de acao</strong>
                 <small class="demanda-progress-label" th:text="${demandaProgresso.percentual + '% concluido'}">0% concluido</small>
             </div>
 
-            <div class="coord-progress">
+            <div class="coord-progress" th:if="${demandaProgresso != null}">
                 <div class="coord-progress__label">
                     <span th:text="${demandaProgresso.concluidas + ' de ' + demandaProgresso.total + ' demandas concluidas'}">
                         0 de 0 demandas concluidas
@@ -124,7 +124,7 @@
             </div>
 
             <p class="admin-empty demanda-alerta"
-               th:if="${demandasPendentes > 0}"
+               th:if="${demandasPendentes != null and demandasPendentes > 0}"
                th:text="${'Voce tem ' + demandasPendentes + ' demanda' + (demandasPendentes == 1 ? '' : 's') + ' pendente' + (demandasPendentes == 1 ? '' : 's')}">
                 Voce tem demandas pendentes
             </p>
@@ -142,7 +142,7 @@
             <div class="demanda-grid" th:if="${demandas != null and !#lists.isEmpty(demandas)}">
                 <article class="demanda-card"
                          th:each="demanda : ${demandas}"
-                         th:classappend="| demanda-prioridade-${demanda.prioridade.cssClass}|">
+                         th:classappend="${demanda.prioridade != null} ? '| demanda-prioridade-' + ${demanda.prioridade.cssClass} : ''">
                     <div class="demanda-card-header">
                         <div>
                             <strong th:text="${demanda.titulo}">Demanda</strong>
@@ -155,11 +155,13 @@
                         </div>
                         <div class="demanda-badge-row">
                             <span class="demanda-badge"
+                                  th:if="${demanda.prioridade != null}"
                                   th:classappend="| demanda-badge--prioridade-${demanda.prioridade.cssClass}|"
                                   th:text="${demanda.prioridade.titulo}">
                                 Prioridade
                             </span>
                             <span class="demanda-badge"
+                                  th:if="${demanda.status != null}"
                                   th:classappend="| demanda-badge--status-${demanda.status.cssClass}|"
                                   th:text="${demanda.status.titulo}">
                                 Status
@@ -177,14 +179,14 @@
                         </span>
                     </div>
                     <div class="demanda-actions">
-                        <form th:if="${demanda.status.name() == 'PENDENTE'}"
+                        <form th:if="${demanda.status != null and demanda.status.name() == 'PENDENTE'}"
                               th:action="@{/coordenadoras/{segmento}/demandas/{id}/status(segmento=${segmento.slug}, id=${demanda.id})}"
                               method="post">
                             <th:block th:replace="~{fragments/csrf :: token}"></th:block>
                             <input type="hidden" name="status" value="EM_ANDAMENTO">
                             <button type="submit" class="btn-editar demanda-action-button">Em andamento</button>
                         </form>
-                        <form th:if="${demanda.status.name() == 'PENDENTE' or demanda.status.name() == 'EM_ANDAMENTO'}"
+                        <form th:if="${demanda.status != null and (demanda.status.name() == 'PENDENTE' or demanda.status.name() == 'EM_ANDAMENTO')}"
                               th:action="@{/coordenadoras/{segmento}/demandas/{id}/status(segmento=${segmento.slug}, id=${demanda.id})}"
                               method="post">
                             <th:block th:replace="~{fragments/csrf :: token}"></th:block>

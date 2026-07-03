@@ -47,7 +47,7 @@ public class ViewController {
                                        @RequestParam(name = "categoria", required = false) CategoriaCard categoria,
                                        RedirectAttributes redirectAttributes,
                                        Model model) {
-        if (!isAdmin(usuario)) {
+        if (!adminAuthService.isAdmin(usuario)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
             return "redirect:/";
         }
@@ -70,7 +70,7 @@ public class ViewController {
                              @RegisteredOAuth2AuthorizedClient("google") OAuth2AuthorizedClient googleClient,
                              RedirectAttributes redirectAttributes,
                              Model model) {
-        if (!isAdmin(usuario)) {
+        if (!adminAuthService.isAdmin(usuario)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
             return "redirect:/";
         }
@@ -109,7 +109,7 @@ public class ViewController {
     public String deletarCard(@AuthenticationPrincipal OAuth2User usuario,
                               @PathVariable Long id,
                               RedirectAttributes redirectAttributes) {
-        if (!isAdmin(usuario)) {
+        if (!adminAuthService.isAdmin(usuario)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
             return "redirect:/";
         }
@@ -124,7 +124,7 @@ public class ViewController {
                                          @PathVariable Long id,
                                          RedirectAttributes redirectAttributes,
                                          Model model) {
-        if (!isAdmin(usuario)) {
+        if (!adminAuthService.isAdmin(usuario)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
             return "redirect:/";
         }
@@ -154,7 +154,7 @@ public class ViewController {
                                 @RegisteredOAuth2AuthorizedClient("google") OAuth2AuthorizedClient googleClient,
                                 RedirectAttributes redirectAttributes,
                                 Model model) {
-        if (!isAdmin(usuario)) {
+        if (!adminAuthService.isAdmin(usuario)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
             return "redirect:/";
         }
@@ -207,13 +207,6 @@ public class ViewController {
         model.addAttribute("conflitos", conflitos.conflitos());
         model.addAttribute("googleAgendaIndisponivel", conflitos.googleIndisponivel());
         model.addAttribute("avisoGoogle", conflitos.avisoGoogle());
-    }
-
-    private boolean isAdmin(OAuth2User usuario) {
-        if (usuario == null) {
-            return false;
-        }
-        return adminAuthService.isAdminEmailAuthorized(usuario.getAttribute("email"));
     }
 
 }

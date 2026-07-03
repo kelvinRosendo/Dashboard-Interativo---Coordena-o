@@ -17,7 +17,7 @@
             <div class="form-header__content">
                 <span class="form-kicker">Documentação</span>
                 <h1>Relatório da Semana em Foco</h1>
-                <p th:text="'Período: ' + ${#temporals.format(semana.dataInicio, 'dd/MM/yyyy')} + ' a ' + ${#temporals.format(semana.dataFim, 'dd/MM/yyyy')}">
+                <p th:text="${semana != null} ? 'Período: ' + ${#temporals.format(semana.dataInicio, 'dd/MM/yyyy')} + ' a ' + ${#temporals.format(semana.dataFim, 'dd/MM/yyyy')} : 'Período: não informado'">
                     Período: 11/05/2026 a 17/05/2026
                 </p>
             </div>
@@ -93,7 +93,7 @@
                         <dd th:text="${#temporals.format(relatorio.atualizadoEm, 'dd/MM/yyyy HH:mm')}">-</dd>
 
                         <dt>Finalizado em:</dt>
-                        <dd th:text="${#temporals.format(relatorio.finalizadoEm, 'dd/MM/yyyy HH:mm')}">-</dd>
+                        <dd th:text="${relatorio.finalizadoEm != null} ? ${#temporals.format(relatorio.finalizadoEm, 'dd/MM/yyyy HH:mm')} : '-'">-</dd>
 
                         <dt>Finalizado por:</dt>
                         <dd th:text="${relatorio.finalizadoPor}">-</dd>

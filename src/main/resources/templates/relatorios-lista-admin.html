@@ -87,7 +87,8 @@
                        th:if="${relatorio.status.name() == 'RASCUNHO'}">
                         Editar
                     </a>
-                    <a th:href="@{/relatorio/visualizar/__${relatorio.semanaEmFoco.id}__}"
+                    <a th:if="${relatorio.semanaEmFoco != null}"
+                       th:href="@{/relatorio/visualizar/__${relatorio.semanaEmFoco.id}__}"
                        class="btn-editar demanda-action-button">
                         Visualizar
                     </a>

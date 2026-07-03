@@ -44,7 +44,7 @@ public class GoogleCalendarController {
                              @RequestParam(name = "segmento", required = false) String segmento,
                              RedirectAttributes redirectAttributes,
                              Model model) {
-        if (!isAdmin(usuario)) {
+        if (!adminAuthService.isAdmin(usuario)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
             return "redirect:/";
         }
@@ -68,7 +68,7 @@ public class GoogleCalendarController {
                               @RegisteredOAuth2AuthorizedClient("google") OAuth2AuthorizedClient googleClient,
                               RedirectAttributes redirectAttributes,
                               Model model) {
-        if (!isAdmin(usuario)) {
+        if (!adminAuthService.isAdmin(usuario)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
             return "redirect:/";
         }
@@ -131,12 +131,5 @@ public class GoogleCalendarController {
 
     private String normalizarOrigem(String origem) {
         return "coordenadora".equalsIgnoreCase(origem) ? "coordenadora" : "admin";
-    }
-
-    private boolean isAdmin(OAuth2User usuario) {
-        if (usuario == null) {
-            return false;
-        }
-        return adminAuthService.isAdminEmailAuthorized(usuario.getAttribute("email"));
     }
 }

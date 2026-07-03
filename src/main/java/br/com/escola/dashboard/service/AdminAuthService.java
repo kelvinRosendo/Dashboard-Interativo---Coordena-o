@@ -1,6 +1,7 @@
 package br.com.escola.dashboard.service;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -29,5 +30,12 @@ public class AdminAuthService {
         }
 
         return authorizedEmails.contains(email.trim().toLowerCase());
+    }
+
+    public boolean isAdmin(OAuth2User usuario) {
+        if (usuario == null) {
+            return false;
+        }
+        return isAdminEmailAuthorized(usuario.getAttribute("email"));
     }
 }

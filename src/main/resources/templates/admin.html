@@ -167,7 +167,7 @@
                 </div>
             </section>
 
-            <section class="admin-section admin-summary-panel">
+            <section class="admin-section admin-summary-panel" th:if="${demandaResumo != null}">
                 <div class="admin-section-header">
                     <div>
                         <span>Resumo da rotina</span>
@@ -272,17 +272,17 @@
                         <span>Demandas das coordenacoes</span>
                         <strong>Fila de acompanhamento</strong>
                     </div>
-                    <small th:text="${demandaResumo.total + ' demandas'}">0 demandas</small>
+                    <small th:text="${demandaResumo != null} ? demandaResumo.total + ' demandas' : '0 demandas'">0 demandas</small>
                 </div>
 
                 <div class="demanda-admin-list" th:if="${demandasAdmin != null and !#lists.isEmpty(demandasAdmin)}">
                     <article class="demanda-admin-card"
                              th:each="demanda : ${demandasAdmin}"
-                             th:classappend="| demanda-prioridade-${demanda.prioridade.cssClass}|">
+                             th:classappend="${demanda.prioridade != null} ? '| demanda-prioridade-' + ${demanda.prioridade.cssClass} : ''">
                         <div class="demanda-card-header">
                             <div>
                                 <strong th:text="${demanda.titulo}">Demanda</strong>
-                                <span th:text="${demanda.segmento.titulo}">Segmento</span>
+                                <span th:text="${demanda.segmento != null ? demanda.segmento.titulo : 'Sem segmento'}">Segmento</span>
                             </div>
                             <div class="demanda-badge-row">
                                 <span class="demanda-badge"

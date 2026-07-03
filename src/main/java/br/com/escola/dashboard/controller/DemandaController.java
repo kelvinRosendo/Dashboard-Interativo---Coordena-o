@@ -42,7 +42,7 @@ public class DemandaController {
     public String novaDemanda(@AuthenticationPrincipal OAuth2User usuario,
                               RedirectAttributes redirectAttributes,
                               Model model) {
-        if (!isAdmin(usuario)) {
+        if (!adminAuthService.isAdmin(usuario)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
             return "redirect:/";
         }
@@ -58,7 +58,7 @@ public class DemandaController {
                                @RegisteredOAuth2AuthorizedClient("google") OAuth2AuthorizedClient googleClient,
                                Model model,
                                RedirectAttributes redirectAttributes) {
-        if (!isAdmin(usuario)) {
+        if (!adminAuthService.isAdmin(usuario)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
             return "redirect:/";
         }
@@ -91,7 +91,7 @@ public class DemandaController {
                                        @PathVariable Long id,
                                        @RequestParam StatusDemanda status,
                                        RedirectAttributes redirectAttributes) {
-        if (!isAdmin(usuario)) {
+        if (!adminAuthService.isAdmin(usuario)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
             return "redirect:/";
         }
@@ -107,7 +107,7 @@ public class DemandaController {
                                                @PathVariable Long id,
                                                @RequestParam StatusDemanda status,
                                                RedirectAttributes redirectAttributes) {
-        if (!isAdmin(usuario)) {
+        if (!adminAuthService.isAdmin(usuario)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
             return "redirect:/";
         }
@@ -126,7 +126,7 @@ public class DemandaController {
     public String visualizarDemandasCoordenadora(@AuthenticationPrincipal OAuth2User usuario,
                                                   @PathVariable String segmento,
                                                   RedirectAttributes redirectAttributes) {
-        if (!isAdmin(usuario)) {
+        if (!adminAuthService.isAdmin(usuario)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
             return "redirect:/";
         }
@@ -139,13 +139,6 @@ public class DemandaController {
         demandaService.marcarNovasPendentesComoVisualizadas(segmentoEnum);
         redirectAttributes.addFlashAttribute("mensagemSucesso", "Demandas novas marcadas como vistas.");
         return "redirect:/coordenadoras/" + segmentoEnum.getSlug();
-    }
-
-    private boolean isAdmin(OAuth2User usuario) {
-        if (usuario == null) {
-            return false;
-        }
-        return adminAuthService.isAdminEmailAuthorized(usuario.getAttribute("email"));
     }
 
     private void prepararFormulario(Model model, DemandaRequestDTO demanda) {

@@ -17,7 +17,7 @@
             <div class="form-header__content">
                 <span class="form-kicker">Documentação</span>
                 <h1>Relatório da Semana em Foco</h1>
-                <p th:text="'Período: ' + ${#temporals.format(semana.dataInicio, 'dd/MM/yyyy')} + ' a ' + ${#temporals.format(semana.dataFim, 'dd/MM/yyyy')}">
+                <p th:text="'Período: ' + ${semana?.dataInicio != null} ? ${#temporals.format(semana.dataInicio, 'dd/MM/yyyy')} : '' + ' a ' + ${semana?.dataFim != null} ? ${#temporals.format(semana.dataFim, 'dd/MM/yyyy')} : ''">
                     Período: 11/05/2026 a 17/05/2026
                 </p>
             </div>
@@ -25,7 +25,7 @@
         </header>
 
         <div class="form-container">
-            <form th:action="@{/relatorio/__${semana.id}__}" method="post" class="relatorio-form">
+            <form th:if="${semana != null}" th:action="@{/relatorio/__${semana.id}__}" method="post" class="relatorio-form">
                 <th:block th:replace="~{fragments/csrf :: token}"></th:block>
 
                 <div class="relatorio-form__section">

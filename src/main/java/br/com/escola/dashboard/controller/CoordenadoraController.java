@@ -55,7 +55,7 @@ public class CoordenadoraController {
     public String listarCoordenadoras(@AuthenticationPrincipal OAuth2User usuario,
                                       Model model,
                                       RedirectAttributes redirectAttributes) {
-        if (!isAdmin(usuario)) {
+        if (!adminAuthService.isAdmin(usuario)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
             return "redirect:/";
         }
@@ -69,7 +69,7 @@ public class CoordenadoraController {
                                      @PathVariable String slug,
                                      Model model,
                                      RedirectAttributes redirectAttributes) {
-        if (!isAdmin(usuario)) {
+        if (!adminAuthService.isAdmin(usuario)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
             return "redirect:/";
         }
@@ -112,13 +112,6 @@ public class CoordenadoraController {
         model.addAttribute("quantidadeDemandasNovas", demandaService.contarNovasPendentesPorSegmento(segmentoEnum));
 
         return "coordenadora";
-    }
-
-    private boolean isAdmin(OAuth2User usuario) {
-        if (usuario == null) {
-            return false;
-        }
-        return adminAuthService.isAdminEmailAuthorized(usuario.getAttribute("email"));
     }
 
     private boolean contemSegmento(CardResponseDTO card, String segmento) {

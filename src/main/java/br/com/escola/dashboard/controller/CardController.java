@@ -47,7 +47,7 @@ public class CardController {
     @PostMapping
     public ResponseEntity<?> criarCard(@AuthenticationPrincipal OAuth2User usuario,
                                        @Valid @RequestBody CardRequestDTO requestDTO) {
-        if (!isAdmin(usuario)) {
+        if (!adminAuthService.isAdmin(usuario)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Acesso negado.");
         }
 
@@ -59,7 +59,7 @@ public class CardController {
     public ResponseEntity<?> atualizarCard(@AuthenticationPrincipal OAuth2User usuario,
                                            @PathVariable Long id,
                                            @Valid @RequestBody CardRequestDTO requestDTO) {
-        if (!isAdmin(usuario)) {
+        if (!adminAuthService.isAdmin(usuario)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Acesso negado.");
         }
 
@@ -70,18 +70,11 @@ public class CardController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletarCard(@AuthenticationPrincipal OAuth2User usuario,
                                          @PathVariable Long id) {
-        if (!isAdmin(usuario)) {
+        if (!adminAuthService.isAdmin(usuario)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Acesso negado.");
         }
 
         cardService.deletarCard(id);
         return ResponseEntity.noContent().build();
-    }
-
-    private boolean isAdmin(OAuth2User usuario) {
-        if (usuario == null) {
-            return false;
-        }
-        return adminAuthService.isAdminEmailAuthorized(usuario.getAttribute("email"));
     }
 }
