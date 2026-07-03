@@ -22,7 +22,7 @@
         </p>
     </div>
 
-    <form th:action="${modoEdicao} ? @{/relatorio/admin/relatorios/__${relatorio.id}__/editar} : @{/relatorio/admin/relatorios/novo}"
+    <form th:action="${modoEdicao} ? @{/relatorio/admin/relatorios/__${relatorio?.id}__/editar} : @{/relatorio/admin/relatorios/novo}"
           method="post" class="formulario">
 
         <th:block th:replace="~{fragments/csrf :: token}"></th:block>

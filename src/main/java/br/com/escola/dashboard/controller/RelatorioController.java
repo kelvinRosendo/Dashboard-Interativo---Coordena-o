@@ -212,6 +212,7 @@ public class RelatorioController {
         }
 
         List<SemanaEmFoco> semanas = semanaEmFocoService.listarTodas();
+        model.addAttribute("relatorio", new RelatorioSemanaEmFoco());
         model.addAttribute("semanas", semanas);
         model.addAttribute("semanaSelecionada", null);
         model.addAttribute("modoEdicao", false);
