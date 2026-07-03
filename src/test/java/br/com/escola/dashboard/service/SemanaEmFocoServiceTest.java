@@ -54,7 +54,7 @@ class SemanaEmFocoServiceTest {
         semanaExistenteAtiva.setId(10L);
         semanaExistenteAtiva.setAtiva(true);
 
-        when(repository.findAll()).thenReturn(List.of(semanaExistenteAtiva));
+        when(repository.findByAtivaTrueOrderByAtualizadoEmDesc()).thenReturn(List.of(semanaExistenteAtiva));
         when(repository.save(any(SemanaEmFoco.class))).thenAnswer(invocation -> {
             SemanaEmFoco arg = invocation.getArgument(0, SemanaEmFoco.class);
             return arg;

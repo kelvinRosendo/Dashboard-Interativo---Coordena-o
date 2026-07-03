@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -42,7 +43,10 @@ public class GoogleCalendarService {
     private final ObjectMapper objectMapper;
 
     public GoogleCalendarService() {
-        this.restTemplate = new RestTemplate();
+        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+        requestFactory.setConnectTimeout(5000);
+        requestFactory.setReadTimeout(10000);
+        this.restTemplate = new RestTemplate(requestFactory);
         this.objectMapper = new ObjectMapper();
     }
 

@@ -41,10 +41,9 @@ public class AdminAccessDiagnosticsFilter extends OncePerRequestFilter {
             boolean authorized = admins.isEmpty() || admins.contains(email);
 
             logger.info(
-                    "Admin access check: email={} authorized={} adminEmails={}",
+                    "Admin access check: email={} authorized={}",
                     email,
-                    authorized,
-                    admins
+                    authorized
             );
         }
 

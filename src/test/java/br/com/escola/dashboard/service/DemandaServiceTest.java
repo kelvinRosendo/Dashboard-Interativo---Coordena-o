@@ -229,7 +229,6 @@ class DemandaServiceTest {
         when(demandaRepository.countByStatus(StatusDemanda.CONCLUIDA)).thenReturn(4L);
         when(demandaRepository.countByStatus(StatusDemanda.CANCELADA)).thenReturn(1L);
         when(demandaRepository.countByStatusIn(DemandaService.STATUS_ATIVOS)).thenReturn(5L);
-        when(demandaRepository.findAll()).thenReturn(List.of());
         when(demandaRepository.countBySegmento(any())).thenReturn(0L);
         for (SegmentoCoordenacao s : SegmentoCoordenacao.values()) {
             when(demandaRepository.countBySegmentoAndStatus(s, StatusDemanda.PENDENTE)).thenReturn(0L);
