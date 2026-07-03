@@ -3,11 +3,14 @@ package br.com.escola.dashboard.controller;
 import br.com.escola.dashboard.dto.AgendaConflictCheckDTO;
 import br.com.escola.dashboard.dto.GoogleCalendarEventRequestDTO;
 import br.com.escola.dashboard.enums.SegmentoCoordenacao;
+import br.com.escola.dashboard.service.AdminAuthService;
 import br.com.escola.dashboard.service.AgendaConflictService;
 import br.com.escola.dashboard.service.GoogleCalendarService;
 import jakarta.validation.Valid;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,17 +28,27 @@ public class GoogleCalendarController {
 
     private final GoogleCalendarService googleCalendarService;
     private final AgendaConflictService agendaConflictService;
+    private final AdminAuthService adminAuthService;
 
     public GoogleCalendarController(GoogleCalendarService googleCalendarService,
-                                    AgendaConflictService agendaConflictService) {
+                                    AgendaConflictService agendaConflictService,
+                                    AdminAuthService adminAuthService) {
         this.googleCalendarService = googleCalendarService;
         this.agendaConflictService = agendaConflictService;
+        this.adminAuthService = adminAuthService;
     }
 
     @GetMapping("/agenda/eventos/novo")
-    public String novoEvento(@RequestParam(name = "origem", defaultValue = "admin") String origem,
+    public String novoEvento(@AuthenticationPrincipal OAuth2User usuario,
+                             @RequestParam(name = "origem", defaultValue = "admin") String origem,
                              @RequestParam(name = "segmento", required = false) String segmento,
+                             RedirectAttributes redirectAttributes,
                              Model model) {
+        if (!isAdmin(usuario)) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
+            return "redirect:/";
+        }
+
         GoogleCalendarEventRequestDTO evento = new GoogleCalendarEventRequestDTO();
         evento.setOrigem(normalizarOrigem(origem));
         evento.setSegmento(segmento);
@@ -48,12 +61,18 @@ public class GoogleCalendarController {
     }
 
     @PostMapping("/agenda/eventos")
-    public String criarEvento(@Valid @ModelAttribute("evento") GoogleCalendarEventRequestDTO evento,
+    public String criarEvento(@AuthenticationPrincipal OAuth2User usuario,
+                              @Valid @ModelAttribute("evento") GoogleCalendarEventRequestDTO evento,
                               BindingResult bindingResult,
                               @RequestParam(name = "confirmarConflito", defaultValue = "false") boolean confirmarConflito,
                               @RegisteredOAuth2AuthorizedClient("google") OAuth2AuthorizedClient googleClient,
-                              Model model,
-                              RedirectAttributes redirectAttributes) {
+                              RedirectAttributes redirectAttributes,
+                              Model model) {
+        if (!isAdmin(usuario)) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
+            return "redirect:/";
+        }
+
         evento.setOrigem(normalizarOrigem(evento.getOrigem()));
 
         if (bindingResult.hasErrors()) {
@@ -112,5 +131,12 @@ public class GoogleCalendarController {
 
     private String normalizarOrigem(String origem) {
         return "coordenadora".equalsIgnoreCase(origem) ? "coordenadora" : "admin";
+    }
+
+    private boolean isAdmin(OAuth2User usuario) {
+        if (usuario == null) {
+            return false;
+        }
+        return adminAuthService.isAdminEmailAuthorized(usuario.getAttribute("email"));
     }
 }

@@ -43,8 +43,15 @@ public class ViewController {
     }
 
     @GetMapping("/novo-card")
-    public String exibirFormularioNovo(@RequestParam(name = "categoria", required = false) CategoriaCard categoria,
+    public String exibirFormularioNovo(@AuthenticationPrincipal OAuth2User usuario,
+                                       @RequestParam(name = "categoria", required = false) CategoriaCard categoria,
+                                       RedirectAttributes redirectAttributes,
                                        Model model) {
+        if (!isAdmin(usuario)) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
+            return "redirect:/";
+        }
+
         CategoriaCard categoriaSelecionada = categoria != null ? categoria : CategoriaCard.EVENTO;
 
         CardRequestDTO card = new CardRequestDTO();
@@ -56,11 +63,18 @@ public class ViewController {
     }
 
     @PostMapping("/salvar-card")
-    public String salvarCard(@Valid @ModelAttribute("card") CardRequestDTO cardRequestDTO,
+    public String salvarCard(@AuthenticationPrincipal OAuth2User usuario,
+                             @Valid @ModelAttribute("card") CardRequestDTO cardRequestDTO,
                              BindingResult bindingResult,
                              @RequestParam(name = "confirmarConflito", defaultValue = "false") boolean confirmarConflito,
                              @RegisteredOAuth2AuthorizedClient("google") OAuth2AuthorizedClient googleClient,
+                             RedirectAttributes redirectAttributes,
                              Model model) {
+        if (!isAdmin(usuario)) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
+            return "redirect:/";
+        }
+
         if (bindingResult.hasErrors()) {
             preencherModeloFormulario(model, cardRequestDTO, false, null);
             return "novo-card";
@@ -106,7 +120,15 @@ public class ViewController {
     }
 
     @GetMapping("/editar-card/{id}")
-    public String exibirFormularioEdicao(@PathVariable Long id, Model model) {
+    public String exibirFormularioEdicao(@AuthenticationPrincipal OAuth2User usuario,
+                                         @PathVariable Long id,
+                                         RedirectAttributes redirectAttributes,
+                                         Model model) {
+        if (!isAdmin(usuario)) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
+            return "redirect:/";
+        }
+
         CardResponseDTO card = cardService.buscarPorId(id);
 
         CardRequestDTO requestDTO = new CardRequestDTO();
@@ -124,12 +146,19 @@ public class ViewController {
     }
 
     @PostMapping("/atualizar-card/{id}")
-    public String atualizarCard(@PathVariable Long id,
+    public String atualizarCard(@AuthenticationPrincipal OAuth2User usuario,
+                                @PathVariable Long id,
                                 @Valid @ModelAttribute("card") CardRequestDTO cardRequestDTO,
                                 BindingResult bindingResult,
                                 @RequestParam(name = "confirmarConflito", defaultValue = "false") boolean confirmarConflito,
                                 @RegisteredOAuth2AuthorizedClient("google") OAuth2AuthorizedClient googleClient,
+                                RedirectAttributes redirectAttributes,
                                 Model model) {
+        if (!isAdmin(usuario)) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
+            return "redirect:/";
+        }
+
         if (bindingResult.hasErrors()) {
             preencherModeloFormulario(model, cardRequestDTO, true, id);
             return "novo-card";
