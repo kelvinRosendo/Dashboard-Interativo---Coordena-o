@@ -25,10 +25,16 @@ public class RelatorioSemanaEmFocoService {
     }
 
     public Optional<RelatorioSemanaEmFoco> obterPorSemanaId(Long semanaId) {
+        if (semanaId == null) {
+            return Optional.empty();
+        }
         return repository.findBySemanaEmFocoId(semanaId);
     }
 
     public Optional<RelatorioSemanaEmFoco> obterPorId(Long relatorioId) {
+        if (relatorioId == null) {
+            return Optional.empty();
+        }
         return repository.findById(relatorioId);
     }
 
@@ -45,6 +51,9 @@ public class RelatorioSemanaEmFocoService {
                                             String coordenadoraNome, String coordenadoraEmail,
                                             String resumoSemana, String atividadesExecutadas,
                                             String pendencias, String observacoes, String conclusao) {
+        if (semanaEmFocoId == null) {
+            throw new IllegalArgumentException("Semana em Foco nao pode ser nula.");
+        }
         Optional<RelatorioSemanaEmFoco> existente = repository.findBySemanaEmFocoId(semanaEmFocoId);
         if (existente.isPresent()) {
             throw new IllegalStateException("Ja existe um relatorio para esta Semana em Foco.");
@@ -78,6 +87,9 @@ public class RelatorioSemanaEmFocoService {
     public RelatorioSemanaEmFoco atualizarAdmin(Long relatorioId, Long semanaEmFocoId,
                                                  String resumoSemana, String atividadesExecutadas,
                                                  String pendencias, String observacoes, String conclusao) {
+        if (relatorioId == null) {
+            throw new IllegalArgumentException("Relatorio nao pode ser nulo.");
+        }
         RelatorioSemanaEmFoco relatorio = repository.findById(relatorioId)
                 .orElseThrow(() -> new IllegalArgumentException("Relatorio nao encontrado"));
 
@@ -108,6 +120,9 @@ public class RelatorioSemanaEmFocoService {
 
     @Transactional
     public void excluir(Long relatorioId) {
+        if (relatorioId == null) {
+            throw new IllegalArgumentException("Relatorio nao pode ser nulo");
+        }
         if (!repository.existsById(relatorioId)) {
             throw new IllegalArgumentException("Relatorio nao encontrado");
         }
@@ -138,6 +153,9 @@ public class RelatorioSemanaEmFocoService {
     @Transactional
     public RelatorioSemanaEmFoco atualizar(Long relatorioId, RelatorioSemanaEmFocoDTO dto,
                                            String coordenadoraId) {
+        if (relatorioId == null) {
+            throw new IllegalArgumentException("Relatorio nao pode ser nulo");
+        }
         RelatorioSemanaEmFoco relatorio = repository.findById(relatorioId)
                 .orElseThrow(() -> new IllegalArgumentException("Relatorio nao encontrado"));
 
@@ -156,6 +174,9 @@ public class RelatorioSemanaEmFocoService {
     @Transactional
     public RelatorioSemanaEmFoco finalizar(Long relatorioId, String coordenadoraId,
                                            String finalizadoPor) {
+        if (relatorioId == null) {
+            throw new IllegalArgumentException("Relatorio nao pode ser nulo");
+        }
         RelatorioSemanaEmFoco relatorio = repository.findById(relatorioId)
                 .orElseThrow(() -> new IllegalArgumentException("Relatorio nao encontrado"));
 

@@ -22,6 +22,9 @@ public class SemanaEmFocoService {
     }
 
     public Optional<SemanaEmFoco> buscarPorId(Long id) {
+        if (id == null) {
+            return Optional.empty();
+        }
         return repository.findById(id);
     }
 

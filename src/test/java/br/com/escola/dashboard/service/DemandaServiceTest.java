@@ -74,6 +74,7 @@ class DemandaServiceTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     void criarDemanda_deveSalvarComoPendente() {
         DemandaRequestDTO request = new DemandaRequestDTO();
         request.setTitulo("Revisar plano");
@@ -157,6 +158,7 @@ class DemandaServiceTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     void marcarNovasPendentesComoVisualizadas_deveSalvarDemandasComoVistas() {
         SegmentoCoordenacao segmento = SegmentoCoordenacao.EDUCACAO_INFANTIL;
         Demanda primeira = new Demanda();

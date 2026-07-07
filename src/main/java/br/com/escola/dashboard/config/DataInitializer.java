@@ -88,12 +88,13 @@ public class DataInitializer implements CommandLineRunner {
         salvarComunicadosSeNecessario();
     }
 
+    @SuppressWarnings("unchecked")
     private void salvarComunicadosSeNecessario() {
         if (comunicadoRepository.count() > 0) {
             return;
         }
 
-        comunicadoRepository.saveAll(List.of(
+        List<Comunicado> comunicados = List.of(
                 criarComunicado("Regras de conduta para o periodo de provas",
                         "Durante o periodo de avaliacao, todos os alunos devem seguir o regimento interno. "
                         + "Celulares devem ser entregues na entrada da sala. Qualquer irregularidade sera registrada "
@@ -104,7 +105,8 @@ public class DataInitializer implements CommandLineRunner {
                 criarComunicado("Campanha de arrecadacao solidaria",
                         "A escola promove uma campanha de arrecadacao de alimentos nao pereciveis. "
                         + "As doacoes podem ser entregues na recepcao da escola ate o dia 30/05.")
-        ));
+        );
+        comunicadoRepository.saveAll(comunicados);
     }
 
     private Comunicado criarComunicado(String titulo, String conteudo) {

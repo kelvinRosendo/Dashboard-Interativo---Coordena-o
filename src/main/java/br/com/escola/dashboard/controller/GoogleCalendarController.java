@@ -93,8 +93,8 @@ public class GoogleCalendarController {
         try {
             googleCalendarService.criarEvento(googleClient, evento);
         } catch (IllegalArgumentException ex) {
-            String mensagem = ex.getMessage() != null ? ex.getMessage() : "Evento inválido";
-            bindingResult.reject("eventoInvalido", mensagem);
+            String mensagem = ex.getMessage();
+            bindingResult.reject("eventoInvalido", mensagem != null ? mensagem : "Evento inválido");
             prepararFormulario(model, evento);
             return "novo-evento";
         } catch (IllegalStateException ex) {

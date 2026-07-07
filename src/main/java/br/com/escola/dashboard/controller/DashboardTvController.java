@@ -39,8 +39,8 @@ import java.util.stream.Stream;
 @RequestMapping("/tv")
 public class DashboardTvController {
 
-    private static final DateTimeFormatter TITULO_MES = DateTimeFormatter.ofPattern("MMMM 'de' yyyy", new Locale("pt", "BR"));
-    private static final DateTimeFormatter TITULO_SEMANA = DateTimeFormatter.ofPattern("dd/MM", new Locale("pt", "BR"));
+    private static final DateTimeFormatter TITULO_MES = DateTimeFormatter.ofPattern("MMMM 'de' yyyy", Locale.forLanguageTag("pt-BR"));
+    private static final DateTimeFormatter TITULO_SEMANA = DateTimeFormatter.ofPattern("dd/MM", Locale.forLanguageTag("pt-BR"));
 
     private final CardService cardService;
     private final GoogleCalendarService googleCalendarService;
@@ -151,7 +151,7 @@ public class DashboardTvController {
                 .toList();
 
         Map<LocalDate, List<CardResponseDTO>> itensPorData = cardsComData.stream()
-                .collect(Collectors.groupingBy(CardResponseDTO::getDataEvento));
+                .collect(Collectors.groupingBy(card -> card.getDataEvento()));
 
         List<GoogleCalendarEventDTO> eventosGoogle = List.of();
         String calendarErro = null;
@@ -163,7 +163,7 @@ public class DashboardTvController {
         }
 
         Map<LocalDate, List<GoogleCalendarEventDTO>> googlePorData = eventosGoogle.stream()
-                .collect(Collectors.groupingBy(GoogleCalendarEventDTO::getData));
+                .collect(Collectors.groupingBy(evento -> evento.getData()));
 
         List<CalendarioDiaDTO> dias = inicio.datesUntil(fim.plusDays(1))
                 .map(data -> new CalendarioDiaDTO(
@@ -202,7 +202,7 @@ public class DashboardTvController {
             List<Demanda> demandasSemana = demandaService.listarAtivas().stream()
                     .filter(demanda -> demanda.getDataPrazo() != null)
                     .filter(demanda -> !demanda.getDataPrazo().isBefore(inicioSemana) && !demanda.getDataPrazo().isAfter(fimSemana))
-                    .sorted(Comparator.comparing(Demanda::getDataPrazo))
+                    .sorted(Comparator.comparing(demanda -> demanda.getDataPrazo()))
                     .toList();
 
             model.addAttribute("eventosSemana", eventosSemana);
@@ -255,7 +255,7 @@ public class DashboardTvController {
             return texto;
         }
 
-        return texto.substring(0, 1).toUpperCase(new Locale("pt", "BR")) + texto.substring(1);
+        return texto.substring(0, 1).toUpperCase(Locale.of("pt", "BR")) + texto.substring(1);
     }
 
     private boolean temTexto(String texto) {
@@ -287,7 +287,7 @@ public class DashboardTvController {
 
     private Comparator<CardResponseDTO> comparadorPainel() {
         return Comparator
-                .comparing(CardResponseDTO::getDataEvento, Comparator.nullsLast(Comparator.naturalOrder()))
+                .<CardResponseDTO, LocalDate>comparing(card -> card.getDataEvento(), Comparator.nullsLast(Comparator.naturalOrder()))
                 .thenComparing(CardResponseDTO::getDataCriacao, Comparator.nullsLast(Comparator.reverseOrder()));
     }
 }

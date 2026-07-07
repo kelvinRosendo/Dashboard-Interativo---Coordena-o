@@ -46,7 +46,7 @@ public class AgendaConflictService {
         AgendaConflictCheckDTO googleCheck = buscarConflitosGoogle(googleClient, data);
         conflitos.addAll(googleCheck.conflitos());
 
-        conflitos.sort(Comparator.comparing(AgendaConflictDTO::horario).thenComparing(AgendaConflictDTO::titulo));
+        conflitos.sort(Comparator.<AgendaConflictDTO, String>comparing(c -> c.horario()).thenComparing(c -> c.titulo()));
 
         return new AgendaConflictCheckDTO(
                 conflitos,

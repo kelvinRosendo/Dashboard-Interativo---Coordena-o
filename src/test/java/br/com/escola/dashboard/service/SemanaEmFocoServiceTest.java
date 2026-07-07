@@ -45,6 +45,7 @@ class SemanaEmFocoServiceTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     void salvar_quandoAtiva_deveDesativarOutrasAtivas() {
         SemanaEmFoco novaSemana = new SemanaEmFoco();
         novaSemana.setId(null);

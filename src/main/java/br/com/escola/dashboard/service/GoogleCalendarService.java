@@ -96,7 +96,8 @@ public class GoogleCalendarService {
                     JsonNode.class
             );
 
-            JsonNode items = response.getBody() != null ? response.getBody().path("items") : null;
+            JsonNode body = response.getBody();
+            JsonNode items = body != null ? body.path("items") : null;
             if (items == null || !items.isArray()) {
                 return List.of();
             }
@@ -154,7 +155,10 @@ public class GoogleCalendarService {
         );
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(googleClient.getAccessToken().getTokenValue());
+        String tokenValue = googleClient.getAccessToken().getTokenValue();
+        if (tokenValue != null) {
+            headers.setBearerAuth(tokenValue);
+        }
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         try {

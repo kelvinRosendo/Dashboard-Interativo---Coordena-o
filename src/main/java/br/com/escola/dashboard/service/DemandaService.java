@@ -77,6 +77,9 @@ public class DemandaService {
     }
 
     private Demanda buscarDemanda(Long id) {
+        if (id == null) {
+            throw new ResourceNotFoundException("ID nao pode ser nulo");
+        }
         return demandaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Demanda nao encontrada com id: " + id));
     }

@@ -34,8 +34,8 @@ public class AdminAuthService {
             return Set.of();
         }
         return Set.of(java.util.Arrays.stream(config.split(","))
-                .map(String::trim)
-                .map(String::toLowerCase)
+                .map(s -> s.trim())
+                .map(s -> s.toLowerCase())
                 .toArray(String[]::new));
     }
 }
