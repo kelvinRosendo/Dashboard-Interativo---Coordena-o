@@ -1334,7 +1334,7 @@ body.form-page {
     align-items: center;
     gap: 12px;
     justify-content: space-between;
-    border-left: 4px solid var(--yellow);
+    border-left: 4px solid var(--blue-2);
 }
 
 .admin-action-card strong {
@@ -1349,8 +1349,8 @@ body.form-page {
     display: grid;
     place-items: center;
     border-radius: var(--radius);
-    background: rgba(250, 204, 21, 0.14);
-    border: 1px solid rgba(250, 204, 21, 0.2);
+    background: rgba(37, 99, 235, 0.14);
+    border: 1px solid rgba(96, 165, 250, 0.2);
 }
 
 .admin-action-icon img {
@@ -1361,28 +1361,27 @@ body.form-page {
 }
 
 .admin-action-card::after {
-    content: ">";
-    color: var(--yellow);
+    content: "›";
+    color: var(--muted);
+    font-size: 18px;
 }
 
 .week-focus-control {
     position: relative;
     overflow: hidden;
-    border-color: rgba(250, 204, 21, 0.36);
+    border-color: rgba(96, 165, 250, 0.22);
     background:
-        radial-gradient(circle at top right, rgba(37, 99, 235, 0.26), transparent 34%),
-        linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(15, 34, 67, 0.92));
-    box-shadow:
-        0 12px 36px rgba(2, 6, 23, 0.28),
-        0 0 0 1px rgba(250, 204, 21, 0.06);
+        linear-gradient(180deg, rgba(21, 31, 49, 0.78), rgba(13, 20, 35, 0.78)),
+        var(--surface);
+    box-shadow: var(--shadow-soft);
 }
 
 .week-focus-control::before {
     content: "";
     position: absolute;
     inset: 0 auto 0 0;
-    width: 5px;
-    background: linear-gradient(180deg, var(--yellow), var(--blue));
+    width: 4px;
+    background: var(--blue-2);
 }
 
 .week-focus-control .admin-section-header {
@@ -2645,8 +2644,29 @@ body.form-page {
     border-radius: var(--radius);
     border: 1px solid var(--border);
     color: var(--text);
-    background: rgba(2, 6, 23, 0.58);
-    padding: 0 10px;
+    background: rgba(15, 23, 42, 0.64);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 0 34px 0 10px;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    cursor: pointer;
+    transition: border-color 0.18s ease, background 0.18s ease;
+}
+
+.demanda-status-form select:hover {
+    border-color: rgba(96, 165, 250, 0.42);
+    background-color: rgba(15, 23, 42, 0.74);
+}
+
+.demanda-status-form select:focus {
+    border-color: rgba(96, 165, 250, 0.82);
+    background-color: rgba(15, 23, 42, 0.84);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    outline: none;
 }
 
 .demanda-action-button {
@@ -3219,7 +3239,7 @@ body.tv-dashboard-mode {
     flex-direction: column;
     justify-content: space-between;
     gap: 8px;
-    border-left: 5px solid var(--blue-2);
+    border-left: 4px solid var(--blue-2);
     overflow: visible;
 }
 
@@ -3870,8 +3890,38 @@ body.tv-page.tv-page--semana.tv-page--dashboard .app-main--tv.tv-shell--semana {
     border: 1px solid var(--border);
     outline: none;
     color: #ffffff;
-    background: rgba(2, 6, 23, 0.34);
+    background: rgba(15, 23, 42, 0.64);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.formulario select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 40px;
+    cursor: pointer;
+}
+
+.formulario input[type="date"],
+.formulario input[type="time"] {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 16px;
+    padding-right: 40px;
+    cursor: pointer;
+}
+
+.formulario input::placeholder,
+.formulario textarea::placeholder {
+    color: var(--subtle);
+    opacity: 0.7;
 }
 
 .formulario textarea {
@@ -3879,11 +3929,18 @@ body.tv-page.tv-page--semana.tv-page--dashboard .app-main--tv.tv-shell--semana {
     resize: vertical;
 }
 
+.formulario input:hover,
+.formulario select:hover,
+.formulario textarea:hover {
+    border-color: rgba(96, 165, 250, 0.42);
+    background: rgba(15, 23, 42, 0.74);
+}
+
 .formulario input:focus,
 .formulario select:focus,
 .formulario textarea:focus {
     border-color: rgba(96, 165, 250, 0.82);
-    background: rgba(2, 6, 23, 0.52);
+    background: rgba(15, 23, 42, 0.84);
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
 }
 
@@ -6387,10 +6444,12 @@ html.sidebar-collapsed-pending .app-sidebar__text {
     border: 1px solid var(--border);
     outline: none;
     color: #ffffff;
-    background: rgba(2, 6, 23, 0.34);
+    background: rgba(15, 23, 42, 0.64);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     font-family: var(--font);
     font-size: 14px;
-    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
 }
 
 .comunicado-form .campo textarea {
@@ -6398,10 +6457,16 @@ html.sidebar-collapsed-pending .app-sidebar__text {
     resize: vertical;
 }
 
+.comunicado-form .campo input:hover,
+.comunicado-form .campo textarea:hover {
+    border-color: rgba(96, 165, 250, 0.42);
+    background: rgba(15, 23, 42, 0.74);
+}
+
 .comunicado-form .campo input:focus,
 .comunicado-form .campo textarea:focus {
     border-color: rgba(96, 165, 250, 0.82);
-    background: rgba(2, 6, 23, 0.52);
+    background: rgba(15, 23, 42, 0.84);
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
 }
 
@@ -6420,9 +6485,9 @@ html.sidebar-collapsed-pending .app-sidebar__text {
     padding: 16px;
     border-radius: var(--radius);
     border: 1px solid var(--border);
-    background: rgba(2, 6, 23, 0.22);
+    background: rgba(15, 23, 42, 0.42);
     border-left: 4px solid var(--blue-2);
-    transition: border-color 0.18s ease;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
 .aviso-card:hover {
@@ -6548,3 +6613,4 @@ html.sidebar-collapsed-pending .app-sidebar__text {
     background: rgba(226, 232, 240, 0.12);
     color: var(--subtle);
 }
+

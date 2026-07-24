@@ -255,7 +255,7 @@ public class DashboardTvController {
             return texto;
         }
 
-        return texto.substring(0, 1).toUpperCase(Locale.of("pt", "BR")) + texto.substring(1);
+        return texto.substring(0, 1).toUpperCase(new Locale("pt", "BR")) + texto.substring(1);
     }
 
     private boolean temTexto(String texto) {
