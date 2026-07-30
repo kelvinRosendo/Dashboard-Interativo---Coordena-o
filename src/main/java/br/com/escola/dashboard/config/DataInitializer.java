@@ -1,7 +1,7 @@
 package br.com.escola.dashboard.config;
 
 import br.com.escola.dashboard.entity.Card;
-import br.com.escola.dashboard.entity.Comunicado;
+import br.com.escola.dashboard.entity.comunicado;
 import br.com.escola.dashboard.enums.CategoriaCard;
 import br.com.escola.dashboard.enums.PrioridadeCard;
 import br.com.escola.dashboard.enums.StatusCard;
@@ -94,23 +94,23 @@ public class DataInitializer implements CommandLineRunner {
             return;
         }
 
-        List<Comunicado> comunicados = List.of(
-                criarComunicado("Regras de conduta para o periodo de provas",
+        List<comunicado> comunicados = List.of(
+                criarcomunicado("Regras de conduta para o periodo de provas",
                         "Durante o periodo de avaliacao, todos os alunos devem seguir o regimento interno. "
                         + "Celulares devem ser entregues na entrada da sala. Qualquer irregularidade sera registrada "
                         + "e comunicada aos responsaveis."),
-                criarComunicado("Reuniao de pais e mestres",
+                criarcomunicado("Reuniao de pais e mestres",
                         "A reuniao trimestral de pais e mestres sera realizada na quinta-feira as 19h no auditorio. "
                         + "A presenca e obrigatoria para todos os responsaveis de alunos do Ensino Fundamental I."),
-                criarComunicado("Campanha de arrecadacao solidaria",
+                criarcomunicado("Campanha de arrecadacao solidaria",
                         "A escola promove uma campanha de arrecadacao de alimentos nao pereciveis. "
                         + "As doacoes podem ser entregues na recepcao da escola ate o dia 30/05.")
         );
         comunicadoRepository.saveAll(comunicados);
     }
 
-    private Comunicado criarComunicado(String titulo, String conteudo) {
-        Comunicado comunicado = new Comunicado();
+    private comunicado criarcomunicado(String titulo, String conteudo) {
+        comunicado comunicado = new comunicado();
         comunicado.setTitulo(titulo);
         comunicado.setConteudo(conteudo);
         return comunicado;
