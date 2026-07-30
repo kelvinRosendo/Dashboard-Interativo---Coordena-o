@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Dashboard da Coordenacao</title>
+    <title>Organiza+ - Login</title>
     <link rel="icon" type="image/png" th:href="@{/img/logo-colegio-satelite.png}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
@@ -14,21 +14,10 @@
         <div class="brand-lockup">
             <th:block th:replace="~{fragments/brand :: brand-login}"></th:block>
         </div>
-        <nav class="login-nav" aria-label="Acesso rapido">
-            <a th:href="@{/admin}">Admin</a>
-            <a th:if="${googleConfigurado}"
-               th:href="@{/oauth2/authorization/google}"
-               class="login-nav-active"
-               title="Entrar com Google">Login</a>
-            <span th:if="${!googleConfigurado}"
-                  class="login-nav-active login-nav-disabled"
-                  title="Configure o Google OAuth para entrar">Login</span>
-        </nav>
     </header>
 
     <section class="login-panel">
         <div class="login-copy">
-            <span class="login-kicker">Colegio Satelite - Dashboard da Coordenacao</span>
             <h1>Sistema de <strong>Coordenacao</strong> Escolar</h1>
             <p>Organize rotinas, acompanhe demandas e mantenha a equipe alinhada em uma experiencia visual simples e institucional.</p>
 

@@ -68,7 +68,7 @@ a {
 
 button:hover,
 a:hover {
-    transform: translateY(-1px);
+    transform: none;
 }
 
 ::selection {
@@ -178,7 +178,7 @@ a:hover {
 }
 
 .brand-text {
-    display: grid;
+    display: none;
     gap: 0;
     min-width: 0;
 }
@@ -345,7 +345,7 @@ html.sidebar-collapsed-pending .app-sidebar__brand-logo--mark {
     width: 100%;
     height: 42px;
     object-fit: contain;
-    object-position: left center;
+    object-position: center;
     flex: 0 0 auto;
 }
 
@@ -375,15 +375,18 @@ html.sidebar-collapsed-pending .app-sidebar__brand-logo--mark {
 }
 
 .app-sidebar__brand-text {
+    display: none;
     text-align: left;
 }
 
 .app-sidebar__brand-text small {
+    display: none;
     font-size: 10px;
     color: var(--muted);
 }
 
 .app-sidebar__brand-text strong {
+    display: none;
     font-size: 24px;
 }
 
@@ -686,7 +689,7 @@ body.login-page {
     min-height: 76px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     gap: 24px;
     padding: 14px 28px;
     border: 1px solid var(--border);
@@ -695,34 +698,7 @@ body.login-page {
     box-shadow: var(--shadow-soft);
 }
 
-.login-nav {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
 
-.login-nav a {
-    min-height: 46px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 18px;
-    border-radius: var(--radius);
-    color: var(--muted);
-    text-decoration: none;
-    font-weight: 700;
-}
-
-.login-nav .login-nav-active {
-    color: #ffffff;
-    background: linear-gradient(135deg, var(--blue), var(--blue-2));
-    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.18);
-}
-
-.login-nav .login-nav-disabled {
-    cursor: not-allowed;
-    opacity: 0.72;
-}
 
 .login-panel {
     width: min(1480px, 100%);
@@ -2658,14 +2634,14 @@ body.form-page {
 }
 
 .demanda-status-form select:hover {
-    border-color: rgba(96, 165, 250, 0.42);
-    background-color: rgba(15, 23, 42, 0.74);
+    border-color: rgba(96, 165, 250, 0.32);
+    background-color: rgba(15, 23, 42, 0.68);
 }
 
 .demanda-status-form select:focus {
-    border-color: rgba(96, 165, 250, 0.82);
-    background-color: rgba(15, 23, 42, 0.84);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    border-color: rgba(96, 165, 250, 0.52);
+    background-color: rgba(15, 23, 42, 0.78);
+    box-shadow: none;
     outline: none;
 }
 
@@ -3932,16 +3908,17 @@ body.tv-page.tv-page--semana.tv-page--dashboard .app-main--tv.tv-shell--semana {
 .formulario input:hover,
 .formulario select:hover,
 .formulario textarea:hover {
-    border-color: rgba(96, 165, 250, 0.42);
-    background: rgba(15, 23, 42, 0.74);
+    border-color: rgba(96, 165, 250, 0.32);
+    background: rgba(15, 23, 42, 0.68);
 }
 
 .formulario input:focus,
 .formulario select:focus,
 .formulario textarea:focus {
-    border-color: rgba(96, 165, 250, 0.82);
-    background: rgba(15, 23, 42, 0.84);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    border-color: rgba(96, 165, 250, 0.52);
+    background: rgba(15, 23, 42, 0.78);
+    box-shadow: none;
+    outline: none;
 }
 
 .campo-invalido {
@@ -5039,7 +5016,7 @@ html.sidebar-collapsed-pending {
     min-height: 48px;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     gap: 9px;
     padding: 7px 8px;
     border: 0;
@@ -5049,6 +5026,7 @@ html.sidebar-collapsed-pending {
 }
 
 .app-sidebar__brand-mark {
+    display: none;
     width: 34px;
     height: 34px;
     flex: 0 0 34px;
@@ -5156,6 +5134,7 @@ html.sidebar-collapsed-pending {
 }
 
 .app-sidebar--collapsed .app-sidebar__brand-mark {
+    display: none;
     width: 44px;
     height: 44px;
 }
@@ -5170,6 +5149,7 @@ html.sidebar-collapsed-pending .app-sidebar__text {
     transform: translateX(-6px);
     overflow: hidden;
     pointer-events: none;
+    display: none;
 }
 
 .app-sidebar__text {
@@ -6015,7 +5995,7 @@ html.sidebar-collapsed-pending .app-sidebar__text {
     outline: none;
     border-color: var(--blue-2);
     background: var(--surface-2);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+    box-shadow: none;
 }
 
 .relatorio-form__textarea:disabled,
@@ -6459,15 +6439,15 @@ html.sidebar-collapsed-pending .app-sidebar__text {
 
 .comunicado-form .campo input:hover,
 .comunicado-form .campo textarea:hover {
-    border-color: rgba(96, 165, 250, 0.42);
-    background: rgba(15, 23, 42, 0.74);
+    border-color: rgba(96, 165, 250, 0.32);
+    background: rgba(15, 23, 42, 0.68);
 }
 
 .comunicado-form .campo input:focus,
 .comunicado-form .campo textarea:focus {
-    border-color: rgba(96, 165, 250, 0.82);
-    background: rgba(15, 23, 42, 0.84);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    border-color: rgba(96, 165, 250, 0.52);
+    background: rgba(15, 23, 42, 0.78);
+    box-shadow: none;
 }
 
 /* Lista de comunicados */

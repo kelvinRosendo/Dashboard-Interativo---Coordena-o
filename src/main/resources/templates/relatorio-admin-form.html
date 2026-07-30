@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${modoEdicao ? 'Editar Relatorio' : 'Novo Relatorio'}">Relatorio</title>
+    <title th:text="${modoEdicao ? 'Organiza+ - Editar Relatorio' : 'Organiza+ - Novo Relatorio'}">Relatorio</title>
     <link rel="icon" type="image/png" th:href="@{/img/logo-colegio-satelite.png}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
@@ -15,7 +15,7 @@
 <main class="app-main form-main">
 <div class="container">
     <div class="form-header">
-        <span class="form-kicker">Colegio Satelite - Relatorios</span>
+        <span class="form-kicker">Relatorios</span>
         <h1 th:text="${modoEdicao ? 'Editar Relatorio' : 'Novo Relatorio'}">Relatorio</h1>
         <p class="texto-lateral">
             Preencha as informacoes do relatorio da Semana em Foco.

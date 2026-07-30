@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${segmento.nome + ' - Coordenadora'}">Coordenadora</title>
+    <title th:text="${'Organiza+ - ' + segmento.nome}">Coordenadora</title>
     <link rel="icon" type="image/png" th:href="@{/img/logo-colegio-satelite.png}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
@@ -15,7 +15,7 @@
 <main class="coordenadora-shell app-main">
     <header class="admin-header">
         <div>
-            <span class="admin-kicker">Colegio Satelite - Painel da coordenadora</span>
+            <span class="admin-kicker">Painel da Coordenadora</span>
             <h1 th:text="${segmento.nome}">Segmento</h1>
             <p th:text="${segmento.descricao}">Descricao</p>
         </div>
