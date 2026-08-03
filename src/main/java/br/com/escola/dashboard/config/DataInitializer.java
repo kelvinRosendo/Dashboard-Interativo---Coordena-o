@@ -1,12 +1,18 @@
 package br.com.escola.dashboard.config;
 
 import br.com.escola.dashboard.entity.Card;
+import br.com.escola.dashboard.entity.Coordenadora;
+import br.com.escola.dashboard.entity.SemanaEmFoco;
 import br.com.escola.dashboard.entity.comunicado;
 import br.com.escola.dashboard.enums.CategoriaCard;
 import br.com.escola.dashboard.enums.PrioridadeCard;
+import br.com.escola.dashboard.enums.PrioridadeDemanda;
+import br.com.escola.dashboard.enums.SegmentoCoordenacao;
 import br.com.escola.dashboard.enums.StatusCard;
 import br.com.escola.dashboard.repository.CardRepository;
+import br.com.escola.dashboard.repository.CoordenadoraRepository;
 import br.com.escola.dashboard.repository.ComunicadoRepository;
+import br.com.escola.dashboard.repository.SemanaEmFocoRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -22,117 +28,185 @@ public class DataInitializer implements CommandLineRunner {
 
     private final CardRepository cardRepository;
     private final ComunicadoRepository comunicadoRepository;
+    private final CoordenadoraRepository coordenadoraRepository;
+    private final SemanaEmFocoRepository semanaEmFocoRepository;
 
-    public DataInitializer(CardRepository cardRepository, ComunicadoRepository comunicadoRepository) {
+    public DataInitializer(CardRepository cardRepository,
+                           ComunicadoRepository comunicadoRepository,
+                           CoordenadoraRepository coordenadoraRepository,
+                           SemanaEmFocoRepository semanaEmFocoRepository) {
         this.cardRepository = cardRepository;
         this.comunicadoRepository = comunicadoRepository;
+        this.coordenadoraRepository = coordenadoraRepository;
+        this.semanaEmFocoRepository = semanaEmFocoRepository;
     }
 
     @Override
     public void run(String... args) {
-        LocalDateTime agora = LocalDateTime.now();
-
-        salvarCategoriaSeNecessario(
-                CategoriaCard.SUBSTITUICAO,
-                List.of(
-                        criarCard("Substituicao 1oA", "Cobertura da aula de Matematica no primeiro horario.", CategoriaCard.SUBSTITUICAO, PrioridadeCard.ALTA, StatusCard.PENDENTE, LocalDate.of(2026, 4, 17), "Prof. Ana Paula", "Confirmar material com a coordenacao.", agora.minusHours(6)),
-                        criarCard("Reforco 7oB", "Aula de reforco de Lingua Portuguesa as 10:20.", CategoriaCard.SUBSTITUICAO, PrioridadeCard.MEDIA, StatusCard.EM_ANDAMENTO, LocalDate.of(2026, 4, 17), "Prof. Carlos Henrique", "Sala 12.", agora.minusHours(5)),
-                        criarCard("Atendimento pedagogico", "Atendimento individual de alunos no periodo da tarde.", CategoriaCard.SUBSTITUICAO, PrioridadeCard.BAIXA, StatusCard.PENDENTE, LocalDate.of(2026, 4, 17), "Prof. Juliana", "Organizar ordem de atendimento.", agora.minusHours(4))
-                )
-        );
-
-        salvarCategoriaSeNecessario(
-                CategoriaCard.FALTA_PROFESSOR,
-                List.of(
-                        criarCard("Ausencia no turno da manha", "Ausencia justificada por atestado medico.", CategoriaCard.FALTA_PROFESSOR, PrioridadeCard.ALTA, StatusCard.PENDENTE, LocalDate.of(2026, 4, 17), "Prof. Marcos", "Necessario remanejamento de aulas.", agora.minusHours(3)),
-                        criarCard("Saida antecipada", "Saida as 15h para consulta agendada.", CategoriaCard.FALTA_PROFESSOR, PrioridadeCard.MEDIA, StatusCard.EM_ANDAMENTO, LocalDate.of(2026, 4, 17), "Prof. Renata", "Ajustar cobertura das ultimas aulas.", agora.minusHours(2)),
-                        criarCard("Falta no periodo da tarde", "Ausencia confirmada para o turno vespertino.", CategoriaCard.FALTA_PROFESSOR, PrioridadeCard.ALTA, StatusCard.PENDENTE, LocalDate.of(2026, 4, 18), "Prof. Luciana", "Avisar secretaria e coordenacao.", agora.minusHours(1))
-                )
-        );
-
-        salvarCategoriaSeNecessario(
-                CategoriaCard.EVENTO, 
-                List.of(
-                        criarCard("Conselho de classe", "Reuniao de fechamento do primeiro trimestre com professores.", CategoriaCard.EVENTO, PrioridadeCard.ALTA, StatusCard.PENDENTE, LocalDate.of(2026, 4, 20), "Coordenacao Pedagogica", "Levar relatorios de desempenho.", agora),
-                        criarCard("Simulado geral", "Aplicacao de simulado para turmas do ensino fundamental.", CategoriaCard.EVENTO, PrioridadeCard.MEDIA, StatusCard.EM_ANDAMENTO, LocalDate.of(2026, 4, 22), "Equipe Pedagogica", "Organizar salas e provas.", agora.plusHours(1)),
-                        criarCard("Feira cultural", "Evento com apresentacoes, exposicoes e trabalhos dos alunos.", CategoriaCard.EVENTO, PrioridadeCard.MEDIA, StatusCard.PENDENTE, LocalDate.of(2026, 4, 26), "Coordenacao Geral", "Confirmar estrutura e cronograma.", agora.plusHours(2)),
-                        criarCard("Entrega de boletins", "Entrega presencial de boletins para responsaveis.", CategoriaCard.EVENTO, PrioridadeCard.ALTA, StatusCard.PENDENTE, LocalDate.of(2026, 4, 24), "Secretaria Escolar", "Separar turmas por horario.", agora.plusHours(3))
-                )
-        );
-
-        salvarCategoriaSeNecessario(
-                CategoriaCard.ROTINA_ADMINISTRATIVA,
-                List.of(
-                        criarCard("Conferir frequencia diaria", "Validar faltas e inconsistencias no sistema.", CategoriaCard.ROTINA_ADMINISTRATIVA, PrioridadeCard.ALTA, StatusCard.EM_ANDAMENTO, null, "Secretaria", "Finalizar ate 11h.", agora.plusHours(4)),
-                        criarCard("Atualizar mural interno", "Substituir comunicados antigos e inserir novos avisos.", CategoriaCard.ROTINA_ADMINISTRATIVA, PrioridadeCard.BAIXA, StatusCard.PENDENTE, null, "Coordenacao", "Revisar calendario escolar.", agora.plusHours(5)),
-                        criarCard("Validar pedidos de material", "Conferir solicitacoes enviadas pelos professores.", CategoriaCard.ROTINA_ADMINISTRATIVA, PrioridadeCard.MEDIA, StatusCard.PENDENTE, null, "Setor Administrativo", "Priorizar materiais para avaliacoes.", agora.plusHours(6))
-                )
-        );
-
-        salvarCategoriaSeNecessario(
-                CategoriaCard.ROTINA_COORDENADORES,
-                List.of(
-                        criarCard("Checklist da coordenacao", "Revisar pendencias da rotina pedagogica do dia.", CategoriaCard.ROTINA_COORDENADORES, PrioridadeCard.ALTA, StatusCard.EM_ANDAMENTO, null, "Coordenacao", "Atualizar conclusoes no painel.", agora.plusHours(7)),
-                        criarCard("Acompanhamento dos segmentos", "Conferir demandas abertas por etapa da escola.", CategoriaCard.ROTINA_COORDENADORES, PrioridadeCard.MEDIA, StatusCard.PENDENTE, null, "Coordenacao", "Priorizar semana em foco.", agora.plusHours(8))
-                )
-        );
-
-        salvarCategoriaSeNecessario(
-                CategoriaCard.SEMANA_EM_FOCO,
-                List.of(
-                        criarCard("Fundamental 1 em foco", "Acompanhar adaptacao das turmas, demandas pedagogicas e comunicados da semana.", CategoriaCard.SEMANA_EM_FOCO, PrioridadeCard.ALTA, StatusCard.EM_ANDAMENTO, LocalDate.now(), "Fundamental 1", "Validar prioridades com as coordenadoras.", agora.plusHours(9)),
-                        criarCard("Manutencao do foco semanal", "Conferir se as demandas do segmento estao atualizadas para exibicao na TV.", CategoriaCard.SEMANA_EM_FOCO, PrioridadeCard.MEDIA, StatusCard.PENDENTE, LocalDate.now().plusDays(1), "Coordenacao", "Atualizar cards de manutencao.", agora.plusHours(10))
-                )
-        );
-
-        salvarComunicadosSeNecessario();
+        popularCoordenadoras();
+        popularSemanasEmFoco();
+        popularCards();
+        popularComunicados();
     }
 
-    @SuppressWarnings("unchecked")
-    private void salvarComunicadosSeNecessario() {
-        if (comunicadoRepository.count() > 0) {
-            return;
-        }
+    private void popularCoordenadoras() {
+        if (coordenadoraRepository.count() > 0) return;
+
+        List<Coordenadora> coordenadoras = List.of(
+                criarCoordenadora("Elaine", null, SegmentoCoordenacao.EDUCACAO_INFANTIL, null),
+                criarCoordenadora("Elaine", null, SegmentoCoordenacao.FUNDAMENTAL_1, null),
+                criarCoordenadora("Edna", null, SegmentoCoordenacao.FUNDAMENTAL_2, null),
+                criarCoordenadora("Amanda", null, SegmentoCoordenacao.FUNDAMENTAL_2, null),
+                criarCoordenadora("Ananda", null, SegmentoCoordenacao.FUNDAMENTAL_2, null),
+                criarCoordenadora("Lilian", null, SegmentoCoordenacao.FUNDAMENTAL_2, null),
+                criarCoordenadora("Edna", null, SegmentoCoordenacao.ENSINO_MEDIO, null),
+                criarCoordenadora("Amanda", null, SegmentoCoordenacao.ENSINO_MEDIO, null),
+                criarCoordenadora("Ananda", null, SegmentoCoordenacao.ENSINO_MEDIO, null),
+                criarCoordenadora("Lilian", null, SegmentoCoordenacao.ENSINO_MEDIO, null)
+        );
+        coordenadoraRepository.saveAll(coordenadoras);
+    }
+
+    private void popularSemanasEmFoco() {
+        if (semanaEmFocoRepository.count() > 0) return;
+
+        List<SemanaEmFoco> semanas = List.of(
+                // AGOSTO 2026
+                criarSemana(SegmentoCoordenacao.EDUCACAO_INFANTIL, "Educacao Infantil em Foco", "Acompanhamento do Infantil: rotina, acolhimento e desenvolvimento.", PrioridadeDemanda.ALTA, LocalDate.of(2026, 8, 3), LocalDate.of(2026, 8, 7)),
+                criarSemana(SegmentoCoordenacao.FUNDAMENTAL_1, "Fund. Anos Iniciais em Foco", "Alfabetizacao, consolidacao e intervencao no Fundamental I.", PrioridadeDemanda.ALTA, LocalDate.of(2026, 8, 10), LocalDate.of(2026, 8, 14)),
+                criarSemana(SegmentoCoordenacao.ENSINO_MEDIO, "Ensino Medio em Foco", "Check-list geral, Geekie e dados, por area e acao com alunos.", PrioridadeDemanda.ALTA, LocalDate.of(2026, 8, 17), LocalDate.of(2026, 8, 21)),
+                criarSemana(SegmentoCoordenacao.FUNDAMENTAL_2, "Fund. Anos Finais em Foco", "Check-list geral, Geekie, incluso, projetos e feedback.", PrioridadeDemanda.ALTA, LocalDate.of(2026, 8, 24), LocalDate.of(2026, 8, 28)),
+
+                // SETEMBRO 2026
+                criarSemana(SegmentoCoordenacao.FUNDAMENTAL_2, "Fund. Anos Finais em Foco", "Continuidade do acompanhamento do Fundamental II.", PrioridadeDemanda.ALTA, LocalDate.of(2026, 8, 31), LocalDate.of(2026, 9, 4)),
+                criarSemana(SegmentoCoordenacao.EDUCACAO_INFANTIL, "Educacao Infantil em Foco", "Rotina e desenvolvimento do Infantil.", PrioridadeDemanda.ALTA, LocalDate.of(2026, 9, 8), LocalDate.of(2026, 9, 11)),
+                criarSemana(SegmentoCoordenacao.FUNDAMENTAL_1, "Fund. Anos Iniciais em Foco", "Acompanhamento pedagogico do Fundamental I.", PrioridadeDemanda.ALTA, LocalDate.of(2026, 9, 14), LocalDate.of(2026, 9, 18)),
+                criarSemana(SegmentoCoordenacao.ENSINO_MEDIO, "Ensino Medio em Foco", "Estrategias ENEM e devolutivas.", PrioridadeDemanda.ALTA, LocalDate.of(2026, 9, 21), LocalDate.of(2026, 9, 25)),
+                criarSemana(SegmentoCoordenacao.FUNDAMENTAL_2, "Fund. Anos Finais em Foco", "Fechamento do trimestre Fundamental II.", PrioridadeDemanda.ALTA, LocalDate.of(2026, 9, 28), LocalDate.of(2026, 10, 2)),
+
+                // OUTUBRO 2026
+                criarSemana(SegmentoCoordenacao.EDUCACAO_INFANTIL, "Educacao Infantil em Foco", "Novo ciclo no Infantil.", PrioridadeDemanda.ALTA, LocalDate.of(2026, 10, 5), LocalDate.of(2026, 10, 9)),
+                criarSemana(SegmentoCoordenacao.FUNDAMENTAL_1, "Fund. Anos Iniciais em Foco", "Retomada do Fundamental I apos ferias.", PrioridadeDemanda.ALTA, LocalDate.of(2026, 10, 13), LocalDate.of(2026, 10, 16)),
+                criarSemana(SegmentoCoordenacao.ENSINO_MEDIO, "Ensino Medio em Foco", "Planejamento final do ano Ensino Medio.", PrioridadeDemanda.ALTA, LocalDate.of(2026, 10, 19), LocalDate.of(2026, 10, 23)),
+                criarSemana(SegmentoCoordenacao.FUNDAMENTAL_2, "Fund. Anos Finais em Foco", "Acompanhamento Fundamental II.", PrioridadeDemanda.ALTA, LocalDate.of(2026, 10, 26), LocalDate.of(2026, 10, 30)),
+
+                // NOVEMBRO 2026
+                criarSemana(SegmentoCoordenacao.EDUCACAO_INFANTIL, "Educacao Infantil em Foco", "Rotina final de ano no Infantil.", PrioridadeDemanda.ALTA, LocalDate.of(2026, 11, 3), LocalDate.of(2026, 11, 6)),
+                criarSemana(SegmentoCoordenacao.FUNDAMENTAL_1, "Fund. Anos Iniciais em Foco", "Avaliacoes finais Fundamental I.", PrioridadeDemanda.ALTA, LocalDate.of(2026, 11, 9), LocalDate.of(2026, 11, 13)),
+                criarSemana(SegmentoCoordenacao.ENSINO_MEDIO, "Ensino Medio em Foco", "Fechamento e encerramento Ensino Medio.", PrioridadeDemanda.ALTA, LocalDate.of(2026, 11, 16), LocalDate.of(2026, 11, 20)),
+                criarSemana(SegmentoCoordenacao.FUNDAMENTAL_2, "Fund. Anos Finais em Foco", "Encerramento Fundamental II.", PrioridadeDemanda.ALTA, LocalDate.of(2026, 11, 23), LocalDate.of(2026, 11, 27))
+        );
+        semanaEmFocoRepository.saveAll(semanas);
+    }
+
+    private void popularCards() {
+        LocalDateTime agora = LocalDateTime.now();
+
+        // EDUCAÇÃO INFANTIL - Rotina semanal
+        salvarCategoriaSeNecessario(CategoriaCard.ROTINA_COORDENADORES, List.of(
+                criarCard("EI - Inicio de Rotina", "Observar as duas salas (15-20 min cada). Avaliar acolhimento das criancas (entrada -> atividade). Analisar planejamento do dia e intencionalidade. Verificar interacao professor x aluno.", CategoriaCard.ROTINA_COORDENADORES, PrioridadeCard.ALTA, StatusCard.PENDENTE, LocalDate.of(2026, 8, 10), "Elaine", "Educacao Infantil - Segunda-feira", agora),
+                criarCard("EI - Interacao e Desenvolvimento", "Observar as duas salas. Avaliar linguagem e comunicacao das criancas. Avaliar mediacao docente e engajamento discente. Registrar pontos de atencao e orientar pratica docente.", CategoriaCard.ROTINA_COORDENADORES, PrioridadeCard.ALTA, StatusCard.PENDENTE, LocalDate.of(2026, 8, 11), "Elaine", "Educacao Infantil - Terca-feira", agora),
+                criarCard("EI - Aprendizagem", "Observar as duas salas. Avaliar intencionalidade pedagogica e engajamento dos alunos. Verificar desenvolvimento (coordenacao, fala, socializacao). Observar desenvolvimento, registros e fornecer devolutiva estruturada.", CategoriaCard.ROTINA_COORDENADORES, PrioridadeCard.ALTA, StatusCard.PENDENTE, LocalDate.of(2026, 8, 12), "Elaine", "Educacao Infantil - Quarta-feira", agora),
+                criarCard("EI - Autonomia e Rotina", "Observar as duas salas. Avaliar autonomia das criancas e organizacao da rotina. Analisar comportamento coletivo e preparo para o Fundamental. Orientar ajustes pedagogicos.", CategoriaCard.ROTINA_COORDENADORES, PrioridadeCard.ALTA, StatusCard.PENDENTE, LocalDate.of(2026, 8, 13), "Elaine", "Educacao Infantil - Quinta-feira", agora),
+                criarCard("EI - Fechamento e Visao Geral", "Monitorar turmas prioritarias e revisar alunos com dificuldades. Verificar aplicacao de ajustes e registrar pontos da semana. Listar alunos para acompanhamento continuo e intervencao. Acompanhar PEIs. Entrega para Direcao as 15h.", CategoriaCard.ROTINA_COORDENADORES, PrioridadeCard.ALTA, StatusCard.PENDENTE, LocalDate.of(2026, 8, 14), "Elaine", "Educacao Infantil - Sexta-feira", agora)
+        ));
+
+        // FUNDAMENTAL I - Rotina semanal
+        salvarCategoriaSeNecessario(CategoriaCard.ROTINA_COORDENADORES, List.of(
+                criarCard("FI - Alfabetizacao", "Observar aula de alfabetizacao. Verificar nivel de leitura. Identificar alunos com dificuldade. Registrar para recomposicao.", CategoriaCard.ROTINA_COORDENADORES, PrioridadeCard.ALTA, StatusCard.PENDENTE, LocalDate.of(2026, 8, 17), "Elaine", "Fund. Anos Iniciais - Segunda-feira", agora),
+                criarCard("FI - Consolidacao", "Observar rotina de leitura/escrita. Verificar fluencia leitora. Analisar producao escrita. Apoiar professora.", CategoriaCard.ROTINA_COORDENADORES, PrioridadeCard.ALTA, StatusCard.PENDENTE, LocalDate.of(2026, 8, 18), "Elaine", "Fund. Anos Iniciais - Terca-feira", agora),
+                criarCard("FI - Intervencao", "Analisar resultados de avaliacoes (caso houver). Identificar habilidades nao consolidadas. Planejar intervencao. Acompanhar PEIs.", CategoriaCard.ROTINA_COORDENADORES, PrioridadeCard.ALTA, StatusCard.PENDENTE, LocalDate.of(2026, 8, 19), "Elaine", "Fund. Anos Iniciais - Quarta-feira", agora),
+                criarCard("FI - Aprendizagem", "Observar metodologia. Verificar compreensao leitora. Identificar dificuldades coletivas. Acompanhar PEIs.", CategoriaCard.ROTINA_COORDENADORES, PrioridadeCard.ALTA, StatusCard.PENDENTE, LocalDate.of(2026, 8, 20), "Elaine", "Fund. Anos Iniciais - Quinta-feira", agora),
+                criarCard("FI - Resultado", "Analisar desempenho geral. Identificar alunos criticos. Organizar lista de recomposicao. Entrega para Direcao as 15h.", CategoriaCard.ROTINA_COORDENADORES, PrioridadeCard.ALTA, StatusCard.PENDENTE, LocalDate.of(2026, 8, 21), "Elaine", "Fund. Anos Iniciais - Sexta-feira", agora)
+        ));
+
+        // FUNDAMENTAL II - Rotina semanal
+        salvarCategoriaSeNecessario(CategoriaCard.ROTINA_COORDENADORES, List.of(
+                criarCard("FII - Check-list Geral", "Observar engajamento e adaptacao dos alunos. Verificar organizacao dos estudos (caderno e rotina). Identificar dificuldades iniciais.", CategoriaCard.ROTINA_COORDENADORES, PrioridadeCard.ALTA, StatusCard.PENDENTE, LocalDate.of(2026, 8, 24), "Edna/Amanda/Ananda/Lilian", "Fund. Anos Finais - Segunda-feira", agora),
+                criarCard("FII - Geekie e Dados", "Consultar relatorios de participacao. Verificar alunos com baixa adesao. Analisar desempenho inicial.", CategoriaCard.ROTINA_COORDENADORES, PrioridadeCard.ALTA, StatusCard.PENDENTE, LocalDate.of(2026, 8, 24), "Edna/Amanda/Ananda/Lilian", "Fund. Anos Finais - Geekie", agora),
+                criarCard("FII - Inclusao", "Verificar alunos com necessidade de adaptacao. Orientar professores sobre material adaptado.", CategoriaCard.ROTINA_COORDENADORES, PrioridadeCard.MEDIA, StatusCard.PENDENTE, LocalDate.of(2026, 8, 24), "Edna/Amanda/Ananda/Lilian", "Fund. Anos Finais - Inclusao", agora),
+                criarCard("FII - Feedback e Recomposicao", "Orientar professores sobre devolutivas de atividades. Iniciar cultura de correcao comentada.", CategoriaCard.ROTINA_COORDENADORES, PrioridadeCard.ALTA, StatusCard.PENDENTE, LocalDate.of(2026, 8, 24), "Edna/Amanda/Ananda/Lilian", "Fund. Anos Finais - Feedback", agora),
+                criarCard("FII - Projetos", "Verificar andamento dos projetos. Avaliar engajamento e resultados parciais.", CategoriaCard.ROTINA_COORDENADORES, PrioridadeCard.MEDIA, StatusCard.PENDENTE, LocalDate.of(2026, 8, 24), "Edna/Amanda/Ananda/Lilian", "Fund. Anos Finais - Projetos", agora)
+        ));
+
+        // ENSINO MÉDIO - Rotina semanal
+        salvarCategoriaSeNecessario(CategoriaCard.ROTINA_COORDENADORES, List.of(
+                criarCard("EM - Check-list Geral", "Verificar rotina de estudos dos alunos. Cobrar uso da Geekie (acesso e tempo). Identificar alunos sem engajamento. Acompanhar PEIs.", CategoriaCard.ROTINA_COORDENADORES, PrioridadeCard.ALTA, StatusCard.PENDENTE, LocalDate.of(2026, 8, 17), "Edna/Amanda/Ananda/Lilian", "Ensino Medio - Segunda-feira", agora),
+                criarCard("EM - Geekie e Dados", "Analisar relatorios de participacao. Identificar alunos nivel 1. Listar habilidades com desempenho abaixo de 60%.", CategoriaCard.ROTINA_COORDENADORES, PrioridadeCard.ALTA, StatusCard.PENDENTE, LocalDate.of(2026, 8, 17), "Edna/Amanda/Ananda/Lilian", "Ensino Medio - Geekie", agora),
+                criarCard("EM - Por Area", "Linguagens: Leitura e interpretacao (base ENEM). Exatas: Matematica Basica (base ENEM). Humanas: Interpretacao e analise critica (base ENEM).", CategoriaCard.ROTINA_COORDENADORES, PrioridadeCard.ALTA, StatusCard.PENDENTE, LocalDate.of(2026, 8, 17), "Edna/Amanda/Ananda/Lilian", "Ensino Medio - Por Area", agora),
+                criarCard("EM - Acao com Alunos", "Conversar com alunos nivel 1. Definir meta individual (subir para nivel 2).", CategoriaCard.ROTINA_COORDENADORES, PrioridadeCard.ALTA, StatusCard.PENDENTE, LocalDate.of(2026, 8, 17), "Edna/Amanda/Ananda/Lilian", "Ensino Medio - Acao", agora),
+                criarCard("EM - Gestao e Fechamento", "Atualizar ranking interno por turma. Listar alunos por nivel (1 a 4). Verificar evolucao semanal. Dar devolutiva para professores. Cobrar plano de acao claro.", CategoriaCard.ROTINA_COORDENADORES, PrioridadeCard.ALTA, StatusCard.PENDENTE, LocalDate.of(2026, 8, 21), "Edna/Amanda/Ananda/Lilian", "Ensino Medio - Sexta-feira", agora)
+        ));
+
+        // CHECKLIST TRIMESTRAL
+        salvarCategoriaSeNecessario(CategoriaCard.ROTINA_ADMINISTRATIVA, List.of(
+                criarCard("Checklist Trimestral - Geekie e Dados", "Analise participacao diaria. Analise desempenho por habilidade. Uso de dados para orientar decisoes.", CategoriaCard.ROTINA_ADMINISTRATIVA, PrioridadeCard.ALTA, StatusCard.PENDENTE, null, "Coordenacao", "Checklist trimestral - Geekie", agora),
+                criarCard("Checklist Trimestral - Professores", "Verificar uso de dados no planejamento. Verificar devolutiva das provas. Verificar cobranca de estudo dos alunos.", CategoriaCard.ROTINA_ADMINISTRATIVA, PrioridadeCard.ALTA, StatusCard.PENDENTE, null, "Coordenacao", "Checklist trimestral - Professores", agora),
+                criarCard("Checklist Trimestral - Inclusao", "Constatou material adaptado quando necessario. Verificou acompanhamento adequado.", CategoriaCard.ROTINA_ADMINISTRATIVA, PrioridadeCard.MEDIA, StatusCard.PENDENTE, null, "Coordenacao", "Checklist trimestral - Inclusao", agora),
+                criarCard("Checklist Trimestral - Alunos", "Checou plano de estudo ativo. Verificou clareza das cobrancas. Observou evolucao.", CategoriaCard.ROTINA_ADMINISTRATIVA, PrioridadeCard.MEDIA, StatusCard.PENDENTE, null, "Coordenacao", "Checklist trimestral - Alunos", agora)
+        ));
+    }
+
+    private void popularComunicados() {
+        if (comunicadoRepository.count() > 0) return;
 
         List<comunicado> comunicados = List.of(
-                criarcomunicado("Regras de conduta para o periodo de provas",
+                criarComunicado("Regras de conduta para o periodo de provas",
                         "Durante o periodo de avaliacao, todos os alunos devem seguir o regimento interno. "
                         + "Celulares devem ser entregues na entrada da sala. Qualquer irregularidade sera registrada "
                         + "e comunicada aos responsaveis."),
-                criarcomunicado("Reuniao de pais e mestres",
+                criarComunicado("Reuniao de pais e mestres",
                         "A reuniao trimestral de pais e mestres sera realizada na quinta-feira as 19h no auditorio. "
                         + "A presenca e obrigatoria para todos os responsaveis de alunos do Ensino Fundamental I."),
-                criarcomunicado("Campanha de arrecadacao solidaria",
+                criarComunicado("Campanha de arrecadacao solidaria",
                         "A escola promove uma campanha de arrecadacao de alimentos nao pereciveis. "
-                        + "As doacoes podem ser entregues na recepcao da escola ate o dia 30/05.")
+                        + "As doacoes podem ser entregues na recepcao da escola ate o dia 30/05."),
+                criarComunicado("Rotina de Coordenacao Pedagogica 2026",
+                        "A rotina de coordenacao pedagogica foi atualizada para 2026. As coordenadoras devem "
+                        + "seguir o cronograma semanal de visitas as turmas, conforme o segmento atribuido.")
         );
         comunicadoRepository.saveAll(comunicados);
     }
 
-    private comunicado criarcomunicado(String titulo, String conteudo) {
-        comunicado comunicado = new comunicado();
-        comunicado.setTitulo(titulo);
-        comunicado.setConteudo(conteudo);
-        return comunicado;
+    private Coordenadora criarCoordenadora(String nome, String email, SegmentoCoordenacao segmento, String telefone) {
+        Coordenadora c = new Coordenadora();
+        c.setNome(nome);
+        if (email != null) c.setEmail(email);
+        c.setSegmento(segmento);
+        if (telefone != null) c.setTelefone(telefone);
+        return c;
+    }
+
+    private SemanaEmFoco criarSemana(SegmentoCoordenacao segmento, String titulo, String descricao,
+                                     PrioridadeDemanda prioridade, LocalDate dataInicio, LocalDate dataFim) {
+        SemanaEmFoco s = new SemanaEmFoco();
+        s.setSegmento(segmento);
+        s.setTitulo(titulo);
+        s.setDescricao(descricao);
+        s.setPrioridade(prioridade);
+        s.setDataInicio(dataInicio);
+        s.setDataFim(dataFim);
+        s.setAtiva(false);
+        return s;
+    }
+
+    private comunicado criarComunicado(String titulo, String conteudo) {
+        comunicado c = new comunicado();
+        c.setTitulo(titulo);
+        c.setConteudo(conteudo);
+        return c;
     }
 
     private void salvarCategoriaSeNecessario(CategoriaCard categoria, List<Card> cards) {
         if (cardRepository.existsByCategoria(categoria)) {
             return;
         }
-
         cardRepository.saveAll(Objects.requireNonNull(cards));
     }
 
-    private Card criarCard(String titulo,
-                           String descricao,
-                           CategoriaCard categoria,
-                           PrioridadeCard prioridade,
-                           StatusCard status,
-                           LocalDate dataEvento,
-                           String responsavel,
-                           String observacoes,
-                           LocalDateTime dataCriacao) {
+    private Card criarCard(String titulo, String descricao, CategoriaCard categoria,
+                           PrioridadeCard prioridade, StatusCard status, LocalDate dataEvento,
+                           String responsavel, String observacoes, LocalDateTime dataCriacao) {
         Card card = new Card();
         card.setTitulo(titulo);
         card.setDescricao(descricao);

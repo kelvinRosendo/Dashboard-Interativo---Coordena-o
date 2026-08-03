@@ -36,7 +36,9 @@ public class SecurityConfig {
                                 "/relatorio",
                                 "/relatorio/**",
                                 "/coordenadoras",
-                                "/coordenadoras/**"
+                                "/coordenadoras/**",
+                                "/admin/importacao",
+                                "/admin/importacao/**"
                         ).authenticated()
                         .anyRequest().authenticated()
                 )

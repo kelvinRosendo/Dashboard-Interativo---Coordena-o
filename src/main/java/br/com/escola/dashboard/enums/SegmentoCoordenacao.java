@@ -6,7 +6,9 @@ public enum SegmentoCoordenacao {
     EDUCACAO_INFANTIL("educacao-infantil", "Educacao Infantil", "Demandas de rotina e acompanhamento do Infantil.", "infantil"),
     FUNDAMENTAL_1("fundamental-1", "Fundamental 1", "Demandas de rotina e acompanhamento do Fundamental 1.", "fund1"),
     FUNDAMENTAL_2("fundamental-2", "Fundamental 2", "Demandas de rotina e acompanhamento do Fundamental 2.", "fund2"),
-    ENSINO_MEDIO("ensino-medio", "Ensino Medio", "Demandas de rotina e acompanhamento do Ensino Medio.", "medio");
+    ENSINO_MEDIO("ensino-medio", "Ensino Medio", "Demandas de rotina e acompanhamento do Ensino Medio.", "medio"),
+    BILINGUE("bilingue", "Bilíngue", "Demandas de rotina e acompanhamento do segmento Bilíngue.", "bilíngue", "bilingue"),
+    INTEGRAL("integral", "Integral", "Demandas de rotina e acompanhamento do segmento Integral.", "integral");
 
     private final String slug;
     private final String titulo;

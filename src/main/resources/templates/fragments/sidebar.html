@@ -70,6 +70,16 @@
             <strong class="app-sidebar__text">Coordenadoras</strong>
         </a>
 
+        <a th:href="@{/admin/importacao}"
+           class="app-sidebar__link"
+           title="Importação de Dados"
+           th:classappend="${active == 'importacao'} ? ' app-sidebar__link--active' : ''">
+            <span class="app-sidebar__icon">
+                <img th:src="@{/img/icons/icon-add.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
+            </span>
+            <strong class="app-sidebar__text">Importação de Dados</strong>
+        </a>
+
         <a th:href="@{/admin/comunicados/novo}"
            class="app-sidebar__link"
            title="Novo Comunicado"
