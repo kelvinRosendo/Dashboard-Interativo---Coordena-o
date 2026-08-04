@@ -30,82 +30,155 @@
     </div>
 
     <nav class="app-sidebar__nav" aria-label="Navegacao principal">
-        <a th:href="@{/admin}"
+        <!-- ITENS COMUNS A TODOS OS PERFIS -->
+        <a th:href="@{/dashboard}"
            class="app-sidebar__link"
-           title="Painel Admin"
-           th:classappend="${active == 'admin'} ? ' app-sidebar__link--active' : ''">
+           title="Dashboard"
+           th:classappend="${active == 'dashboard'} ? ' app-sidebar__link--active' : ''">
             <span class="app-sidebar__icon">
                 <img th:src="@{/img/icons/icon-admin.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
             </span>
-            <strong class="app-sidebar__text">Painel Admin</strong>
+            <strong class="app-sidebar__text">Dashboard</strong>
         </a>
 
-        <a th:href="@{/tv/calendario(modo='mensal')}"
-           class="app-sidebar__link"
-           title="Calendario"
-           th:classappend="${active == 'calendario'} ? ' app-sidebar__link--active' : ''">
-            <span class="app-sidebar__icon">
-                <img th:src="@{/img/icons/icon-calendar.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
-            </span>
-            <strong class="app-sidebar__text">Calendario</strong>
-        </a>
+        <!-- ITENS EXCLUSIVOS DO ADMIN -->
+        <th:block th:if="${perfil != null and perfil.name() == 'ADMIN'}">
+            <a th:href="@{/admin/importacao}"
+               class="app-sidebar__link"
+               title="Importacao de Dados"
+               th:classappend="${active == 'importacao'} ? ' app-sidebar__link--active' : ''">
+                <span class="app-sidebar__icon">
+                    <img th:src="@{/img/icons/icon-add.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
+                </span>
+                <strong class="app-sidebar__text">Importacao de Dados</strong>
+            </a>
 
-        <a th:href="@{/tv/semana}"
-           class="app-sidebar__link"
-           title="Semana em Foco"
-           th:classappend="${active == 'semana'} ? ' app-sidebar__link--active' : ''">
-            <span class="app-sidebar__icon">
-                <img th:src="@{/img/icons/icon-week.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
-            </span>
-            <strong class="app-sidebar__text">Semana em Foco</strong>
-        </a>
+            <a th:href="@{/coordenadoras}"
+               class="app-sidebar__link"
+               title="Coordenadoras"
+               th:classappend="${active == 'coordenadoras'} ? ' app-sidebar__link--active' : ''">
+                <span class="app-sidebar__icon">
+                    <img th:src="@{/img/icons/icon-coordinators.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
+                </span>
+                <strong class="app-sidebar__text">Coordenadoras</strong>
+            </a>
 
-        <a th:href="@{/coordenadoras}"
-           class="app-sidebar__link"
-           title="Coordenadoras"
-           th:classappend="${active == 'coordenadoras'} ? ' app-sidebar__link--active' : ''">
-            <span class="app-sidebar__icon">
-                <img th:src="@{/img/icons/icon-coordinators.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
-            </span>
-            <strong class="app-sidebar__text">Coordenadoras</strong>
-        </a>
+            <a th:href="@{/admin/comunicados/novo}"
+               class="app-sidebar__link"
+               title="Novo Comunicado"
+               th:classappend="${active == 'novo-comunicado'} ? ' app-sidebar__link--active' : ''">
+                <span class="app-sidebar__icon">
+                    <img th:src="@{/img/icons/icon-add.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
+                </span>
+                <strong class="app-sidebar__text">Novo Comunicado</strong>
+            </a>
 
-        <a th:href="@{/admin/importacao}"
-           class="app-sidebar__link"
-           title="Importação de Dados"
-           th:classappend="${active == 'importacao'} ? ' app-sidebar__link--active' : ''">
-            <span class="app-sidebar__icon">
-                <img th:src="@{/img/icons/icon-add.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
-            </span>
-            <strong class="app-sidebar__text">Importação de Dados</strong>
-        </a>
+            <a th:href="@{/relatorio/admin/relatorios}"
+               class="app-sidebar__link"
+               title="Relatorios"
+               th:classappend="${active == 'relatorios'} ? ' app-sidebar__link--active' : ''">
+                <span class="app-sidebar__icon">
+                    <img th:src="@{/img/icons/icon-report.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
+                </span>
+                <strong class="app-sidebar__text">Relatorios</strong>
+            </a>
 
-        <a th:href="@{/admin/comunicados/novo}"
-           class="app-sidebar__link"
-           title="Novo Comunicado"
-           th:classappend="${active == 'novo-comunicado'} ? ' app-sidebar__link--active' : ''">
-            <span class="app-sidebar__icon">
-                <img th:src="@{/img/icons/icon-add.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
+            <span class="app-sidebar__link app-sidebar__link--disabled" aria-disabled="true" title="Funcionalidade disponivel em breve">
+                <span class="app-sidebar__icon">
+                    <img th:src="@{/img/icons/icon-settings.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
+                </span>
+                <strong class="app-sidebar__text">Configuracoes</strong>
             </span>
-            <strong class="app-sidebar__text">Novo Comunicado</strong>
-        </a>
+        </th:block>
 
-        <a th:href="@{/relatorio/admin/relatorios}"
-           class="app-sidebar__link"
-           title="Relatorios"
-           th:classappend="${active == 'relatorios'} ? ' app-sidebar__link--active' : ''">
-            <span class="app-sidebar__icon">
-                <img th:src="@{/img/icons/icon-report.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
-            </span>
-            <strong class="app-sidebar__text">Relatorios</strong>
-        </a>
+        <!-- ITENS EXCLUSIVOS DA VICE-DIRETORA -->
+        <th:block th:if="${perfil != null and perfil.name() == 'VICE_DIRETORA'}">
+            <a th:href="@{/tv/calendario(modo='mensal')}"
+               class="app-sidebar__link"
+               title="Calendario"
+               th:classappend="${active == 'calendario'} ? ' app-sidebar__link--active' : ''">
+                <span class="app-sidebar__icon">
+                    <img th:src="@{/img/icons/icon-calendar.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
+                </span>
+                <strong class="app-sidebar__text">Calendario</strong>
+            </a>
 
-        <span class="app-sidebar__link app-sidebar__link--disabled" aria-disabled="true" title="Funcionalidade disponivel em breve">
-            <span class="app-sidebar__icon">
-                <img th:src="@{/img/icons/icon-settings.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
-            </span>
-            <strong class="app-sidebar__text">Configuracoes</strong>
-        </span>
+            <a th:href="@{/tv/semana}"
+               class="app-sidebar__link"
+               title="Semana em Foco"
+               th:classappend="${active == 'semana'} ? ' app-sidebar__link--active' : ''">
+                <span class="app-sidebar__icon">
+                    <img th:src="@{/img/icons/icon-week.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
+                </span>
+                <strong class="app-sidebar__text">Semana em Foco</strong>
+            </a>
+
+            <a th:href="@{/relatorio/admin/relatorios}"
+               class="app-sidebar__link"
+               title="Relatorios"
+               th:classappend="${active == 'relatorios'} ? ' app-sidebar__link--active' : ''">
+                <span class="app-sidebar__icon">
+                    <img th:src="@{/img/icons/icon-report.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
+                </span>
+                <strong class="app-sidebar__text">Relatorios</strong>
+            </a>
+        </th:block>
+
+        <!-- ITENS EXCLUSIVOS DA COORDENADORA -->
+        <th:block th:if="${perfil != null and perfil.name() == 'COORDENADORA'}">
+            <a th:href="@{/tv/semana}"
+               class="app-sidebar__link"
+               title="Semana em Foco"
+               th:classappend="${active == 'semana'} ? ' app-sidebar__link--active' : ''">
+                <span class="app-sidebar__icon">
+                    <img th:src="@{/img/icons/icon-week.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
+                </span>
+                <strong class="app-sidebar__text">Semana em Foco</strong>
+            </a>
+
+            <a th:href="@{/tv/calendario(modo='mensal')}"
+               class="app-sidebar__link"
+               title="Agenda"
+               th:classappend="${active == 'calendario'} ? ' app-sidebar__link--active' : ''">
+                <span class="app-sidebar__icon">
+                    <img th:src="@{/img/icons/icon-calendar.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
+                </span>
+                <strong class="app-sidebar__text">Agenda</strong>
+            </a>
+        </th:block>
+
+        <!-- LINKS ADMIN ANTIGOS (MANTIDOS PARA COMPATIBILIDADE) -->
+        <th:block th:if="${perfil != null and perfil.name() == 'ADMIN'}">
+            <a th:href="@{/admin}"
+               class="app-sidebar__link"
+               title="Painel Admin"
+               th:classappend="${active == 'admin'} ? ' app-sidebar__link--active' : ''">
+                <span class="app-sidebar__icon">
+                    <img th:src="@{/img/icons/icon-admin.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
+                </span>
+                <strong class="app-sidebar__text">Painel Admin</strong>
+            </a>
+
+            <a th:href="@{/tv/calendario(modo='mensal')}"
+               class="app-sidebar__link"
+               title="Calendario"
+               th:classappend="${active == 'calendario'} ? ' app-sidebar__link--active' : ''">
+                <span class="app-sidebar__icon">
+                    <img th:src="@{/img/icons/icon-calendar.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
+                </span>
+                <strong class="app-sidebar__text">Calendario</strong>
+            </a>
+
+            <a th:href="@{/tv/semana}"
+               class="app-sidebar__link"
+               title="Semana em Foco"
+               th:classappend="${active == 'semana'} ? ' app-sidebar__link--active' : ''">
+                <span class="app-sidebar__icon">
+                    <img th:src="@{/img/icons/icon-week.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
+                </span>
+                <strong class="app-sidebar__text">Semana em Foco</strong>
+            </a>
+        </th:block>
     </nav>
 
     <form th:if="${!tvMode}" class="app-sidebar__logout" th:action="@{/logout}" method="post" onsubmit="return confirm('Deseja realmente sair?')">

@@ -8,6 +8,12 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
+    private final CustomOAuth2UserService customOAuth2UserService;
+
+    public SecurityConfig(CustomOAuth2UserService customOAuth2UserService) {
+        this.customOAuth2UserService = customOAuth2UserService;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -38,13 +44,22 @@ public class SecurityConfig {
                                 "/coordenadoras",
                                 "/coordenadoras/**",
                                 "/admin/importacao",
-                                "/admin/importacao/**"
+                                "/admin/importacao/**",
+                                "/dashboard",
+                                "/dashboard/**",
+                                "/vice-diretora",
+                                "/vice-diretora/**",
+                                "/coordenadora/dashboard",
+                                "/coordenadora/dashboard/**"
                         ).authenticated()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth -> oauth
                         .loginPage("/login")
-                        .defaultSuccessUrl("/admin", true)
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(customOAuth2UserService)
+                        )
+                        .defaultSuccessUrl("/dashboard", true)
                 )
                 .logout(logout -> logout
                         .logoutSuccessUrl("/login?logout")

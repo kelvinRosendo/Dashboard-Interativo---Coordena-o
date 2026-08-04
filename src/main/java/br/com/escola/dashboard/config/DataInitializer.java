@@ -3,6 +3,7 @@ package br.com.escola.dashboard.config;
 import br.com.escola.dashboard.entity.Card;
 import br.com.escola.dashboard.entity.Coordenadora;
 import br.com.escola.dashboard.entity.SemanaEmFoco;
+import br.com.escola.dashboard.entity.Segmento;
 import br.com.escola.dashboard.entity.comunicado;
 import br.com.escola.dashboard.enums.CategoriaCard;
 import br.com.escola.dashboard.enums.PrioridadeCard;
@@ -12,6 +13,7 @@ import br.com.escola.dashboard.enums.StatusCard;
 import br.com.escola.dashboard.repository.CardRepository;
 import br.com.escola.dashboard.repository.CoordenadoraRepository;
 import br.com.escola.dashboard.repository.ComunicadoRepository;
+import br.com.escola.dashboard.repository.SegmentoRepository;
 import br.com.escola.dashboard.repository.SemanaEmFocoRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
@@ -30,23 +32,50 @@ public class DataInitializer implements CommandLineRunner {
     private final ComunicadoRepository comunicadoRepository;
     private final CoordenadoraRepository coordenadoraRepository;
     private final SemanaEmFocoRepository semanaEmFocoRepository;
+    private final SegmentoRepository segmentoRepository;
 
     public DataInitializer(CardRepository cardRepository,
                            ComunicadoRepository comunicadoRepository,
                            CoordenadoraRepository coordenadoraRepository,
-                           SemanaEmFocoRepository semanaEmFocoRepository) {
+                           SemanaEmFocoRepository semanaEmFocoRepository,
+                           SegmentoRepository segmentoRepository) {
         this.cardRepository = cardRepository;
         this.comunicadoRepository = comunicadoRepository;
         this.coordenadoraRepository = coordenadoraRepository;
         this.semanaEmFocoRepository = semanaEmFocoRepository;
+        this.segmentoRepository = segmentoRepository;
     }
 
     @Override
     public void run(String... args) {
+        popularSegmentos();
         popularCoordenadoras();
         popularSemanasEmFoco();
         popularCards();
         popularComunicados();
+    }
+
+    private void popularSegmentos() {
+        if (segmentoRepository.count() > 0) return;
+
+        List<Segmento> segmentos = List.of(
+                criarSegmento("educacao-infantil", "Educacao Infantil", "Acompanhamento do Infantil: rotina, acolhimento e desenvolvimento."),
+                criarSegmento("fundamental-1", "Fundamental 1", "Alfabetizacao, consolidacao e intervencao no Fundamental I."),
+                criarSegmento("fundamental-2", "Fundamental 2", "Check-list geral, Geekie, incluso, projetos e feedback."),
+                criarSegmento("ensino-medio", "Ensino Medio", "Estrategias ENEM e devolutivas, por area e acao com alunos."),
+                criarSegmento("bilingue", "Bilíngue", "Acompanhamento do segmento Bilíngue."),
+                criarSegmento("integral", "Integral", "Acompanhamento do segmento Integral.")
+        );
+        segmentoRepository.saveAll(segmentos);
+    }
+
+    private Segmento criarSegmento(String slug, String titulo, String descricao) {
+        Segmento s = new Segmento();
+        s.setSlug(slug);
+        s.setTitulo(titulo);
+        s.setDescricao(descricao);
+        s.setAtivo(true);
+        return s;
     }
 
     private void popularCoordenadoras() {

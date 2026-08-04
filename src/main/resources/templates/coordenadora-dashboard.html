@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organiza+ - Meu Dashboard</title>
+    <link rel="icon" type="image/png" th:href="@{/img/logo-colegio-satelite.png}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="admin-page">
+
+<div class="app-shell">
+    <aside th:replace="~{fragments/sidebar :: sidebar('dashboard', false)}"></aside>
+
+<main class="admin-shell app-main">
+    <header class="admin-header admin-header--dashboard">
+        <div class="admin-header__brand">
+            <th:block th:replace="~{fragments/brand :: brand-admin}"></th:block>
+            <span class="admin-kicker">Meu Dashboard</span>
+            <h1 th:text="'Ola, ' + (${nome != null} ? ${nome} : 'Coordenadora') + '!'">Ola, Coordenadora!</h1>
+            <p>Visualizacao personalizada dos seus segmentos.</p>
+        </div>
+
+        <div class="admin-header__account">
+            <div class="admin-user-card">
+                <span th:text="${perfil != null ? perfil.titulo : 'Coordenadora'}">Coordenadora</span>
+                <strong th:text="${nome != null and !#strings.isEmpty(nome) ? nome : 'Coordenadora'}">Coordenadora</strong>
+                <small th:if="${email != null}" th:text="${email}">email</small>
+            </div>
+            <form th:action="@{/logout}" method="post">
+                <th:block th:replace="~{fragments/csrf :: token}"></th:block>
+                <button type="submit" class="admin-logout-button">Sair</button>
+            </form>
+        </div>
+    </header>
+
+    <p class="admin-flash admin-flash--success" aria-live="polite"
+       th:if="${mensagemSucesso != null}"
+       th:text="${mensagemSucesso}">
+        Mensagem de sucesso
+    </p>
+    <p class="admin-flash admin-flash--error" aria-live="polite"
+       th:if="${mensagemErro != null}"
+       th:text="${mensagemErro}">
+        Mensagem de erro
+    </p>
+
+    <!-- SEGMENTOS VINCULADOS -->
+    <section class="admin-section" th:if="${segmentos != null and !#lists.isEmpty(segmentos)}">
+        <div class="admin-section-header">
+            <div>
+                <span>Meus Segmentos</span>
+                <strong>Segmentos vinculados ao seu perfil</strong>
+            </div>
+        </div>
+        <div class="admin-stat-grid">
+            <article class="admin-stat-card" th:each="segmento : ${segmentos}">
+                <span th:text="${segmento.titulo}">Segmento</span>
+                <strong th:text="${segmento.descricao}">Descricao</strong>
+            </article>
+        </div>
+    </section>
+
+    <section class="admin-section" th:if="${segmentos == null or #lists.isEmpty(segmentos)}">
+        <div class="admin-empty">
+            Nenhum segmento vinculado ao seu perfil. Contacte o administrador.
+        </div>
+    </section>
+
+    <section class="admin-dashboard admin-dashboard--control">
+        <div class="admin-main-column admin-main-column--control">
+            <!-- SEMANA EM FOCO -->
+            <section class="admin-section week-focus-control avisos-collapsible" id="semana-panel"
+                     th:with="semanaControle=${semanaEmFoco}">
+                <button type="button"
+                        class="avisos-collapsible__toggle"
+                        id="semana-toggle"
+                        aria-expanded="false"
+                        aria-controls="semana-content"
+                        onclick="toggleCollapsible('semana-panel','semana-content','semana-toggle')">
+                    <div class="avisos-collapsible__header">
+                        <div>
+                            <span>&#127919; Semana em Foco</span>
+                            <strong>Controle da Semana em Foco</strong>
+                        </div>
+                        <div class="avisos-collapsible__meta">
+                            <small class="week-focus-control__status"
+                                   th:classappend="${semanaControle != null and semanaControle.ativa == true} ? ' week-focus-control__status--active' : ''"
+                                   th:text="${semanaControle != null and semanaControle.ativa == true ? 'Ativa / publicada' : 'Aguardando publicacao'}">
+                                Ativa / publicada
+                            </small>
+                            <span class="avisos-collapsible__arrow" aria-hidden="true">&#9654;</span>
+                        </div>
+                    </div>
+                </button>
+                <div class="avisos-collapsible__body" id="semana-content" aria-hidden="true">
+                    <div class="avisos-collapsible__inner">
+                        <div class="week-focus-control__preview" th:if="${semanaControle != null}">
+                            <div>
+                                <span class="week-focus-control__eyebrow">Segmento em destaque</span>
+                                <strong th:text="${semanaControle.segmento != null ? semanaControle.segmento.titulo : 'Nenhum segmento definido'}">
+                                    Segmento
+                                </strong>
+                            </div>
+                            <div class="week-focus-control__content">
+                                <h2 th:text="${semanaControle.titulo}">Semana em Foco</h2>
+                                <p th:text="${semanaControle.descricao}">Descricao</p>
+                            </div>
+                            <div class="week-focus-control__meta">
+                                <span>Periodo</span>
+                                <strong th:if="${semanaControle.dataInicio != null and semanaControle.dataFim != null}"
+                                        th:text="${#temporals.format(semanaControle.dataInicio, 'dd/MM') + ' a ' + #temporals.format(semanaControle.dataFim, 'dd/MM/yyyy')}">
+                                    Periodo
+                                </strong>
+                            </div>
+                        </div>
+                        <div class="week-focus-control__preview" th:if="${semanaControle == null}">
+                            <p class="admin-empty">Nenhuma Semana em Foco ativa no momento.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RESUMO DAS DEMANDAS -->
+            <section class="admin-section admin-summary-panel" th:if="${demandaResumo != null}">
+                <div class="admin-section-header">
+                    <div>
+                        <span>Resumo da rotina</span>
+                        <strong>Status das demandas</strong>
+                    </div>
+                </div>
+                <div class="demanda-summary-grid admin-stat-grid">
+                    <article class="demanda-summary-card admin-stat-card admin-stat-card--active">
+                        <span>Ativas</span>
+                        <strong th:text="${demandaResumo.ativas}">0</strong>
+                        <small>Pendentes + em andamento</small>
+                    </article>
+                    <article class="demanda-summary-card admin-stat-card admin-stat-card--pending">
+                        <span>Pendentes</span>
+                        <strong th:text="${demandaResumo.pendentes}">0</strong>
+                        <small>Aguardando inicio</small>
+                    </article>
+                    <article class="demanda-summary-card admin-stat-card admin-stat-card--progress">
+                        <span>Em andamento</span>
+                        <strong th:text="${demandaResumo.emAndamento}">0</strong>
+                        <small>Dentro do fluxo</small>
+                    </article>
+                    <article class="demanda-summary-card admin-stat-card admin-stat-card--done">
+                        <span>Concluidas</span>
+                        <strong th:text="${demandaResumo.concluidas}">0</strong>
+                        <small>Ja finalizadas</small>
+                    </article>
+                </div>
+            </section>
+
+            <!-- COMUNICADOS -->
+            <section class="admin-section avisos-admin-panel avisos-collapsible" id="comunicados-panel">
+                <button type="button"
+                        class="avisos-collapsible__toggle"
+                        id="comunicados-toggle"
+                        aria-expanded="false"
+                        aria-controls="comunicados-content"
+                        onclick="toggleCollapsible('comunicados-panel','comunicados-content','comunicados-toggle')">
+                    <div class="avisos-collapsible__header">
+                        <div>
+                            <span>&#128226; Comunicados</span>
+                            <strong>Comunicados da escola</strong>
+                        </div>
+                        <div class="avisos-collapsible__meta">
+                            <small th:text="${comunicados == null ? '0 comunicados' : comunicados.size() + ' comunicados'}"></small>
+                            <span class="avisos-collapsible__arrow" aria-hidden="true">&#9654;</span>
+                        </div>
+                    </div>
+                </button>
+                <div class="avisos-collapsible__body" id="comunicados-content" aria-hidden="true">
+                    <div class="avisos-collapsible__inner">
+                        <div th:if="${comunicados == null or #lists.isEmpty(comunicados)}" class="admin-empty">
+                            Nenhum comunicado publicado.
+                        </div>
+                        <div class="avisos-list" th:if="${comunicados != null and !#lists.isEmpty(comunicados)}">
+                            <article class="aviso-card" th:each="comunicado : ${comunicados}">
+                                <div class="aviso-card__content">
+                                    <h3 th:text="${comunicado.titulo}">Titulo</h3>
+                                    <p th:text="${comunicado.conteudo}">Conteudo</p>
+                                    <small th:text="${#temporals.format(comunicado.dataCriacao, 'dd/MM/yyyy HH:mm')}">Data</small>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DEMANDAS ATIVAS -->
+            <section class="admin-section demanda-admin-panel admin-demand-feed">
+                <div class="admin-section-header">
+                    <div>
+                        <span>Demandas</span>
+                        <strong>Fila de acompanhamento</strong>
+                    </div>
+                    <small th:text="${demandasAtivas != null} ? #lists.size(demandasAtivas) + ' demandas ativas' : '0 demandas ativas'">0 demandas ativas</small>
+                </div>
+
+                <div class="demanda-admin-list" th:if="${demandasAtivas != null and !#lists.isEmpty(demandasAtivas)}">
+                    <article class="demanda-admin-card"
+                             th:each="demanda : ${demandasAtivas}"
+                             th:classappend="${demanda.prioridade != null} ? '| demanda-prioridade-' + ${demanda.prioridade.cssClass} : ''">
+                        <div class="demanda-card-header">
+                            <div>
+                                <strong th:text="${demanda.titulo}">Demanda</strong>
+                                <span th:text="${demanda.segmento != null ? demanda.segmento.titulo : 'Sem segmento'}">Segmento</span>
+                            </div>
+                            <div class="demanda-badge-row">
+                                <span class="demanda-badge"
+                                      th:classappend="| demanda-badge--prioridade-${demanda.prioridade.cssClass}|"
+                                      th:text="${demanda.prioridade.titulo}">
+                                    Prioridade
+                                </span>
+                                <span class="demanda-badge"
+                                      th:classappend="| demanda-badge--status-${demanda.status.cssClass}|"
+                                      th:text="${demanda.status.titulo}">
+                                    Status
+                                </span>
+                            </div>
+                        </div>
+                        <p th:text="${demanda.descricao}">Descricao</p>
+                        <div class="demanda-meta">
+                            <span th:text="${demanda.dataPrazo != null ? 'Prazo: ' + #temporals.format(demanda.dataPrazo, 'dd/MM/yyyy') : 'Sem prazo definido'}">Prazo</span>
+                            <span th:text="${demanda.criadaPor != null ? 'Criada por: ' + demanda.criadaPor : 'Criada pela direcao'}">Criada por</span>
+                        </div>
+                    </article>
+                </div>
+
+                <p class="admin-empty" th:if="${demandasAtivas == null or #lists.isEmpty(demandasAtivas)}">
+                    Nenhuma demanda ativa no momento.
+                </p>
+            </section>
+        </div>
+
+        <aside class="admin-side-column admin-side-column--control">
+            <!-- INFORMACOES DO USUARIO -->
+            <section class="admin-section admin-quick-panel">
+                <div class="admin-section-header">
+                    <span>Meu Perfil</span>
+                    <strong>Informacoes</strong>
+                </div>
+                <div class="admin-quick-grid">
+                    <div class="admin-action-card">
+                        <strong th:text="${nome != null ? nome : 'Coordenadora'}">Nome</strong>
+                        <small th:text="${email}">email</small>
+                    </div>
+                    <div class="admin-action-card">
+                        <strong>Perfil</strong>
+                        <small th:text="${perfil != null ? perfil.titulo : 'Coordenadora'}">Perfil</small>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEGMENTOS RAPIDOS -->
+            <section class="admin-section admin-progress-panel" th:if="${segmentos != null and !#lists.isEmpty(segmentos)}">
+                <div class="admin-section-header">
+                    <span>Segmentos</span>
+                    <strong>Meus vinculos</strong>
+                </div>
+                <div class="admin-progress-list">
+                    <article class="admin-progress-item" th:each="segmento : ${segmentos}">
+                        <div class="admin-progress-item__header">
+                            <strong th:text="${segmento.titulo}">Segmento</strong>
+                        </div>
+                        <small th:text="${segmento.descricao}">Descricao</small>
+                    </article>
+                </div>
+            </section>
+        </aside>
+    </section>
+</main>
+
+</div>
+
+<script>
+function toggleCollapsible(panelId, bodyId, toggleId) {
+    var panel = document.getElementById(panelId);
+    var body  = document.getElementById(bodyId);
+    var toggle = document.getElementById(toggleId);
+    var isOpen = panel.classList.contains('avisos-collapsible--open');
+
+    if (isOpen) {
+        body.style.maxHeight = body.scrollHeight + 'px';
+        body.offsetHeight;
+        body.style.maxHeight = '0';
+        panel.classList.remove('avisos-collapsible--open');
+        toggle.setAttribute('aria-expanded', 'false');
+        body.setAttribute('aria-hidden', 'true');
+    } else {
+        panel.classList.add('avisos-collapsible--open');
+        toggle.setAttribute('aria-expanded', 'true');
+        body.setAttribute('aria-hidden', 'false');
+        body.style.maxHeight = body.scrollHeight + 'px';
+        body.addEventListener('transitionend', function handler() {
+            if (panel.classList.contains('avisos-collapsible--open')) {
+                body.style.maxHeight = 'none';
+            }
+            body.removeEventListener('transitionend', handler);
+        });
+    }
+}
+</script>
+
+</body>
+</html>

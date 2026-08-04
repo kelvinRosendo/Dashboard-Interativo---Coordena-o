@@ -1,0 +1,37 @@
+package br.com.escola.dashboard.controller;
+
+import br.com.escola.dashboard.entity.Usuario;
+import br.com.escola.dashboard.service.PerfilService;
+import br.com.escola.dashboard.service.UsuarioService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller
+public class DashboardController {
+
+    private final PerfilService perfilService;
+    private final UsuarioService usuarioService;
+
+    public DashboardController(PerfilService perfilService, UsuarioService usuarioService) {
+        this.perfilService = perfilService;
+        this.usuarioService = usuarioService;
+    }
+
+    @GetMapping("/dashboard")
+    public String dashboard(@AuthenticationPrincipal OAuth2User oauth2User) {
+        if (oauth2User == null) {
+            return "redirect:/login";
+        }
+
+        String email = oauth2User.getAttribute("email");
+        Usuario usuario = usuarioService.buscarPorEmail(email);
+
+        if (usuario == null) {
+            return "redirect:/login";
+        }
+
+        return "redirect:" + perfilService.getDashboardRedirect(usuario);
+    }
+}

@@ -2,6 +2,7 @@ package br.com.escola.dashboard.controller;
 
 import br.com.escola.dashboard.dto.GoogleCalendarEventDTO;
 import br.com.escola.dashboard.entity.SemanaEmFoco;
+import br.com.escola.dashboard.entity.Usuario;
 import br.com.escola.dashboard.enums.PrioridadeDemanda;
 import br.com.escola.dashboard.enums.SegmentoCoordenacao;
 import br.com.escola.dashboard.enums.StatusDemanda;
@@ -10,6 +11,7 @@ import br.com.escola.dashboard.service.ComunicadoService;
 import br.com.escola.dashboard.service.DemandaService;
 import br.com.escola.dashboard.service.GoogleCalendarService;
 import br.com.escola.dashboard.service.SemanaEmFocoService;
+import br.com.escola.dashboard.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
@@ -37,17 +39,20 @@ public class AdminController {
     private final SemanaEmFocoService semanaEmFocoService;
     private final ComunicadoService comunicadoService;
     private final AdminAuthService adminAuthService;
+    private final UsuarioService usuarioService;
 
     public AdminController(GoogleCalendarService googleCalendarService,
                            DemandaService demandaService,
                            SemanaEmFocoService semanaEmFocoService,
                            ComunicadoService comunicadoService,
-                           AdminAuthService adminAuthService) {
+                           AdminAuthService adminAuthService,
+                           UsuarioService usuarioService) {
         this.googleCalendarService = googleCalendarService;
         this.demandaService = demandaService;
         this.semanaEmFocoService = semanaEmFocoService;
         this.comunicadoService = comunicadoService;
         this.adminAuthService = adminAuthService;
+        this.usuarioService = usuarioService;
     }
 
     @GetMapping("/admin")
@@ -63,8 +68,11 @@ public class AdminController {
             return "redirect:/";
         }
 
+        Usuario usuarioAtual = usuarioService.buscarPorEmail(email);
+
         model.addAttribute("nome", nome);
         model.addAttribute("email", email);
+        model.addAttribute("perfil", usuarioAtual != null ? usuarioAtual.getPerfil() : null);
         model.addAttribute("semanaEmFoco", semanaEmFocoService.buscarAtiva().orElse(null));
         model.addAttribute("coordenadoras", Arrays.stream(SegmentoCoordenacao.values())
                 .map(segmento -> new CoordenadoraResumo(
