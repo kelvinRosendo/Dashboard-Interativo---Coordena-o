@@ -1,6 +1,7 @@
 package br.com.escola.dashboard.entity;
 
 import br.com.escola.dashboard.enums.PerfilUsuario;
+import br.com.escola.dashboard.enums.StatusUsuario;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -37,8 +38,15 @@ public class Usuario {
     @Column(nullable = false, length = 30)
     private PerfilUsuario perfil = PerfilUsuario.COORDENADORA;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private StatusUsuario status = StatusUsuario.PENDENTE;
+
     @Column(nullable = false)
     private Boolean ativo = true;
+
+    @Column(name = "ultimo_login")
+    private LocalDateTime ultimoLogin;
 
     @Column(name = "data_criacao", nullable = false)
     private LocalDateTime dataCriacao;
@@ -109,12 +117,28 @@ public class Usuario {
         this.perfil = perfil;
     }
 
+    public StatusUsuario getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusUsuario status) {
+        this.status = status;
+    }
+
     public Boolean getAtivo() {
         return ativo;
     }
 
     public void setAtivo(Boolean ativo) {
         this.ativo = ativo;
+    }
+
+    public LocalDateTime getUltimoLogin() {
+        return ultimoLogin;
+    }
+
+    public void setUltimoLogin(LocalDateTime ultimoLogin) {
+        this.ultimoLogin = ultimoLogin;
     }
 
     public LocalDateTime getDataCriacao() {
@@ -143,5 +167,17 @@ public class Usuario {
 
     public boolean isCoordenadora() {
         return perfil == PerfilUsuario.COORDENADORA;
+    }
+
+    public boolean isAtivo() {
+        return status == StatusUsuario.ATIVO;
+    }
+
+    public boolean isPendente() {
+        return status == StatusUsuario.PENDENTE;
+    }
+
+    public boolean isBloqueado() {
+        return status == StatusUsuario.BLOQUEADO;
     }
 }

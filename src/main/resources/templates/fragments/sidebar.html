@@ -73,6 +73,16 @@
                 <strong class="app-sidebar__text">Novo Comunicado</strong>
             </a>
 
+            <a th:href="@{/admin/usuarios}"
+               class="app-sidebar__link"
+               title="Usuarios"
+               th:classappend="${active == 'usuarios'} ? ' app-sidebar__link--active' : ''">
+                <span class="app-sidebar__icon">
+                    <img th:src="@{/img/icons/icon-coordinators.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
+                </span>
+                <strong class="app-sidebar__text">Usuarios</strong>
+            </a>
+
             <a th:href="@{/relatorio/admin/relatorios}"
                class="app-sidebar__link"
                title="Relatorios"

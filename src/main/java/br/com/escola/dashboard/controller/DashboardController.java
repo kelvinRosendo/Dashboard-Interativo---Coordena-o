@@ -1,12 +1,14 @@
 package br.com.escola.dashboard.controller;
 
 import br.com.escola.dashboard.entity.Usuario;
+import br.com.escola.dashboard.enums.StatusUsuario;
 import br.com.escola.dashboard.service.PerfilService;
 import br.com.escola.dashboard.service.UsuarioService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class DashboardController {
@@ -20,7 +22,8 @@ public class DashboardController {
     }
 
     @GetMapping("/dashboard")
-    public String dashboard(@AuthenticationPrincipal OAuth2User oauth2User) {
+    public String dashboard(@AuthenticationPrincipal OAuth2User oauth2User,
+                             RedirectAttributes redirectAttributes) {
         if (oauth2User == null) {
             return "redirect:/login";
         }
@@ -29,6 +32,18 @@ public class DashboardController {
         Usuario usuario = usuarioService.buscarPorEmail(email);
 
         if (usuario == null) {
+            return "redirect:/login";
+        }
+
+        if (usuario.getStatus() == StatusUsuario.PENDENTE) {
+            redirectAttributes.addFlashAttribute("mensagemErro",
+                    "Seu acesso ainda nao foi liberado. Aguarde a aprovacao do administrador.");
+            return "redirect:/login";
+        }
+
+        if (usuario.getStatus() == StatusUsuario.BLOQUEADO) {
+            redirectAttributes.addFlashAttribute("mensagemErro",
+                    "Seu acesso foi bloqueado. Contate o administrador.");
             return "redirect:/login";
         }
 

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuarios - Organiza+</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="app-shell">
+    <th:block th:replace="~{fragments/sidebar :: sidebar('usuarios', false)}"></th:block>
+
+    <main class="app-main">
+        <header class="admin-header admin-header--dashboard">
+            <div class="admin-header__brand">
+                <th:block th:replace="~{fragments/brand :: brand-admin}"></th:block>
+            </div>
+            <div class="admin-header__account">
+                <span class="admin-user-card" th:text="${nome != null} ? ${nome} : 'Admin'"></span>
+            </div>
+        </header>
+
+        <section class="admin-section">
+            <div class="admin-section__header">
+                <h1 class="admin-section__title">Central de Usuarios</h1>
+            </div>
+
+            <div th:if="${mensagemSucesso}" class="form-alerta form-alerta--sucesso" role="alert" aria-live="polite">
+                <span th:text="${mensagemSucesso}"></span>
+            </div>
+            <div th:if="${mensagemErro}" class="form-alerta form-alerta--erro" role="alert" aria-live="polite">
+                <span th:text="${mensagemErro}"></span>
+            </div>
+
+            <div class="usuarios-indicadores">
+                <div class="usuarios-indicadores__item">
+                    <span class="usuarios-indicadores__valor" th:text="${contarPorStatus.getOrDefault('ATIVO', 0L)}"></span>
+                    <span class="usuarios-indicadores__label">Ativos</span>
+                </div>
+                <div class="usuarios-indicadores__item usuarios-indicadores__item--pendente">
+                    <span class="usuarios-indicadores__valor" th:text="${contarPorStatus.getOrDefault('PENDENTE', 0L)}"></span>
+                    <span class="usuarios-indicadores__label">Pendentes</span>
+                </div>
+                <div class="usuarios-indicadores__item">
+                    <span class="usuarios-indicadores__valor" th:text="${contarPorPerfil.getOrDefault('ADMIN', 0L)}"></span>
+                    <span class="usuarios-indicadores__label">Admins</span>
+                </div>
+                <div class="usuarios-indicadores__item">
+                    <span class="usuarios-indicadores__valor" th:text="${contarPorPerfil.getOrDefault('VICE_DIRETORA', 0L)}"></span>
+                    <span class="usuarios-indicadores__label">Vice-Diretoras</span>
+                </div>
+                <div class="usuarios-indicadores__item">
+                    <span class="usuarios-indicadores__valor" th:text="${contarPorPerfil.getOrDefault('COORDENADORA', 0L)}"></span>
+                    <span class="usuarios-indicadores__label">Coordenadoras</span>
+                </div>
+                <div class="usuarios-indicadores__item">
+                    <span class="usuarios-indicadores__valor" th:text="${totalSegmentos}"></span>
+                    <span class="usuarios-indicadores__label">Segmentos</span>
+                </div>
+            </div>
+
+            <form class="usuarios-filtros" method="get" th:action="@{/admin/usuarios}">
+                <input type="text"
+                       class="usuarios-filtros__input"
+                       name="termo"
+                       placeholder="Buscar por nome ou email..."
+                       th:value="${termoBusca}">
+                <select class="usuarios-filtros__select" name="perfil">
+                    <option value="">Todos os perfis</option>
+                    <option th:each="p : ${perfis}" th:value="${p}" th:text="${p.titulo}" th:selected="${perfilFiltro == p}"></option>
+                </select>
+                <select class="usuarios-filtros__select" name="status">
+                    <option value="">Todos os status</option>
+                    <option th:each="s : ${statusList}" th:value="${s}" th:text="${s.titulo}" th:selected="${statusFiltro == s}"></option>
+                </select>
+                <button type="submit" class="btn btn--primary">Buscar</button>
+                <a th:href="@{/admin/usuarios}" class="btn btn--secondary">Limpar</a>
+            </form>
+
+            <div class="usuarios-tabela-wrap">
+                <table class="usuarios-tabela">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Perfil</th>
+                            <th>Segmentos</th>
+                            <th>Status</th>
+                            <th>Ultimo Login</th>
+                            <th>Cadastro</th>
+                            <th>Acoes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="u : ${usuarios}" th:class="${u.status?.name() == 'PENDENTE'} ? 'usuarios-tabela__linha--pendente' : ''">
+                            <td>
+                                <div class="usuarios-tabela__usuario">
+                                    <img th:if="${u.fotoUrl != null and !u.fotoUrl.isEmpty()}"
+                                         th:src="${u.fotoUrl}"
+                                         alt=""
+                                         class="usuarios-tabela__foto"
+                                         aria-hidden="true">
+                                    <span th:text="${u.nome}"></span>
+                                </div>
+                            </td>
+                            <td th:text="${u.email}"></td>
+                            <td>
+                                <span class="usuarios-badge"
+                                      th:classappend="${u.perfil?.name() == 'ADMIN'} ? 'usuarios-badge--admin' : (${u.perfil?.name() == 'VICE_DIRETORA'} ? 'usuarios-badge--vice' : 'usuarios-badge--coord')"
+                                      th:text="${u.perfil?.titulo}"></span>
+                            </td>
+                            <td>
+                                <span th:if="${u.segmentos != null and !u.segmentos.isEmpty()}"
+                                      th:text="${#strings.listJoin(u.segmentos, ', ')}"></span>
+                                <span th:if="${u.segmentos == null or u.segmentos.isEmpty()}" class="usuarios-tabela__vazio">-</span>
+                            </td>
+                            <td>
+                                <span class="usuarios-status"
+                                      th:classappend="${u.status?.name() == 'ATIVO'} ? 'usuarios-status--ativo' : (${u.status?.name() == 'PENDENTE'} ? 'usuarios-status--pendente' : 'usuarios-status--bloqueado')"
+                                      th:text="${u.status?.titulo}"></span>
+                            </td>
+                            <td th:text="${u.ultimoLogin != null} ? ${#temporals.format(u.ultimoLogin, 'dd/MM/yyyy HH:mm')} : 'Nunca'"></td>
+                            <td th:text="${#temporals.format(u.dataCriacao, 'dd/MM/yyyy')}"></td>
+                            <td>
+                                <div class="usuarios-tabela__acoes">
+                                    <a th:href="@{/admin/usuarios/{id}/editar(id=${u.id})}" class="btn btn--small btn--primary">Editar</a>
+                                    <form th:if="${u.status?.name() == 'PENDENTE'}" method="post" th:action="@{/admin/usuarios/{id}/aprovar(id=${u.id})}" style="display:inline">
+                                        <input type="hidden" name="perfil" value="COORDENADORA">
+                                        <button type="submit" class="btn btn--small btn--success">Aprovar</button>
+                                    </form>
+                                    <form th:if="${u.status?.name() == 'ATIVO'}" method="post" th:action="@{/admin/usuarios/{id}/bloquear(id=${u.id})}" style="display:inline">
+                                        <button type="submit" class="btn btn--small btn--danger" onclick="return confirm('Bloquear este usuario?')">Bloquear</button>
+                                    </form>
+                                    <form th:if="${u.status?.name() == 'BLOQUEADO'}" method="post" th:action="@{/admin/usuarios/{id}/desbloquear(id=${u.id})}" style="display:inline">
+                                        <button type="submit" class="btn btn--small btn--success">Desbloquear</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${usuarios == null or usuarios.isEmpty()}">
+                            <td colspan="8" class="usuarios-tabela__vazio">Nenhum usuario encontrado.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <th:title th:text="${modoEdicao} ? 'Editar Usuario' : 'Aprovar Usuario'">Editar Usuario</th:title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="app-shell">
+    <th:block th:replace="~{fragments/sidebar :: sidebar('usuarios', false)}"></th:block>
+
+    <main class="app-main">
+        <header class="admin-header admin-header--dashboard">
+            <div class="admin-header__brand">
+                <th:block th:replace="~{fragments/brand :: brand-admin}"></th:block>
+            </div>
+            <div class="admin-header__account">
+                <span class="admin-user-card" th:text="${nome != null} ? ${nome} : 'Admin'"></span>
+            </div>
+        </header>
+
+        <section class="admin-section">
+            <div class="admin-section__header">
+                <h1 class="admin-section__title" th:text="${modoEdicao} ? 'Editar Usuario' : 'Aprovar Usuario'">Editar Usuario</h1>
+                <a th:href="@{/admin/usuarios}" class="btn btn--secondary">Voltar</a>
+            </div>
+
+            <div th:if="${mensagemErro}" class="form-alerta form-alerta--erro" role="alert" aria-live="polite">
+                <span th:text="${mensagemErro}"></span>
+            </div>
+
+            <div class="usuario-editar">
+                <div class="usuario-editar__info">
+                    <img th:if="${usuario.fotoUrl != null and !usuario.fotoUrl.isEmpty()}"
+                         th:src="${usuario.fotoUrl}"
+                         alt=""
+                         class="usuario-editar__foto"
+                         aria-hidden="true">
+                    <div>
+                        <h2 class="usuario-editar__nome" th:text="${usuario.nome}"></h2>
+                        <p class="usuario-editar__email" th:text="${usuario.email}"></p>
+                        <p class="usuario-editar__data">
+                            Cadastrado em: <span th:text="${#temporals.format(usuario.dataCriacao, 'dd/MM/yyyy HH:mm')}"></span>
+                        </p>
+                    </div>
+                </div>
+
+                <form method="post" th:action="@{/admin/usuarios/{id}/editar(id=${usuario.id})}" th:object="${requestDTO}" class="usuario-editar__form">
+                    <th:block th:replace="~{fragments/csrf :: token}"></th:block>
+
+                    <div class="campo-formulario">
+                        <label for="nome" class="campo-label">Nome</label>
+                        <input type="text" id="nome" th:field="*{nome}" class="campo-input" required>
+                        <small class="campo-erro" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></small>
+                    </div>
+
+                    <div class="campo-formulario">
+                        <label for="perfil" class="campo-label">Perfil</label>
+                        <select id="perfil" th:field="*{perfil}" class="campo-select" required>
+                            <option th:each="p : ${perfis}" th:value="${p}" th:text="${p.titulo}"></option>
+                        </select>
+                        <small class="campo-erro" th:if="${#fields.hasErrors('perfil')}" th:errors="*{perfil}"></small>
+                    </div>
+
+                    <div class="campo-formulario">
+                        <label for="status" class="campo-label">Status</label>
+                        <select id="status" th:field="*{status}" class="campo-select" required>
+                            <option th:each="s : ${statusList}" th:value="${s}" th:text="${s.titulo}"></option>
+                        </select>
+                        <small class="campo-erro" th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></small>
+                    </div>
+
+                    <div class="campo-formulario">
+                        <label class="campo-label">Segmentos</label>
+                        <div class="usuario-editar__segmentos">
+                            <div th:each="seg : ${todosSegmentos}" class="usuario-editar__segmento-item">
+                                <input type="checkbox"
+                                       th:field="*{segmentoIds}"
+                                       th:value="${seg.id}"
+                                       th:id="'seg-' + ${seg.id}"
+                                       class="campo-checkbox">
+                                <label th:for="'seg-' + ${seg.id}" class="campo-label-checkbox" th:text="${seg.titulo}"></label>
+                            </div>
+                        </div>
+                        <small class="campo-erro" th:if="${#fields.hasErrors('segmentoIds')}" th:errors="*{segmentoIds}"></small>
+                    </div>
+
+                    <div class="usuario-editar__acoes">
+                        <button type="submit" class="btn btn--primary">Salvar</button>
+                        <a th:href="@{/admin/usuarios}" class="btn btn--secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+</div>
+</body>
+</html>

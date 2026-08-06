@@ -45,6 +45,8 @@ public class SecurityConfig {
                                 "/coordenadoras/**",
                                 "/admin/importacao",
                                 "/admin/importacao/**",
+                                "/admin/usuarios",
+                                "/admin/usuarios/**",
                                 "/dashboard",
                                 "/dashboard/**",
                                 "/vice-diretora",
