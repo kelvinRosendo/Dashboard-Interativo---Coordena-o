@@ -148,6 +148,50 @@ public class DemandaService {
         demandaRepository.saveAll(demandasNovas);
     }
 
+    public List<Demanda> listarAtivasPorSegmentos(List<SegmentoCoordenacao> segmentos) {
+        if (segmentos == null || segmentos.isEmpty()) {
+            return List.of();
+        }
+        return demandaRepository.findBySegmentoInAndStatusInOrderByDataPrazoAscDataCriacaoDesc(segmentos, STATUS_ATIVOS);
+    }
+
+    public List<Demanda> listarPorSegmentos(List<SegmentoCoordenacao> segmentos) {
+        if (segmentos == null || segmentos.isEmpty()) {
+            return List.of();
+        }
+        return demandaRepository.findBySegmentoInOrderByDataPrazoAscDataCriacaoDesc(segmentos);
+    }
+
+    public ResumoDemandas resumoPorSegmentos(List<SegmentoCoordenacao> segmentos) {
+        if (segmentos == null || segmentos.isEmpty()) {
+            return new ResumoDemandas(0, 0, 0, 0, 0, 0, 0, List.of());
+        }
+
+        long total = demandaRepository.countBySegmentoIn(segmentos);
+        long pendentes = demandaRepository.countBySegmentoInAndStatus(segmentos, StatusDemanda.PENDENTE);
+        long emAndamento = demandaRepository.countBySegmentoInAndStatus(segmentos, StatusDemanda.EM_ANDAMENTO);
+        long concluidas = demandaRepository.countBySegmentoInAndStatus(segmentos, StatusDemanda.CONCLUIDA);
+        long canceladas = demandaRepository.countBySegmentoInAndStatus(segmentos, StatusDemanda.CANCELADA);
+        long ativas = demandaRepository.countBySegmentoInAndStatusIn(segmentos, STATUS_ATIVOS);
+        long proximasDoPrazo = contarProximasDoPrazoPorSegmentos(segmentos);
+
+        List<ProgressoSegmento> progressos = segmentos.stream()
+                .map(this::calcularProgressoPorSegmento)
+                .toList();
+
+        return new ResumoDemandas(total, pendentes, emAndamento, concluidas, canceladas, ativas, proximasDoPrazo, progressos);
+    }
+
+    private long contarProximasDoPrazoPorSegmentos(List<SegmentoCoordenacao> segmentos) {
+        LocalDate hoje = LocalDate.now();
+        LocalDate limite = hoje.plusDays(7);
+
+        return demandaRepository.countBySegmentoInAndStatusIn(
+                segmentos,
+                STATUS_ATIVOS
+        );
+    }
+
     private long contarProximasDoPrazo() {
         LocalDate hoje = LocalDate.now();
         LocalDate limite = hoje.plusDays(7);

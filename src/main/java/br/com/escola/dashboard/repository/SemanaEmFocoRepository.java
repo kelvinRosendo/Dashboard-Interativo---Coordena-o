@@ -19,4 +19,10 @@ public interface SemanaEmFocoRepository extends JpaRepository<SemanaEmFoco, Long
     List<SemanaEmFoco> findByAtivaTrueOrderByAtualizadoEmDesc();
 
     List<SemanaEmFoco> findBySegmento(SegmentoCoordenacao segmento);
+
+    @EntityGraph(attributePaths = {"relatorio"})
+    List<SemanaEmFoco> findByAtivaTrueAndSegmentoIn(List<SegmentoCoordenacao> segmentos);
+
+    @EntityGraph(attributePaths = {"relatorio"})
+    List<SemanaEmFoco> findBySegmentoIn(List<SegmentoCoordenacao> segmentos);
 }

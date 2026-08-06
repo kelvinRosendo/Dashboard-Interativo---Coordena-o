@@ -5,6 +5,7 @@ import br.com.escola.dashboard.enums.SegmentoCoordenacao;
 import br.com.escola.dashboard.repository.AvisoRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,5 +36,24 @@ public class AvisoService {
 
     public void excluir(Long id) {
         avisoRepository.deleteById(id);
+    }
+
+    public List<Aviso> listarPorSegmentos(List<SegmentoCoordenacao> segmentos) {
+        if (segmentos == null || segmentos.isEmpty()) {
+            return List.of();
+        }
+        return avisoRepository.findBySegmentoInOrderByDataCriacaoDesc(segmentos);
+    }
+
+    public List<Aviso> listarGlobais() {
+        return avisoRepository.findBySegmentoIsNullOrderByDataCriacaoDesc();
+    }
+
+    public List<Aviso> listarGlobaisEPorSegmentos(List<SegmentoCoordenacao> segmentos) {
+        List<Aviso> dosSegmentos = listarPorSegmentos(segmentos);
+        List<Aviso> globais = listarGlobais();
+        List<Aviso> resultado = new ArrayList<>(globais);
+        resultado.addAll(dosSegmentos);
+        return resultado;
     }
 }

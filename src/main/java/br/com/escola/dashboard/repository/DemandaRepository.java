@@ -59,4 +59,26 @@ public interface DemandaRepository extends JpaRepository<Demanda, Long> {
             @Param("inicio") LocalDate inicio,
             @Param("fim") LocalDate fim,
             @Param("statusExcluidos") List<StatusDemanda> statusExcluidos);
+
+    @Query("SELECT d FROM Demanda d WHERE d.segmento IN :segmentos AND d.status IN :statuses ORDER BY d.dataPrazo ASC, d.dataCriacao DESC")
+    List<Demanda> findBySegmentoInAndStatusInOrderByDataPrazoAscDataCriacaoDesc(
+            @Param("segmentos") List<SegmentoCoordenacao> segmentos,
+            @Param("statuses") List<StatusDemanda> statuses);
+
+    @Query("SELECT d FROM Demanda d WHERE d.segmento IN :segmentos ORDER BY d.dataPrazo ASC, d.dataCriacao DESC")
+    List<Demanda> findBySegmentoInOrderByDataPrazoAscDataCriacaoDesc(
+            @Param("segmentos") List<SegmentoCoordenacao> segmentos);
+
+    @Query("SELECT COUNT(d) FROM Demanda d WHERE d.segmento IN :segmentos AND d.status IN :statuses")
+    long countBySegmentoInAndStatusIn(
+            @Param("segmentos") List<SegmentoCoordenacao> segmentos,
+            @Param("statuses") List<StatusDemanda> statuses);
+
+    @Query("SELECT COUNT(d) FROM Demanda d WHERE d.segmento IN :segmentos AND d.status = :status")
+    long countBySegmentoInAndStatus(
+            @Param("segmentos") List<SegmentoCoordenacao> segmentos,
+            @Param("status") StatusDemanda status);
+
+    @Query("SELECT COUNT(d) FROM Demanda d WHERE d.segmento IN :segmentos")
+    long countBySegmentoIn(@Param("segmentos") List<SegmentoCoordenacao> segmentos);
 }

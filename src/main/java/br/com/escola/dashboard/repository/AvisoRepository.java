@@ -13,4 +13,8 @@ public interface AvisoRepository extends JpaRepository<Aviso, Long> {
     List<Aviso> findBySegmento(SegmentoCoordenacao segmento);
 
     List<Aviso> findByOrderByDataCriacaoDesc();
+
+    List<Aviso> findBySegmentoInOrderByDataCriacaoDesc(List<SegmentoCoordenacao> segmentos);
+
+    List<Aviso> findBySegmentoIsNullOrderByDataCriacaoDesc();
 }
