@@ -125,13 +125,16 @@
                                 <div class="usuarios-tabela__acoes">
                                     <a th:href="@{/admin/usuarios/{id}/editar(id=${u.id})}" class="btn btn--small btn--primary">Editar</a>
                                     <form th:if="${u.status?.name() == 'PENDENTE'}" method="post" th:action="@{/admin/usuarios/{id}/aprovar(id=${u.id})}" style="display:inline">
+                                        <th:block th:replace="~{fragments/csrf :: token}"></th:block>
                                         <input type="hidden" name="perfil" value="COORDENADORA">
                                         <button type="submit" class="btn btn--small btn--success">Aprovar</button>
                                     </form>
                                     <form th:if="${u.status?.name() == 'ATIVO'}" method="post" th:action="@{/admin/usuarios/{id}/bloquear(id=${u.id})}" style="display:inline">
+                                        <th:block th:replace="~{fragments/csrf :: token}"></th:block>
                                         <button type="submit" class="btn btn--small btn--danger" onclick="return confirm('Bloquear este usuario?')">Bloquear</button>
                                     </form>
                                     <form th:if="${u.status?.name() == 'BLOQUEADO'}" method="post" th:action="@{/admin/usuarios/{id}/desbloquear(id=${u.id})}" style="display:inline">
+                                        <th:block th:replace="~{fragments/csrf :: token}"></th:block>
                                         <button type="submit" class="btn btn--small btn--success">Desbloquear</button>
                                     </form>
                                 </div>
