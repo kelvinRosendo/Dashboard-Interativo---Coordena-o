@@ -24,8 +24,8 @@
         <div class="admin-header__account">
             <div class="admin-user-card">
                 <span>Direcao</span>
-                <strong th:text="${nome != null and !#strings.isEmpty(nome) ? nome : 'Direcao'}">Direcao</strong>
-                <small th:if="${email != null}" th:text="${email}">email</small>
+                <strong th:text="${dashboard.nome != null and !#strings.isEmpty(dashboard.nome) ? dashboard.nome : 'Direcao'}">Direcao</strong>
+                <small th:if="${dashboard.email != null}" th:text="${dashboard.email}">email</small>
             </div>
             <form th:action="@{/logout}" method="post">
                 <th:block th:replace="~{fragments/csrf :: token}"></th:block>
@@ -45,11 +45,64 @@
         Mensagem de erro
     </p>
 
+    <!-- INDICADORES ADMIN -->
+    <section class="admin-section" th:if="${dashboard.indicadores != null}">
+        <div class="admin-section-header">
+            <div>
+                <span>Indicadores Administrativos</span>
+                <strong>Visao geral do sistema</strong>
+            </div>
+        </div>
+        <div class="admin-stat-grid">
+            <article class="admin-stat-card admin-stat-card--active">
+                <span>Demandas Ativas</span>
+                <strong th:text="${dashboard.indicadores.demandasAbertas}">0</strong>
+                <small>Pendentes + em andamento</small>
+            </article>
+            <article class="admin-stat-card admin-stat-card--pending">
+                <span>Pendentes</span>
+                <strong th:text="${dashboard.indicadores.demandasEmAndamento}">0</strong>
+                <small>Aguardando inicio</small>
+            </article>
+            <article class="admin-stat-card admin-stat-card--progress">
+                <span>Em andamento</span>
+                <strong th:text="${dashboard.indicadores.demandasEmAndamento}">0</strong>
+                <small>Dentro do fluxo</small>
+            </article>
+            <article class="admin-stat-card admin-stat-card--done">
+                <span>Concluidas</span>
+                <strong th:text="${dashboard.indicadores.demandasConcluidas}">0</strong>
+                <small>Ja finalizadas</small>
+            </article>
+            <article class="admin-stat-card admin-stat-card--urgent">
+                <span>Urgentes / prazo</span>
+                <strong th:text="${dashboard.indicadores.demandasAtrasadas}">0</strong>
+                <small>Pedem atencao</small>
+            </article>
+        </div>
+        <div class="admin-stat-grid" style="margin-top: 0.75rem;">
+            <article class="admin-stat-card">
+                <span>Usuarios Ativos</span>
+                <strong th:text="${dashboard.indicadores.usuariosAtivos}">0</strong>
+                <small>No sistema</small>
+            </article>
+            <article class="admin-stat-card">
+                <span>Usuarios Pendentes</span>
+                <strong th:text="${dashboard.indicadores.usuariosPendentes}">0</strong>
+                <small>Aguardando aprovacao</small>
+            </article>
+            <article class="admin-stat-card">
+                <span>Importacoes</span>
+                <strong th:text="${dashboard.indicadores.importacoesRealizadas}">0</strong>
+                <small>Realizadas</small>
+            </article>
+        </div>
+    </section>
+
     <section class="admin-dashboard admin-dashboard--control">
         <div class="admin-main-column admin-main-column--control">
             <!-- ====== SEMANA EM FOCO (collapsible) ====== -->
-            <section class="admin-section week-focus-control avisos-collapsible" id="semana-panel"
-                     th:with="semanaControle=${semanaEmFoco}">
+            <section class="admin-section week-focus-control avisos-collapsible" id="semana-panel">
                 <button type="button"
                         class="avisos-collapsible__toggle"
                         id="semana-toggle"
@@ -63,8 +116,8 @@
                         </div>
                         <div class="avisos-collapsible__meta">
                             <small class="week-focus-control__status"
-                                   th:classappend="${semanaControle != null and semanaControle.ativa == true} ? ' week-focus-control__status--active' : ''"
-                                   th:text="${semanaControle != null and semanaControle.ativa == true ? 'Ativa / publicada' : 'Aguardando publicacao'}">
+                                   th:classappend="${dashboard.semanaEmFoco != null and dashboard.semanaEmFoco.ativa == true} ? ' week-focus-control__status--active' : ''"
+                                   th:text="${dashboard.semanaEmFoco != null and dashboard.semanaEmFoco.ativa == true ? 'Ativa / publicada' : 'Aguardando publicacao'}">
                                 Ativa / publicada
                             </small>
                             <span class="avisos-collapsible__arrow" aria-hidden="true">&#9654;</span>
@@ -76,27 +129,27 @@
                         <div class="week-focus-control__preview">
                             <div>
                                 <span class="week-focus-control__eyebrow">Segmento em destaque</span>
-                                <strong th:text="${semanaControle != null and semanaControle.segmento != null ? semanaControle.segmento.titulo : 'Nenhum segmento definido'}">
+                                <strong th:text="${dashboard.semanaEmFoco != null and dashboard.semanaEmFoco.segmentoTitulo != null ? dashboard.semanaEmFoco.segmentoTitulo : 'Nenhum segmento definido'}">
                                     Fundamental 1
                                 </strong>
                             </div>
 
                             <div class="week-focus-control__content">
-                                <h2 th:text="${semanaControle != null and semanaControle.titulo != null and !#strings.isEmpty(semanaControle.titulo) ? semanaControle.titulo : 'Semana em Foco ainda nao configurada'}">
+                                <h2 th:text="${dashboard.semanaEmFoco != null and dashboard.semanaEmFoco.titulo != null and !#strings.isEmpty(dashboard.semanaEmFoco.titulo) ? dashboard.semanaEmFoco.titulo : 'Semana em Foco ainda nao configurada'}">
                                     Semana em Foco
                                 </h2>
-                                <p th:text="${semanaControle != null and semanaControle.descricao != null and !#strings.isEmpty(semanaControle.descricao) ? semanaControle.descricao : 'Defina o foco semanal para orientar a exibicao do dashboard da TV.'}">
+                                <p th:text="${dashboard.semanaEmFoco != null and dashboard.semanaEmFoco.descricao != null and !#strings.isEmpty(dashboard.semanaEmFoco.descricao) ? dashboard.semanaEmFoco.descricao : 'Defina o foco semanal para orientar a exibicao do dashboard da TV.'}">
                                     Defina o foco semanal para orientar a exibicao do dashboard da TV.
                                 </p>
                             </div>
 
                             <div class="week-focus-control__meta">
                                 <span>Periodo</span>
-                                <strong th:if="${semanaControle != null and semanaControle.dataInicio != null and semanaControle.dataFim != null}"
-                                        th:text="${#temporals.format(semanaControle.dataInicio, 'dd/MM') + ' a ' + #temporals.format(semanaControle.dataFim, 'dd/MM/yyyy')}">
-                                    11/05 a 17/05/2026
+                                <strong th:if="${dashboard.semanaEmFoco != null and dashboard.semanaEmFoco.periodoFormatado != null and !dashboard.semanaEmFoco.periodoFormatado.isEmpty()}"
+                                        th:text="${dashboard.semanaEmFoco.periodoFormatado}">
+                                    Periodo
                                 </strong>
-                                <strong th:unless="${semanaControle != null and semanaControle.dataInicio != null and semanaControle.dataFim != null}">
+                                <strong th:unless="${dashboard.semanaEmFoco != null and dashboard.semanaEmFoco.periodoFormatado != null and !dashboard.semanaEmFoco.periodoFormatado.isEmpty()}">
                                     Periodo nao definido
                                 </strong>
                             </div>
@@ -114,97 +167,52 @@
                 </div>
             </section>
 
-            <!-- ====== RELATÓRIO DA SEMANA EM FOCO ====== -->
+            <!-- ====== RELATORIO DA SEMANA EM FOCO ====== -->
             <section class="admin-section relatorio-card"
-                     th:if="${semanaEmFoco != null}">
+                     th:if="${dashboard.semanaEmFoco != null and dashboard.semanaEmFoco.id != null}">
                 <div class="relatorio-card__header">
                     <div>
-                        <div class="relatorio-card__title">📋 Relatório da Semana em Foco</div>
+                        <div class="relatorio-card__title">Relatorio da Semana em Foco</div>
                         <div class="relatorio-card__meta">
                             <span>Status:
                                 <span class="relatorio-status relatorio-status--not-started"
-                                      th:if="${semanaEmFoco.relatorio == null}">
-                                    Não iniciado
+                                      th:if="${dashboard.semanaEmFoco.statusRelatorio == 'NAO_INICIADO'}">
+                                    Nao iniciado
                                 </span>
                                 <span class="relatorio-status relatorio-status--draft"
-                                      th:if="${semanaEmFoco.relatorio != null and semanaEmFoco.relatorio.status.name() == 'RASCUNHO'}">
+                                      th:if="${dashboard.semanaEmFoco.statusRelatorio == 'RASCUNHO'}">
                                     Rascunho
                                 </span>
                                 <span class="relatorio-status relatorio-status--finalized"
-                                      th:if="${semanaEmFoco.relatorio != null and semanaEmFoco.relatorio.status.name() == 'FINALIZADO'}">
+                                      th:if="${dashboard.semanaEmFoco.statusRelatorio == 'FINALIZADO'}">
                                     Finalizado
                                 </span>
-                            </span>
-                            <span th:if="${semanaEmFoco.relatorio != null and semanaEmFoco.relatorio.status.name() == 'RASCUNHO'}">
-                                Última atualização: <span th:text="${#temporals.format(semanaEmFoco.relatorio.atualizadoEm, 'dd/MM HH:mm')}">-</span>
-                            </span>
-                            <span th:if="${semanaEmFoco.relatorio != null and semanaEmFoco.relatorio.status.name() == 'FINALIZADO'}">
-                                Finalizado em: <span th:text="${#temporals.format(semanaEmFoco.relatorio.finalizadoEm, 'dd/MM HH:mm')}">-</span>
                             </span>
                         </div>
                     </div>
                 </div>
                 <div class="relatorio-card__actions">
-                    <a th:if="${semanaEmFoco.relatorio == null}"
-                       th:href="@{/relatorio/__${semanaEmFoco.id}__}"
+                    <a th:if="${dashboard.semanaEmFoco.statusRelatorio == 'NAO_INICIADO'}"
+                       th:href="@{/relatorio/__${dashboard.semanaEmFoco.id}__}"
                        class="relatorio-card__button">
-                        ✏️ Iniciar Relatório
+                        Iniciar Relatorio
                     </a>
-                    <a th:if="${semanaEmFoco.relatorio != null and semanaEmFoco.relatorio.status.name() == 'RASCUNHO'}"
-                       th:href="@{/relatorio/__${semanaEmFoco.id}__}"
+                    <a th:if="${dashboard.semanaEmFoco.statusRelatorio == 'RASCUNHO'}"
+                       th:href="@{/relatorio/__${dashboard.semanaEmFoco.id}__}"
                        class="relatorio-card__button">
-                        ✏️ Continuar edição
+                        Continuar edicao
                     </a>
-                    <a th:if="${semanaEmFoco.relatorio != null and semanaEmFoco.relatorio.status.name() == 'FINALIZADO'}"
-                       th:href="@{/relatorio/visualizar/__${semanaEmFoco.id}__}"
+                    <a th:if="${dashboard.semanaEmFoco.statusRelatorio == 'FINALIZADO'}"
+                       th:href="@{/relatorio/visualizar/__${dashboard.semanaEmFoco.id}__}"
                        class="relatorio-card__button">
-                        👁️ Visualizar
+                        Visualizar
                     </a>
                     <a th:href="@{/relatorio/admin/relatorios}"
                        class="relatorio-card__button relatorio-card__button--ghost">
-                        📋 Todos os relatórios
+                        Todos os relatorios
                     </a>
                 </div>
             </section>
-
-            <section class="admin-section admin-summary-panel" th:if="${demandaResumo != null}">
-                <div class="admin-section-header">
-                    <div>
-                        <span>Resumo da rotina</span>
-                        <strong>Status das demandas</strong>
-                    </div>
-                    <a th:href="@{/admin/demandas/nova}" class="btn-editar demanda-new-button">Nova demanda</a>
-                </div>
-
-                <div class="demanda-summary-grid admin-stat-grid">
-                    <article class="demanda-summary-card admin-stat-card admin-stat-card--active">
-                        <span>Ativas</span>
-                        <strong th:text="${demandaResumo.ativas}">0</strong>
-                        <small>Pendentes + em andamento</small>
-                    </article>
-                    <article class="demanda-summary-card admin-stat-card admin-stat-card--pending">
-                        <span>Pendentes</span>
-                        <strong th:text="${demandaResumo.pendentes}">0</strong>
-                        <small>Aguardando inicio</small>
-                    </article>
-                    <article class="demanda-summary-card admin-stat-card admin-stat-card--progress">
-                        <span>Em andamento</span>
-                        <strong th:text="${demandaResumo.emAndamento}">0</strong>
-                        <small>Dentro do fluxo</small>
-                    </article>
-                    <article class="demanda-summary-card admin-stat-card admin-stat-card--done">
-                        <span>Concluidas</span>
-                        <strong th:text="${demandaResumo.concluidas}">0</strong>
-                        <small>Ja finalizadas</small>
-                    </article>
-                    <article class="demanda-summary-card demanda-summary-card--warning admin-stat-card admin-stat-card--urgent">
-                        <span>Urgentes / prazo</span>
-                        <strong th:text="${demandaResumo.proximasDoPrazo}">0</strong>
-                        <small>Pedem atencao</small>
-                    </article>
-                </div>
-            </section>
-
 
             <!-- ====== COMUNICADOS (collapsible) ====== -->
             <section class="admin-section avisos-admin-panel avisos-collapsible" id="comunicados-panel">
@@ -220,7 +228,7 @@
                             <strong>Gestao de comunicados</strong>
                         </div>
                         <div class="avisos-collapsible__meta">
-                            <small th:text="${comunicados == null ? '0 comunicados' : comunicados.size() + ' comunicados'}"></small>
+                            <small th:text="${dashboard.comunicados == null ? '0 comunicados' : dashboard.comunicados.size() + ' comunicados'}"></small>
                             <span class="avisos-collapsible__arrow" aria-hidden="true">&#9654;</span>
                         </div>
                     </div>
@@ -242,21 +250,21 @@
                             </div>
                         </form>
 
-                        <div th:if="${comunicados == null or #lists.isEmpty(comunicados)}" class="admin-empty">
+                        <div th:if="${dashboard.comunicados == null or #lists.isEmpty(dashboard.comunicados)}" class="admin-empty">
                             Nenhum comunicado publicado.
                         </div>
-                        <div class="avisos-list" th:if="${comunicados != null and !#lists.isEmpty(comunicados)}">
-                            <article class="aviso-card" th:each="comunicado : ${comunicados}">
+                        <div class="avisos-list" th:if="${dashboard.comunicados != null and !#lists.isEmpty(dashboard.comunicados)}">
+                            <article class="aviso-card" th:each="comunicado : ${dashboard.comunicados}">
                                 <div class="aviso-card__content">
                                     <h3 th:text="${comunicado.titulo}">Titulo</h3>
                                     <p th:text="${comunicado.conteudo}">Conteudo</p>
-                                    <small th:text="${#temporals.format(comunicado.dataCriacao, 'dd/MM/yyyy HH:mm')}">Data</small>
+                                    <small th:text="${comunicado.dataFormatada}">Data</small>
                                 </div>
                                 <form th:action="@{/admin/comunicados/{id}/delete(id=${comunicado.id})}" method="post"
                                       onsubmit="return confirm('Deseja realmente excluir este comunicado?')">
                                     <th:block th:replace="~{fragments/csrf :: token}" />
                                     <button type="submit" class="btn-excluir-aviso" title="Excluir comunicado">
-                                        &#128465; Excluir
+                                        Excluir
                                     </button>
                                 </form>
                             </article>
@@ -272,93 +280,68 @@
                         <span>Demandas das coordenacoes</span>
                         <strong>Fila de acompanhamento</strong>
                     </div>
-                    <small th:text="${demandaResumo != null} ? demandaResumo.total + ' demandas' : '0 demandas'">0 demandas</small>
+                    <small th:text="${dashboard.indicadores != null} ? dashboard.indicadores.totalDemandas + ' demandas' : '0 demandas'">0 demandas</small>
                 </div>
 
-                <div class="demanda-admin-list" th:if="${demandasAdmin != null and !#lists.isEmpty(demandasAdmin)}">
+                <div class="demanda-admin-list" th:if="${dashboard.demandas != null and !#lists.isEmpty(dashboard.demandas)}">
                     <article class="demanda-admin-card"
-                             th:each="demanda : ${demandasAdmin}"
-                             th:classappend="${demanda.prioridade != null} ? '| demanda-prioridade-' + ${demanda.prioridade.cssClass} : ''">
+                             th:each="demanda : ${dashboard.demandas}"
+                             th:classappend="${demanda.atrasada} ? ' demanda-prioridade-urgente' : ''">
                         <div class="demanda-card-header">
                             <div>
                                 <strong th:text="${demanda.titulo}">Demanda</strong>
-                                <span th:text="${demanda.segmento != null ? demanda.segmento.titulo : 'Sem segmento'}">Segmento</span>
+                                <span th:text="${demanda.segmento}">Segmento</span>
                             </div>
                             <div class="demanda-badge-row">
                                 <span class="demanda-badge"
-                                      th:classappend="| demanda-badge--prioridade-${demanda.prioridade.cssClass}|"
-                                      th:text="${demanda.prioridade.titulo}">
+                                      th:classappend="| demanda-badge--prioridade-${demanda.prioridadeCssClass}|"
+                                      th:text="${demanda.prioridade}">
                                     Prioridade
                                 </span>
                                 <span class="demanda-badge"
-                                      th:classappend="| demanda-badge--status-${demanda.status.cssClass}|"
-                                      th:text="${demanda.status.titulo}">
+                                      th:classappend="| demanda-badge--status-${demanda.statusCssClass}|"
+                                      th:text="${demanda.status}">
                                     Status
                                 </span>
                             </div>
                         </div>
                         <p th:text="${demanda.descricao}">Descricao</p>
                         <div class="demanda-meta">
-                            <span th:text="${demanda.dataPrazo != null ? 'Prazo: ' + #temporals.format(demanda.dataPrazo, 'dd/MM/yyyy') : 'Sem prazo definido'}">Prazo</span>
-                            <span th:text="${demanda.criadaPor != null ? 'Criada por: ' + demanda.criadaPor : 'Criada pela direcao'}">Criada por</span>
+                            <span th:text="${demanda.prazoFormatado != 'Sem prazo' ? 'Prazo: ' + demanda.prazoFormatado : 'Sem prazo definido'}">Prazo</span>
+                            <span th:text="${'Criada por: ' + demanda.criadaPor}">Criada por</span>
                         </div>
-                        <form th:action="@{/admin/demandas/{id}/status(id=${demanda.id})}"
-                              method="post"
-                              class="demanda-status-form">
-                            <th:block th:replace="~{fragments/csrf :: token}"></th:block>
-                            <label th:for="${'status-admin-' + demanda.id}">Atualizar status</label>
-                            <select th:id="${'status-admin-' + demanda.id}" name="status">
-                                <option th:each="statusItem : ${statusDemandas}"
-                                        th:value="${statusItem}"
-                                        th:text="${statusItem.titulo}"
-                                        th:selected="${statusItem == demanda.status}">
-                                    Status
-                                </option>
-                            </select>
-                            <button type="submit" class="btn-editar demanda-action-button">Salvar</button>
-                        </form>
                     </article>
                 </div>
             </section>
         </div>
 
         <aside class="admin-side-column admin-side-column--control">
-            <section class="admin-section admin-agenda-panel">
+            <!-- ACOMPANHAMENTO POR SEGMENTO -->
+            <section class="admin-section admin-progress-panel" th:if="${dashboard.segmentos != null and !#lists.isEmpty(dashboard.segmentos)}">
                 <div class="admin-section-header">
-                    <div>
-                        <span>Agenda</span>
-                        <strong>Proximos dias</strong>
-                    </div>
-                    <a th:href="@{/tv/calendario(modo='mensal')}" class="admin-side-link">Ver tudo</a>
+                    <span>Acompanhamento</span>
+                    <strong>Progresso por segmento</strong>
                 </div>
 
-                <p class="admin-empty admin-alert" th:if="${calendarErro != null}" th:text="${calendarErro}">
-                    Erro ao carregar calendario.
-                </p>
-
-                <p class="admin-empty" th:if="${calendarErro == null and (eventosGoogle == null or #lists.isEmpty(eventosGoogle))}">
-                    Nenhum evento encontrado na agenda principal.
-                </p>
-
-                <div class="admin-calendar-list" th:if="${eventosGoogle != null and !#lists.isEmpty(eventosGoogle)}">
-                    <article class="admin-calendar-item" th:each="evento : ${eventosGoogle}">
-                        <div class="admin-calendar-date">
-                            <strong th:text="${#temporals.format(evento.data, 'dd')}">13</strong>
-                            <span th:text="${#temporals.format(evento.data, 'MMM')}">mai</span>
+                <div class="admin-progress-list">
+                    <article class="admin-progress-item"
+                             th:each="segmento : ${dashboard.segmentos}">
+                        <div class="admin-progress-item__header">
+                            <strong th:text="${segmento.titulo}">Segmento</strong>
+                            <span th:text="${segmento.totalDemandas > 0 ? (segmento.demandasConcluidas * 100 / segmento.totalDemandas) + '%' : '0%'}">0%</span>
                         </div>
-                        <div>
-                            <strong th:text="${evento.titulo}">Evento</strong>
-                            <p th:text="${evento.diaInteiro ? 'Dia inteiro' : #temporals.format(evento.inicio, 'HH:mm')}">Horario</p>
+                        <div class="admin-progress-bar">
+                            <span class="admin-progress-bar__fill"
+                                  th:style="'width: ' + (${segmento.totalDemandas > 0 ? (segmento.demandasConcluidas * 100 / segmento.totalDemandas) : 0}) + '%'"></span>
                         </div>
+                        <small th:text="${segmento.demandasConcluidas + ' de ' + segmento.totalDemandas + ' demandas concluidas'}">
+                            0 de 0 demandas concluidas
+                        </small>
                     </article>
-                </div>
-
-                <div class="admin-side-actions">
-                    <a th:href="@{/agenda/eventos/novo(origem='admin')}" class="admin-inline-action">Novo evento</a>
-                    <a th:href="@{/tv/calendario(modo='semanal')}" class="admin-inline-action">Calendario semanal</a>
                 </div>
             </section>
 
+            <!-- ATALHOS -->
             <section class="admin-section admin-quick-panel">
                 <div class="admin-section-header">
                     <span>Atalhos</span>
@@ -372,23 +355,11 @@
                         </span>
                         <strong>Nova demanda</strong>
                     </a>
-                    <a th:href="@{/agenda/eventos/novo(origem='admin')}" class="admin-action-card">
-                        <span class="admin-action-icon">
-                            <img th:src="@{/img/icons/icon-calendar.png}" alt="" aria-hidden="true">
-                        </span>
-                        <strong>Novo evento</strong>
-                    </a>
                     <a th:href="@{/admin/comunicados/novo}" class="admin-action-card">
                         <span class="admin-action-icon">
                             <img th:src="@{/img/icons/icon-report.png}" alt="" aria-hidden="true">
                         </span>
                         <strong>Novo comunicado</strong>
-                    </a>
-                    <a th:href="@{/novo-card(categoria='FALTA_PROFESSOR')}" class="admin-action-card">
-                        <span class="admin-action-icon">
-                            <img th:src="@{/img/icons/icon-admin.png}" alt="" aria-hidden="true">
-                        </span>
-                        <strong>Registrar falta</strong>
                     </a>
                     <a th:href="@{/admin/semana-em-foco}" class="admin-action-card">
                         <span class="admin-action-icon">
@@ -402,34 +373,37 @@
                         </span>
                         <strong>Semana na TV</strong>
                     </a>
+                    <a th:href="@{/admin/usuarios}" class="admin-action-card">
+                        <span class="admin-action-icon">
+                            <img th:src="@{/img/icons/icon-coordinators.png}" alt="" aria-hidden="true">
+                        </span>
+                        <strong>Usuarios</strong>
+                    </a>
+                    <a th:href="@{/admin/importacao}" class="admin-action-card">
+                        <span class="admin-action-icon">
+                            <img th:src="@{/img/icons/icon-add.png}" alt="" aria-hidden="true">
+                        </span>
+                        <strong>Importacao</strong>
+                    </a>
                 </div>
             </section>
 
-            <section class="admin-section admin-progress-panel">
+            <!-- PENDENCIAS -->
+            <section class="admin-section admin-quick-panel"
+                     th:if="${dashboard.pendencias != null and (dashboard.pendencias.demandasPendentes > 0 or dashboard.pendencias.demandasAtrasadas > 0)}">
                 <div class="admin-section-header">
-                    <span>Acompanhamento</span>
-                    <strong>Progresso por segmento</strong>
+                    <span>Pendencias</span>
+                    <strong>Atencao</strong>
                 </div>
-
-                <p class="admin-empty" th:if="${demandaResumo == null or demandaResumo.progressos == null or #lists.isEmpty(demandaResumo.progressos)}">
-                    Nenhum progresso registrado ainda.
-                </p>
-
-                <div class="admin-progress-list" th:if="${demandaResumo != null and demandaResumo.progressos != null and !#lists.isEmpty(demandaResumo.progressos)}">
-                    <article class="admin-progress-item"
-                             th:each="progresso : ${demandaResumo.progressos}">
-                        <div class="admin-progress-item__header">
-                            <strong th:text="${progresso.titulo}">Segmento</strong>
-                            <span th:text="${progresso.percentual + '%'}">0%</span>
-                        </div>
-                        <div class="admin-progress-bar">
-                            <span class="admin-progress-bar__fill"
-                                  th:style="'width: ' + ${progresso.percentual} + '%'"></span>
-                        </div>
-                        <small th:text="${progresso.concluidas + ' de ' + progresso.total + ' demandas concluidas'}">
-                            0 de 0 demandas concluidas
-                        </small>
-                    </article>
+                <div class="admin-quick-grid">
+                    <div class="admin-action-card" th:if="${dashboard.pendencias.demandasPendentes > 0}">
+                        <strong th:text="${dashboard.pendencias.demandasPendentes}">0</strong>
+                        <small>Demandas pendentes</small>
+                    </div>
+                    <div class="admin-action-card" th:if="${dashboard.pendencias.demandasAtrasadas > 0}">
+                        <strong th:text="${dashboard.pendencias.demandasAtrasadas}">0</strong>
+                        <small>Atrasadas</small>
+                    </div>
                 </div>
             </section>
         </aside>
@@ -439,16 +413,6 @@
 </div>
 
 <script>
-/**
- * Função genérica para expandir/recolher qualquer seção collapsible.
- * Reutilizável em qualquer área do sistema:
- *   toggleCollapsible('meu-panel', 'meu-content', 'meu-toggle')
- *
- * Requisitos no HTML:
- *   - Elemento raiz com id=panelId e classe "avisos-collapsible"
- *   - Corpo colapsável com id=bodyId e classe "avisos-collapsible__body"
- *   - Botão trigger com id=toggleId e aria-expanded
- */
 function toggleCollapsible(panelId, bodyId, toggleId) {
     var panel = document.getElementById(panelId);
     var body  = document.getElementById(bodyId);
@@ -456,20 +420,17 @@ function toggleCollapsible(panelId, bodyId, toggleId) {
     var isOpen = panel.classList.contains('avisos-collapsible--open');
 
     if (isOpen) {
-        /* Collapse: animate height to 0 */
         body.style.maxHeight = body.scrollHeight + 'px';
-        body.offsetHeight; /* force reflow */
+        body.offsetHeight;
         body.style.maxHeight = '0';
         panel.classList.remove('avisos-collapsible--open');
         toggle.setAttribute('aria-expanded', 'false');
         body.setAttribute('aria-hidden', 'true');
     } else {
-        /* Expand: animate height from 0 to content height */
         panel.classList.add('avisos-collapsible--open');
         toggle.setAttribute('aria-expanded', 'true');
         body.setAttribute('aria-hidden', 'false');
         body.style.maxHeight = body.scrollHeight + 'px';
-        /* After transition, remove inline max-height so content can resize */
         body.addEventListener('transitionend', function handler() {
             if (panel.classList.contains('avisos-collapsible--open')) {
                 body.style.maxHeight = 'none';
