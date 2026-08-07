@@ -113,6 +113,16 @@
 
         <!-- ITENS EXCLUSIVOS DA VICE-DIRETORA -->
         <th:block th:if="${perfil != null and perfil.name() == 'VICE_DIRETORA'}">
+            <a th:href="@{/vice-diretora}"
+               class="app-sidebar__link"
+               title="Painel Vice-Diretora"
+               th:classappend="${active == 'vice-diretora'} ? ' app-sidebar__link--active' : ''">
+                <span class="app-sidebar__icon">
+                    <img th:src="@{/img/icons/icon-admin.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
+                </span>
+                <strong class="app-sidebar__text">Painel Vice-Diretora</strong>
+            </a>
+
             <a th:href="@{/tv/calendario(modo='mensal')}"
                class="app-sidebar__link"
                title="Calendario"
@@ -146,6 +156,16 @@
 
         <!-- ITENS EXCLUSIVOS DA COORDENADORA -->
         <th:block th:if="${perfil != null and perfil.name() == 'COORDENADORA'}">
+            <a th:href="@{/coordenadora/dashboard}"
+               class="app-sidebar__link"
+               title="Dashboard da Coordenacao"
+               th:classappend="${active == 'coordenadora'} ? ' app-sidebar__link--active' : ''">
+                <span class="app-sidebar__icon">
+                    <img th:src="@{/img/icons/icon-admin.png}" alt="" class="app-sidebar__icon-img" aria-hidden="true">
+                </span>
+                <strong class="app-sidebar__text">Minha Coordenacao</strong>
+            </a>
+
             <a th:href="@{/tv/semana}"
                class="app-sidebar__link"
                title="Semana em Foco"

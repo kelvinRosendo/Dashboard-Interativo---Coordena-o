@@ -191,26 +191,26 @@
                         </div>
                     </div>
                 </div>
-                <div class="relatorio-card__actions">
+<div class="relatorio-card__actions">
                     <a th:if="${dashboard.semanaEmFoco.statusRelatorio == 'NAO_INICIADO'}"
-                       th:href="@{/relatorio/__${dashboard.semanaEmFoco.id}__}"
+                       th:href="@{/relatorio/{id}(id=${dashboard.semanaEmFoco.id})}"
                        class="relatorio-card__button">
-                        Iniciar Relatorio
-                    </a>
+                         Iniciar Relatorio
+                     </a>
                     <a th:if="${dashboard.semanaEmFoco.statusRelatorio == 'RASCUNHO'}"
-                       th:href="@{/relatorio/__${dashboard.semanaEmFoco.id}__}"
+                       th:href="@{/relatorio/{id}(id=${dashboard.semanaEmFoco.id})}"
                        class="relatorio-card__button">
-                        Continuar edicao
-                    </a>
+                         Continuar edicao
+                     </a>
                     <a th:if="${dashboard.semanaEmFoco.statusRelatorio == 'FINALIZADO'}"
-                       th:href="@{/relatorio/visualizar/__${dashboard.semanaEmFoco.id}__}"
+                       th:href="@{/relatorio/visualizar/{id}(id=${dashboard.semanaEmFoco.id})}"
                        class="relatorio-card__button">
-                        Visualizar
-                    </a>
+                         Visualizar
+                     </a>
                     <a th:href="@{/relatorio/admin/relatorios}"
                        class="relatorio-card__button relatorio-card__button--ghost">
-                        Todos os relatorios
-                    </a>
+                         Todos os relatorios
+                     </a>
                 </div>
             </section>
 

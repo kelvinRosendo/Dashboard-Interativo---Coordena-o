@@ -2,6 +2,7 @@ package br.com.escola.dashboard.controller;
 
 import br.com.escola.dashboard.dto.DashboardDTO;
 import br.com.escola.dashboard.entity.Usuario;
+import br.com.escola.dashboard.enums.PerfilUsuario;
 import br.com.escola.dashboard.enums.StatusUsuario;
 import br.com.escola.dashboard.service.DashboardService;
 import br.com.escola.dashboard.service.UsuarioService;
@@ -43,6 +44,11 @@ public class CoordenadoraDashboardController {
             redirectAttributes.addFlashAttribute("mensagemErro",
                     "Seu acesso ainda nao foi liberado. Aguarde a aprovacao do administrador.");
             return "redirect:/login";
+        }
+
+        if (usuario.getPerfil() != PerfilUsuario.COORDENADORA) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso restrito a coordenadoras.");
+            return "redirect:/dashboard";
         }
 
         DashboardDTO dashboard = dashboardService.coletarDadosCoordenadora(usuario);

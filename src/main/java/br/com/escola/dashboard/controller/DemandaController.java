@@ -2,12 +2,14 @@ package br.com.escola.dashboard.controller;
 
 import br.com.escola.dashboard.dto.AgendaConflictCheckDTO;
 import br.com.escola.dashboard.dto.DemandaRequestDTO;
+import br.com.escola.dashboard.entity.Usuario;
 import br.com.escola.dashboard.enums.PrioridadeDemanda;
 import br.com.escola.dashboard.enums.SegmentoCoordenacao;
 import br.com.escola.dashboard.enums.StatusDemanda;
 import br.com.escola.dashboard.service.AdminAuthService;
 import br.com.escola.dashboard.service.AgendaConflictService;
 import br.com.escola.dashboard.service.DemandaService;
+import br.com.escola.dashboard.service.UsuarioService;
 import br.com.escola.dashboard.utils.ConflitoModelHelper;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -30,13 +32,16 @@ public class DemandaController {
     private final DemandaService demandaService;
     private final AgendaConflictService agendaConflictService;
     private final AdminAuthService adminAuthService;
+    private final UsuarioService usuarioService;
 
     public DemandaController(DemandaService demandaService,
                              AgendaConflictService agendaConflictService,
-                             AdminAuthService adminAuthService) {
+                             AdminAuthService adminAuthService,
+                             UsuarioService usuarioService) {
         this.demandaService = demandaService;
         this.agendaConflictService = agendaConflictService;
         this.adminAuthService = adminAuthService;
+        this.usuarioService = usuarioService;
     }
 
     @GetMapping("/admin/demandas/nova")
@@ -108,13 +113,21 @@ public class DemandaController {
                                                @PathVariable Long id,
                                                @RequestParam StatusDemanda status,
                                                RedirectAttributes redirectAttributes) {
-        if (!adminAuthService.isAdmin(usuario)) {
-            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
+        if (!adminAuthService.isCoordenadora(usuario)) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado. Apenas coordenadoras podem alterar status de demandas.");
             return "redirect:/";
         }
 
         SegmentoCoordenacao segmentoEnum = SegmentoCoordenacao.fromSlug(segmento);
         if (segmentoEnum == null) {
+            return "redirect:/coordenadoras";
+        }
+
+        String email = usuario.getAttribute("email");
+        Usuario u = usuarioService.buscarPorEmail(email);
+        if (u == null || !usuarioService.buscarSegmentosDoUsuario(u.getId()).stream()
+                .anyMatch(s -> s.getSlug().equals(segmento))) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado. Esta demanda nao pertence aos seus segmentos.");
             return "redirect:/coordenadoras";
         }
 
@@ -127,9 +140,17 @@ public class DemandaController {
     public String visualizarDemandasCoordenadora(@AuthenticationPrincipal OAuth2User usuario,
                                                   @PathVariable String segmento,
                                                   RedirectAttributes redirectAttributes) {
-        if (!adminAuthService.isAdmin(usuario)) {
-            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
+        if (!adminAuthService.isCoordenadora(usuario)) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado. Apenas coordenadoras podem visualizar demandas.");
             return "redirect:/";
+        }
+
+        String email = usuario.getAttribute("email");
+        Usuario u = usuarioService.buscarPorEmail(email);
+        if (u == null || !usuarioService.buscarSegmentosDoUsuario(u.getId()).stream()
+                .anyMatch(s -> s.getSlug().equals(segmento))) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado. Este segmento nao esta autorizado para voce.");
+            return "redirect:/coordenadoras";
         }
 
         SegmentoCoordenacao segmentoEnum = SegmentoCoordenacao.fromSlug(segmento);
