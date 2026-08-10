@@ -11,13 +11,15 @@ import br.com.escola.dashboard.exception.ResourceNotFoundException;
 import br.com.escola.dashboard.repository.SegmentoRepository;
 import br.com.escola.dashboard.repository.UsuarioRepository;
 import br.com.escola.dashboard.repository.UsuarioSegmentoRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 public class UsuarioService {
@@ -25,16 +27,16 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final SegmentoRepository segmentoRepository;
     private final UsuarioSegmentoRepository usuarioSegmentoRepository;
-    private final AdminAuthService adminAuthService;
+    private final Set<String> adminEmails;
 
     public UsuarioService(UsuarioRepository usuarioRepository,
                           SegmentoRepository segmentoRepository,
                           UsuarioSegmentoRepository usuarioSegmentoRepository,
-                          AdminAuthService adminAuthService) {
+                          @Value("${app.admin.authorized-emails:}") String adminEmailsConfig) {
         this.usuarioRepository = usuarioRepository;
         this.segmentoRepository = segmentoRepository;
         this.usuarioSegmentoRepository = usuarioSegmentoRepository;
-        this.adminAuthService = adminAuthService;
+        this.adminEmails = parseEmails(adminEmailsConfig);
     }
 
     @Transactional
@@ -48,6 +50,17 @@ public class UsuarioService {
                     if (googleId != null && usuario.getGoogleId() == null) {
                         usuario.setGoogleId(googleId);
                     }
+
+                    if (isEmailAdmin(email)) {
+                        if (usuario.getPerfil() != PerfilUsuario.ADMIN) {
+                            usuario.setPerfil(PerfilUsuario.ADMIN);
+                        }
+                        if (usuario.getStatus() != StatusUsuario.ATIVO) {
+                            usuario.setStatus(StatusUsuario.ATIVO);
+                            usuario.setAtivo(true);
+                        }
+                    }
+
                     usuario.setUltimoLogin(LocalDateTime.now());
                     return usuarioRepository.save(usuario);
                 })
@@ -59,7 +72,7 @@ public class UsuarioService {
                     novoUsuario.setFotoUrl(fotoUrl);
                     novoUsuario.setStatus(StatusUsuario.PENDENTE);
 
-                    if (adminAuthService.isAdminEmailAuthorized(email)) {
+                    if (isEmailAdmin(email)) {
                         novoUsuario.setPerfil(PerfilUsuario.ADMIN);
                         novoUsuario.setStatus(StatusUsuario.ATIVO);
                     } else {
@@ -254,5 +267,22 @@ public class UsuarioService {
         dto.setDataCriacao(usuario.getDataCriacao());
         dto.setSegmentos(nomesSegmentosDoUsuario(usuario.getId()));
         return dto;
+    }
+
+    private boolean isEmailAdmin(String email) {
+        if (email == null || email.isBlank()) {
+            return false;
+        }
+        return adminEmails.contains(email.trim().toLowerCase());
+    }
+
+    private Set<String> parseEmails(String config) {
+        if (config == null || config.isBlank()) {
+            return Set.of();
+        }
+        return Set.of(Arrays.stream(config.split(","))
+                .map(String::trim)
+                .map(String::toLowerCase)
+                .toArray(String[]::new));
     }
 }

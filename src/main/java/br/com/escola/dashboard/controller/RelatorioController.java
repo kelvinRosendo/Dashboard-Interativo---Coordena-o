@@ -3,9 +3,12 @@ package br.com.escola.dashboard.controller;
 import br.com.escola.dashboard.dto.RelatorioSemanaEmFocoDTO;
 import br.com.escola.dashboard.entity.RelatorioSemanaEmFoco;
 import br.com.escola.dashboard.entity.SemanaEmFoco;
+import br.com.escola.dashboard.entity.Usuario;
+import br.com.escola.dashboard.enums.PerfilUsuario;
 import br.com.escola.dashboard.service.AdminAuthService;
 import br.com.escola.dashboard.service.RelatorioSemanaEmFocoService;
 import br.com.escola.dashboard.service.SemanaEmFocoService;
+import br.com.escola.dashboard.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -30,13 +33,16 @@ public class RelatorioController {
     private final RelatorioSemanaEmFocoService relatorioService;
     private final SemanaEmFocoService semanaEmFocoService;
     private final AdminAuthService adminAuthService;
+    private final UsuarioService usuarioService;
 
     public RelatorioController(RelatorioSemanaEmFocoService relatorioService,
                                SemanaEmFocoService semanaEmFocoService,
-                               AdminAuthService adminAuthService) {
+                               AdminAuthService adminAuthService,
+                               UsuarioService usuarioService) {
         this.relatorioService = relatorioService;
         this.semanaEmFocoService = semanaEmFocoService;
         this.adminAuthService = adminAuthService;
+        this.usuarioService = usuarioService;
     }
 
     @GetMapping("/{semanaId}")
@@ -185,10 +191,11 @@ public class RelatorioController {
         }
 
         String email = usuario.getAttribute("email");
+        Usuario usuarioAtual = usuarioService.buscarPorEmail(email);
 
-        if (!adminAuthService.isAdminEmailAuthorized(email)) {
+        if (usuarioAtual == null || usuarioAtual.getPerfil() != PerfilUsuario.ADMIN) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado");
-            return "redirect:/";
+            return "redirect:/dashboard";
         }
 
         List<RelatorioSemanaEmFoco> relatorios = relatorioService.obterTodos();
@@ -206,9 +213,11 @@ public class RelatorioController {
         }
 
         String email = usuario.getAttribute("email");
-        if (!adminAuthService.isAdminEmailAuthorized(email)) {
+        Usuario usuarioAtual = usuarioService.buscarPorEmail(email);
+
+        if (usuarioAtual == null || usuarioAtual.getPerfil() != PerfilUsuario.ADMIN) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado");
-            return "redirect:/";
+            return "redirect:/dashboard";
         }
 
         List<SemanaEmFoco> semanas = semanaEmFocoService.listarTodas();
@@ -233,9 +242,11 @@ public class RelatorioController {
         }
 
         String email = usuario.getAttribute("email");
-        if (!adminAuthService.isAdminEmailAuthorized(email)) {
+        Usuario usuarioAtual = usuarioService.buscarPorEmail(email);
+
+        if (usuarioAtual == null || usuarioAtual.getPerfil() != PerfilUsuario.ADMIN) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado");
-            return "redirect:/";
+            return "redirect:/dashboard";
         }
 
         String nome = usuario.getAttribute("name");
@@ -261,9 +272,11 @@ public class RelatorioController {
         }
 
         String email = usuario.getAttribute("email");
-        if (!adminAuthService.isAdminEmailAuthorized(email)) {
+        Usuario usuarioAtual = usuarioService.buscarPorEmail(email);
+
+        if (usuarioAtual == null || usuarioAtual.getPerfil() != PerfilUsuario.ADMIN) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado");
-            return "redirect:/";
+            return "redirect:/dashboard";
         }
 
         Optional<RelatorioSemanaEmFoco> relatorio = relatorioService.obterPorId(id);
@@ -295,9 +308,11 @@ public class RelatorioController {
         }
 
         String email = usuario.getAttribute("email");
-        if (!adminAuthService.isAdminEmailAuthorized(email)) {
+        Usuario usuarioAtual = usuarioService.buscarPorEmail(email);
+
+        if (usuarioAtual == null || usuarioAtual.getPerfil() != PerfilUsuario.ADMIN) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado");
-            return "redirect:/";
+            return "redirect:/dashboard";
         }
 
         try {
@@ -320,9 +335,11 @@ public class RelatorioController {
         }
 
         String email = usuario.getAttribute("email");
-        if (!adminAuthService.isAdminEmailAuthorized(email)) {
+        Usuario usuarioAtual = usuarioService.buscarPorEmail(email);
+
+        if (usuarioAtual == null || usuarioAtual.getPerfil() != PerfilUsuario.ADMIN) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado");
-            return "redirect:/";
+            return "redirect:/dashboard";
         }
 
         try {

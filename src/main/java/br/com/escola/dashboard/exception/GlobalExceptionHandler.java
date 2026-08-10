@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
         }
 
         redirectAttributes.addFlashAttribute("mensagemErro", "Recurso não encontrado.");
-        return "redirect:/";
+        return "error";
     }
 
     /**
@@ -46,7 +46,7 @@ public class GlobalExceptionHandler {
         }
 
         redirectAttributes.addFlashAttribute("mensagemErro", ex.getMessage());
-        return "redirect:/";
+        return "error";
     }
 
     /**
@@ -61,7 +61,7 @@ public class GlobalExceptionHandler {
         }
 
         redirectAttributes.addFlashAttribute("mensagemErro", ex.getMessage());
-        return "redirect:/";
+        return "error";
     }
 
     /**
@@ -76,7 +76,7 @@ public class GlobalExceptionHandler {
         }
 
         redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
-        return "redirect:/";
+        return "error";
     }
 
     /**
@@ -93,7 +93,7 @@ public class GlobalExceptionHandler {
         }
 
         redirectAttributes.addFlashAttribute("mensagemErro", "Ocorreu um erro inesperado. Tente novamente.");
-        return "redirect:/";
+        return "error";
     }
 
     private boolean isAjaxRequest() {

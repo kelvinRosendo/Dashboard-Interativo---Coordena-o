@@ -3,6 +3,7 @@ package br.com.escola.dashboard.controller;
 import br.com.escola.dashboard.dto.DashboardDTO;
 import br.com.escola.dashboard.entity.SemanaEmFoco;
 import br.com.escola.dashboard.entity.Usuario;
+import br.com.escola.dashboard.enums.PerfilUsuario;
 import br.com.escola.dashboard.enums.PrioridadeDemanda;
 import br.com.escola.dashboard.enums.SegmentoCoordenacao;
 import br.com.escola.dashboard.service.AdminAuthService;
@@ -48,17 +49,20 @@ public class AdminController {
     public String painelAdministrativo(@AuthenticationPrincipal OAuth2User usuario,
                                        Model model,
                                        RedirectAttributes redirectAttributes) {
-        String email = usuario != null ? usuario.getAttribute("email") : null;
-
-        if (!adminAuthService.isAdminEmailAuthorized(email)) {
-            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado. Seu e-mail nao esta autorizado para acessar o painel administrativo.");
-            return "redirect:/";
+        if (usuario == null) {
+            return "redirect:/login";
         }
 
+        String email = usuario.getAttribute("email");
         Usuario usuarioAtual = usuarioService.buscarPorEmail(email);
 
         if (usuarioAtual == null) {
             return "redirect:/login";
+        }
+
+        if (usuarioAtual.getPerfil() != PerfilUsuario.ADMIN) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado. Apenas administradoras podem acessar este painel.");
+            return "redirect:/dashboard";
         }
 
         DashboardDTO dashboard = dashboardService.coletarDadosAdmin(usuarioAtual);
@@ -78,11 +82,16 @@ public class AdminController {
     public String editarSemanaEmFoco(@AuthenticationPrincipal OAuth2User usuario,
                                      Model model,
                                      RedirectAttributes redirectAttributes) {
-        String email = usuario != null ? usuario.getAttribute("email") : null;
+        if (usuario == null) {
+            return "redirect:/login";
+        }
 
-        if (!adminAuthService.isAdminEmailAuthorized(email)) {
-            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado. Seu e-mail nao esta autorizado para acessar o painel administrativo.");
-            return "redirect:/";
+        String email = usuario.getAttribute("email");
+        Usuario usuarioAtual = usuarioService.buscarPorEmail(email);
+
+        if (usuarioAtual == null || usuarioAtual.getPerfil() != PerfilUsuario.ADMIN) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
+            return "redirect:/dashboard";
         }
 
         SemanaEmFoco semana = semanaEmFocoService.buscarAtiva()
@@ -104,11 +113,16 @@ public class AdminController {
                                      BindingResult bindingResult,
                                      Model model,
                                      RedirectAttributes redirectAttributes) {
-        String email = usuario != null ? usuario.getAttribute("email") : null;
+        if (usuario == null) {
+            return "redirect:/login";
+        }
 
-        if (!adminAuthService.isAdminEmailAuthorized(email)) {
-            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado. Seu e-mail nao esta autorizado para acessar o painel administrativo.");
-            return "redirect:/";
+        String email = usuario.getAttribute("email");
+        Usuario usuarioAtual = usuarioService.buscarPorEmail(email);
+
+        if (usuarioAtual == null || usuarioAtual.getPerfil() != PerfilUsuario.ADMIN) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
+            return "redirect:/dashboard";
         }
 
         if (bindingResult.hasErrors()) {
@@ -126,11 +140,16 @@ public class AdminController {
     public String exibirFormularioComunicado(@AuthenticationPrincipal OAuth2User usuario,
                                              Model model,
                                              RedirectAttributes redirectAttributes) {
-        String email = usuario != null ? usuario.getAttribute("email") : null;
+        if (usuario == null) {
+            return "redirect:/login";
+        }
 
-        if (!adminAuthService.isAdminEmailAuthorized(email)) {
+        String email = usuario.getAttribute("email");
+        Usuario usuarioAtual = usuarioService.buscarPorEmail(email);
+
+        if (usuarioAtual == null || usuarioAtual.getPerfil() != PerfilUsuario.ADMIN) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
-            return "redirect:/";
+            return "redirect:/dashboard";
         }
 
         return "novo-comunicado";
@@ -141,11 +160,16 @@ public class AdminController {
                                                 @RequestParam String titulo,
                                                 @RequestParam(required = false) String conteudo,
                                                 RedirectAttributes redirectAttributes) {
-        String email = usuario != null ? usuario.getAttribute("email") : null;
+        if (usuario == null) {
+            return "redirect:/login";
+        }
 
-        if (!adminAuthService.isAdminEmailAuthorized(email)) {
+        String email = usuario.getAttribute("email");
+        Usuario usuarioAtual = usuarioService.buscarPorEmail(email);
+
+        if (usuarioAtual == null || usuarioAtual.getPerfil() != PerfilUsuario.ADMIN) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
-            return "redirect:/";
+            return "redirect:/dashboard";
         }
 
         try {
@@ -162,11 +186,16 @@ public class AdminController {
     public String excluirComunicado(@AuthenticationPrincipal OAuth2User usuario,
                                     @PathVariable Long id,
                                     RedirectAttributes redirectAttributes) {
-        String email = usuario != null ? usuario.getAttribute("email") : null;
+        if (usuario == null) {
+            return "redirect:/login";
+        }
 
-        if (!adminAuthService.isAdminEmailAuthorized(email)) {
+        String email = usuario.getAttribute("email");
+        Usuario usuarioAtual = usuarioService.buscarPorEmail(email);
+
+        if (usuarioAtual == null || usuarioAtual.getPerfil() != PerfilUsuario.ADMIN) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
-            return "redirect:/";
+            return "redirect:/dashboard";
         }
 
         comunicadoService.excluir(id);

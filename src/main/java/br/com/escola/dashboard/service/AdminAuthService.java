@@ -61,6 +61,31 @@ public class AdminAuthService {
         return isAdmin(usuario) || isViceDiretora(usuario);
     }
 
+    public boolean hasPerfil(OAuth2User oauth2User, PerfilUsuario perfil) {
+        if (oauth2User == null || perfil == null) {
+            return false;
+        }
+        String email = oauth2User.getAttribute("email");
+        Usuario u = usuarioService.buscarPorEmail(email);
+        return u != null && u.getPerfil() == perfil;
+    }
+
+    public boolean hasPerfil(Usuario usuario, PerfilUsuario perfil) {
+        return usuario != null && usuario.getPerfil() == perfil;
+    }
+
+    public boolean hasPerfilOrAdmin(OAuth2User oauth2User, PerfilUsuario perfil) {
+        if (oauth2User == null || perfil == null) {
+            return false;
+        }
+        String email = oauth2User.getAttribute("email");
+        Usuario u = usuarioService.buscarPorEmail(email);
+        if (u == null) {
+            return false;
+        }
+        return u.getPerfil() == perfil || u.getPerfil() == PerfilUsuario.ADMIN;
+    }
+
     private Set<String> parseEmails(String config) {
         if (config == null || config.isBlank()) {
             return Set.of();

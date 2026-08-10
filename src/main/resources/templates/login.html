@@ -75,6 +75,8 @@
                 Nao foi possivel concluir o login. Verifique as credenciais do Google.
             </div>
 
+            <div class="login-message login-message-error" th:if="${mensagemErro}" th:text="${mensagemErro}"></div>
+
             <a th:if="${googleConfigurado}"
                class="google-login-button"
                title="Entrar com Google"

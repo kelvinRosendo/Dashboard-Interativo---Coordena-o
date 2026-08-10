@@ -2,6 +2,7 @@ package br.com.escola.dashboard.controller;
 
 import br.com.escola.dashboard.dto.DashboardDTO;
 import br.com.escola.dashboard.entity.Usuario;
+import br.com.escola.dashboard.enums.PerfilUsuario;
 import br.com.escola.dashboard.service.AdminAuthService;
 import br.com.escola.dashboard.service.DashboardService;
 import br.com.escola.dashboard.service.UsuarioService;
@@ -42,7 +43,8 @@ public class ViceDiretoraController {
             return "redirect:/login";
         }
 
-        if (!adminAuthService.isAdminEmailAuthorized(email)) {
+        if (usuario.getPerfil() != PerfilUsuario.VICE_DIRETORA
+                && usuario.getPerfil() != PerfilUsuario.ADMIN) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
             return "redirect:/dashboard";
         }

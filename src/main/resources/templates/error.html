@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organiza+ - Erro</title>
+    <link rel="icon" type="image/png" th:href="@{/img/logo-colegio-satelite.png}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="login-page">
+
+<main class="login-shell">
+    <header class="login-navbar">
+        <div class="brand-lockup">
+            <th:block th:replace="~{fragments/brand :: brand-login}"></th:block>
+        </div>
+    </header>
+
+    <section class="login-panel">
+        <div class="login-card" style="max-width: 480px; margin: 0 auto; text-align: center;">
+            <h2>Algo deu errado</h2>
+
+            <div class="login-message login-message-error" th:if="${mensagemErro}" th:text="${mensagemErro}">
+            </div>
+
+            <div class="login-message login-message-error" th:if="${!mensagemErro}">
+                Ocorreu um erro inesperado. Tente novamente.
+            </div>
+
+            <div style="margin-top: 24px;">
+                <a th:href="@{/login}" class="google-login-button" style="text-decoration: none;">
+                    <span>Voltar ao login</span>
+                </a>
+            </div>
+
+            <div class="login-links" style="margin-top: 16px;">
+                <a th:href="@{/tv/semana}">Ver dashboard da TV</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+</body>
+</html>

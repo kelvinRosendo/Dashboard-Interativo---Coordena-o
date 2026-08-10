@@ -2,13 +2,16 @@ package br.com.escola.dashboard.controller;
 
 import br.com.escola.dashboard.dto.CardResponseDTO;
 import br.com.escola.dashboard.entity.SemanaEmFoco;
+import br.com.escola.dashboard.entity.Usuario;
 import br.com.escola.dashboard.enums.CategoriaCard;
+import br.com.escola.dashboard.enums.PerfilUsuario;
 import br.com.escola.dashboard.enums.SegmentoCoordenacao;
 import br.com.escola.dashboard.service.AdminAuthService;
 import br.com.escola.dashboard.service.CardService;
 import br.com.escola.dashboard.service.ComunicadoService;
 import br.com.escola.dashboard.service.DemandaService;
 import br.com.escola.dashboard.service.SemanaEmFocoService;
+import br.com.escola.dashboard.service.UsuarioService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
@@ -38,26 +41,36 @@ public class CoordenadoraController {
     private final SemanaEmFocoService semanaEmFocoService;
     private final ComunicadoService comunicadoService;
     private final AdminAuthService adminAuthService;
+    private final UsuarioService usuarioService;
 
     public CoordenadoraController(CardService cardService,
                                   DemandaService demandaService,
                                   SemanaEmFocoService semanaEmFocoService,
                                   ComunicadoService comunicadoService,
-                                  AdminAuthService adminAuthService) {
+                                  AdminAuthService adminAuthService,
+                                  UsuarioService usuarioService) {
         this.cardService = cardService;
         this.demandaService = demandaService;
         this.semanaEmFocoService = semanaEmFocoService;
         this.comunicadoService = comunicadoService;
         this.adminAuthService = adminAuthService;
+        this.usuarioService = usuarioService;
     }
 
     @GetMapping("/coordenadoras")
     public String listarCoordenadoras(@AuthenticationPrincipal OAuth2User usuario,
                                       Model model,
                                       RedirectAttributes redirectAttributes) {
-        if (!adminAuthService.isAdmin(usuario)) {
+        if (usuario == null) {
+            return "redirect:/login";
+        }
+
+        String email = usuario.getAttribute("email");
+        Usuario usuarioAtual = usuarioService.buscarPorEmail(email);
+
+        if (usuarioAtual == null || usuarioAtual.getPerfil() != PerfilUsuario.ADMIN) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
-            return "redirect:/";
+            return "redirect:/dashboard";
         }
 
         model.addAttribute("segmentos", SEGMENTOS);
@@ -69,14 +82,33 @@ public class CoordenadoraController {
                                      @PathVariable String slug,
                                      Model model,
                                      RedirectAttributes redirectAttributes) {
-        if (!adminAuthService.isAdmin(usuario)) {
-            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
-            return "redirect:/";
+        if (usuario == null) {
+            return "redirect:/login";
+        }
+
+        String email = usuario.getAttribute("email");
+        Usuario usuarioAtual = usuarioService.buscarPorEmail(email);
+
+        if (usuarioAtual == null) {
+            return "redirect:/login";
         }
 
         SegmentoCoordenacao segmentoEnum = SegmentoCoordenacao.fromSlug(slug);
 
         if (segmentoEnum == null) {
+            return "redirect:/coordenadoras";
+        }
+
+        boolean podeAcessar = false;
+        if (usuarioAtual.getPerfil() == PerfilUsuario.ADMIN) {
+            podeAcessar = true;
+        } else if (usuarioAtual.getPerfil() == PerfilUsuario.COORDENADORA) {
+            podeAcessar = usuarioService.buscarSegmentosDoUsuario(usuarioAtual.getId()).stream()
+                    .anyMatch(s -> s.getSlug().equals(segmentoEnum.getSlug()));
+        }
+
+        if (!podeAcessar) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado. Voce nao tem permissao para acessar este segmento.");
             return "redirect:/coordenadoras";
         }
 

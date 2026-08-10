@@ -3,10 +3,10 @@ package br.com.escola.dashboard.controller;
 import br.com.escola.dashboard.dto.AgendaConflictCheckDTO;
 import br.com.escola.dashboard.dto.DemandaRequestDTO;
 import br.com.escola.dashboard.entity.Usuario;
+import br.com.escola.dashboard.enums.PerfilUsuario;
 import br.com.escola.dashboard.enums.PrioridadeDemanda;
 import br.com.escola.dashboard.enums.SegmentoCoordenacao;
 import br.com.escola.dashboard.enums.StatusDemanda;
-import br.com.escola.dashboard.service.AdminAuthService;
 import br.com.escola.dashboard.service.AgendaConflictService;
 import br.com.escola.dashboard.service.DemandaService;
 import br.com.escola.dashboard.service.UsuarioService;
@@ -31,16 +31,13 @@ public class DemandaController {
 
     private final DemandaService demandaService;
     private final AgendaConflictService agendaConflictService;
-    private final AdminAuthService adminAuthService;
     private final UsuarioService usuarioService;
 
     public DemandaController(DemandaService demandaService,
                              AgendaConflictService agendaConflictService,
-                             AdminAuthService adminAuthService,
                              UsuarioService usuarioService) {
         this.demandaService = demandaService;
         this.agendaConflictService = agendaConflictService;
-        this.adminAuthService = adminAuthService;
         this.usuarioService = usuarioService;
     }
 
@@ -48,9 +45,9 @@ public class DemandaController {
     public String novaDemanda(@AuthenticationPrincipal OAuth2User usuario,
                               RedirectAttributes redirectAttributes,
                               Model model) {
-        if (!adminAuthService.isAdmin(usuario)) {
+        if (!isAdmin(usuario)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
-            return "redirect:/";
+            return "redirect:/dashboard";
         }
         prepararFormulario(model, new DemandaRequestDTO());
         return "nova-demanda";
@@ -64,9 +61,9 @@ public class DemandaController {
                                @RegisteredOAuth2AuthorizedClient("google") OAuth2AuthorizedClient googleClient,
                                Model model,
                                RedirectAttributes redirectAttributes) {
-        if (!adminAuthService.isAdmin(usuario)) {
+        if (!isAdmin(usuario)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
-            return "redirect:/";
+            return "redirect:/dashboard";
         }
 
         if (bindingResult.hasErrors()) {
@@ -97,9 +94,9 @@ public class DemandaController {
                                        @PathVariable Long id,
                                        @RequestParam StatusDemanda status,
                                        RedirectAttributes redirectAttributes) {
-        if (!adminAuthService.isAdmin(usuario)) {
+        if (!isAdmin(usuario)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
-            return "redirect:/";
+            return "redirect:/dashboard";
         }
 
         demandaService.atualizarStatus(id, status);
@@ -113,9 +110,9 @@ public class DemandaController {
                                                @PathVariable Long id,
                                                @RequestParam StatusDemanda status,
                                                RedirectAttributes redirectAttributes) {
-        if (!adminAuthService.isCoordenadora(usuario)) {
+        if (!isCoordenadora(usuario)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado. Apenas coordenadoras podem alterar status de demandas.");
-            return "redirect:/";
+            return "redirect:/dashboard";
         }
 
         SegmentoCoordenacao segmentoEnum = SegmentoCoordenacao.fromSlug(segmento);
@@ -140,9 +137,9 @@ public class DemandaController {
     public String visualizarDemandasCoordenadora(@AuthenticationPrincipal OAuth2User usuario,
                                                   @PathVariable String segmento,
                                                   RedirectAttributes redirectAttributes) {
-        if (!adminAuthService.isCoordenadora(usuario)) {
+        if (!isCoordenadora(usuario)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado. Apenas coordenadoras podem visualizar demandas.");
-            return "redirect:/";
+            return "redirect:/dashboard";
         }
 
         String email = usuario.getAttribute("email");
@@ -177,5 +174,23 @@ public class DemandaController {
         String email = usuario.getAttribute("email");
         String nome = usuario.getAttribute("name");
         return email != null ? email : nome;
+    }
+
+    private boolean isAdmin(OAuth2User oauth2User) {
+        if (oauth2User == null) {
+            return false;
+        }
+        String email = oauth2User.getAttribute("email");
+        Usuario u = usuarioService.buscarPorEmail(email);
+        return u != null && u.getPerfil() == PerfilUsuario.ADMIN;
+    }
+
+    private boolean isCoordenadora(OAuth2User oauth2User) {
+        if (oauth2User == null) {
+            return false;
+        }
+        String email = oauth2User.getAttribute("email");
+        Usuario u = usuarioService.buscarPorEmail(email);
+        return u != null && u.getPerfil() == PerfilUsuario.COORDENADORA;
     }
 }

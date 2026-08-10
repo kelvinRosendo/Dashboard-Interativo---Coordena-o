@@ -3,9 +3,12 @@ package br.com.escola.dashboard.controller;
 import br.com.escola.dashboard.dto.CsvPreviewDTO;
 import br.com.escola.dashboard.dto.ImportacaoResultadoDTO;
 import br.com.escola.dashboard.entity.ImportacaoLog;
+import br.com.escola.dashboard.entity.Usuario;
+import br.com.escola.dashboard.enums.PerfilUsuario;
 import br.com.escola.dashboard.service.AdminAuthService;
 import br.com.escola.dashboard.service.CsvImportService;
 import br.com.escola.dashboard.service.ImportacaoLogService;
+import br.com.escola.dashboard.service.UsuarioService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -29,6 +32,7 @@ public class CsvImportController {
     private final CsvImportService csvImportService;
     private final ImportacaoLogService importacaoLogService;
     private final AdminAuthService adminAuthService;
+    private final UsuarioService usuarioService;
 
     private static final List<String> TIPOS_VALIDOS = List.of(
             "coordenadoras", "professores", "avisos", "eventos",
@@ -37,21 +41,21 @@ public class CsvImportController {
 
     public CsvImportController(CsvImportService csvImportService,
                                ImportacaoLogService importacaoLogService,
-                               AdminAuthService adminAuthService) {
+                               AdminAuthService adminAuthService,
+                               UsuarioService usuarioService) {
         this.csvImportService = csvImportService;
         this.importacaoLogService = importacaoLogService;
         this.adminAuthService = adminAuthService;
+        this.usuarioService = usuarioService;
     }
 
     @GetMapping
     public String exibirDashboard(@AuthenticationPrincipal OAuth2User usuario,
                                   Model model,
                                   RedirectAttributes redirectAttributes) {
-        String email = usuario != null ? usuario.getAttribute("email") : null;
-
-        if (!adminAuthService.isAdminEmailAuthorized(email)) {
+        if (!isAdmin(usuario)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
-            return "redirect:/";
+            return "redirect:/dashboard";
         }
 
         model.addAttribute("tiposEntidade", TIPOS_VALIDOS);
@@ -66,11 +70,9 @@ public class CsvImportController {
                           @RequestParam("tipoEntidade") String tipoEntidade,
                           Model model,
                           RedirectAttributes redirectAttributes) {
-        String email = usuario != null ? usuario.getAttribute("email") : null;
-
-        if (!adminAuthService.isAdminEmailAuthorized(email)) {
+        if (!isAdmin(usuario)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
-            return "redirect:/";
+            return "redirect:/dashboard";
         }
 
         if (arquivo.isEmpty() || arquivo.getOriginalFilename() == null) {
@@ -110,11 +112,9 @@ public class CsvImportController {
                            @RequestParam("tipoEntidade") String tipoEntidade,
                            Model model,
                            RedirectAttributes redirectAttributes) {
-        String email = usuario != null ? usuario.getAttribute("email") : null;
-
-        if (!adminAuthService.isAdminEmailAuthorized(email)) {
+        if (!isAdmin(usuario)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
-            return "redirect:/";
+            return "redirect:/dashboard";
         }
 
         if (arquivo.isEmpty() || arquivo.getOriginalFilename() == null) {
@@ -133,7 +133,8 @@ public class CsvImportController {
             ImportacaoLog log = new ImportacaoLog();
             log.setTipoEntidade(tipoEntidade);
             log.setNomeArquivo(arquivo.getOriginalFilename());
-            log.setUsuario(email != null ? email : "sistema");
+            log.setUsuario(usuario != null && usuario.getAttribute("email") != null
+                    ? usuario.getAttribute("email") : "sistema");
             log.setTotalRegistros(resultado.getTotalRegistros());
             log.setInseridos(resultado.getInseridos());
             log.setAtualizados(resultado.getAtualizados());
@@ -160,15 +161,12 @@ public class CsvImportController {
                               @RequestParam Long logId,
                               HttpServletResponse response,
                               RedirectAttributes redirectAttributes) throws IOException {
-        String email = usuario != null ? usuario.getAttribute("email") : null;
-
-        if (!adminAuthService.isAdminEmailAuthorized(email)) {
+        if (!isAdmin(usuario)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
             return;
         }
 
         var logOpt = importacaoLogService.buscarUltima();
-        // For simplicity, always download the latest log's errors
         response.setContentType("text/csv; charset=UTF-8");
         response.setHeader("Content-Disposition", "attachment; filename=erros_importacao.csv");
 
@@ -181,5 +179,14 @@ public class CsvImportController {
             writer.println(linhas[i]);
         }
         writer.flush();
+    }
+
+    private boolean isAdmin(OAuth2User oauth2User) {
+        if (oauth2User == null) {
+            return false;
+        }
+        String email = oauth2User.getAttribute("email");
+        Usuario usuario = usuarioService.buscarPorEmail(email);
+        return usuario != null && usuario.getPerfil() == PerfilUsuario.ADMIN;
     }
 }

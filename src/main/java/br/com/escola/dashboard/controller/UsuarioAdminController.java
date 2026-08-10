@@ -47,10 +47,9 @@ public class UsuarioAdminController {
                                   @RequestParam(required = false) StatusUsuario status,
                                   Model model,
                                   RedirectAttributes redirectAttributes) {
-        String email = usuario != null ? usuario.getAttribute("email") : null;
-        if (!adminAuthService.isAdminEmailAuthorized(email)) {
+        if (!isAdmin(usuario)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
-            return "redirect:/";
+            return "redirect:/dashboard";
         }
 
         List<Usuario> usuarios = usuarioService.buscarComFiltros(termo, perfil, status);
@@ -75,10 +74,9 @@ public class UsuarioAdminController {
                                           @PathVariable Long id,
                                           Model model,
                                           RedirectAttributes redirectAttributes) {
-        String email = usuario != null ? usuario.getAttribute("email") : null;
-        if (!adminAuthService.isAdminEmailAuthorized(email)) {
+        if (!isAdmin(usuario)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
-            return "redirect:/";
+            return "redirect:/dashboard";
         }
 
         Usuario usuarioEditado = usuarioService.buscarPorIdOuErro(id);
@@ -113,10 +111,9 @@ public class UsuarioAdminController {
                                 BindingResult bindingResult,
                                 Model model,
                                 RedirectAttributes redirectAttributes) {
-        String email = usuario != null ? usuario.getAttribute("email") : null;
-        if (!adminAuthService.isAdminEmailAuthorized(email)) {
+        if (!isAdmin(usuario)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
-            return "redirect:/";
+            return "redirect:/dashboard";
         }
 
         if (bindingResult.hasErrors()) {
@@ -148,10 +145,9 @@ public class UsuarioAdminController {
                                   @RequestParam PerfilUsuario perfil,
                                   @RequestParam(required = false) List<Long> segmentoIds,
                                   RedirectAttributes redirectAttributes) {
-        String email = usuario != null ? usuario.getAttribute("email") : null;
-        if (!adminAuthService.isAdminEmailAuthorized(email)) {
+        if (!isAdmin(usuario)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
-            return "redirect:/";
+            return "redirect:/dashboard";
         }
 
         usuarioService.aprovar(id, perfil, segmentoIds);
@@ -163,10 +159,9 @@ public class UsuarioAdminController {
     public String bloquearUsuario(@AuthenticationPrincipal OAuth2User usuario,
                                    @PathVariable Long id,
                                    RedirectAttributes redirectAttributes) {
-        String email = usuario != null ? usuario.getAttribute("email") : null;
-        if (!adminAuthService.isAdminEmailAuthorized(email)) {
+        if (!isAdmin(usuario)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
-            return "redirect:/";
+            return "redirect:/dashboard";
         }
 
         usuarioService.bloquear(id);
@@ -178,10 +173,9 @@ public class UsuarioAdminController {
     public String desbloquearUsuario(@AuthenticationPrincipal OAuth2User usuario,
                                       @PathVariable Long id,
                                       RedirectAttributes redirectAttributes) {
-        String email = usuario != null ? usuario.getAttribute("email") : null;
-        if (!adminAuthService.isAdminEmailAuthorized(email)) {
+        if (!isAdmin(usuario)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
-            return "redirect:/";
+            return "redirect:/dashboard";
         }
 
         usuarioService.desbloquear(id);
@@ -193,10 +187,9 @@ public class UsuarioAdminController {
     public String listarPendentes(@AuthenticationPrincipal OAuth2User usuario,
                                    Model model,
                                    RedirectAttributes redirectAttributes) {
-        String email = usuario != null ? usuario.getAttribute("email") : null;
-        if (!adminAuthService.isAdminEmailAuthorized(email)) {
+        if (!isAdmin(usuario)) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Acesso negado.");
-            return "redirect:/";
+            return "redirect:/dashboard";
         }
 
         List<Usuario> pendentes = usuarioService.listarPorStatus(StatusUsuario.PENDENTE);
@@ -209,5 +202,14 @@ public class UsuarioAdminController {
         model.addAttribute("pendenteMode", true);
 
         return "admin/usuarios-admin";
+    }
+
+    private boolean isAdmin(OAuth2User oauth2User) {
+        if (oauth2User == null) {
+            return false;
+        }
+        String email = oauth2User.getAttribute("email");
+        Usuario usuario = usuarioService.buscarPorEmail(email);
+        return usuario != null && usuario.getPerfil() == PerfilUsuario.ADMIN;
     }
 }
