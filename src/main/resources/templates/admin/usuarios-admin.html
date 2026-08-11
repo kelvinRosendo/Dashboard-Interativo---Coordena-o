@@ -63,7 +63,9 @@
             </div>
 
             <form class="usuarios-filtros" method="get" th:action="@{/admin/usuarios}">
+                <label for="usuarios-busca" class="visually-hidden">Buscar usuarios</label>
                 <input type="text"
+                       id="usuarios-busca"
                        class="usuarios-filtros__input"
                        name="termo"
                        placeholder="Buscar por nome ou email..."
@@ -80,7 +82,7 @@
                 <a th:href="@{/admin/usuarios}" class="btn btn--secondary">Limpar</a>
             </form>
 
-            <div class="usuarios-tabela-wrap" style="overflow-x: auto;">
+            <div class="usuarios-tabela-wrap usuarios-tabela-wrap--scroll">
                 <table class="usuarios-tabela">
                     <thead>
                         <tr>
@@ -130,7 +132,7 @@
                                     <form th:if="${u.status?.name() == 'PENDENTE'}" method="post" th:action="@{/admin/usuarios/{id}/aprovar(id=${u.id})}" style="display:inline">
                                         <th:block th:replace="~{fragments/csrf :: token}"></th:block>
                                         <input type="hidden" name="perfil" value="COORDENADORA">
-                                        <button type="submit" class="btn btn--small btn--success">Aprovar</button>
+                                        <button type="submit" class="btn btn--small btn--success" onclick="return confirm('Aprovar este usuario e definir como Coordenadora?')">Aprovar</button>
                                     </form>
                                     <form th:if="${u.status?.name() == 'ATIVO'}" method="post" th:action="@{/admin/usuarios/{id}/bloquear(id=${u.id})}" style="display:inline">
                                         <th:block th:replace="~{fragments/csrf :: token}"></th:block>

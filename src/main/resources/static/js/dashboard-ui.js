@@ -75,6 +75,8 @@ document.addEventListener("DOMContentLoaded", () => {
     initWeekFocusCollapsible();
     initTvInfiniteAutoScroll();
     initMobileSidebar();
+    initFormLoadingStates();
+    initSidebarKeyboard();
 });
 
 function initSidebar() {
@@ -520,5 +522,55 @@ function initMobileSidebar() {
 
     sidebar.querySelectorAll("a").forEach(link => {
         link.addEventListener("click", close);
+    });
+}
+
+function initFormLoadingStates() {
+    document.addEventListener("submit", (event) => {
+        const form = event.target;
+        if (!(form instanceof HTMLFormElement)) return;
+
+        const submitBtn = form.querySelector("button[type='submit'], input[type='submit']");
+        if (!submitBtn || submitBtn.disabled) return;
+
+        submitBtn.disabled = true;
+        submitBtn.setAttribute("data-loading-original", submitBtn.textContent || submitBtn.value || "");
+
+        if (submitBtn.tagName === "BUTTON") {
+            submitBtn.innerHTML = '<span class="btn-spinner"></span> Enviando...';
+        } else {
+            submitBtn.value = "Enviando...";
+        }
+
+        submitBtn.classList.add("btn--loading");
+    });
+
+    document.addEventListener("reset", (event) => {
+        const form = event.target;
+        if (!(form instanceof HTMLFormElement)) return;
+
+        form.querySelectorAll(".btn--loading").forEach((btn) => {
+            const original = btn.getAttribute("data-loading-original");
+            btn.disabled = false;
+            btn.classList.remove("btn--loading");
+            if (btn.tagName === "BUTTON" && original !== null) {
+                btn.textContent = original;
+            } else if (original !== null) {
+                btn.value = original;
+            }
+            btn.removeAttribute("data-loading-original");
+        });
+    });
+}
+
+function initSidebarKeyboard() {
+    const toggle = document.querySelector("[data-sidebar-toggle]");
+    if (!toggle) return;
+
+    toggle.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            toggle.click();
+        }
     });
 }

@@ -20,7 +20,7 @@
     </header>
 
     <section class="login-panel">
-        <div class="login-card" style="max-width: 480px; margin: 0 auto; text-align: center;">
+        <div class="login-card error-card">
             <h2>Algo deu errado</h2>
 
             <div class="login-message login-message-error" th:if="${mensagemErro}" th:text="${mensagemErro}">
@@ -30,13 +30,13 @@
                 Ocorreu um erro inesperado. Tente novamente.
             </div>
 
-            <div style="margin-top: 24px;">
-                <a th:href="@{/login}" class="google-login-button" style="text-decoration: none;">
+            <div class="error-actions">
+                <a th:href="@{/login}" class="google-login-button error-login-link">
                     <span>Voltar ao login</span>
                 </a>
             </div>
 
-            <div class="login-links" style="margin-top: 16px;">
+            <div class="login-links error-links">
                 <a th:href="@{/tv/semana}">Ver dashboard da TV</a>
             </div>
         </div>

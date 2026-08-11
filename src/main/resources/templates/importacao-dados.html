@@ -93,11 +93,11 @@
                         <tr>
                             <th>Data</th>
                             <th>Tipo</th>
-                            <th style="text-align: center;">Total</th>
-                            <th style="text-align: center;">Inseridos</th>
-                            <th style="text-align: center;">Atualizados</th>
-                            <th style="text-align: center;">Ignorados</th>
-                            <th style="text-align: center;">Erros</th>
+                            <th class="td--center">Total</th>
+                            <th class="td--center">Inseridos</th>
+                            <th class="td--center">Atualizados</th>
+                            <th class="td--center">Ignorados</th>
+                            <th class="td--center">Erros</th>
                             <th>Status</th>
                             <th>Tempo</th>
                         </tr>
@@ -198,7 +198,7 @@
                   onsubmit="return confirm('Deseja realmente importar estes dados?')">
                 <th:block th:replace="~{fragments/csrf :: token}"></th:block>
                 <input type="hidden" name="tipoEntidade" th:value="${preview.tipoEntidade}">
-                <input type="file" name="arquivo" accept=".csv" style="display: none;" id="arquivo-reimport">
+                <input type="file" name="arquivo" accept=".csv" class="import-file-hidden" id="arquivo-reimport">
                 <div class="acoes">
                     <button type="submit" class="btn-editar">Importar Dados</button>
                 </div>
@@ -207,7 +207,7 @@
 
         <!-- RESULTADO -->
         <div th:if="${resultado != null}" class="import-card import-card--resultado">
-            <h2 class="import-card__title--lg" style="margin-bottom: 16px;">Resultado da Importação</h2>
+            <h2 class="import-card__title--lg import-result-title">Resultado da Importação</h2>
             <p class="import-card__subtitle">
                 Tipo: <strong th:text="${resultado.tipoEntidade}">tipo</strong> —
                 Total: <strong th:text="${resultado.totalRegistros}">0</strong> registros —
@@ -235,11 +235,11 @@
 
             <!-- Erros detalhados -->
             <div th:if="${resultado.temErros()}" class="import-banner import-banner--danger">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <div class="import-banner-header">
                     <strong class="import-banner__title--danger">Erros encontrados:</strong>
                 </div>
 
-                <div th:if="${!#lists.isEmpty(resultado.errosDetalhados)}" class="import-table-wrap" style="margin-bottom: 12px;">
+                <div th:if="${!#lists.isEmpty(resultado.errosDetalhados)}" class="import-table-wrap import-table-wrap--spaced">
                     <table class="import-table import-table--errors">
                         <thead>
                             <tr>
@@ -269,7 +269,7 @@
 
             <div class="acoes import-footer">
                 <a th:href="@{/admin/importacao}" class="btn-editar">Nova Importação</a>
-                <a th:href="@{/admin}" class="btn-editar import-footer .btn-editar--ghost">Painel Admin</a>
+                <a th:href="@{/admin}" class="btn-editar import-footer btn-editar--ghost">Painel Admin</a>
             </div>
         </div>
 

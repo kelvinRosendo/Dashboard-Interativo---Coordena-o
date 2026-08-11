@@ -83,7 +83,7 @@
                 <small>Pedem atencao</small>
             </article>
         </div>
-        <div class="admin-stat-grid" style="margin-top: 0.75rem;">
+        <div class="admin-stat-grid admin-stat-grid--secondary">
             <article class="admin-stat-card">
                 <span>Usuarios Ativos</span>
                 <strong th:text="${dashboard.indicadores.usuariosAtivos}">0</strong>
@@ -314,6 +314,10 @@
                             <span th:text="${'Criada por: ' + demanda.criadaPor}">Criada por</span>
                         </div>
                     </article>
+                </div>
+
+                <div th:if="${dashboard.demandas == null or #lists.isEmpty(dashboard.demandas)}" class="admin-empty">
+                    Nenhuma demanda registrada.
                 </div>
             </section>
         </div>

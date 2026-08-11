@@ -7681,3 +7681,112 @@ select option,
     background: var(--surface-3);
 }
 
+/* ===================================== */
+/* FORM LOADING STATE                    */
+/* ===================================== */
+.btn--loading {
+    pointer-events: none;
+    opacity: 0.7;
+    position: relative;
+}
+
+.btn-spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+/* ===================================== */
+/* ERROR PAGE                            */
+/* ===================================== */
+.error-card {
+    max-width: 480px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.error-actions {
+    margin-top: 24px;
+}
+
+.error-login-link {
+    text-decoration: none;
+}
+
+.error-links {
+    margin-top: 16px;
+}
+
+/* ===================================== */
+/* IMPORT PAGE UTILITIES                 */
+/* ===================================== */
+.import-file-hidden {
+    display: none;
+}
+
+.import-result-title {
+    margin-bottom: 16px;
+}
+
+.import-banner-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.import-table-wrap--spaced {
+    margin-bottom: 12px;
+}
+
+.td--center {
+    text-align: center;
+}
+
+/* ===================================== */
+/* ADMIN EMPTY STATE                     */
+/* ===================================== */
+.admin-empty {
+    padding: 32px 24px;
+    text-align: center;
+    color: var(--subtle);
+    font-style: italic;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+}
+
+/* ===================================== */
+/* ADMIN STAT GRID SECONDARY             */
+/* ===================================== */
+.admin-stat-grid--secondary {
+    margin-top: 0.75rem;
+}
+
+/* ===================================== */
+/* VISUALLY HIDDEN (screen readers)      */
+/* ===================================== */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ===================================== */
+/* TABLE SCROLL WRAPPER                  */
+/* ===================================== */
+.usuarios-tabela-wrap--scroll {
+    overflow-x: auto;
+}
+
