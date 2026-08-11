@@ -23,7 +23,8 @@ public class RedirectDiagnosticFilter extends OncePerRequestFilter {
 
     private static final Logger log = LoggerFactory.getLogger("REDIRECT_DIAGNOSTIC");
     private static final String SESSION_KEY = "_redirect_chain";
-    private static final int MAX_CHAIN_SIZE = 20;
+    private static final int MAX_CHAIN_SIZE = 15;
+    private static final int LOOP_THRESHOLD = 3;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
@@ -31,54 +32,52 @@ public class RedirectDiagnosticFilter extends OncePerRequestFilter {
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
 
         String uri = request.getRequestURI();
-        String email = resolverEmail();
-        HttpSession session = request.getSession(false);
 
-        @SuppressWarnings("unchecked")
-        List<String> chain = session != null
-                ? (List<String>) session.getAttribute(SESSION_KEY)
-                : null;
-
-        if (chain == null) {
-            chain = new ArrayList<>();
+        if (isStaticResource(uri)) {
+            filterChain.doFilter(request, response);
+            return;
         }
 
-        int repeticoes = contarRepeticoes(chain, uri);
-
-        log.info("[REDIRECT] uri={} email={} chain_tamanho={} repeticoes_este_uri={}",
-                uri, email, chain.size(), repeticoes);
-
-        if (repeticoes >= 2) {
-            log.error("[REDIRECT LOOP DETECTADO] uri={} email={} chain_completa={}",
-                    uri, email, chain);
-        }
-
-        if (chain.size() >= MAX_CHAIN_SIZE) {
-            log.error("[REDIRECT CHAIN MUITO LONGA] uri={} email={} chain_completa={}",
-                    uri, email, chain);
-        }
-
-        chain.add(uri);
-        if (chain.size() > MAX_CHAIN_SIZE) {
-            chain = new ArrayList<>(chain.subList(chain.size() - MAX_CHAIN_SIZE, chain.size()));
-        }
-
-        if (session != null) {
-            session.setAttribute(SESSION_KEY, chain);
-        }
-
-        int statusAnterior = response.getStatus();
         filterChain.doFilter(request, response);
-        int statusAtual = response.getStatus();
 
-        if (statusAtual == 302 || statusAtual == 301) {
+        int status = response.getStatus();
+
+        if (status == 301 || status == 302) {
             String location = response.getHeader("Location");
-            log.info("[REDIRECT RESPONSE] {} → {} (status={})", uri, location, statusAtual);
-        }
+            String email = resolverEmail();
 
-        if (statusAnterior == 200 && statusAtual == 302) {
-            log.info("[REDIRECT CHAIN ATUAL] {}", chain);
+            HttpSession session = request.getSession(true);
+            @SuppressWarnings("unchecked")
+            List<String> chain = (List<String>) session.getAttribute(SESSION_KEY);
+            if (chain == null) {
+                chain = new ArrayList<>();
+            }
+
+            chain.add(uri);
+            if (chain.size() > MAX_CHAIN_SIZE) {
+                chain = new ArrayList<>(chain.subList(chain.size() - MAX_CHAIN_SIZE, chain.size()));
+            }
+            session.setAttribute(SESSION_KEY, chain);
+
+            log.debug("[REDIRECT] {} -> {} (status={})", uri, location, status);
+
+            int repeticoes = contarRepeticoes(chain, uri);
+            if (repeticoes >= LOOP_THRESHOLD) {
+                log.warn("[POSSIVEL REDIRECT LOOP] uri={} email={} chain={}", uri, email, chain);
+            }
+        } else if (status == 200) {
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                session.removeAttribute(SESSION_KEY);
+            }
         }
+    }
+
+    private boolean isStaticResource(String uri) {
+        return uri.startsWith("/css/") || uri.startsWith("/js/") || uri.startsWith("/img/")
+                || uri.endsWith(".css") || uri.endsWith(".js") || uri.endsWith(".png")
+                || uri.endsWith(".jpg") || uri.endsWith(".ico") || uri.endsWith(".svg")
+                || uri.endsWith(".woff") || uri.endsWith(".woff2");
     }
 
     private int contarRepeticoes(List<String> chain, String uri) {

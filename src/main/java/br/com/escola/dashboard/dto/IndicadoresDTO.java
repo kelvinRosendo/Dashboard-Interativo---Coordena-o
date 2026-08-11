@@ -2,6 +2,7 @@ package br.com.escola.dashboard.dto;
 
 public record IndicadoresDTO(
         long demandasAbertas,
+        long demandasPendentes,
         long demandasAtrasadas,
         long demandasConcluidas,
         long demandasEmAndamento,
@@ -15,6 +16,6 @@ public record IndicadoresDTO(
     }
 
     public static IndicadoresDTO vazio() {
-        return new IndicadoresDTO(0, 0, 0, 0, 0, 0, 0, 0, 0);
+        return new IndicadoresDTO(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
     }
 }

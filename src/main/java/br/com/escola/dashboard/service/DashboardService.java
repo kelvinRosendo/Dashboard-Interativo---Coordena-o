@@ -81,12 +81,15 @@ public class DashboardService {
                 .map(DashboardMapper::toSemanaFocoDTO)
                 .orElse(SemanaFocoDTO.vazio());
 
+        var resumo = demandaService.resumoGeral();
+
         IndicadoresDTO indicadores = new IndicadoresDTO(
-                demandaService.resumoGeral().ativas(),
-                demandaService.resumoGeral().proximasDoPrazo(),
-                demandaService.resumoGeral().concluidas(),
-                demandaService.resumoGeral().emAndamento(),
-                demandaService.resumoGeral().total(),
+                resumo.ativas(),
+                resumo.pendentes(),
+                resumo.proximasDoPrazo(),
+                resumo.concluidas(),
+                resumo.emAndamento(),
+                resumo.total(),
                 usuarioRepository.countByStatus(StatusUsuario.ATIVO),
                 usuarioRepository.countByStatus(StatusUsuario.PENDENTE),
                 usuarioRepository.count(),
@@ -105,8 +108,8 @@ public class DashboardService {
                 DashboardMapper.toEventoDTOList(eventoService.listarTodos()),
                 segmentosResumo,
                 new PendenciasDTO(
-                        demandaService.resumoGeral().pendentes(),
-                        demandaService.resumoGeral().proximasDoPrazo(),
+                        resumo.pendentes(),
+                        resumo.proximasDoPrazo(),
                         0
                 )
         );
@@ -146,6 +149,7 @@ public class DashboardService {
 
         IndicadoresDTO indicadores = new IndicadoresDTO(
                 resumo.ativas(),
+                resumo.pendentes(),
                 resumo.proximasDoPrazo(),
                 resumo.concluidas(),
                 resumo.emAndamento(),
@@ -213,6 +217,7 @@ public class DashboardService {
                 usuario.getEmail(),
                 new IndicadoresDTO(
                         resumo.ativas(),
+                        resumo.pendentes(),
                         resumo.proximasDoPrazo(),
                         resumo.concluidas(),
                         resumo.emAndamento(),
