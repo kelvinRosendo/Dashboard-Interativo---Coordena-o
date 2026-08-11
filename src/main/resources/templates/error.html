@@ -23,7 +23,7 @@
             <div class="login-message login-message-error" th:if="${mensagemErro}" th:text="${mensagemErro}">
             </div>
 
-            <div class="login-message login-message-error" th:if="${!mensagemErro}">
+            <div class="login-message login-message-error" th:if="${mensagemErro == null}">
                 Ocorreu um erro inesperado. Tente novamente.
             </div>
 

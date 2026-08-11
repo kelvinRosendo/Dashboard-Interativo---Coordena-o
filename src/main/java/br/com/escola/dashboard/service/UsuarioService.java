@@ -41,7 +41,8 @@ public class UsuarioService {
 
     @Transactional
     public Usuario buscarOuCriarPorGoogle(String googleId, String email, String nome, String fotoUrl) {
-        return usuarioRepository.findByEmail(email)
+        String emailNormalizado = normalizarEmail(email);
+        return usuarioRepository.findByEmail(emailNormalizado)
                 .map(usuario -> {
                     usuario.setNome(nome);
                     if (fotoUrl != null) {
@@ -51,7 +52,7 @@ public class UsuarioService {
                         usuario.setGoogleId(googleId);
                     }
 
-                    if (isEmailAdmin(email)) {
+                    if (isEmailAdmin(emailNormalizado)) {
                         if (usuario.getPerfil() != PerfilUsuario.ADMIN) {
                             usuario.setPerfil(PerfilUsuario.ADMIN);
                         }
@@ -67,12 +68,12 @@ public class UsuarioService {
                 .orElseGet(() -> {
                     Usuario novoUsuario = new Usuario();
                     novoUsuario.setGoogleId(googleId);
-                    novoUsuario.setEmail(email);
+                    novoUsuario.setEmail(emailNormalizado);
                     novoUsuario.setNome(nome);
                     novoUsuario.setFotoUrl(fotoUrl);
                     novoUsuario.setStatus(StatusUsuario.PENDENTE);
 
-                    if (isEmailAdmin(email)) {
+                    if (isEmailAdmin(emailNormalizado)) {
                         novoUsuario.setPerfil(PerfilUsuario.ADMIN);
                         novoUsuario.setStatus(StatusUsuario.ATIVO);
                     } else {
@@ -85,7 +86,9 @@ public class UsuarioService {
     }
 
     public Usuario buscarPorEmail(String email) {
-        return usuarioRepository.findByEmail(email).orElse(null);
+        String emailNormalizado = normalizarEmail(email);
+        return usuarioRepository.findByEmail(emailNormalizado)
+                .orElse(null);
     }
 
     public Usuario buscarPorId(Long id) {
@@ -267,6 +270,10 @@ public class UsuarioService {
         dto.setDataCriacao(usuario.getDataCriacao());
         dto.setSegmentos(nomesSegmentosDoUsuario(usuario.getId()));
         return dto;
+    }
+
+    private String normalizarEmail(String email) {
+        return email == null ? "" : email.trim().toLowerCase();
     }
 
     private boolean isEmailAdmin(String email) {

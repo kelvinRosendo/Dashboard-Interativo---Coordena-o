@@ -32,6 +32,15 @@ public class DashboardController {
         Usuario usuario = usuarioService.buscarPorEmail(email);
 
         if (usuario == null) {
+            usuario = usuarioService.buscarOuCriarPorGoogle(
+                    oauth2User.getAttribute("sub") != null ? oauth2User.getAttribute("sub") : null,
+                    email,
+                    oauth2User.getAttribute("name"),
+                    oauth2User.getAttribute("picture") != null ? oauth2User.getAttribute("picture") : null
+            );
+        }
+
+        if (usuario == null) {
             return "redirect:/login";
         }
 

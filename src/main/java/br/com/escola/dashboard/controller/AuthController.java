@@ -29,7 +29,17 @@ public class AuthController {
                         Model model) {
         if (usuario != null) {
             String email = usuario.getAttribute("email");
+
             Usuario usuarioAtual = usuarioService.buscarPorEmail(email);
+
+            if (usuarioAtual == null) {
+                usuarioAtual = usuarioService.buscarOuCriarPorGoogle(
+                        usuario.getAttribute("sub") != null ? usuario.getAttribute("sub") : null,
+                        email,
+                        usuario.getAttribute("name"),
+                        usuario.getAttribute("picture") != null ? usuario.getAttribute("picture") : null
+                );
+            }
 
             if (usuarioAtual == null) {
                 return "redirect:/logout";
