@@ -42,13 +42,14 @@
 
         <div class="campo">
             <label for="titulo">Titulo</label>
-            <input type="text" id="titulo" th:field="*{titulo}" required th:classappend="${#fields.hasErrors('titulo')} ? ' campo-invalido'">
+            <input type="text" id="titulo" th:field="*{titulo}" required placeholder="Titulo do card" th:classappend="${#fields.hasErrors('titulo')} ? ' campo-invalido'">
             <small class="campo-erro" role="alert" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}">Erro</small>
         </div>
 
         <div class="campo">
             <label for="categoria">Tipo de Card</label>
             <select id="categoria" th:field="*{categoria}" required th:classappend="${#fields.hasErrors('categoria')} ? ' campo-invalido'">
+                <option value="">Selecione o tipo...</option>
                 <option value="EVENTO">Novo Evento</option>
                 <option value="FALTA_PROFESSOR">Falta de Professores</option>
                 <option value="SUBSTITUICAO">Substituicao</option>
@@ -95,7 +96,7 @@
 
         <div class="campo campo-completo">
             <label for="descricao">Descricao</label>
-            <textarea id="descricao" th:field="*{descricao}" rows="3" th:classappend="${#fields.hasErrors('descricao')} ? ' campo-invalido'"></textarea>
+            <textarea id="descricao" th:field="*{descricao}" rows="3" placeholder="Descricao do card" th:classappend="${#fields.hasErrors('descricao')} ? ' campo-invalido'"></textarea>
             <small class="campo-erro" role="alert" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}">Erro</small>
         </div>
 

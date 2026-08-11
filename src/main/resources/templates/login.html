@@ -84,7 +84,9 @@
                class="google-login-button"
                title="Entrar com Google"
                th:href="@{/oauth2/authorization/google}"
-               onclick="this.classList.add('google-login-button--loading')">
+               role="button"
+               aria-busy="false"
+               onclick="this.classList.add('google-login-button--loading'); this.setAttribute('aria-busy','true')">
                 <span class="google-mark">G</span>
                 <span class="google-login-button__text">Entrar com Google</span>
             </a>

@@ -27,7 +27,7 @@
         <section class="admin-section">
             <div class="admin-section__header">
                 <h1 class="admin-section__title" th:text="${modoEdicao} ? 'Editar Usuario' : 'Aprovar Usuario'">Editar Usuario</h1>
-                <a th:href="@{/admin/usuarios}" class="btn btn--secondary">Voltar</a>
+                <a th:href="@{/admin/usuarios}" class="btn-voltar">Voltar</a>
             </div>
 
             <div th:if="${mensagemErro}" class="form-alerta form-alerta--erro" role="alert" aria-live="polite">

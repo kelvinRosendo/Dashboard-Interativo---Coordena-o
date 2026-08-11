@@ -101,19 +101,19 @@
                     </label>
                 </div>
 
-                <div class="relatorio-form__actions">
+                <div class="acoes">
                     <th:block th:if="${relatorio.status.name() == 'RASCUNHO'}">
-                        <button type="submit" class="relatorio-form__button relatorio-form__button--primary">
-                            💾 Salvar Rascunho
+                        <button type="submit" class="btn-editar">
+                            Salvar Rascunho
                         </button>
                         <button type="button"
-                                class="relatorio-form__button relatorio-form__button--success"
+                                class="btn-editar"
                                 onclick="document.getElementById('formFinalizar').submit()">
-                            ✓ Finalizar Relatório
+                            Finalizar Relatorio
                         </button>
                     </th:block>
                     <th:block th:if="${relatorio.status.name() == 'FINALIZADO'}">
-                        <a th:href="@{/admin}" class="relatorio-form__button relatorio-form__button--secondary">
+                        <a th:href="@{/admin}" class="btn-voltar">
                             Voltar
                         </a>
                     </th:block>

@@ -96,6 +96,7 @@
                     <input type="date"
                            id="dataPrazo"
                            th:field="*{dataPrazo}"
+                           placeholder="dd/mm/aaaa"
                            th:classappend="${#fields.hasErrors('dataPrazo')} ? ' campo-invalido'">
                     <small class="campo-erro" role="alert" th:if="${#fields.hasErrors('dataPrazo')}" th:errors="*{dataPrazo}">Erro</small>
                 </div>
