@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" th:href="@{/img/logo-colegio-satelite.png}">
     <title>Organiza+ - Login</title>
     <link rel="icon" type="image/png" th:href="@{/img/logo-colegio-satelite.png}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
@@ -80,9 +83,10 @@
             <a th:if="${googleConfigurado}"
                class="google-login-button"
                title="Entrar com Google"
-               th:href="@{/oauth2/authorization/google}">
+               th:href="@{/oauth2/authorization/google}"
+               onclick="this.classList.add('google-login-button--loading')">
                 <span class="google-mark">G</span>
-                <span>Entrar com Google</span>
+                <span class="google-login-button__text">Entrar com Google</span>
             </a>
 
             <div class="oauth-setup-alert" th:if="${!googleConfigurado}">

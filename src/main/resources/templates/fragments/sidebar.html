@@ -17,6 +17,9 @@
     })();
 </script>
 
+<button class="sidebar-hamburger" data-sidebar-hamburger aria-label="Abrir menu">☰</button>
+<div class="sidebar-overlay" data-sidebar-overlay></div>
+
 <aside class="app-sidebar"
        th:fragment="sidebar(active, tvMode)"
        th:classappend="${tvMode} ? ' app-sidebar--tv' : ''">

@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" th:href="@{/img/logo-colegio-satelite.png}">
     <title>Organiza+ - Importação de Dados</title>
     <link rel="icon" type="image/png" th:href="@{/img/logo-colegio-satelite.png}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
@@ -37,92 +40,82 @@
     <p class="admin-flash admin-flash--error" aria-live="polite"
        th:if="${mensagemErro != null}" th:text="${mensagemErro}"></p>
 
-    <section class="admin-section" style="max-width: 1080px; margin: 0 auto; padding: 0 24px;">
+    <section class="admin-section import-page-layout">
 
         <!-- DASHBOARD: Última Importação -->
-        <div th:if="${ultimaImportacao != null}"
-             style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 24px;">
-            <h2 style="font-size: 1rem; color: var(--muted); margin-bottom: 16px;">Última importação realizada</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px;">
+        <div th:if="${ultimaImportacao != null}" class="import-card">
+            <h2 class="import-card__title">Última importação realizada</h2>
+            <div class="import-stat-grid">
                 <div>
-                    <div style="font-size: 0.75rem; color: var(--subtle);">Data</div>
-                    <div style="font-size: 1rem; font-weight: 600;" th:text="${#temporals.format(ultimaImportacao.dataImportacao, 'dd/MM/yyyy')}">-</div>
-                    <div style="font-size: 0.85rem; color: var(--muted);" th:text="${#temporals.format(ultimaImportacao.dataImportacao, 'HH:mm')}">-</div>
+                    <div class="import-stat-label">Data</div>
+                    <div class="import-stat-value" th:text="${#temporals.format(ultimaImportacao.dataImportacao, 'dd/MM/yyyy')}">-</div>
+                    <div class="import-stat-value import-stat-value--sm" th:text="${#temporals.format(ultimaImportacao.dataImportacao, 'HH:mm')}">-</div>
                 </div>
                 <div>
-                    <div style="font-size: 0.75rem; color: var(--subtle);">Tipo</div>
-                    <div style="font-size: 1rem; font-weight: 600; text-transform: capitalize;" th:text="${ultimaImportacao.tipoEntidade}">-</div>
+                    <div class="import-stat-label">Tipo</div>
+                    <div class="import-stat-value import-stat-value--capitalize" th:text="${ultimaImportacao.tipoEntidade}">-</div>
                 </div>
                 <div>
-                    <div style="font-size: 0.75rem; color: var(--subtle);">Registros</div>
-                    <div style="font-size: 1rem; font-weight: 600;" th:text="${ultimaImportacao.totalRegistros}">0</div>
+                    <div class="import-stat-label">Registros</div>
+                    <div class="import-stat-value" th:text="${ultimaImportacao.totalRegistros}">0</div>
                 </div>
                 <div>
-                    <div style="font-size: 0.75rem; color: var(--subtle);">Inseridos</div>
-                    <div style="font-size: 1rem; font-weight: 600; color: var(--success);" th:text="${ultimaImportacao.inseridos}">0</div>
+                    <div class="import-stat-label">Inseridos</div>
+                    <div class="import-stat-value import-stat-value--success" th:text="${ultimaImportacao.inseridos}">0</div>
                 </div>
                 <div>
-                    <div style="font-size: 0.75rem; color: var(--subtle);">Atualizados</div>
-                    <div style="font-size: 1rem; font-weight: 600; color: var(--blue-2);" th:text="${ultimaImportacao.atualizados}">0</div>
+                    <div class="import-stat-label">Atualizados</div>
+                    <div class="import-stat-value import-stat-value--info" th:text="${ultimaImportacao.atualizados}">0</div>
                 </div>
                 <div>
-                    <div style="font-size: 0.75rem; color: var(--subtle);">Status</div>
-                    <div style="font-size: 1rem; font-weight: 600;"
-                         th:style="${ultimaImportacao.status == 'SUCESSO'} ? 'color: var(--success)' : 'color: var(--danger)'"
+                    <div class="import-stat-label">Status</div>
+                    <div class="import-stat-value"
+                         th:classappend="${ultimaImportacao.status == 'SUCESSO'} ? 'import-stat-value--success' : 'import-stat-value--danger'"
                          th:text="${ultimaImportacao.status}">-</div>
                 </div>
                 <div>
-                    <div style="font-size: 0.75rem; color: var(--subtle);">Tempo</div>
-                    <div style="font-size: 1rem; font-weight: 600;" th:text="${ultimaImportacao.tempoFormatado}">-</div>
+                    <div class="import-stat-label">Tempo</div>
+                    <div class="import-stat-value" th:text="${ultimaImportacao.tempoFormatado}">-</div>
                 </div>
                 <div>
-                    <div style="font-size: 0.75rem; color: var(--subtle);">Usuário</div>
-                    <div style="font-size: 0.85rem; font-weight: 500;" th:text="${ultimaImportacao.usuario}">-</div>
+                    <div class="import-stat-label">Usuário</div>
+                    <div class="import-stat-value import-stat-value--sm" th:text="${ultimaImportacao.usuario}">-</div>
                 </div>
             </div>
         </div>
 
         <!-- HISTÓRICO DE IMPORTAÇÕES -->
-        <div th:if="${historico != null and !#lists.isEmpty(historico)}"
-             style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 24px;">
-            <h2 style="font-size: 1rem; color: var(--muted); margin-bottom: 16px;">Histórico de Importações</h2>
-            <div style="overflow-x: auto;">
-                <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem;">
+        <div th:if="${historico != null and !#lists.isEmpty(historico)}" class="import-card">
+            <h2 class="import-card__title">Histórico de Importações</h2>
+            <div class="import-table-wrap">
+                <table class="import-table">
                     <thead>
                         <tr>
-                            <th style="padding: 10px 12px; text-align: left; border-bottom: 2px solid var(--border-strong); color: var(--blue-2);">Data</th>
-                            <th style="padding: 10px 12px; text-align: left; border-bottom: 2px solid var(--border-strong); color: var(--blue-2);">Tipo</th>
-                            <th style="padding: 10px 12px; text-align: center; border-bottom: 2px solid var(--border-strong); color: var(--blue-2);">Total</th>
-                            <th style="padding: 10px 12px; text-align: center; border-bottom: 2px solid var(--border-strong); color: var(--blue-2);">Inseridos</th>
-                            <th style="padding: 10px 12px; text-align: center; border-bottom: 2px solid var(--border-strong); color: var(--blue-2);">Atualizados</th>
-                            <th style="padding: 10px 12px; text-align: center; border-bottom: 2px solid var(--border-strong); color: var(--blue-2);">Ignorados</th>
-                            <th style="padding: 10px 12px; text-align: center; border-bottom: 2px solid var(--border-strong); color: var(--blue-2);">Erros</th>
-                            <th style="padding: 10px 12px; text-align: left; border-bottom: 2px solid var(--border-strong); color: var(--blue-2);">Status</th>
-                            <th style="padding: 10px 12px; text-align: left; border-bottom: 2px solid var(--border-strong); color: var(--blue-2);">Tempo</th>
+                            <th>Data</th>
+                            <th>Tipo</th>
+                            <th style="text-align: center;">Total</th>
+                            <th style="text-align: center;">Inseridos</th>
+                            <th style="text-align: center;">Atualizados</th>
+                            <th style="text-align: center;">Ignorados</th>
+                            <th style="text-align: center;">Erros</th>
+                            <th>Status</th>
+                            <th>Tempo</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:each="log : ${historico}">
-                            <td style="padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--muted);"
-                                th:text="${#temporals.format(log.dataImportacao, 'dd/MM/yy HH:mm')}">-</td>
-                            <td style="padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--muted); text-transform: capitalize;"
-                                th:text="${log.tipoEntidade}">-</td>
-                            <td style="padding: 8px 12px; border-bottom: 1px solid var(--border); text-align: center; color: var(--text);"
-                                th:text="${log.totalRegistros}">0</td>
-                            <td style="padding: 8px 12px; border-bottom: 1px solid var(--border); text-align: center; color: var(--success);"
-                                th:text="${log.inseridos}">0</td>
-                            <td style="padding: 8px 12px; border-bottom: 1px solid var(--border); text-align: center; color: var(--blue-2);"
-                                th:text="${log.atualizados}">0</td>
-                            <td style="padding: 8px 12px; border-bottom: 1px solid var(--border); text-align: center; color: var(--subtle);"
-                                th:text="${log.ignorados}">0</td>
-                            <td style="padding: 8px 12px; border-bottom: 1px solid var(--border); text-align: center;"
-                                 th:style="${log.totalErros > 0} ? 'color: var(--danger)' : 'color: var(--subtle)'"
+                            <td th:text="${#temporals.format(log.dataImportacao, 'dd/MM/yy HH:mm')}">-</td>
+                            <td class="import-stat-value--capitalize" th:text="${log.tipoEntidade}">-</td>
+                            <td class="td--center" th:text="${log.totalRegistros}">0</td>
+                            <td class="td--center import-stat-value--success" th:text="${log.inseridos}">0</td>
+                            <td class="td--center import-stat-value--info" th:text="${log.atualizados}">0</td>
+                            <td class="td--center import-stat-value--muted" th:text="${log.ignorados}">0</td>
+                            <td class="td--center"
+                                th:classappend="${log.totalErros > 0} ? 'import-stat-value--danger' : 'import-stat-value--muted'"
                                 th:text="${log.totalErros}">0</td>
-                            <td style="padding: 8px 12px; border-bottom: 1px solid var(--border);"
-                                 th:style="${log.status == 'SUCESSO'} ? 'color: var(--success)' : 'color: var(--danger)'"
+                            <td th:classappend="${log.status == 'SUCESSO'} ? 'import-stat-value--success' : 'import-stat-value--danger'"
                                 th:text="${log.status}">-</td>
-                            <td style="padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--muted);"
-                                th:text="${log.tempoFormatado}">-</td>
+                            <td th:text="${log.tempoFormatado}">-</td>
                         </tr>
                     </tbody>
                 </table>
@@ -130,17 +123,16 @@
         </div>
 
         <!-- FORMULARIO DE UPLOAD -->
-        <div th:if="${preview == null and resultado == null}"
-             style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px;">
-            <h2 style="margin-bottom: 8px; font-size: 1.1rem;">Nova Importação</h2>
-            <p style="color: var(--muted); margin-bottom: 24px;">
+        <div th:if="${preview == null and resultado == null}" class="import-card import-card--form">
+            <h2 class="import-card__title--lg">Nova Importação</h2>
+            <p class="import-card__subtitle">
                 Selecione o tipo de dados e o arquivo CSV. Separador: <strong>ponto e vírgula (;)</strong>.
             </p>
 
             <form th:action="@{/admin/importacao/preview}" method="post" enctype="multipart/form-data">
                 <th:block th:replace="~{fragments/csrf :: token}"></th:block>
 
-                <div class="campo" style="margin-bottom: 16px;">
+                <div class="campo import-field">
                     <label for="tipoEntidade">Tipo de Dados</label>
                     <select id="tipoEntidade" name="tipoEntidade" required>
                         <option value="">Selecione...</option>
@@ -148,9 +140,9 @@
                     </select>
                 </div>
 
-                <div class="campo" style="margin-bottom: 24px;">
+                <div class="campo import-field--lg">
                     <label for="arquivo">Arquivo CSV</label>
-                    <input type="file" id="arquivo" name="arquivo" accept=".csv" required style="color: var(--muted);">
+                    <input type="file" id="arquivo" name="arquivo" accept=".csv" required>
                 </div>
 
                 <div class="acoes">
@@ -160,53 +152,46 @@
         </div>
 
         <!-- PREVIEW -->
-        <div th:if="${preview != null}"
-             style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <div th:if="${preview != null}" class="import-card import-card--preview">
+            <div class="import-preview-header">
                 <div>
-                    <h2 style="font-size: 1.1rem;">Prévia da Importação</h2>
-                    <p style="color: var(--muted);">
+                    <h2 class="import-card__title--lg">Prévia da Importação</h2>
+                    <p class="import-card__subtitle">
                         <span th:text="${preview.nomeArquivo}">arquivo.csv</span> —
                         <strong th:text="${preview.totalLinhas}">0</strong> registros —
                         Tipo: <strong th:text="${preview.tipoEntidade}">tipo</strong>
                     </p>
                 </div>
-                <a th:href="@{/admin/importacao}" class="btn-editar" style="text-decoration: none; background: var(--surface-2); border: 1px solid var(--border); font-size: 0.85rem;">← Voltar</a>
+                <a th:href="@{/admin/importacao}" class="btn-editar import-back-link">← Voltar</a>
             </div>
 
             <!-- Validação -->
-            <div th:if="${!#lists.isEmpty(preview.errosValidacao)}"
-                 style="background: rgba(250, 204, 21, 0.1); border: 1px solid rgba(250, 204, 21, 0.3); border-radius: var(--radius); padding: 16px; margin-bottom: 20px;">
-                <strong style="color: var(--yellow);">Validação encontrou <span th:text="${#lists.size(preview.errosValidacao)}">0</span> problema(s):</strong>
-                <ul style="margin-top: 8px; padding-left: 20px; color: var(--muted); max-height: 150px; overflow-y: auto;">
-                    <li th:each="erro : ${preview.errosValidacao}" th:text="${erro}" style="margin-bottom: 4px;">erro</li>
+            <div th:if="${!#lists.isEmpty(preview.errosValidacao)}" class="import-banner import-banner--warning">
+                <strong class="import-banner__title">Validação encontrou <span th:text="${#lists.size(preview.errosValidacao)}">0</span> problema(s):</strong>
+                <ul class="import-banner__list">
+                    <li th:each="erro : ${preview.errosValidacao}" th:text="${erro}">erro</li>
                 </ul>
             </div>
 
-            <div th:if="${#lists.isEmpty(preview.errosValidacao)}"
-                 style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius); padding: 12px; margin-bottom: 20px; color: var(--success);">
+            <div th:if="${#lists.isEmpty(preview.errosValidacao)}" class="import-banner import-banner--success">
                 Validação passed — nenhuma problema crítico encontrado.
             </div>
 
             <!-- Tabela de preview -->
-            <div th:if="${!#lists.isEmpty(preview.linhasPreview)}" style="overflow-x: auto; margin-bottom: 24px;">
-                <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem;">
+            <div th:if="${!#lists.isEmpty(preview.linhasPreview)}" class="import-table-wrap">
+                <table class="import-table">
                     <thead>
                         <tr>
-                            <th th:each="col : ${preview.colunas}"
-                                style="padding: 10px 12px; text-align: left; border-bottom: 2px solid var(--border-strong); color: var(--blue-2); font-weight: 600;"
-                                th:text="${col}">col</th>
+                            <th th:each="col : ${preview.colunas}" th:text="${col}">col</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:each="linha : ${preview.linhasPreview}">
-                            <td th:each="col : ${preview.colunas}"
-                                style="padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--muted);"
-                                th:text="${linha[col]}">val</td>
+                            <td th:each="col : ${preview.colunas}" th:text="${linha[col]}">val</td>
                         </tr>
                     </tbody>
                 </table>
-                <p style="color: var(--subtle); font-size: 0.75rem; margin-top: 8px;">Mostrando primeiras 5 linhas de <span th:text="${preview.totalLinhas}">0</span>.</p>
+                <p class="import-hint">Mostrando primeiras 5 linhas de <span th:text="${preview.totalLinhas}">0</span>.</p>
             </div>
 
             <form th:action="@{/admin/importacao/executar}" method="post" enctype="multipart/form-data"
@@ -221,74 +206,70 @@
         </div>
 
         <!-- RESULTADO -->
-        <div th:if="${resultado != null}"
-             style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px;">
-            <h2 style="font-size: 1.1rem; margin-bottom: 16px;">Resultado da Importação</h2>
-            <p style="color: var(--muted); margin-bottom: 24px;">
+        <div th:if="${resultado != null}" class="import-card import-card--resultado">
+            <h2 class="import-card__title--lg" style="margin-bottom: 16px;">Resultado da Importação</h2>
+            <p class="import-card__subtitle">
                 Tipo: <strong th:text="${resultado.tipoEntidade}">tipo</strong> —
                 Total: <strong th:text="${resultado.totalRegistros}">0</strong> registros —
                 Tempo: <strong th:text="${resultado.tempoFormatado}">-</strong>
             </p>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 16px; margin-bottom: 24px;">
-                <div style="background: rgba(34, 197, 94, 0.12); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius); padding: 16px; text-align: center;">
-                    <div style="font-size: 0.75rem; color: var(--muted);">Inseridos</div>
-                    <div style="font-size: 1.8rem; font-weight: 700; color: var(--success);" th:text="${resultado.inseridos}">0</div>
+            <div class="import-stat-grid import-stat-grid--result">
+                <div class="import-result-card import-result-card--success">
+                    <div class="import-result-card__label">Inseridos</div>
+                    <div class="import-result-card__value import-result-card__value--success" th:text="${resultado.inseridos}">0</div>
                 </div>
-                <div style="background: rgba(59, 130, 246, 0.12); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius); padding: 16px; text-align: center;">
-                    <div style="font-size: 0.75rem; color: var(--muted);">Atualizados</div>
-                    <div style="font-size: 1.8rem; font-weight: 700; color: var(--blue-2);" th:text="${resultado.atualizados}">0</div>
+                <div class="import-result-card import-result-card--info">
+                    <div class="import-result-card__label">Atualizados</div>
+                    <div class="import-result-card__value import-result-card__value--info" th:text="${resultado.atualizados}">0</div>
                 </div>
-                <div style="background: rgba(148, 163, 184, 0.12); border: 1px solid rgba(148, 163, 184, 0.3); border-radius: var(--radius); padding: 16px; text-align: center;">
-                    <div style="font-size: 0.75rem; color: var(--muted);">Ignorados</div>
-                    <div style="font-size: 1.8rem; font-weight: 700; color: var(--subtle);" th:text="${resultado.ignorados}">0</div>
+                <div class="import-result-card import-result-card--muted">
+                    <div class="import-result-card__label">Ignorados</div>
+                    <div class="import-result-card__value import-result-card__value--muted" th:text="${resultado.ignorados}">0</div>
                 </div>
-                <div style="background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: var(--radius); padding: 16px; text-align: center;">
-                    <div style="font-size: 0.75rem; color: var(--muted);">Erros</div>
-                    <div style="font-size: 1.8rem; font-weight: 700; color: var(--danger);" th:text="${resultado.totalErros}">0</div>
+                <div class="import-result-card import-result-card--danger">
+                    <div class="import-result-card__label">Erros</div>
+                    <div class="import-result-card__value import-result-card__value--danger" th:text="${resultado.totalErros}">0</div>
                 </div>
             </div>
 
             <!-- Erros detalhados -->
-            <div th:if="${resultado.temErros()}"
-                 style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25); border-radius: var(--radius); padding: 16px; margin-bottom: 24px;">
+            <div th:if="${resultado.temErros()}" class="import-banner import-banner--danger">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                    <strong style="color: var(--danger);">Erros encontrados:</strong>
+                    <strong class="import-banner__title--danger">Erros encontrados:</strong>
                 </div>
 
-                <!-- Tabela de erros detalhados -->
-                <div th:if="${!#lists.isEmpty(resultado.errosDetalhados)}" style="overflow-x: auto; margin-bottom: 12px;">
-                    <table style="width: 100%; border-collapse: collapse; font-size: 0.8rem;">
+                <div th:if="${!#lists.isEmpty(resultado.errosDetalhados)}" class="import-table-wrap" style="margin-bottom: 12px;">
+                    <table class="import-table import-table--errors">
                         <thead>
                             <tr>
-                                <th style="padding: 8px; text-align: left; border-bottom: 1px solid var(--border); color: var(--danger);">Linha</th>
-                                <th style="padding: 8px; text-align: left; border-bottom: 1px solid var(--border); color: var(--danger);">Campo</th>
-                                <th style="padding: 8px; text-align: left; border-bottom: 1px solid var(--border); color: var(--danger);">Erro</th>
-                                <th style="padding: 8px; text-align: left; border-bottom: 1px solid var(--border); color: var(--danger);">Valor Recebido</th>
+                                <th>Linha</th>
+                                <th>Campo</th>
+                                <th>Erro</th>
+                                <th>Valor Recebido</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr th:each="erro : ${resultado.errosDetalhados}">
-                                <td style="padding: 6px 8px; border-bottom: 1px solid var(--border); color: var(--muted);" th:text="${erro.linha()}">-</td>
-                                <td style="padding: 6px 8px; border-bottom: 1px solid var(--border); color: var(--muted);" th:text="${erro.campo()}">-</td>
-                                <td style="padding: 6px 8px; border-bottom: 1px solid var(--border); color: var(--muted);" th:text="${erro.erro()}">-</td>
-                                <td style="padding: 6px 8px; border-bottom: 1px solid var(--border); color: var(--muted); font-style: italic;" th:text="${erro.valorRecebido()}">-</td>
+                                <td th:text="${erro.linha()}">-</td>
+                                <td th:text="${erro.campo()}">-</td>
+                                <td th:text="${erro.erro()}">-</td>
+                                <td class="td--italic" th:text="${erro.valorRecebido()}">-</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <!-- Erros gerais -->
                 <div th:if="${!#lists.isEmpty(resultado.erros)}">
-                    <ul style="padding-left: 20px; color: var(--muted); max-height: 150px; overflow-y: auto;">
-                        <li th:each="erro : ${resultado.erros}" th:text="${erro}" style="margin-bottom: 4px;">erro</li>
+                    <ul class="import-banner__list">
+                        <li th:each="erro : ${resultado.erros}" th:text="${erro}">erro</li>
                     </ul>
                 </div>
             </div>
 
-            <div class="acoes" style="gap: 12px;">
-                <a th:href="@{/admin/importacao}" class="btn-editar" style="text-decoration: none;">Nova Importação</a>
-                <a th:href="@{/admin}" class="btn-editar" style="text-decoration: none; background: var(--surface-2); border: 1px solid var(--border);">Painel Admin</a>
+            <div class="acoes import-footer">
+                <a th:href="@{/admin/importacao}" class="btn-editar">Nova Importação</a>
+                <a th:href="@{/admin}" class="btn-editar import-footer .btn-editar--ghost">Painel Admin</a>
             </div>
         </div>
 

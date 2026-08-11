@@ -74,7 +74,7 @@ public final class DashboardMapper {
         );
     }
 
-    public static ComunicadoDTO toComunicadoDTO(comunicado c) {
+    public static ComunicadoDTO toComunicadoDTO(Comunicado c) {
         return new ComunicadoDTO(
                 c.getId(),
                 c.getTitulo(),
@@ -141,7 +141,7 @@ public final class DashboardMapper {
         return demandas.stream().map(DashboardMapper::toDemandaResumoDTO).toList();
     }
 
-    public static List<ComunicadoDTO> toComunicadoDTOList(List<comunicado> comunicados) {
+    public static List<ComunicadoDTO> toComunicadoDTOList(List<Comunicado> comunicados) {
         return comunicados.stream().map(DashboardMapper::toComunicadoDTO).toList();
     }
 

@@ -5,7 +5,7 @@ import br.com.escola.dashboard.dto.ImportacaoResultadoDTO;
 import br.com.escola.dashboard.entity.Aviso;
 import br.com.escola.dashboard.entity.Card;
 import br.com.escola.dashboard.entity.Coordenadora;
-import br.com.escola.dashboard.entity.comunicado;
+import br.com.escola.dashboard.entity.Comunicado;
 import br.com.escola.dashboard.entity.Demanda;
 import br.com.escola.dashboard.entity.Evento;
 import br.com.escola.dashboard.entity.Professor;
@@ -431,7 +431,7 @@ public class CsvImportService {
             return;
         }
 
-        comunicado c = new comunicado();
+        Comunicado c = new Comunicado();
         c.setTitulo(titulo);
         if (!conteudo.isEmpty()) c.setConteudo(conteudo);
         comunicadoRepository.save(c);

@@ -74,6 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initWeekFocusPreview();
     initWeekFocusCollapsible();
     initTvInfiniteAutoScroll();
+    initMobileSidebar();
 });
 
 function initSidebar() {
@@ -492,5 +493,32 @@ function initTvInfiniteAutoScroll() {
 
             window.setTimeout(startScroll, INITIAL_DELAY_MS);
         });
+    });
+}
+
+function initMobileSidebar() {
+    const hamburger = document.querySelector("[data-sidebar-hamburger]");
+    const overlay = document.querySelector("[data-sidebar-overlay]");
+    const sidebar = document.querySelector(".app-sidebar");
+
+    if (!hamburger || !sidebar) return;
+
+    const open = () => {
+        sidebar.classList.add("app-sidebar--mobile-open");
+        if (overlay) overlay.classList.add("sidebar-overlay--visible");
+        document.body.style.overflow = "hidden";
+    };
+
+    const close = () => {
+        sidebar.classList.remove("app-sidebar--mobile-open");
+        if (overlay) overlay.classList.remove("sidebar-overlay--visible");
+        document.body.style.overflow = "";
+    };
+
+    hamburger.addEventListener("click", open);
+    if (overlay) overlay.addEventListener("click", close);
+
+    sidebar.querySelectorAll("a").forEach(link => {
+        link.addEventListener("click", close);
     });
 }

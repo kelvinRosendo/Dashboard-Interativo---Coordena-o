@@ -280,7 +280,7 @@ public class DataInitializer implements CommandLineRunner {
     private void popularComunicados() {
         if (comunicadoRepository.count() > 0) return;
 
-        List<comunicado> comunicados = List.of(
+        List<Comunicado> comunicados = List.of(
                 criarComunicado("Regras de conduta para o periodo de provas",
                         "Durante o periodo de avaliacao, todos os alunos devem seguir o regimento interno. "
                         + "Celulares devem ser entregues na entrada da sala. Qualquer irregularidade sera registrada "
@@ -320,8 +320,8 @@ public class DataInitializer implements CommandLineRunner {
         return s;
     }
 
-    private comunicado criarComunicado(String titulo, String conteudo) {
-        comunicado c = new comunicado();
+    private Comunicado criarComunicado(String titulo, String conteudo) {
+        Comunicado c = new Comunicado();
         c.setTitulo(titulo);
         c.setConteudo(conteudo);
         return c;

@@ -1,6 +1,6 @@
 package br.com.escola.dashboard.service;
 
-import br.com.escola.dashboard.entity.comunicado;
+import br.com.escola.dashboard.entity.Comunicado;
 import br.com.escola.dashboard.exception.ResourceNotFoundException;
 import br.com.escola.dashboard.repository.ComunicadoRepository;
 import org.springframework.stereotype.Service;
@@ -17,20 +17,20 @@ public class ComunicadoService {
         this.comunicadoRepository = comunicadoRepository;
     }
 
-    public comunicado criar(String titulo, String conteudo) {
+    public Comunicado criar(String titulo, String conteudo) {
         if (!StringUtils.hasText(titulo)) {
             throw new IllegalArgumentException("Titulo e obrigatorio.");
         }
 
-        comunicado comunicado = new comunicado();
+        Comunicado comunicado = new Comunicado();
         comunicado.setTitulo(titulo.trim());
         comunicado.setConteudo(StringUtils.hasText(conteudo) ? conteudo.trim() : null);
 
         return comunicadoRepository.save(comunicado);
     }
 
-    
-    public List<comunicado> listarTodos() {
+
+    public List<Comunicado> listarTodos() {
         return comunicadoRepository.findAllByOrderByDataCriacaoDesc();
     }
 
