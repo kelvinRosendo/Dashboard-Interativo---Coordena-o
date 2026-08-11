@@ -6,12 +6,13 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" th:href="@{/img/logo-colegio-satelite.png}">
-    <th:title th:text="${modoEdicao} ? 'Editar Usuario' : 'Aprovar Usuario'">Editar Usuario</th:title>
+    <title th:text="${modoEdicao} ? 'Editar Usuario' : 'Aprovar Usuario'">Editar Usuario</title>
+    <link rel="icon" type="image/png" th:href="@{/img/logo-colegio-satelite.png}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body>
+<body class="admin-page">
 <div class="app-shell">
-    <th:block th:replace="~{fragments/sidebar :: sidebar('usuarios', false)}"></th:block>
+    <aside th:replace="~{fragments/sidebar :: sidebar('usuarios', false)}"></aside>
 
     <main class="app-main">
         <header class="admin-header admin-header--dashboard">
@@ -61,6 +62,7 @@
                     <div class="campo-formulario">
                         <label for="perfil" class="campo-label">Perfil</label>
                         <select id="perfil" th:field="*{perfil}" class="campo-select" required>
+                            <option value="">Selecione...</option>
                             <option th:each="p : ${perfis}" th:value="${p}" th:text="${p.titulo}"></option>
                         </select>
                         <small class="campo-erro" th:if="${#fields.hasErrors('perfil')}" th:errors="*{perfil}"></small>
@@ -69,6 +71,7 @@
                     <div class="campo-formulario">
                         <label for="status" class="campo-label">Status</label>
                         <select id="status" th:field="*{status}" class="campo-select" required>
+                            <option value="">Selecione...</option>
                             <option th:each="s : ${statusList}" th:value="${s}" th:text="${s.titulo}"></option>
                         </select>
                         <small class="campo-erro" th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></small>

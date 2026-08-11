@@ -8,7 +8,7 @@
             var saved = window.localStorage.getItem("dashboardSidebarCollapsed");
             var shell = document.querySelector(".app-shell");
             var isTv = shell && shell.classList.contains("app-shell--tv");
-            var compact = window.matchMedia("(max-width: 1100px)").matches;
+            var compact = window.matchMedia("(max-width: 980px)").matches;
             var collapsed = saved === null ? (isTv || compact) : saved === "true";
             if (collapsed) {
                 document.documentElement.classList.add("sidebar-collapsed-pending");

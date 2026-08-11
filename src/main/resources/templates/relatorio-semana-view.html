@@ -20,7 +20,7 @@
             <div class="form-header__content">
                 <span class="form-kicker">Documentação</span>
                 <h1>Relatório da Semana em Foco</h1>
-                <p th:text="${semana != null} ? 'Período: ' + ${#temporals.format(semana.dataInicio, 'dd/MM/yyyy')} + ' a ' + ${#temporals.format(semana.dataFim, 'dd/MM/yyyy')} : 'Período: não informado'">
+                <p th:text="${semana != null and semana.dataInicio != null} ? 'Período: ' + T(java.time.format.DateTimeFormatter).ofPattern('dd/MM/yyyy').format(semana.dataInicio) + (semana.dataFim != null ? ' a ' + T(java.time.format.DateTimeFormatter).ofPattern('dd/MM/yyyy').format(semana.dataFim) : '') : 'Período: não informado'">
                     Período: 11/05/2026 a 17/05/2026
                 </p>
             </div>

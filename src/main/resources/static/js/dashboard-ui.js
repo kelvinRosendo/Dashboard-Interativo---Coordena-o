@@ -86,7 +86,7 @@ function initSidebar() {
     }
 
     const shell = sidebar.closest(".app-shell");
-    const toggleButton = sidebar.querySelector("button[data-sidebar-toggle]");
+    const toggleButton = sidebar.querySelector("[data-sidebar-toggle]");
     const toggleIcon = sidebar.querySelector("[data-sidebar-toggle-icon]");
     const toggleTriggers = sidebar.querySelectorAll("[data-sidebar-toggle]");
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;

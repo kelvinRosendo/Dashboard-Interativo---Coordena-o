@@ -138,8 +138,8 @@
                                 </strong>
                             </div>
                             <div class="week-focus-control__content">
-                                <h2 th:text="${dashboard.semanaEmFoco.titulo}">Semana em Foco</h2>
-                                <p th:text="${dashboard.semanaEmFoco.descricao}">Descricao</p>
+                                <h2 th:text="${dashboard.semanaEmFoco.titulo != null ? dashboard.semanaEmFoco.titulo : 'Semana em Foco'}">Semana em Foco</h2>
+                                <p th:text="${dashboard.semanaEmFoco.descricao != null ? dashboard.semanaEmFoco.descricao : ''}">Descricao</p>
                             </div>
                             <div class="week-focus-control__meta">
                                 <span>Periodo</span>

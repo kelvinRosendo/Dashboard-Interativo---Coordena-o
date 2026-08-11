@@ -21,6 +21,9 @@
     --success: #22c55e;
     --danger: #ef4444;
     --pink: #ec4899;
+    --primary: #6366f1;
+    --primary-light: rgba(99, 102, 241, 0.16);
+    --warning: #f59e0b;
     --radius: 8px;
     --shadow: 0 14px 36px rgba(0, 0, 0, 0.22);
     --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.16);
@@ -7562,5 +7565,119 @@ html.sidebar-collapsed-pending .app-sidebar__text {
 
 @keyframes spin {
     to { transform: rotate(360deg); }
+}
+
+/* ===================================== */
+/* OPTION STYLING (dark theme fix)       */
+/* ===================================== */
+select option,
+.campo-select option {
+    background: #101827;
+    color: #f8fafc;
+    padding: 8px 12px;
+}
+
+/* ===================================== */
+/* SIDEBAR OVERLAY Z-INDEX FIX           */
+/* ===================================== */
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 79;
+    display: none;
+}
+
+/* ===================================== */
+/* FORM-CONTAINER CLASS                  */
+/* ===================================== */
+.form-container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 24px 32px;
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+}
+
+/* ===================================== */
+/* USUARIO-EDITAR FORM CLASSES           */
+/* ===================================== */
+.campo-input {
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-size: 0.9rem;
+    transition: border-color 0.2s;
+}
+
+.campo-input:focus {
+    outline: none;
+    border-color: var(--blue-2);
+}
+
+.campo-select {
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-size: 0.9rem;
+}
+
+.campo-label {
+    display: block;
+    font-weight: 600;
+    color: var(--muted);
+    margin-bottom: 6px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.campo-grupo {
+    margin-bottom: 18px;
+}
+
+.campo-erros {
+    margin-top: 4px;
+    font-size: 0.8rem;
+    color: var(--danger);
+}
+
+.btn--primary {
+    background: var(--blue);
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: var(--radius);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn--primary:hover {
+    background: var(--blue-2);
+}
+
+.btn--secondary {
+    background: var(--surface-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 10px 24px;
+    border-radius: var(--radius);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn--secondary:hover {
+    background: var(--surface-3);
 }
 
