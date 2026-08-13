@@ -8,6 +8,7 @@ import br.com.escola.dashboard.enums.SegmentoCoordenacao;
 import br.com.escola.dashboard.enums.StatusDemanda;
 import br.com.escola.dashboard.enums.StatusUsuario;
 import br.com.escola.dashboard.repository.ImportacaoLogRepository;
+import br.com.escola.dashboard.repository.SemanaEmFocoRepository;
 import br.com.escola.dashboard.repository.UsuarioRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,6 +52,9 @@ class DashboardServiceTest {
     @Mock
     private ImportacaoLogRepository importacaoLogRepository;
 
+    @Mock
+    private SemanaEmFocoRepository semanaEmFocoRepository;
+
     @InjectMocks
     private DashboardService dashboardService;
 
@@ -93,6 +97,7 @@ class DashboardServiceTest {
         when(comunicadoService.listarTodos()).thenReturn(List.of());
         when(avisoService.listarGlobaisEPorSegmentos(anyList())).thenReturn(List.of());
         when(eventoService.listarPorSegmentosECompartilhados(anyList())).thenReturn(List.of());
+        when(semanaEmFocoRepository.countAtivasSemRelatorioPorSegmentos(anyList())).thenReturn(0L);
 
         DashboardDTO dashboard = dashboardService.coletarDadosCoordenadora(coordenadora);
 
@@ -132,6 +137,7 @@ class DashboardServiceTest {
         when(usuarioRepository.countByStatus(StatusUsuario.PENDENTE)).thenReturn(2L);
         when(usuarioRepository.count()).thenReturn(10L);
         when(importacaoLogRepository.count()).thenReturn(3L);
+        when(semanaEmFocoRepository.countAtivasSemRelatorio()).thenReturn(2L);
 
         DashboardDTO dashboard = dashboardService.coletarDadosAdmin(admin);
 
@@ -151,7 +157,7 @@ class DashboardServiceTest {
         Segmento seg = criarSegmento("fundamental-1", "Fundamental 1");
 
         when(perfilService.getSegmentosDoUsuario(vice)).thenReturn(List.of(seg));
-        when(demandaService.resumoGeral()).thenReturn(
+        when(demandaService.resumoPorSegmentos(anyList())).thenReturn(
                 new DemandaService.ResumoDemandas(15, 4, 6, 3, 2, 10, 2, List.of())
         );
         when(demandaService.listarAtivasPorSegmentos(anyList())).thenReturn(List.of());
@@ -165,6 +171,7 @@ class DashboardServiceTest {
         when(comunicadoService.listarTodos()).thenReturn(List.of());
         when(avisoService.listarTodos()).thenReturn(List.of());
         when(eventoService.listarTodos()).thenReturn(List.of());
+        when(semanaEmFocoRepository.countAtivasSemRelatorio()).thenReturn(1L);
 
         DashboardDTO dashboard = dashboardService.coletarDadosViceDiretora(vice);
 
@@ -195,6 +202,7 @@ class DashboardServiceTest {
         when(usuarioRepository.countByStatus(any())).thenReturn(0L);
         when(usuarioRepository.count()).thenReturn(0L);
         when(importacaoLogRepository.count()).thenReturn(0L);
+        when(semanaEmFocoRepository.countAtivasSemRelatorio()).thenReturn(0L);
 
         DashboardDTO dashboard = dashboardService.coletarDados(admin);
 
@@ -222,6 +230,7 @@ class DashboardServiceTest {
         when(comunicadoService.listarTodos()).thenReturn(List.of());
         when(avisoService.listarGlobaisEPorSegmentos(anyList())).thenReturn(List.of());
         when(eventoService.listarPorSegmentosECompartilhados(anyList())).thenReturn(List.of());
+        when(semanaEmFocoRepository.countAtivasSemRelatorioPorSegmentos(anyList())).thenReturn(1L);
 
         DashboardDTO dashboard = dashboardService.coletarDadosCoordenadora(coordenadora);
 

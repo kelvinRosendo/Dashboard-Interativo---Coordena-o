@@ -7,6 +7,7 @@ import br.com.escola.dashboard.enums.SegmentoCoordenacao;
 import br.com.escola.dashboard.enums.StatusUsuario;
 import br.com.escola.dashboard.mapper.DashboardMapper;
 import br.com.escola.dashboard.repository.ImportacaoLogRepository;
+import br.com.escola.dashboard.repository.SemanaEmFocoRepository;
 import br.com.escola.dashboard.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,7 @@ public class DashboardService {
     private final EventoService eventoService;
     private final UsuarioRepository usuarioRepository;
     private final ImportacaoLogRepository importacaoLogRepository;
+    private final SemanaEmFocoRepository semanaEmFocoRepository;
 
     public DashboardService(PerfilService perfilService,
                             UsuarioService usuarioService,
@@ -33,7 +35,8 @@ public class DashboardService {
                             AvisoService avisoService,
                             EventoService eventoService,
                             UsuarioRepository usuarioRepository,
-                            ImportacaoLogRepository importacaoLogRepository) {
+                            ImportacaoLogRepository importacaoLogRepository,
+                            SemanaEmFocoRepository semanaEmFocoRepository) {
         this.perfilService = perfilService;
         this.usuarioService = usuarioService;
         this.demandaService = demandaService;
@@ -43,6 +46,7 @@ public class DashboardService {
         this.eventoService = eventoService;
         this.usuarioRepository = usuarioRepository;
         this.importacaoLogRepository = importacaoLogRepository;
+        this.semanaEmFocoRepository = semanaEmFocoRepository;
     }
 
     public DashboardDTO coletarDados(Usuario usuario) {
@@ -110,7 +114,7 @@ public class DashboardService {
                 new PendenciasDTO(
                         resumo.pendentes(),
                         resumo.proximasDoPrazo(),
-                        0
+                        semanaEmFocoRepository.countAtivasSemRelatorio()
                 )
         );
     }
@@ -122,7 +126,7 @@ public class DashboardService {
                 .filter(s -> s != null)
                 .toList();
 
-        var resumo = demandaService.resumoGeral();
+        var resumo = demandaService.resumoPorSegmentos(segCoords);
 
         List<DemandaResumoDTO> demandas = DashboardMapper.toDemandaResumoDTOList(
                 demandaService.listarAtivasPorSegmentos(segCoords)
@@ -171,7 +175,7 @@ public class DashboardService {
                 new PendenciasDTO(
                         resumo.pendentes(),
                         resumo.proximasDoPrazo(),
-                        0
+                        semanaEmFocoRepository.countAtivasSemRelatorio()
                 )
         );
     }
@@ -233,7 +237,7 @@ public class DashboardService {
                 new PendenciasDTO(
                         resumo.pendentes(),
                         resumo.proximasDoPrazo(),
-                        0
+                        semanaEmFocoRepository.countAtivasSemRelatorioPorSegmentos(segCoords)
                 )
         );
     }

@@ -186,9 +186,10 @@ public class DemandaService {
         LocalDate hoje = LocalDate.now();
         LocalDate limite = hoje.plusDays(7);
 
-        return demandaRepository.countBySegmentoInAndStatusIn(
+        return demandaRepository.countBySegmentoInAndDataPrazoBetweenAndStatusNotIn(
                 segmentos,
-                STATUS_ATIVOS
+                hoje, limite,
+                List.of(StatusDemanda.CONCLUIDA, StatusDemanda.CANCELADA)
         );
     }
 

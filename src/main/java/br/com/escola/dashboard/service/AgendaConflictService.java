@@ -115,6 +115,9 @@ public class AgendaConflictService {
     }
 
     private String formatarHorarioInterno(Card card) {
+        if (card.getDataEvento() != null) {
+            return card.getDataEvento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        }
         return "Sem horario definido";
     }
 

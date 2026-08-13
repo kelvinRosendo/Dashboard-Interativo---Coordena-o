@@ -144,7 +144,9 @@ public class DashboardTvController {
             tituloPeriodo = capitalizarPrimeiraLetra(dataReferencia.format(TITULO_MES));
         }
 
-        List<CardResponseDTO> cardsComData = cardService.listarTodos().stream()
+        List<CardResponseDTO> todosCards = cardService.listarTodos();
+
+        List<CardResponseDTO> cardsComData = todosCards.stream()
                 .filter(card -> card.getDataEvento() != null)
                 .filter(card -> !card.getDataEvento().isBefore(inicio) && !card.getDataEvento().isAfter(fim))
                 .sorted(comparadorPainel())
@@ -189,7 +191,7 @@ public class DashboardTvController {
             LocalDate inicioSemana = LocalDate.now().with(DayOfWeek.MONDAY);
             LocalDate fimSemana = inicioSemana.plusDays(6);
 
-            List<CardResponseDTO> eventosSemana = cardService.listarTodos().stream()
+            List<CardResponseDTO> eventosSemana = todosCards.stream()
                     .filter(card -> card.getDataEvento() != null)
                     .filter(card -> !card.getDataEvento().isBefore(inicioSemana) && !card.getDataEvento().isAfter(fimSemana))
                     .sorted(comparadorPainel())
