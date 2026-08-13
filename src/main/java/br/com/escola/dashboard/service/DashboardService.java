@@ -81,9 +81,11 @@ public class DashboardService {
                 })
                 .toList();
 
-        SemanaFocoDTO semanaDto = semanaEmFocoService.buscarAtiva()
+        SemanaFocoDTO semanaDto = semanaEmFocoService.buscarSemanaAtual()
                 .map(DashboardMapper::toSemanaFocoDTO)
-                .orElse(SemanaFocoDTO.vazio());
+                .orElseGet(() -> semanaEmFocoService.buscarAtiva()
+                        .map(DashboardMapper::toSemanaFocoDTO)
+                        .orElse(SemanaFocoDTO.vazio()));
 
         var resumo = demandaService.resumoGeral();
 
@@ -147,9 +149,11 @@ public class DashboardService {
                 })
                 .toList();
 
-        SemanaFocoDTO semanaDto = semanaEmFocoService.buscarAtiva()
+        SemanaFocoDTO semanaDto = semanaEmFocoService.buscarSemanaAtual()
                 .map(DashboardMapper::toSemanaFocoDTO)
-                .orElse(SemanaFocoDTO.vazio());
+                .orElseGet(() -> semanaEmFocoService.buscarAtiva()
+                        .map(DashboardMapper::toSemanaFocoDTO)
+                        .orElse(SemanaFocoDTO.vazio()));
 
         IndicadoresDTO indicadores = new IndicadoresDTO(
                 resumo.ativas(),
@@ -213,7 +217,11 @@ public class DashboardService {
         List<SemanaFocoDTO> semanas = semanaEmFocoService.listarAtivasPorSegmentos(segCoords).stream()
                 .map(DashboardMapper::toSemanaFocoDTO)
                 .toList();
-        SemanaFocoDTO semanaDto = semanas.isEmpty() ? SemanaFocoDTO.vazio() : semanas.get(0);
+        SemanaFocoDTO semanaDto = semanas.isEmpty()
+                ? semanaEmFocoService.buscarSemanaAtual()
+                        .map(DashboardMapper::toSemanaFocoDTO)
+                        .orElse(SemanaFocoDTO.vazio())
+                : semanas.get(0);
 
         return new DashboardDTO(
                 usuario.getPerfil(),

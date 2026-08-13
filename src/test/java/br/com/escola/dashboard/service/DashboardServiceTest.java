@@ -94,6 +94,7 @@ class DashboardServiceTest {
                 )
         );
         when(semanaEmFocoService.listarAtivasPorSegmentos(anyList())).thenReturn(List.of());
+        when(semanaEmFocoService.buscarSemanaAtual()).thenReturn(java.util.Optional.empty());
         when(comunicadoService.listarTodos()).thenReturn(List.of());
         when(avisoService.listarGlobaisEPorSegmentos(anyList())).thenReturn(List.of());
         when(eventoService.listarPorSegmentosECompartilhados(anyList())).thenReturn(List.of());
@@ -129,6 +130,7 @@ class DashboardServiceTest {
                         10, 3, 4, 2, 1, 7, 20
                 )
         );
+        when(semanaEmFocoService.buscarSemanaAtual()).thenReturn(java.util.Optional.empty());
         when(semanaEmFocoService.buscarAtiva()).thenReturn(java.util.Optional.empty());
         when(comunicadoService.listarTodos()).thenReturn(List.of());
         when(avisoService.listarTodos()).thenReturn(List.of());
@@ -167,6 +169,7 @@ class DashboardServiceTest {
                         15, 4, 6, 3, 2, 10, 20
                 )
         );
+        when(semanaEmFocoService.buscarSemanaAtual()).thenReturn(java.util.Optional.empty());
         when(semanaEmFocoService.buscarAtiva()).thenReturn(java.util.Optional.empty());
         when(comunicadoService.listarTodos()).thenReturn(List.of());
         when(avisoService.listarTodos()).thenReturn(List.of());
@@ -195,6 +198,7 @@ class DashboardServiceTest {
         when(demandaService.resumoGeral()).thenReturn(
                 new DemandaService.ResumoDemandas(0, 0, 0, 0, 0, 0, 0, List.of())
         );
+        when(semanaEmFocoService.buscarSemanaAtual()).thenReturn(java.util.Optional.empty());
         when(semanaEmFocoService.buscarAtiva()).thenReturn(java.util.Optional.empty());
         when(comunicadoService.listarTodos()).thenReturn(List.of());
         when(avisoService.listarTodos()).thenReturn(List.of());
@@ -227,6 +231,7 @@ class DashboardServiceTest {
                 )
         );
         when(semanaEmFocoService.listarAtivasPorSegmentos(anyList())).thenReturn(List.of());
+        when(semanaEmFocoService.buscarSemanaAtual()).thenReturn(java.util.Optional.empty());
         when(comunicadoService.listarTodos()).thenReturn(List.of());
         when(avisoService.listarGlobaisEPorSegmentos(anyList())).thenReturn(List.of());
         when(eventoService.listarPorSegmentosECompartilhados(anyList())).thenReturn(List.of());

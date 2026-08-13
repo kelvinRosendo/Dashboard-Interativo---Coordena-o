@@ -38,7 +38,7 @@ public class AdminAccessDiagnosticsFilter extends OncePerRequestFilter {
         if (isAdminRequest(request)) {
             String email = normalizarEmail(resolverEmailAutenticado());
             Set<String> admins = normalizarAdminEmails();
-            boolean authorized = admins.isEmpty() || admins.contains(email);
+            boolean authorized = !admins.isEmpty() && admins.contains(email);
 
             logger.info(
                     "Admin access check: email={} authorized={}",

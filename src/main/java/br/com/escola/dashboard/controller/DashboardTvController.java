@@ -87,7 +87,10 @@ public class DashboardTvController {
                 .limit(modoDashboard ? 4 : 6)
                 .toList();
 
-        Optional<SemanaEmFoco> semanaEmFocoOpt = semanaEmFocoService.buscarAtiva();
+        Optional<SemanaEmFoco> semanaEmFocoOpt = semanaEmFocoService.buscarSemanaAtual();
+        if (semanaEmFocoOpt.isEmpty()) {
+            semanaEmFocoOpt = semanaEmFocoService.buscarAtiva();
+        }
         if (semanaEmFocoOpt.isPresent()) {
             SemanaEmFoco semanaEmFoco = semanaEmFocoOpt.get();
             model.addAttribute("semanaEmFoco", semanaEmFoco);

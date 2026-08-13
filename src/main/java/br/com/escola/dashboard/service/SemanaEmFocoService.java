@@ -6,6 +6,7 @@ import br.com.escola.dashboard.repository.SemanaEmFocoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,8 +19,45 @@ public class SemanaEmFocoService {
         this.repository = repository;
     }
 
+    /**
+     * Busca a semana ativa mais recente (fallback para dados legados).
+     * Para uso dinâmico, preferir buscarSemanaAtual().
+     */
     public Optional<SemanaEmFoco> buscarAtiva() {
         return repository.findByAtivaTrueOrderByAtualizadoEmDesc().stream().findFirst();
+    }
+
+    /**
+     * Busca a semana cujo periodo contem a data atual.
+     * Prioriza periodos que contem hoje, depois busca por segmento.
+     */
+    public Optional<SemanaEmFoco> buscarSemanaAtual() {
+        LocalDate hoje = LocalDate.now();
+        List<SemanaEmFoco> todas = repository.findByAtivaTrueOrderByAtualizadoEmDesc();
+
+        // Primeiro: semana onde dataInicio <= hoje <= dataFim
+        Optional<SemanaEmFoco> porPeriodo = todas.stream()
+                .filter(s -> !hoje.isBefore(s.getDataInicio()) && !hoje.isAfter(s.getDataFim()))
+                .findFirst();
+        if (porPeriodo.isPresent()) {
+            return porPeriodo;
+        }
+
+        // Segundo: semana mais recente que ainda esta ativa
+        return todas.stream().findFirst();
+    }
+
+    /**
+     * Busca a semana cujo periodo contem a data informada.
+     */
+    public Optional<SemanaEmFoco> buscarSemanaPorData(LocalDate data) {
+        if (data == null) {
+            return buscarSemanaAtual();
+        }
+        List<SemanaEmFoco> todas = repository.findAll();
+        return todas.stream()
+                .filter(s -> !data.isBefore(s.getDataInicio()) && !data.isAfter(s.getDataFim()))
+                .findFirst();
     }
 
     public Optional<SemanaEmFoco> buscarPorId(Long id) {

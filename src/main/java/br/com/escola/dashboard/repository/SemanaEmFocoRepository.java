@@ -33,4 +33,11 @@ public interface SemanaEmFocoRepository extends JpaRepository<SemanaEmFoco, Long
 
     @Query("SELECT COUNT(s) FROM SemanaEmFoco s WHERE s.relatorio IS NULL AND s.ativa = true AND s.segmento IN :segmentos")
     long countAtivasSemRelatorioPorSegmentos(@Param("segmentos") List<SegmentoCoordenacao> segmentos);
+
+    @Query("SELECT s FROM SemanaEmFoco s WHERE s.dataInicio <= :data AND s.dataFim >= :data")
+    List<SemanaEmFoco> findByDataInRange(@Param("data") java.time.LocalDate data);
+
+    @Query("SELECT s FROM SemanaEmFoco s WHERE s.dataInicio <= :data AND s.dataFim >= :data AND s.segmento IN :segmentos")
+    List<SemanaEmFoco> findByDataInRangeAndSegmentoIn(@Param("data") java.time.LocalDate data,
+                                                       @Param("segmentos") List<SegmentoCoordenacao> segmentos);
 }

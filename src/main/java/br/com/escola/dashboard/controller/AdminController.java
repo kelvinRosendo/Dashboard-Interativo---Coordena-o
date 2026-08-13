@@ -94,7 +94,8 @@ public class AdminController {
             return "redirect:/dashboard";
         }
 
-        SemanaEmFoco semana = semanaEmFocoService.buscarAtiva()
+        SemanaEmFoco semana = semanaEmFocoService.buscarSemanaAtual()
+                .or(() -> semanaEmFocoService.buscarAtiva())
                 .orElseGet(() -> {
                     SemanaEmFoco nova = new SemanaEmFoco();
                     nova.setAtiva(true);
