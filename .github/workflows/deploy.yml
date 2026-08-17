@@ -1,0 +1,45 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      
+      - name: Build with Maven
+        run: mvn clean package -DskipTests
+      
+      - name: Copy JAR to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          source: "target/dashboard-escolar-0.0.1-SNAPSHOT.jar"
+          target: "/tmp/organiza-deploy/"
+      
+      - name: Deploy on VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            sudo cp /tmp/organiza-deploy/dashboard-escolar-0.0.1-SNAPSHOT.jar /opt/organiza/app/organiza.jar
+            sudo chown ubuntu:ubuntu /opt/organiza/app/organiza.jar
+            sudo systemctl restart organiza.service
+            echo "Deploy finalizado!"
+            sleep 30
+            sudo systemctl status organiza.service --no-pager
